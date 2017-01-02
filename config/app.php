@@ -168,9 +168,10 @@ return [
         Creativeorange\Gravatar\GravatarServiceProvider::class,
 
         Yajra\Datatables\DatatablesServiceProvider::class,
-        
+
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        SocialEngine\SnifferRules\ServiceProvider::class,
     ],
 
     /*
