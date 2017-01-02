@@ -4,8 +4,13 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class User extends Authenticatable
 {
+    use EntrustUserTrait;
+    use SoftDeletes { SoftDeletes::restore insteadof EntrustUserTrait; }
     /**
      * The attributes that are mass assignable.
      *

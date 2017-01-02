@@ -17,7 +17,9 @@ env:
 sudo: false
 
 before_script:
+  - mkdir bootstrap/cache
   - composer self-update
   - composer install --no-interaction
+  - php artisan key:generate
 
 script: vendor/bin/phpunit
