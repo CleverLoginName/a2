@@ -156,6 +156,21 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Zizaco\Entrust\EntrustServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+
+        Intervention\Image\ImageServiceProvider::class,
+        Szykra\Notifications\NotificationServiceProvider::class,
+
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        Creativeorange\Gravatar\GravatarServiceProvider::class,
+
+        Yajra\Datatables\DatatablesServiceProvider::class,
+        
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
     ],
 
     /*
@@ -201,6 +216,18 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+
+        'Image' => Intervention\Image\Facades\Image::class,
+
+        'Flash' => Szykra\Notifications\Flash::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+
 
     ],
 
