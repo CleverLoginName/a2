@@ -67,5 +67,6 @@ class EntrustSetupTables extends Migration
         Schema::drop('permissions');
         Schema::drop('role_user');
         Schema::drop('roles');
+        //Remove forign keys
     }
 }
