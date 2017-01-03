@@ -6,5 +6,4 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductCatalog extends Model
 {
-    //
-}
+}//end class

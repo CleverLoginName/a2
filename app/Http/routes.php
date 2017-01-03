@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'products'], function () {
         Route::resource('/', 'ProductsController');
+        Route::resource('/all', 'ProductsController@allData');
         Route::resource('single-products', 'SingleProductsController');
         Route::resource('composite-products', 'CompositeProductsController');
         Route::resource('packs', 'PacksController');

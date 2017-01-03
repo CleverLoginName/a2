@@ -23,58 +23,58 @@ use Szykra\Notifications\Flash;
 class UsersController extends Controller
 {
 
+
     public function create()
     {
         $roles = Role::all();
-        return  view('users.create')
-            ->with('roles', $roles);
-    }
+        return view('users.create')->with('roles', $roles);
+    }//end create()
+
 
     public function index()
     {
         $users = User::all();
-        return  view('users.index')
-            ->with('users', $users);
-    }
+        return view('users.index')->with('users', $users);
+    }//end index()
+
 
     public function show($id)
     {
         $user = User::find($id);
-        return view('users.show')
-            ->with('user', $user);
-    }
+        return view('users.show')->with('user', $user);
+    }//end show()
+
+
     public function profile()
     {
         $user = Auth::user();
-        return view('users.show')
-            ->with('user', $user);
-    }
+        return view('users.show')->with('user', $user);
+    }//end profile()
+
 
     public function store(Request $request)
     {
-
         $rules = array(
-            'first_name'   => 'required',
-            'last_name'    => 'required',
-            'mobile'       => 'required',
-            'role_id'    => 'required',
-            'email'        => 'required|email|unique:users',
-            'password'     => 'required',
-            'password_confirm' => 'required|same:password'
-        );
+                  'first_name'       => 'required',
+                  'last_name'        => 'required',
+                  'mobile'           => 'required',
+                  'role_id'          => 'required',
+                  'email'            => 'required|email|unique:users',
+                  'password'         => 'required',
+                  'password_confirm' => 'required|same:password',
+                 );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return Redirect::to('/users/create')
-                ->withErrors($validator);
+            return Redirect::to('/users/create')->withErrors($validator);
         }
 
-        $user = new User();
+        $user             = new User();
         $user->first_name = $request->get('first_name');
-        $user->last_name = $request->get('last_name');
-        $user->email = $request->get('email');
-        $user->mobile = $request->get('mobile');
-        $user->password = Hash::make($request->get('password'));
+        $user->last_name  = $request->get('last_name');
+        $user->email      = $request->get('email');
+        $user->mobile     = $request->get('mobile');
+        $user->password   = Hash::make($request->get('password'));
         $user->created_by = Auth::user()->id;
         $user->is_enabled = true;
 
@@ -83,24 +83,23 @@ class UsersController extends Controller
         $role = $request->get('role_id');
         $user->roles()->attach($role);
 
-
         File::exists('uploads') or File::makeDirectory('uploads');
         File::exists('uploads/profile_pics') or File::makeDirectory('uploads/profile_pics');
         File::exists('uploads/profile_pics/'.$user->id) or File::makeDirectory('uploads/profile_pics/'.$user->id);
         File::exists('uploads/profile_pics/'.$user->id.'/originals/') or
         File::makeDirectory('uploads/profile_pics/'.$user->id.'/originals/');
 
-        $user_ = User::find($user->id);
+        $user_       = User::find($user->id);
         $profile_pic = $request->file('profile_pic');
-        $randStr = Str::random(16);
+        $randStr     = Str::random(16);
 
-        //Move Uploaded File
+        // Move Uploaded File
         $destinationPath = 'uploads/profile_pics/'.$user->id.'/originals/';
         if ($profile_pic) {
             $randFileName = $randStr.'.'.$profile_pic->getClientOriginalExtension();
             $profile_pic->move($destinationPath, $randFileName);
         } else {
-            $img = Image::make(Gravatar::fallback('/resources/images/default.png')->get($user->email));
+            $img          = Image::make(Gravatar::fallback('/resources/images/default.png')->get($user->email));
             $randFileName = $randStr.'.png';
             $img->save($destinationPath.$randFileName);
         }
@@ -109,43 +108,41 @@ class UsersController extends Controller
 
         $user_->save();
 
-
         Flash::success('User Added', 'User has been added successfully.');
 
         return redirect()->action('UsersController@index');
-    }
+    }//end store()
+
+
     public function update(Request $request, $id)
     {
         $rules = array(
-            'first_name'   => 'required',
-            'last_name'    => 'required',
-            'mobile'       => 'required',
-            'role_id'    => 'required',
-            'email'        => 'required|email'
-        );
+                  'first_name' => 'required',
+                  'last_name'  => 'required',
+                  'mobile'     => 'required',
+                  'role_id'    => 'required',
+                  'email'      => 'required|email',
+                 );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return Redirect::to('/users/'.$id.'/edit')
-                ->withErrors($validator);
+            return Redirect::to('/users/'.$id.'/edit')->withErrors($validator);
         }
 
-        $user = User::find($id);
+        $user             = User::find($id);
         $user->first_name = $request->get('first_name');
-        $user->last_name = $request->get('last_name');
-        $user->email = $request->get('email');
-        $user->mobile = $request->get('mobile');
-       // $user->password = Hash::make($request->get('password'));
-
+        $user->last_name  = $request->get('last_name');
+        $user->email      = $request->get('email');
+        $user->mobile     = $request->get('mobile');
+        // $user->password = Hash::make($request->get('password'));
         $user->save();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        $role = DB::table('role_user')
-            ->where('user_id', '=', $user->id)
-            ->update(['role_id' => $request->get('role_id')]);
+        $role = DB::table('role_user')->where('user_id', '=', $user->id)->update(['role_id' => $request->get('role_id')]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         Flash::success('User Updated', 'User has been updated successfully.');
         return redirect()->action('UsersController@index');
-    }
+    }//end update()
+
 
     public function destroy($id)
     {
@@ -153,73 +150,78 @@ class UsersController extends Controller
         $user->delete();
         Flash::error('User Deleted', 'User has been deleted successfully.');
         return redirect()->action('UsersController@index');
-    }
+    }//end destroy()
+
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user  = User::find($id);
         $roles = Role::all();
-        return view('users.edit')
-            ->with('user', $user)
-            ->with('roles', $roles);
-    }
+        return view('users.edit')->with('user', $user)->with('roles', $roles);
+    }//end edit()
+
+
     public function editProfile()
     {
-        $user = Auth::user();
+        $user  = Auth::user();
         $roles = Role::all();
-        return view('users.edit')
-            ->with('user', $user)
-            ->with('roles', $roles);
-    }
+        return view('users.edit')->with('user', $user)->with('roles', $roles);
+    }//end editProfile()
+
 
     public function logout()
     {
         Auth::logout();
         Session::flush();
         return redirect()->action('UserController@login');
-    }
+    }//end logout()
+
 
     public function login()
     {
-        return  view('auth.login');
-    }
+        return view('auth.login');
+    }//end login()
+
 
     public function rolesNPermissions()
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
+        $roles             = Role::all();
+        $permissions       = Permission::all();
         $activePermissions = DB::table('permission_role')->get();
-        return view('users.roles.roles_permissions')
-            ->with('roles', $roles)
-            ->with('activePermissions', $activePermissions)
-            ->with('permissions', $permissions);
-    }
+        return view('users.roles.roles_permissions')->with('roles', $roles)->with('activePermissions', $activePermissions)->with('permissions', $permissions);
+    }//end rolesNPermissions()
+
+
     public function updateRolesNPermissions(Request $request)
     {
         if ($request->get('permissions')) {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             DB::table('permission_role')->truncate();
             foreach ($request->get('permissions') as $permission) {
-                $rolePermission = explode(",", $permission);
+                $rolePermission = explode(',', $permission);
                 DB::table('permission_role')->insert(
-                    ['permission_id' => $rolePermission[1], 'role_id' => $rolePermission[0]]
+                    [
+                     'permission_id' => $rolePermission[1],
+                     'role_id'       => $rolePermission[0],
+                    ]
                 );
             }DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
+
         Flash::success('Permissions Updated', 'Permissions has been updated successfully.');
         return redirect()->action('UsersController@rolesNPermissions');
-    }
+    }//end updateRolesNPermissions()
+
+
     public function rolesNUsers()
     {
-        $roles = Role::all();
-        $users = User::all();
+        $roles       = Role::all();
+        $users       = User::all();
         $activeUsers = DB::table('role_user')->get();
-        return view('users.roles.user_roles')
-            ->with('roles', $roles)
-            ->with('activeUsers', $activeUsers)
-            ->with('users', $users);
-    }
-    
+        return view('users.roles.user_roles')->with('roles', $roles)->with('activeUsers', $activeUsers)->with('users', $users);
+    }//end rolesNUsers()
+
+
     public function updateRolesNUsers(Request $request)
     {
         $users = array_except($request->all(), ['_token']);
@@ -227,13 +229,17 @@ class UsersController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             DB::table('role_user')->truncate();
             foreach ($users as $user) {
-                $userRole = explode(",", $user);
+                $userRole = explode(',', $user);
                 DB::table('role_user')->insert(
-                    ['role_id' => $userRole[0], 'user_id' => $userRole[1]]
+                    [
+                     'role_id' => $userRole[0],
+                     'user_id' => $userRole[1],
+                    ]
                 );
             }DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
+
         Flash::success('User Roles Updated', 'User Roles has been updated successfully.');
         return redirect()->action('UsersController@rolesNUsers');
-    }
-}
+    }//end updateRolesNUsers()
+}//end class

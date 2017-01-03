@@ -8,5 +8,4 @@ use App\Http\Requests;
 
 class PacksController extends ProductsController
 {
-    //
-}
+}//end class

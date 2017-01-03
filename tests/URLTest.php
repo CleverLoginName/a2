@@ -17,6 +17,7 @@ class URLTest extends TestCase
         $this->visit('/login')->assertResponseOk();
         $this->visit('/users')->assertResponseOk();
         $this->visit('/users/create')->assertResponseOk();
+        $this->visit('/products')->assertResponseOk();
 
     }
 
