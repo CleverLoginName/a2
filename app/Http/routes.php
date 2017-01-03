@@ -26,5 +26,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardsController@index');
 
 
+    /******************* Products  ****************************************************************/
 
+    Route::group(['prefix' => 'products'], function () {
+        Route::resource('/', 'ProductsController');
+        Route::resource('single-products', 'SingleProductsController');
+        Route::resource('composite-products', 'CompositeProductsController');
+        Route::resource('packs', 'PacksController');
+    });
+    /**********************************************************************************************/
 });
