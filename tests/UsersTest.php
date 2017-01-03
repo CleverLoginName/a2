@@ -24,7 +24,7 @@ class UsersTest extends TestCase
         $user = new User(array('name' => 'John1'));
         $this->be($user);
 
-     /*   $this->visit('/users/create')
+        $this->visit('/users/create')
             ->type('Damith','first_name' )
             ->type('Harischandrathilaka','last_name')
             ->type('bqudamith@gmail.com','email')
@@ -37,10 +37,10 @@ class UsersTest extends TestCase
             ->press('Add')
             ->see('Damith')
             ->see('Harischandrathilaka')
-            ->seePageIs('/users');*/
+            ->seePageIs('/users');
     }
 
- /*   public function testLoginWithWrongUserNameOrPassword()
+    public function testLoginWithWrongUserNameOrPassword()
     {
         $this->visit('/login')
             ->type('abc@seebo.com.au','email' )
@@ -48,6 +48,6 @@ class UsersTest extends TestCase
             ->press('Login')
             ->seePageIs('/login')
             ->see('These credentials do not match our records.');
-    }*/
+    }
 
 }
