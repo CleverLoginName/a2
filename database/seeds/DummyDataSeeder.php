@@ -310,11 +310,11 @@ class DummyDataSeeder extends Seeder
         DB::table('product_categories')->insert(['name' => 'Audio/Visual','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#00A59D','type' => 3]);
         DB::table('product_categories')->insert(['name' => 'Power Point','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#960000','type' => 3]);
 
-        DB::table('product_sub_categories')->insert(['name' => 'INCANDESCENT' ,'description' => 'INCANDESCENT description','category_id' => 1]);
-        DB::table('product_sub_categories')->insert(['name' => 'FLUORESCENT' ,'description' => 'FLUORESCENT description','category_id' => 1]);
-        DB::table('product_sub_categories')->insert(['name' => 'HIGH-INTENSITY DISCHARGE' ,'description' => 'HIGH-INTENSITY DISCHARGE description','category_id' => 1]);
-        DB::table('product_sub_categories')->insert(['name' => 'LED','description'  => 'LED description','category_id' => 1]);
-        DB::table('product_sub_categories')->insert(['name' => 'INDOOR-SWTCH','description' =>'Indoor Switch','category_id' => 4]);
+        DB::table('product_sub_categories')->insert(['name' => 'INCANDESCENT' ,'description' => 'INCANDESCENT description','category_id' => 1,'is_pack' => false]);
+        DB::table('product_sub_categories')->insert(['name' => 'FLUORESCENT' ,'description' => 'FLUORESCENT description','category_id' => 1,'is_pack' => false]);
+        DB::table('product_sub_categories')->insert(['name' => 'HIGH-INTENSITY DISCHARGE' ,'description' => 'HIGH-INTENSITY DISCHARGE description','category_id' => 1,'is_pack' => false]);
+        DB::table('product_sub_categories')->insert(['name' => 'LED','description'  => 'LED description','category_id' => 1,'is_pack' => false]);
+        DB::table('product_sub_categories')->insert(['name' => 'INDOOR-SWTCH','description' =>'Indoor Switch','category_id' => 4,'is_pack' => false]);
 
 
 
