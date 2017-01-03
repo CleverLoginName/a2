@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
     use EntrustUserTrait;
-    use SoftDeletes { SoftDeletes::restore insteadof EntrustUserTrait; }
+    use SoftDeletes { SoftDeletes::restore insteadof EntrustUserTrait;
+    }
     /**
      * The attributes that are mass assignable.
      *

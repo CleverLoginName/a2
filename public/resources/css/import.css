@@ -1,0 +1,281 @@
+.import-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.import-landing {
+    width: 100%;
+    height: 100%;
+    background: #5b5d5c;
+    border: 2px solid #ccc;
+}
+
+.import-upload {
+    width: 100%;
+    height: 100%;
+}
+
+.import-extract {
+    height: 100%;
+    border-right: 5px solid #ccc
+}
+
+.import-attached {
+    height: 100%;
+}
+
+.import-extract-heading {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #fff;
+}
+
+.import-attached-actions {
+    height: 30px;
+    line-height: 30px;
+    border-top: 1px solid #fff;
+}
+.import-upload-body{
+	padding: 10px;
+}
+.import-extract-preview {
+    overflow-y: scroll;
+    overflow: auto;
+}
+
+.btn-plus {
+    font-size: 20px;
+    color: #0060d8;
+    cursor: pointer;
+}
+
+.import-upload-add-btn {
+    width: 20px;
+    height: 20px;
+    background: #0060d8;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 5px;
+    color: #fff;
+    font-size: 15px;
+    border: 1px solid #fff;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.import-upload-add-btn:hover {
+    color: #fff;
+    background: #0060d8;
+}
+
+.import-attached-heading {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    font-weight: bold;
+}
+
+.import-attached-preview {
+    overflow-y: scroll;
+    overflow: auto;
+}
+
+.attached-item-wrapper {
+    padding: 10px 0px;
+}
+
+.image-preview {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.image-wrapper {
+    margin-bottom: 10px;
+    margin-top: 30px;
+}
+
+.image-remove {
+    position: relative;
+    top: -190px;
+    right: -15px;
+    float: right;
+    width: 25px;
+    height: 25px;
+    background: #fff;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 25px;
+    color: #0060d8;
+    cursor: pointer;
+    border: 1px solid #0060d8;
+}
+
+.image-remove:hover {
+    background: #0060d8;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.attached-item-wrapper .thumbnail img {
+    height: 175px;
+}
+
+.import-upload-wrapper {
+    height: 100%;
+    background-color: #3e403f;
+    /* border-top-right-radius: 30px; */
+}
+
+.import-upload-heading {
+    height: 30px;
+    color: #fff;
+}
+
+.import-upload-actions {
+}
+
+.modal-attached-actions {
+    height: 30px;
+    text-align: right;
+    line-height: 30px;
+    border-top: 1px solid #fff;
+    padding-top: 5px;
+}
+
+.dialog-dismiss {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    float: right;
+    width: 25px;
+    height: 25px;
+    background: #ccc;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 25px;
+    color: #333;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.extract-image-preview {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.extracted-item-wrapper {
+    padding: 20px 0px;
+}
+
+.extracted-item-wrapper .thumbnail img {
+    height: 110px;
+}
+
+.extracted-item-wrapper .image-add {
+    position: relative;
+    top: -125px;
+    right: -15px;
+    float: right;
+    width: 25px;
+    height: 25px;
+    background: #cdac27;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.import-done-btn {
+    background: #5b5d5c;
+    border: 1px solid #333;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.import-done-btn:hover {
+    color: #fff;
+    background: #333;
+}
+
+.import-cancel-btn {
+    background: #5b5d5c;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.import-cancel-btn:hover {
+    color: #fff;
+    background: #333;
+}
+
+.extracted-item-wrapper .thumbnail {
+    border-color: #cdac27;
+}
+
+.extracted-item-wrapper .thumbnail:hover {
+    border-color: #cdac27;
+}
+
+.no-floor-plan {
+    text-align: center;
+  color: #cdac27;
+  margin: 40px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#viewer-no-attached {
+    text-align: center;
+    color: #9c1f27;
+    margin: 40px;
+    background: #ccc;
+
+}
+
+.modal-content {
+    background: #5b5d5c;
+}
+
+.modal-done-btn {
+    background: #fff;
+    border: 1px solid #0060d8;
+    color: #0060d8;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.modal-done-btn:hover {
+    color: #fff;
+    background: #0060d8;
+    border: 1px solid #fff;
+}
+
+.modal-s-btn {
+    background: #5B5D5C;
+    border: 1px solid #333;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.modal-s-btn:hover {
+    color: #fff;
+    background: #333;
+    border: 1px solid #333;
+}
+
+.modal-cancel-btn {
+    background: #5b5d5c;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.modal-cancel-btn:hover {
+    color: #fff;
+    background: #333;
+}

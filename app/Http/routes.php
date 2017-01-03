@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     /**********************************************************************************************/
 
+    Route::get('/dashboard', 'DashboardsController@index');
 
 
 
