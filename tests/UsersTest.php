@@ -21,7 +21,7 @@ class UsersTest extends TestCase
 
     public function testUserCreate()
     {
-        $user = new User(array('name' => 'John1'));
+        $user = User::find(1);;
         $this->be($user);
 
         $this->visit('/users/create')
