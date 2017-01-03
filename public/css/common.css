@@ -149,7 +149,7 @@ li.[aria-expanded$="true"] {
 	background: #5b5d5c;
 	border-radius: 3px;
 	padding: 10px 20px;
-	color: #fff!important;
+	color: #fff !important;
 	margin-bottom: 0px !important;
 	text-transform: uppercase;
 }
