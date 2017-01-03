@@ -19,5 +19,7 @@ sudo: false
 before_script:
   - composer self-update
   - composer install --no-interaction
+  - touch ./app/database/testing.sqlite
+  - php artisan migrate:refresh --seed
 
 script: vendor/bin/phpunit
