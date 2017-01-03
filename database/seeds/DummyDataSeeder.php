@@ -16,6 +16,7 @@ class DummyDataSeeder extends Seeder
     {
 
         $faker = Faker::create();
+        if(\Illuminate\Support\Facades\App::environment('local'))
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         DB::table('permission_role')->truncate();
@@ -272,5 +273,7 @@ class DummyDataSeeder extends Seeder
             'role_id' => 2
         ]);
 
+        if(\Illuminate\Support\Facades\App::environment('local'))
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
