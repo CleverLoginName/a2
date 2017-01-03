@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginTest extends TestCase
 {
-    use DatabaseMigrations;
+    
 
     public function testLogin()
     {

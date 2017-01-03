@@ -7,8 +7,7 @@ use \App\User;
 
 class UsersTest extends TestCase
 {
-
-    use DatabaseTransactions;
+    
 
     public function testUserIndex()
     {
