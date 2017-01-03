@@ -10,6 +10,7 @@ env:
     - APP_DEBUG=true
     - APP_KEY=base64:Nau2kXiToK8o4nsUE76kc0CEMAGiaEYixDageVl+cVs=
     - DB_CONNECTION=sqlite
+    - DB_DATABASE=testing
     - CACHE_DRIVER=array
     - SESSION_DRIVER=file
     - QUEUE_DRIVER=sync
