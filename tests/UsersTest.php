@@ -33,7 +33,6 @@ class UsersTest extends TestCase
             ->type('123123','password')
             ->type('123123','password_confirm')
             ->select(1,'role_id')
-            ->attach(asset('/resources/images/user.jpg'),'profile_pic')
             ->press('Add')
             ->see('Damith')
             ->see('Harischandrathilaka')

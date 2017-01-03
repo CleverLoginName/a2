@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('mobile');
-            $table->string('profile_pic');
+            $table->string('profile_pic')->nullable();
             $table->integer('created_by');
             $table->boolean('is_enabled');
             $table->softDeletes();
