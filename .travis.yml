@@ -10,7 +10,6 @@ env:
     - APP_DEBUG=true
     - APP_KEY=base64:Nau2kXiToK8o4nsUE76kc0CEMAGiaEYixDageVl+cVs=
     - DB_CONNECTION=sqlite
-    - DB_DATABASE=testing.sqlite
     - CACHE_DRIVER=array
     - SESSION_DRIVER=file
     - QUEUE_DRIVER=sync
@@ -20,7 +19,7 @@ sudo: false
 before_script:
   - composer self-update
   - composer install --no-interaction
-  - touch ./database/testing.sqlite
+  - touch ./database/database.sqlite
   - php artisan migrate
   - php artisan db:seed
 
