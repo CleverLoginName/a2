@@ -82,15 +82,15 @@ class DummyDataSeeder extends Seeder
         $new_plans->save();
 
         $new_plans = new \App\Permission();
-        $new_plans->name = "create-catalogs";
-        $new_plans->display_name = "create-catalogs";
-        $new_plans->description = "create-catalogs";
+        $new_plans->name = "create-product_catalogs";
+        $new_plans->display_name = "create-product_catalogs";
+        $new_plans->description = "create-product_catalogs";
         $new_plans->save();
 
         $new_plans = new \App\Permission();
-        $new_plans->name = "create-categories";
-        $new_plans->display_name = "create-categories";
-        $new_plans->description = "create-categories";
+        $new_plans->name = "create-product_categories";
+        $new_plans->display_name = "create-product_categories";
+        $new_plans->description = "create-product_categories";
         $new_plans->save();
 
         $new_plans = new \App\Permission();
@@ -121,15 +121,15 @@ class DummyDataSeeder extends Seeder
         $update_plans->save();
 
         $update_plans = new \App\Permission();
-        $update_plans->name = "update-catalogs";
-        $update_plans->display_name = "update-catalogs";
-        $update_plans->description = "update-catalogs";
+        $update_plans->name = "update-product_catalogs";
+        $update_plans->display_name = "update-product_catalogs";
+        $update_plans->description = "update-product_catalogs";
         $update_plans->save();
 
         $update_plans = new \App\Permission();
-        $update_plans->name = "update-categories";
-        $update_plans->display_name = "update-categories";
-        $update_plans->description = "update-categories";
+        $update_plans->name = "update-product_categories";
+        $update_plans->display_name = "update-product_categories";
+        $update_plans->description = "update-product_categories";
         $update_plans->save();
 
         $update_plans = new \App\Permission();
@@ -159,15 +159,15 @@ class DummyDataSeeder extends Seeder
         $delete_plans->save();
 
         $delete_plans = new \App\Permission();
-        $delete_plans->name = "delete-catalogs";
-        $delete_plans->display_name = "delete-catalogs";
-        $delete_plans->description = "delete-catalogs";
+        $delete_plans->name = "delete-product_catalogs";
+        $delete_plans->display_name = "delete-product_catalogs";
+        $delete_plans->description = "delete-product_catalogs";
         $delete_plans->save();
 
         $delete_plans = new \App\Permission();
-        $delete_plans->name = "delete-categories";
-        $delete_plans->display_name = "delete-categories";
-        $delete_plans->description = "delete-categories";
+        $delete_plans->name = "delete-product_categories";
+        $delete_plans->display_name = "delete-product_categories";
+        $delete_plans->description = "delete-product_categories";
         $delete_plans->save();
 
         $delete_plans = new \App\Permission();
@@ -197,15 +197,15 @@ class DummyDataSeeder extends Seeder
         $view_plans->save();
 
         $view_plans = new \App\Permission();
-        $view_plans->name = "view-catalogs";
-        $view_plans->display_name = "view-catalogs";
-        $view_plans->description = "view-catalogs";
+        $view_plans->name = "view-product_catalogs";
+        $view_plans->display_name = "view-product_catalogs";
+        $view_plans->description = "view-product_catalogs";
         $view_plans->save();
 
         $view_plans = new \App\Permission();
-        $view_plans->name = "view-categories";
-        $view_plans->display_name = "view-categories";
-        $view_plans->description = "view-categories";
+        $view_plans->name = "view-product_categories";
+        $view_plans->display_name = "view-product_categories";
+        $view_plans->description = "view-product_categories";
         $view_plans->save();
 
         $view_plans = new \App\Permission();
@@ -283,41 +283,67 @@ class DummyDataSeeder extends Seeder
 
         /*********************************Products**********************************************************/
 
-        DB::table('catalogs')->insert(['name' => 'Electrical','description' => 'Electrical description']);
-        DB::table('catalogs')->insert(['name' => 'Home Automation','description' => 'Home Automation description']);
-        DB::table('catalogs')->insert(['name' => 'Interior Design','description' => 'Interior Design description']);
-        DB::table('catalogs')->insert(['name' => 'Fittings and Fixtures','description' => 'Fittings and Fixtures description']);
+        DB::table('product_catalogs')->insert(['name' => 'Electrical','description' => 'Electrical description']);
+        DB::table('product_catalogs')->insert(['name' => 'Home Automation','description' => 'Home Automation description']);
+        DB::table('product_catalogs')->insert(['name' => 'Interior Design','description' => 'Interior Design description']);
+        DB::table('product_catalogs')->insert(['name' => 'Fittings and Fixtures','description' => 'Fittings and Fixtures description']);
 
 
-        DB::table('categories')->insert(['name' => 'Interior Light','description' => 'Electrical description','catalog_id' => 1,'colour' => '#FF9900','type' => 1]);
-        DB::table('categories')->insert(['name' => 'Exterior Lights','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ffc000','type' => 1]);
-        DB::table('categories')->insert(['name' => 'Other Power','description' => 'Electrical description','catalog_id' => 1,'colour' => '#008080','type' => 1]);
-        DB::table('categories')->insert(['name' => 'Light Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff3300','type' => 2]);
-        DB::table('categories')->insert(['name' => 'Dimmer Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff99ff','type' => 2]);
-        DB::table('categories')->insert(['name' => 'Meter Box','description' => 'Electrical description','catalog_id' => 1,'colour' => '#66ff99','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Junction Box','description' => 'Electrical description','catalog_id' => 1,'colour' => '#e3de00','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Timer Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#1e219e','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Door Chime/Intercom','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff00ff','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Data (RJ45)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#0066ff','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Telephone Point (RJ25)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ffff00','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Television Point (PAL/F)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#9900cc','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Smoke Detector','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#33ccff','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Ceiling Fan' ,'description' => 'Electrical description','catalog_id' => 1,'colour' => '#71c993','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Exhaust Fan','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#dd5959','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Security Equipment','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#646e66','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Heating' ,'description' => 'Electrical description','catalog_id' => 1,'colour' => '#000000','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Automation','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#002060','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Audio/Visual','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#00A59D','type' => 3]);
-        DB::table('categories')->insert(['name' => 'Power Point','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#960000','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Interior Light','description' => 'Electrical description','catalog_id' => 1,'colour' => '#FF9900','type' => 1]);
+        DB::table('product_categories')->insert(['name' => 'Exterior Lights','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ffc000','type' => 1]);
+        DB::table('product_categories')->insert(['name' => 'Other Power','description' => 'Electrical description','catalog_id' => 1,'colour' => '#008080','type' => 1]);
+        DB::table('product_categories')->insert(['name' => 'Light Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff3300','type' => 2]);
+        DB::table('product_categories')->insert(['name' => 'Dimmer Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff99ff','type' => 2]);
+        DB::table('product_categories')->insert(['name' => 'Meter Box','description' => 'Electrical description','catalog_id' => 1,'colour' => '#66ff99','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Junction Box','description' => 'Electrical description','catalog_id' => 1,'colour' => '#e3de00','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Timer Switch','description' => 'Electrical description','catalog_id' => 1,'colour' => '#1e219e','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Door Chime/Intercom','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ff00ff','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Data (RJ45)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#0066ff','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Telephone Point (RJ25)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#ffff00','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Television Point (PAL/F)','description' => 'Electrical description','catalog_id' => 1,'colour' => '#9900cc','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Smoke Detector','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#33ccff','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Ceiling Fan' ,'description' => 'Electrical description','catalog_id' => 1,'colour' => '#71c993','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Exhaust Fan','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#dd5959','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Security Equipment','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#646e66','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Heating' ,'description' => 'Electrical description','catalog_id' => 1,'colour' => '#000000','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Automation','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#002060','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Audio/Visual','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#00A59D','type' => 3]);
+        DB::table('product_categories')->insert(['name' => 'Power Point','description'  => 'Electrical description','catalog_id' => 1,'colour' => '#960000','type' => 3]);
 
-        DB::table('sub_categories')->insert(['name' => 'INCANDESCENT' ,'description' => 'INCANDESCENT description','category_id' => 1]);
-        DB::table('sub_categories')->insert(['name' => 'FLUORESCENT' ,'description' => 'FLUORESCENT description','category_id' => 1]);
-        DB::table('sub_categories')->insert(['name' => 'HIGH-INTENSITY DISCHARGE' ,'description' => 'HIGH-INTENSITY DISCHARGE description','category_id' => 1]);
-        DB::table('sub_categories')->insert(['name' => 'LED','description'  => 'LED description','category_id' => 1]);
+        DB::table('product_sub_categories')->insert(['name' => 'INCANDESCENT' ,'description' => 'INCANDESCENT description','category_id' => 1]);
+        DB::table('product_sub_categories')->insert(['name' => 'FLUORESCENT' ,'description' => 'FLUORESCENT description','category_id' => 1]);
+        DB::table('product_sub_categories')->insert(['name' => 'HIGH-INTENSITY DISCHARGE' ,'description' => 'HIGH-INTENSITY DISCHARGE description','category_id' => 1]);
+        DB::table('product_sub_categories')->insert(['name' => 'LED','description'  => 'LED description','category_id' => 1]);
+        DB::table('product_sub_categories')->insert(['name' => 'INDOOR-SWTCH','description' =>'Indoor Switch','category_id' => 4]);
 
 
 
-        for ($i=1;$i<=100;$i++){
+        for ($i=1;$i<=10;$i++){
+
+        if($faker->boolean(50)){
+            $category_id = 1;
+        }else{
+            $category_id = 4;
+        }
+            $id = DB::table('product_sub_categories')->insertGetId([
+                'name' => 'Pack '.$i ,
+                'description' => 'Pack description'.$i,
+                'category_id' => $category_id,
+                'is_pack' => true,
+                'builder_price' => $faker->numberBetween(100,1000),
+                'supplier_price' => $faker->numberBetween(100,1000),
+                'contractor_price' => $faker->numberBetween(100,1000)
+            ]);
+
+            for ($j=1;$j<=10;$j++) {
+                DB::table('product_sub_category_maps')
+                    ->insert(['sub_category_id' => $id, 'product_id' => $j]);
+            }
+        }
+
+
+
+        for ($i=1;$i<=250;$i++){
             $is_composite = $faker->boolean(50);
             DB::table('products')->insert([
                 'name' => $faker->sentence(2),
@@ -326,10 +352,10 @@ class DummyDataSeeder extends Seeder
                 'pronto_code' => $faker->text(10),
                 'manufacturing_product_code' => $faker->text(10),
                 'image' => $faker->imageUrl(640,480,null,true,null),
-                'builders_price' => $faker->numberBetween(0,10000),
+                'builder_price' => $faker->numberBetween(0,10000),
                 'discount' => $faker->numberBetween(0,100),
                 'symbol' => $faker->numberBetween(0,250),
-                'sales_price' => $faker->numberBetween(0,10000),
+                'sale_price' => $faker->numberBetween(0,10000),
                 'is_composite' => $is_composite,
                 'supplier_id'=>$faker->numberBetween(1,10)
             ]);
@@ -337,17 +363,41 @@ class DummyDataSeeder extends Seeder
 
             if($is_composite){
                 for ($j=1;$j<=5;$j++) {
-                    DB::table('composite_product_maps')->insert([
+                    DB::table('product_composite_maps')->insert([
                         'parent' => $i,
                         'child' => $faker->numberBetween(1, 20)
                     ]);
                 }
             }
+            if($faker->boolean(50)){
+                DB::table('product_sub_category_maps')->insert(['sub_category_id' => 4 ,'product_id' => $i]);
+            }else{
+                DB::table('product_sub_category_maps')->insert(['sub_category_id' => 5 ,'product_id' => $i]);
+            }
 
-            DB::table('sub_category_products')->insert(['sub_category_id' => 4 ,'product_id' => $i]);
+
         }
 
         /***************************************************************************************************/
+
+        /******************************Product Custom Fields ***********************************************/
+        DB::table('custom_field_types')->insert([
+            ['name' => 'text'],
+            ['name' => 'textarea']
+        ]);
+
+        DB::table('product_custom_fields')->insert([
+            ['name' => 'Energy Consumption (W)','custom_field_type_id' => 1,'is_mandatory' => true,'product_sub_category_id' => 4],
+            ['name' => 'Width','custom_field_type_id' => 1,'is_mandatory' => true,'product_sub_category_id' => 4],
+            ['name' => 'Height','custom_field_type_id' => 1,'is_mandatory' => true,'product_sub_category_id' => 4],
+            ['name' => 'Depth','custom_field_type_id' => 1,'is_mandatory' => true,'product_sub_category_id' => 4],
+        ]);
+
+        /***************************************************************************************************/
+
+
+
+
 
 
     }

@@ -1,6 +1,5 @@
 @extends('layouts.default')
 
-
 @section('main-content')
     <div class="row" id="prod-list-view">
         <div class="box">
@@ -12,9 +11,6 @@
                        role="grid" aria-describedby="product-table-view_info">
                     <thead>
                     <tr role="row">
-                        <th class="sorting_asc" tabindex="0" aria-controls="product-table-view" rowspan="1"
-                            colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending">#
-                        </th>
                         <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
                             aria-label="Product Code: activate to sort column ascending"> Name
                         </th>
@@ -24,41 +20,25 @@
                         <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
                             aria-label="Product Name: activate to sort column ascending">Type
                         </th>
+                        <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
+                            aria-label="Product Name: activate to sort column ascending">Category
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
+                            aria-label="Product Name: activate to sort column ascending">Sub-Category
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
+                            aria-label="Product Name: activate to sort column ascending">Builder's Price
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
+                            aria-label="Product Name: activate to sort column ascending">Image
+                        </th>
                         <th>
                             Actions
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php $i = 1; ?>
-                    @foreach($products as $product)
-                        <tr data-product-id="2" role="row">
-                            <td data-id="2-id" class="sorting_1">{!! $i++ !!}</td>
-                            <td data-id="2-code">{!! $product['name'] !!}</td>
-                            <td data-id="2-name">{!! $product['description'] !!}</td>
-                            <td data-id="2-name">{!! $product['type'] !!}</td>
-                            <td data-id="2-actions"><a class="action-btn btn-app" href="{!! url($product['more_url']) !!}"
-                                                       data-toggle="tooltip" data-placement="top" title=""
-                                                       data-original-title="View Product"><i
-                                            class="fa fa-folder-open-o green-font"></i></a>
-                                <a class="action-btn btn-app" data-product-id="2" id="2-edit-action" href="{!! url($product['edit_url']) !!}"
-                                   data-toggle="tooltip" data-placement="top" title=""
-                                   data-original-title="Edit Product"><i class="fa fa-edit green-font"></i></a>
 
-                                <form method="GET" action="{!! url($product['delete_url']) !!}" accept-charset="UTF-8" style="display:inline">
-                                    <a class="action-btn btn-app"
-                                       data-product-id="2"
-                                       data-placement="top"
-                                       title=""
-                                       data-toggle="modal"
-                                       data-target="#confirmDelete"
-                                       data-title="Delete Product"
-                                       data-message="Are you sure you want to delete this Product ?"
-                                       data-original-title="Remove User"><i class="fa fa-times red-font"></i></a>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -103,8 +83,55 @@
     {{ Html::script('resources/js/plugins/datatables/dataTables.bootstrap.js') }}
     <script>
         $(document).ready(function () {
-            $('#product-table-view').DataTable();
+            $(".product-link-hover").mouseover(function(){ console.log('f');
+                var id = $(this).attr("id");
+                var image_id = '#image_'+id;
+                $(image_id).attr("src",$(this).attr("src"));
+                $(image_id).css("display","block");
+            });
+            $('#product-table-view').DataTable({
+                ajax:'/products/all',/*
+                "aoColumns": [
+                { "mDataProp": "name" },
+                { "mDataProp": "description" },
+                { "mDataProp": "type" },
+                { "mDataProp": "category" },
+                { "mDataProp": "sub_category" },
+                { "mDataProp": "builder_price" },
+                { "mDataProp": "image" },
+            ],*/ "columns": [
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "type" },
+                { "data": "category" },
+                { "data": "sub_category" },
+                { "data": "builder_price" }
+            ],
+                "columnDefs": [ {
+                    "targets": 6,
+                     visible: true,
+                    "data": function ( row, type, val, meta ) {
+
+                        return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12" style="display: none" id ="image_'+row.id+'"/><a href="#" class="product-link-hover" id ="'+row.id+'">View Image</a>';
+                        return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12 product-link-hover"/>';
+                    }
+                },{
+                    "targets": 7,
+                     visible: true,
+                    "data": function ( row, type, val, meta ) {
+                        return '<a class="action-btn btn-app" href="'+row.more_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Product"><i class="fa fa-folder-open-o green-font"></i></a>' +
+                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" id="2-edit-action" href="'+row.edit_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Product"><i class="fa fa-edit green-font"></i></a>'+
+                                '<form method="GET" action="'+row.delete_url+'" accept-charset="UTF-8" style="display:inline">' +
+                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" data-placement="top" title="" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Product" data-message="Are you sure you want to delete this Product ?" data-original-title="Remove User"><i class="fa fa-times red-font"></i></a>' +
+                                '</form>';
+                    }
+                } ],
+                pageLength:50
+            });
+
         });
+
+
     </script>
 
     @include('includes.confirmDelete')
