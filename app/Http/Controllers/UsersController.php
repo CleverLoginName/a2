@@ -75,6 +75,7 @@ class UsersController extends Controller
         $user->email = $request->get('email');
         $user->mobile = $request->get('mobile');
         $user->password = Hash::make($request->get('password'));
+        $user->created_by = Auth::user()->id;
 
         $user->save();
         $role = DB::table('roles')->where('id', $request->get('role_id'))->first()->name;
