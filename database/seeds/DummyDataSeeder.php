@@ -252,7 +252,7 @@ class DummyDataSeeder extends Seeder
         $user->password = Hash::make('123');
         $user->is_enabled = true;
         $user->created_by = 1;
-        $user->profile_pic = '/uploads/profile_pics/default.jpg';
+        $user->profile_pic = '/resources/images/default.png';
         $user->save();
 
         $user = new User();
@@ -263,7 +263,7 @@ class DummyDataSeeder extends Seeder
         $user->password = Hash::make('123');
         $user->is_enabled = true;
         $user->created_by = 1;
-        $user->profile_pic = '/uploads/profile_pics/default.jpg';
+        $user->profile_pic = '/resources/images/default.png';
         $user->save();
 
 

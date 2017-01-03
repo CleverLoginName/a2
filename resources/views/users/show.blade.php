@@ -2,48 +2,70 @@
 
 
 @section('main-content')
-    <section class="box new-item-wrapper">
-        <section class="box-header"></section>
-        <section class="box-body">
-            <form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-                  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/users') !!}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>First Name</label></section>
-                    <section class="col-md-6">{!! $user->first_name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Last Name</label></section>
-                    <section class="col-md-6">{!! $user->last_name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>E-mail</label></section>
-                    <section class="col-md-6">{!! $user->email !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Mobile</label></section>
-                    <section class="col-md-6">{!! $user->mobile !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>User Role</label></section>
-                    <section class="col-md-6">
-                        {!! \App\Role::find(DB::table('role_user')->where('user_id','=',$user->id)->first()->role_id)->display_name !!}
-                    </section>
-                    <section class="col-md-2"></section>
-                </section>
 
-            </form>
-        </section>
-    </section>
+    <div class="content_area clearfix">
+    <div class="col-xs -12 col-sm- 12 col-md-12 col-lg-12 content_left">
+
+        <div class="form_container clearfix">
+
+            <div class="col-lg-3">
+            <div class="col-md-9">
+                <img src="{!! asset($user->profile_pic,null) !!}" class="img-responsive" alt=""/>
+                <div class="product_desc">
+                    <center><label for="_name" class="control-label">{!! $user->first_name.' '.$user->last_name !!}</label></center>
+
+                </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 product_details">
+                <form class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">First Name</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $user->first_name !!}</p>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Last Name</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $user->last_name !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">E-mail</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $user->email !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Mobile</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $user->mobile !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">User Role</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! \App\Role::find(DB::table('role_user')->where('user_id','=',$user->id)->first()->role_id)->display_name !!}</p>
+                        </div>
+                    </div>
+                    <div class="wr_btn clearfix">
+                        <a name="Save" type="button" class="btn_save" id="Save" href="{!! url('profile/edit') !!}">Edit Profile</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    </div>
 @stop
 
 

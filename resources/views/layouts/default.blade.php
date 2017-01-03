@@ -24,11 +24,11 @@
         <section class="row">
 
 
-            <section class="col-md-9 padding-top-10">
+            <section class="col-md-12 padding-top-10">
                 @yield('main-content')
             </section>
-            <section class="col-md-3">
-                @yield('sub-content')
+           <!-- <section class="col-md-3">
+                @yield('sub-content')-->
             </section>
         </section>
     </aside>

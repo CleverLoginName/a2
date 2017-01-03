@@ -100,7 +100,7 @@ class UsersController extends Controller
             $randFileName = $randStr.'.'.$profile_pic->getClientOriginalExtension();
             $profile_pic->move($destinationPath, $randFileName);
         } else {
-            $img = Image::make(Gravatar::fallback('/uploads/profile_pics/default.jpg')->get($user->email));
+            $img = Image::make(Gravatar::fallback('/resources/images/default.png')->get($user->email));
             $randFileName = $randStr.'.png';
             $img->save($destinationPath.$randFileName);
         }
@@ -158,6 +158,14 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+        $roles = Role::all();
+        return view('users.edit')
+            ->with('user', $user)
+            ->with('roles', $roles);
+    }
+    public function editProfile()
+    {
+        $user = Auth::user();
         $roles = Role::all();
         return view('users.edit')
             ->with('user', $user)

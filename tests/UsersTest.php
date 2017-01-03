@@ -4,6 +4,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use \App\User;
+use Faker\Factory as Faker;
 
 class UsersTest extends TestCase
 {
@@ -20,14 +21,14 @@ class UsersTest extends TestCase
     }
 
     public function testUserCreate()
-    {
+    {   $faker = Faker::create();
         $user = User::find(1);;
         $this->be($user);
 
         $this->visit('/users/create')
             ->type('Damith','first_name' )
             ->type('Harischandrathilaka','last_name')
-            ->type('bqudamith@gmail.com','email')
+            ->type($faker->email,'email')
             ->type('0718219616','mobile')
             ->type('Harischandrathilaka','last_name')
             ->type('123123','password')

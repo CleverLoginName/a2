@@ -17,7 +17,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/users/roles', 'UsersController@updateRolesNUsers');
     Route::resource('users', 'UsersController');
     Route::get('users/{id}/delete', 'UsersController@destroy');
+
     Route::get('/profile', 'UsersController@profile');
+    Route::get('/profile/edit', 'UsersController@editProfile');
 
     /**********************************************************************************************/
 
