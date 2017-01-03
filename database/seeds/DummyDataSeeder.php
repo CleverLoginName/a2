@@ -250,6 +250,8 @@ class DummyDataSeeder extends Seeder
         $user->email = "admin@seebo.com.au";
         $user->mobile = "1231231231";
         $user->password = Hash::make('123');
+        $user->is_enabled = true;
+        $user->created_by = 1;
         $user->profile_pic = '/uploads/profile_pics/default.jpg';
         $user->save();
 
@@ -259,6 +261,8 @@ class DummyDataSeeder extends Seeder
         $user->email = "con@seebo.com.au";
         $user->mobile = "1231231231";
         $user->password = Hash::make('123');
+        $user->is_enabled = true;
+        $user->is_enabled = 1;
         $user->profile_pic = '/uploads/profile_pics/default.jpg';
         $user->save();
 
