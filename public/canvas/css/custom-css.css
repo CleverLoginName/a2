@@ -17,10 +17,10 @@
 
 #plan-name{
     display:inline-block;
-    width:110px;
+    /*width:110px;*/
     white-space: nowrap;
     tab-size: 15px;
-    overflow:hidden !important;
+    /*overflow:hidden !important;*/
     text-overflow: ellipsis;
 }
 
@@ -40,3 +40,104 @@
 .imege-props{
     height: 65px !important;
 }
+
+/*============ ERANDA'S CSS======================= */
+ .pin:nth-child(2) {
+    width:68px;
+}
+.panel-heading{ border-bottom:none !important}
+.lobipanel>.panel-heading .dropdown{ position:absolute !important; right:0px;}
+.lobipanel .panel-heading .dropdown .dropdown-menu{ float:right}
+.level-2{ float:left; width:100%; margin-top:10px;}
+.lobipanel{ height:auto !important}
+#tool-items-ul{ padding-left:0px;}
+
+.wr_logout .tool-item .tooltiptext {
+    left: -159%;
+}
+
+/*.glyphicon-pushpin:before, .fa-plus-square-o:before {
+    content: none !important;
+}
+*/
+
+.panel-body::-webkit-scrollbar {
+    width: 13px;
+}
+ /*.panel-body::-webkit-scrollbar-button {
+    background:#ff0000 !important
+}*/
+.panel-body::-webkit-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+.panel-body::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+/*.lobipanel .panel-heading .dropdown .dropdown-menu>li{
+	background:url(../img/pined.png) no-repeat center center !important;
+} */
+.panel_top_width{ width:34px;}
+.dropdown-menu-right .fa-plus-square-o::before, .dropdown-menu-right .fa-minus-square-o::before, .panel-collapsed .dropdown-menu-right .glyphicon-pushpin::before, .dropdown-menu-right .glyphicon-pushpin:before{ content:none !important}
+.dropdown-menu-right .fa-plus-square-o{
+	background:url(../img/plus.jpg) no-repeat;    display: block;
+    padding: 9px 9px 12px 9px;
+}
+.dropdown-menu-right .fa-minus-square-o{
+	background:url(../img/minus.jpg) no-repeat;    display: block;
+    padding: 9px 9px 12px 9px;
+}
+.panel-collapsed .dropdown-menu-right .glyphicon-pushpin{
+	background: url(../img/pined.png) no-repeat;
+    display: block;
+    padding: 11px 11px 14px 14px;
+}
+
+
+.dropdown-menu-right .glyphicon-pushpin{
+	background: url(../img/pin_light.jpg) no-repeat center center;
+    display: block;
+    padding: 11px 11px 14px 14px;
+}
+
+
+.back-ground-colour-inner:first-child .dropdown-menu-right .glyphicon-pushpin{
+	background: url(../img/pin_collapsed.png) no-repeat center center;
+    display: block;
+    padding: 11px 11px 14px 14px;
+}
+
+
+
+@media screen and (min-width: 768px){
+.lobipanel .panel-heading .panel-title {
+    max-width: 100% !important;
+}
+.lobipanel>.panel-heading {
+    padding: 5px;
+	/*margin-bottom:25px;*/
+	border-bottom:1px solid #fff !important;
+}
+}
+
+@media screen and (min-width: 1024px){
+#sidebar{
+    width:275px;
+}
+#design-area{width:75%}
+}
+
+
+@media screen and (min-width: 380px) and ( max-width: 990px ){
+#sidebar{
+    width:100%;
+}
+#design-area{width:100% !important}
+/*#top-canvas, #bg-canvas, #draw-tool-canvas{width:100% !important}*/
+}
+/*#ruler-canvas, #bg-canvas, #draw-tool-canvas, #top-canvas, #address-bar, #top-menu{ display:none}*/
+

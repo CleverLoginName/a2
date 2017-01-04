@@ -20,15 +20,15 @@
 
 .first {
   text-align: center;
-  width: 15%;
+  width: 20%;
 }
 
 .second {
-  width: 75%;
+  width: 65%;
 }
 
 .third {
-  width: 10%;
+  width: 15%;
   text-align: center;
   height:auto;
 }

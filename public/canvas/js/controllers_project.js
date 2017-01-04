@@ -7,6 +7,9 @@
 //     drawAllObjects();
 // });
 
+// var width =  $(window).width() ;
+// var height = $(window).height();
+	
 $('.toggle-button a').click(function () {
     $('.toggle-button').removeClass('active');
     $(this).parent().addClass('active');
@@ -27,6 +30,7 @@ $('#drag').click(function () {
 
 $('#eraser').click(function () {
     toolAction = ToolActionEnum.ERASE;
+    drawObjectType = ObjectType.ERASE;
     document.getElementsByTagName("body")[0].style.cursor = "auto";
 });
 
@@ -42,6 +46,7 @@ $('#rotate').click(function () {
 
 $('#pan').click(function () {
     toolAction = ToolActionEnum.PAN;
+    hideDialog();
     document.getElementsByTagName("body")[0].style.cursor = "pointer";
 });
 
@@ -90,7 +95,7 @@ $("#switch-prop-close").on("click", function () {
 
 // DROP ITEM TO THE CANVAS
 
-var angle, elev, power, type, b_tooltip, s_angle, s_elev, s_power, s_bname, s_type, s_tooltip,bulb_icon;
+var angle, elev, power, type, b_tooltip, s_angle, s_elev, s_power, s_bname, s_type, s_tooltip,bulb_icon,cat_type;
 
 //var single_item = document.getElementsByClassName('single-item');
 
@@ -107,13 +112,13 @@ $(".product-container").on("click", ".single-item", function (e) {
         power = this.getAttribute("data-power");
 
         bname = this.getAttribute("data-name");
-
         type = this.getAttribute("attr");
         b_tooltip = this.getAttribute("data-tooltip");
         bulbPrice = this.getAttribute("data-price");
         set_itemCode = this.getAttribute("data-item-code");
         lightImagePath = this.getAttribute("data-path");
         bulb_icon  = this.getAttribute("data-path1");
+        cat_type = this.getAttribute("data-category-type");
 
         document.getElementsByTagName("body")[0].style.cursor = "url('/img/cursor/bulb-icon.cur'), auto";
     }
@@ -312,9 +317,11 @@ $(function () {
         switch (action) {
             case 'zoom-in':
                 zoomIn();
+                hideDialog();
                 break;
             case 'zoom-out':
                 zoomOut();
+                hideDialog();
                 break;
             case 'zoom-reset':
                 zoomReset();
@@ -392,8 +399,9 @@ $(function () {
             var fileDetails = JSON.parse(msg);
 
             clearDrawElements();
+
             var metaData = fileDetails.metaData;
-            scaleFactor = metaData.scaleFactor;
+            //scaleFactor = metaData.scaleFactor;
             var objectData = fileDetails.objectData;
 
             $(objectData).each(function (i, e) {
@@ -444,11 +452,20 @@ $('#mouse-action-menu li').click(function () {
         case "delete":
             deleteObj(selObjIndex);
             break;
+        //(+)TBIRD - VB0.4 - START
+        case "stop":
+            performEscapeAction();
+        case "clear":
+            deleteObj(selObjIndex);
+            break;
+        default:
+            break;
+        //(+)TBIRD - VB0.4 - FINISH
     }
 });
 
 $('#can-tool-btn-save').click(function () {
-    console.log(this);
+    //console.log(this);
     var notes = $('#can-tool-product-note').val();
     if (notes != undefined) {
         addNoteToSelectedProduct(notes);    
@@ -462,22 +479,24 @@ $('#tool-items-ul a').click(function () {
 
 $("#sidebar").resizable();
 $('#sidebar').resize(function() {
-    $('#design-area').width($("#parent").width() - $("#sidebar").width());
+    $('#design-area').width($(window).width() - $("#sidebar").width());
     adjustCanvas();
-});
+ });
+ 
 
 // Changing the canvas width and height according to window resize
 $(window).resize(function () {
-    $('#design-area').width($("#parent").width() - $("#sidebar").width());
-    $('#sidebar').height($("#parent").height());
+    $('#design-area').width($(window).width() - $("#sidebar").width());
+    $('#sidebar').height($(window).height());
+    adjustSidebar();
     adjustCanvas();
     drawAllObjects();
-    adjustSidebar();
 });
 
 function adjustCanvas() {
+    
     var canvas_offset = $(canvasOrig).offset();
-    var width =  $(window).width() - canvas_offset.left;
+    var width =  $(window).width() - canvas_offset.left -5;
     var height = $(window).height() - canvas_offset.top;
     rulerCanvas.width = width;
     rulerCanvas.height = height;
@@ -487,28 +506,27 @@ function adjustCanvas() {
     canvas.height = height;
     bg_Canvas.width = width;
     bg_Canvas.height = height;
+    era_canvas.width = width;
+    era_canvas.height = height;
+
+    $('#address-bar').width(width);
+    $('#top-menu').width(width);
 
     $('#container').height(height);
     // adjustSidebar();
-
-    // rulerCanvas.width = $(window).width() - 3;
-    // rulerCanvas.height = $(window).height() - 70;
-    // canvasOrig.width = $(window).width() - 3;
-    // canvasOrig.height = $(window).height() - 70;
-    // canvas.width = $(canvasOrig).width();
-    // canvas.height = $(canvasOrig).height();
 }
 
 adjustSidebar()
 function adjustSidebar(){
-    $('#sidebar').height(window.innerHeight);
-    $('#main-pnnel-drag').height(window.innerHeight*70/100);
-    $('#bom-area1').height(window.innerHeight*30/100);
+    $('#sidebar').height($(window).height());
+    $('#main-pnnel-drag').height($(window).height() * 70 / 100);
+    $('#bom-area').height($(window).height() * 30 / 100);
 
-    $('#bom-area1').width($('#main-pnnel-drag').width());
-    $('#bom-area1').width($('#sidebar').width());
+//    $('#bom-area').width($('#main-pnnel-drag').width());
     $('#bom-area').width($('#sidebar').width());
-    $('.body-main').css("height",(window.innerHeight*70/100));
+    $('#bom-table').width($('#sidebar').width());
+    $('.body-main').css("height",($(window).height() * 70 / 100));
+    $('#main-pannel-body').height( $('#main-pnnel-drag').height()-$('#main-hadder').height())
     //			document.getElementById("sidebar").setAttribute("style","height:"+screen.height+"px");
 }
 /*
@@ -532,5 +550,5 @@ $('#plans-button').click( function(){
 });
 */
 $(".toggle-button").click( function () {
-    perfromEscapeAction()
+    performEscapeAction()
 })

@@ -2,41 +2,76 @@
 
 
 @section('main-content')
-    <section class="box new-item-wrapper">
-        <section class="box-header"></section>
-        <section class="box-body">
-            <form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-                  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/templates') !!}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4"><label>Name</label></section>
-                    <section class="col-md-6">{!! $template->name !!}</section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4"><label>Watt Per SQM - House</label></section>
-                    <section class="col-md-6">{!! $template->sqm_house !!}</section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4"><label>Watt Per SQM - Garage</label></section>
-                    <section class="col-md-6">{!! $template->sqm_garage !!}</section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4"><label>Watt Per SQM - Porch</label></section>
-                    <section class="col-md-6">{!! $template->sqm_porch !!}</section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4"><label>Scale</label></section>
-                    <section class="col-md-6">1 : {!! $template->scale !!}</section>
-                </section>
+    <div class="col-xs -12 col-sm- 12 col-md-12 col-lg-12 content_left">
 
-            </form>
-        </section>
-    </section>
+        <div class="form_container clearfix">
+
+
+            <div class="col-lg-12 product_details">
+                <form class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Name</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->name !!}</p>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - House</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_house !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - Garage</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_garage !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - Porch</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_porch !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Scale</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>1 : {!! $template->scale !!}</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-12 related_products" >
+            <h4>Related Products</h4>
+            @foreach($plans as $plan)
+            <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
+                <div class="product">
+                    <img src="/{!! $plan->img !!}" class="img-responsive col-md-9 col-lg-9"/>
+                    <div class="form-group clearfix">
+                        <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label">Name</label>
+                        <div class="col-md-8 col-lg-8">
+                            <p>{!! $plan->name !!}</p>
+                        </div>
+                        <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label"></label>
+                        <div class="col-md-8 col-lg-8">
+                            <a href="{!! url('templates/create/add-plans/'.$plan->id.'/canvas') !!}">Load in Canvas</a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+                @endforeach
+
+        </div>
 @stop
 
 

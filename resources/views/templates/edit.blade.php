@@ -64,7 +64,7 @@
                                     Total
                                 </section>
                                 <section class="col-md-8">
-                                    <span id="total"></span>
+                                    <span id="total">{!! intval($template->sqm_house)+intval($template->sqm_garage)+intval($template->sqm_porch) !!}</span>W
 
                                     <input type="hidden" name="energy_rating" id="energy_rating" value="1">
                                 </section>

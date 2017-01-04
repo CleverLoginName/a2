@@ -4,10 +4,11 @@
     var subCategory= '';
     var products = '';
     var serch ='';
+    var baseUrl ='';
     
 
         $.ajax({
-            url: '/rest/api/products',
+            url: baseUrl+'/rest/api/products',
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
@@ -39,7 +40,7 @@
                                             +'</div>'
                                         +'</div>'
                                         +'<div >'
-                                            +'<li class="product-container" style="overflow-x: hidden; overflow-y:scroll;" id="search-'+index+'">'
+                                            +'<li class="product-container" id="search-'+index+'">'
                                             + '</li>'
                                         +'</div>'
                                     +' </div>'
@@ -57,24 +58,19 @@
                                 $.each(v2.data, function(i3, v3) {
                                    if(v3.name.search(new RegExp(bla)) != -1){
                                     isfound = true;
-                                    var productoo ='<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-name="Down Light T1" data-tooltip="img/left-menu/ceilinglight.png" data-path1 ="'+v3.icon+'">'
+                                    var productoo ='<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-name="Down Light T1" data-tooltip="img/left-menu/ceilinglight.png" data-path1 ="'+baseUrl+v3.icon+'">'
                                                         +'<div>'
-                                                        +'<div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">'
-                                                            +'<img src="'+v3.path+'" class="imege-props ">'
+                                                        +'<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">'
+                                                            +'<img src="'+baseUrl+v3.path+'" class="imege-props">'
                                                         +'</div>'
                                                         +'<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                                +'<span  class=" without-margin ">'+v3.name+'</span></br>'
-                                                                +'<span  class="  without-margin ">LUMS : '+v3.wattage+'</span></br>'
+                                                                +'<span  class=" without-margin product-name">'+v3.name+'</span></br>'
+                                                                +'<span  class="  without-margin product-normal">LUMS : '+v3.wattage+'</span></br>'
                                                                 +'<span  class=" without-margin ">Rating: 4.0</span></br>'
                                                                 +'<span  class=" without-margin ">Type : '+v3.productCode+'</span></br>'
+                                                                +'<span  class=" without-margin ">Type : '+v3.productCode+'</span></br>'
+                                                                +'<span  class=" without-margin "><span class="product-price">$'+v3.price+'</span><span class="product-gst">(in gst)</span></span></br>'
                                                             +'</div>'
-                                                    + ' <div class="pro-price-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                        +'<span class="set-red  without-margin" >Sale</span></br>'
-                                                        +'<span class=" without-margin ">$'+v3.price+'</span></br>'
-                                                        +'<span class=" without-margin ">Save</span></br>'
-                                                        + '<span class = "">$0.00</span>'
-                                                    + '</div>'
-                                                            
                                                         +'</div>'
                                                     +'<div>'  
                                     $('#search-'+index).append(productoo);
@@ -102,23 +98,19 @@
                                     isfound = true;
                                     var productoo ='<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-name="Down Light T1" data-image_path="'+v3.path+'">'
                                                         +'<div>'
-                                                        +'<div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">'
-                                                            +'<img src="'+v3.path+'" class="imege-props ">'
+                                                        +'<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">'
+                                                            +'<img src="'+baseUrl+v3.path+'" class="imege-props ">'
                                                         +'</div>'
                                                         +'<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                                +'<span  class=" without-margin ">'+v3.name+'</span></br>'
-                                                                +'<span  class="  without-margin ">LUMS : '+v3.wattage+'</span></br>'
-                                                                +'<span  class=" without-margin ">Rating: 4.0</span></br>'
-                                                                +'<span  class=" without-margin ">Type : '+v3.productCode+'</span></br>'
+                                                                +'<span  class=" without-margin product-name">'+v3.name+'</span></br>'
+                                                                +'<span  class="  without-margin product-normal">LUMS : '+v3.wattage+'</span></br>'
+                                                                +'<span  class=" without-margin product-normal">Rating: 4.0</span></br>'
+                                                                +'<span  class=" without-margin product-normal">Type : '+v3.productCode+'</span></br>'
+                                                                +'<span  class=" without-margin product-normal">Type : '+v3.productCode+'</span></br>'
+                                                                +'<span  class=" without-margin "><span class="product-price">$'+v3.price+'</span><span class="product-gst">(in gst)</span></span></br>'
                                                             +'</div>'
-                                                    + ' <div class="pro-price-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                        +'<span class="set-red  without-margin" >Sale</span></br>'
-                                                        +'<span class=" without-margin ">$'+v3.price+'</span></br>'
-                                                        +'<span class=" without-margin ">Save</span></br>'
-                                                        + '<span class = "">$0.00</span>'
-                                                    + '</div>'
-                                                            
-                                                        +'</div>'
+
+                                        +'</div>'
                                                     +'<div>'  
                                     $('#search-'+index).append(productoo);
                                    } 
@@ -163,37 +155,40 @@
                                                 +'</div>'
                                             +'</div>'
                                         +'</div>'
-                                        + '<ul class="level-4" style="padding-left: 10px;-webkit-padding-start: 10px;-moz-padding-start: 10px" >'
-                                            +'<li class="product-container" style="overflow-x: hidden; overflow-y:scroll;" id ="subCategory-'+index2+subCatName+'" >'
+                                        + '<ul class="level-4" style="padding-left: 0px;-webkit-padding-start: 0px;-moz-padding-start: 0px" >'
+                                            +'<li class="product-container"  id ="subCategory-'+index2+subCatName+'" >'
                                             +'</li>'
                                         +'</ul>'
                                     +'</li>';
                             $('#catagory-'+index1).append(subCategory);
                             $.each(subValue.data,function(index3,products){
-                                products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-name="Down Light T1" data-image_path="'+products.path+'" data-path1 ="'+products.icon+'" data-is_pack="'+subValue.is_pack+'" data-cat="'+subValue.sub_category_id+'">'
-                                                +'<div>'
-                                                    +'<div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">'
+                                products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id='+products.id+'  data-prod_type='+products.type+' data-name="'+products.name+'" data-sale_price="'+products.sale_price+'" data-image_path="'+products.path+'" data-path1 ="'+baseUrl+products.icon+'" data-is_pack="'+subValue.is_pack+'" data-cat="'+subValue.sub_category_id+'" data-category-type="'+catValue.category_name+'">'
+                                                +'<div class="clearfix">'
+                                                    +'<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_img">'
                                                         +'<img src="'+products.path+'" class="imege-props product-item">'
                                                     +'</div>'
-                                                     +'<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                        +'<span  class=" without-margin ">'+products.name+'</span></br>'
-                                                        +'<span  class="  without-margin ">LUMS : '+products.wattage+'</span></br>'
-                                                        +'<span  class=" without-margin ">Rating: 4.0</span></br>'
-                                                        +'<span  class=" without-margin ">Type : '+products.productCode+'</span></br>'
+                                                     +'<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_desc">'
+                                                        +'<span  class=" without-margin product-name">'+products.name+'</span></br>'
+                                                        +'<span  class="  without-margin product-normal">LUMS : '+products.wattage+'</span></br>'
+                                                        +'<span  class=" without-margin product-normal">Rating: 4.0</span></br>'
+                                                        +'<span  class=" without-margin product-normal">Type : '+products.productCode+'</span></br>'
+                                                        +'<span  class=" without-margin product-normal">Type : '+products.productCode+'</span></br>'
+                                                        +'<span  class=" without-margin "><span class="product-price">$'+products.price+'</span><span class="product-gst">(in gst)</span></span>'
                                                     +'</div>'
-                                                    + ' <div class="pro-price-container col-md-4 col-lg-4 col-sm-4 col-xs-4">'
-                                                        +'<span class="set-red  without-margin" >Sale</span></br>'
-                                                        +'<span class=" without-margin ">$'+products.price+'</span></br>'
-                                                        +'<span class=" without-margin ">Save</span></br>'
-                                                        + '<span class = "">$0.00</span>'
-                                                    + '</div>'
-                                                +'</div>'
+                                    //+'<span  class=" without-margin "><span class="product-price">$'+v3.price+'</span><span class="product-gst">(in gst)</span></span></br>'
+
+                                    // +'<span  class=" without-margin product-name">'+v3.name+'</span></br>'
+                                    // +'<span  class="  without-margin product-normal">LUMS : '+v3.wattage+'</span></br>'
+                                    // +'<span  class=" without-margin ">Rating: 4.0</span></br>'
+                                    // +'<span  class=" without-margin ">Type : '+v3.productCode+'</span></br>'
+                                    // +'<span  class=" without-margin ">Type : '+v3.productCode+'</span></br>'
+
+                                    +'</div>'
                                             +'<div>';
 
                             $('#subCategory-'+index2+subCatName).append(products);
                             });
                         });
-                        //console.log( index1 + ": " + catValue.category_name );
                     });
                 });
                    $("#main-pannel-body").append(catalog);
@@ -250,7 +245,7 @@
                         bulbPrice = this.getAttribute("data-price");
                         set_itemCode = this.getAttribute("data-item-code");
                         lightImagePath = this.getAttribute("data-path");
-                        bulb_icon  = this.getAttribute("data-path1");
+                        iconPath  = this.getAttribute("data-path1");
 
                     }
 
@@ -275,18 +270,20 @@
                 // make all .tool's draggable
                 $tools.draggable({
                     helper: function () {
-                        is_pack = this.getAttribute("data-is_pack");
-                        data1 = this.getAttribute("data-cat");
-                        is_pack = parseInt(is_pack);
+                        is_pack = parseInt(this.getAttribute("data-is_pack"));
+                        pack_id = parseInt(this.getAttribute("data-cat"));//sub catagory id
                         image_path = this.getAttribute("data-image_path");
-                        data1 = parseInt(data1);
+                        prod_id = this.getAttribute("data-prod_id");
+                        prod_type = this.getAttribute("data-prod_type");
+                        sale_price = this.getAttribute("data-sale_price");
+                        category_type = this.getAttribute("data-category-type");
                         $copy = $(this).clone();
-                        if(is_pack ==1){
-                            bname = this.getAttribute("data-name");
-                            bulb_icon = this.getAttribute("data-path1");
+                        if(is_pack ==1){ //TODO: check why if statement needed ??? 
+                            prod_name = this.getAttribute("data-name");
+                            iconPath = this.getAttribute("data-path1");
                         }else {
-                            bname = this.getAttribute("data-name");
-                            bulb_icon = this.getAttribute("data-path1");
+                            prod_name = this.getAttribute("data-name");
+                            iconPath = this.getAttribute("data-path1");
                         }
                         return $copy;
 
@@ -327,62 +324,89 @@
                         $.each(data, function( index, value ) {
                                 $.each(value.data, function(i1, v1) {
                                     $.each(v1.data, function(i2, v2) {
-                                        if(data1 ==  parseInt(v2.sub_category_id)){
-                                            $.each(v2.data, function(i3, v3) {
-                                                var theIndex = ui.draggable.data("toolsIndex");
-                                                // this.getAttribute("data-name")
-                                                var currentObj = new LightBulb();
-                                                currentObj.setCoordinates(x+i3*40, y);
-                                                currentObj.setProductInfo(selectedProduct);
-                                                var lightBulbIndex = lightBulbArr.length + 1;
-                                                //selectedProduct = {id : this.getAttribute("data-product-id"), price : this.getAttribute("data-unit-price"), description : this.getAttribute("data-name")};
-                                                currentObj.setLabel(lightBulbIndex);
-                                                currentObj.setIconPath(v3.icon);
-                                                currentObj.setImgPath(v3.path);
-                                                pushElementToDrawElement(currentObj);
-                                                lightBulbArr.push(currentObj);
-                                                //addToTable(currentObj);
-                                                //updateTable(draggableProductID);
-                                                populateLightBulbMenu();
-
-                                            });
+                                        if(pack_id ==  parseInt(v2.sub_category_id)){
+                                            addPack(x,y, v2);
+                                            // $.each(v2.data, function(i3, prod) {
+                                            //     drowbulb(x, y, prod.id, prod.name, prod.sale_price, selectedProduct, 
+                                            //     lightBulbArr, prod.path, "http://45.79.179.53"+prod.icon, i3*40);
+                                            // });
                                         }
-
                                 });
                             });
                         });
                     } else {
-                        var theIndex = ui.draggable.data("toolsIndex");
-                        this.getAttribute("data-name")
-                        var currentObj = new LightBulb();
-                        currentObj.setCoordinates(x, y);
-                        currentObj.setProductInfo(selectedProduct);
-                        var lightBulbIndex = lightBulbArr.length + 1;
-                        //selectedProduct = {id : this.getAttribute("data-product-id"), price : this.getAttribute("data-unit-price"), description : this.getAttribute("data-name")};
-                        currentObj.setLabel(lightBulbIndex);
-                        currentObj.setIconPath(bulb_icon);
-                        currentObj.setImgPath(image_path);
-                        pushElementToDrawElement(currentObj);
-                        lightBulbArr.push(currentObj);
-                        //addToTable(currentObj);
-                        //updateTable(draggableProductID);
-                        populateLightBulbMenu();
+                        addProduct(x, y, prod_type, prod_id, prod_name, sale_price, image_path, iconPath);
+                        //drowbulb(x,y,prod_id,prod_name,sale_price,selectedProduct,lightBulbArr,image_path,bulb_icon,0);
                     }
-
-
                     // drawAllObjects();
                     $('#tool-items-ul li').removeClass('active');
 
                 }
 
+                function addPack(x,y,params){
+                    var pack = new PackItem();
+                    pack.setID(params.sub_category_id);
+                    pack.setName(params.sub_category_name);
+                    pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
+                    
+                    $.each(params.data, function(i, product) {
+                        var currentProduct = addProduct(x + i*40, y, product.type, product.id, product.name, product.sale_price, product.path, baseUrl+product.icon);
+                        currentProduct.isInsidePack = true;
+                        pack.pushProduct(currentProduct);
+                    });
+                    pushElementToDrawElement(pack);
+                }
 
+                function addProduct(x, y, type, id, name, price, imgPath, symbolPath){
+                    var currentObj;
+                    var product_type;
+                    if (type !== undefined) {
+                        product_type = type.toLowerCase();
+                    }
 
+                    switch (product_type) {
+                        case "switches":
+                            currentObj = new LightSwitch();
+                            break;
+                    
+                        case "lights":
+                            currentObj = new LightBulb();
+                            var lightBulbIndex = lightBulbArr.length + 1;
+                            currentObj.setLabel(lightBulbIndex);
+                            lightBulbArr.push(currentObj);
+                            break;
+                    
+                        default:
+                            currentObj = new ProductItem();
+                            break;
+                    }
+                    currentObj.setCoordinates(x, y);
+                    currentObj.setID(id);
+                    currentObj.setName(name);
+                    currentObj.setPrice(price);
+                    currentObj.setImgPath(imgPath);
+                    currentObj.setSymbolPath(symbolPath);
 
+                    pushElementToDrawElement(currentObj); //TODO check for pack 
+                    return currentObj;
+                }
 
-
-
-
-
+                // function drowbulb(x,y,prod_id,prod_name,sale_price,selectedProduct,lightBulbArr,imgPath,iconPath,xOffSet) {
+                //     var currentObj = new LightBulb();
+                //     currentObj.setCoordinates(x+xOffSet, y);
+                //     // currentObj.setProductInfo(selectedProduct);
+                //     var lightBulbIndex = lightBulbArr.length + 1;
+                //     currentObj.id = prod_id;
+                //     currentObj.setLabel(lightBulbIndex);
+                //     currentObj.setName(prod_name);
+                //     currentObj.setPrice(sale_price);
+                //     currentObj.setSymbolPath(iconPath);
+                //     currentObj.setImgPath(imgPath);
+                //     currentObj.setCatType(category_type);
+                //     pushElementToDrawElement(currentObj);
+                //     lightBulbArr.push(currentObj);
+                //     populateLightBulbMenu();
+                // }
 
             },
             error: function (xhr, textStatus, errorThrown) {

@@ -214,7 +214,9 @@ class TemplatesController extends Controller
     public function show($id)
     {
         $template = Template::find($id);
+        $plans = TemplatePlan::where('template_id','=',$id)->get();
         return view('templates.show')
+            ->with('plans', $plans)
             ->with('template', $template);
     }
 
@@ -296,6 +298,12 @@ class TemplatesController extends Controller
 
         Flash::success('Template Updated', 'Template has been updated successfully.');
 
+        $templatesPlans = TemplatePlan::where('template_id','=',$id)->get();
+
+            return  view('templates.addPlans')
+                ->with('template',$template)
+                ->with('templatesPlans',$templatesPlans)
+                ->with('empty_form',true);
         return view('templates.edit')
             ->with('template', $template);
     }
@@ -308,7 +316,10 @@ class TemplatesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $template = Template::find($id);
+        $template->delete();
+        Flash::error('Template Deleted', 'Template has been deleted successfully.');
+        return redirect()->action('TemplatesController@index');
     }
     public function cropPlanImage($id)
     {

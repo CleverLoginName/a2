@@ -13,6 +13,7 @@ class CreateProductCustomFieldsTable extends Migration
     public function up()
     {
         Schema::create('product_custom_fields', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('name');
             $table->integer('custom_field_type_id');
             $table->boolean('is_mandatory');

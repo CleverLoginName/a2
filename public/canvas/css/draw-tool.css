@@ -70,6 +70,12 @@
 	left: 0px;
 }
 
+#era-canvas {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
 #scale-ratio-display,#zoom-ratio-display {
 	position:absolute;
 	bottom:0px;
@@ -100,9 +106,9 @@ canvas {
 	border:1px solid #000;
 }
 
-#container { position: relative; height:560px; width:560px; }
+#container { position: relative; min-height:560px !important; width:100%; }
 
-#draw-tool-canvas { border: 1px solid #000; }
+#draw-tool-canvas { border: 1px solid #000;  }
 
 #control-grid ul{
 	list-style-type:none;

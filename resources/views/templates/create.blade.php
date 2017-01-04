@@ -29,8 +29,8 @@
                                 aria-invalid="true">
                             <option value="200">1:200</option>
                             <option value="150">1:150</option>
-                            <option value="150">1:100</option>
-                            <option value="150">1:50</option>
+                            <option value="100" selected="selected">1:100</option>
+                            <option value="50">1:50</option>
                         </select></section>
                 </section>
                 <section class="row form-group">

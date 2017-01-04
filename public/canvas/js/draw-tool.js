@@ -1,4 +1,3 @@
-var canvasOrig, contextOrig, canvas, rulerCanvas, rulerContext, context, currentObj, changeObj, bg_Canvas
 var isIE = false;
 var isCtrlPressed = false;
 var isAltPressed = false;
@@ -6,6 +5,10 @@ var isAngleSnappingOn = true;
 var isGridSnappingOn = false;
 var backgroundImage; 
 var showSelectedObjects =false;
+var drawelementListChanged =false;
+var lastConectedObj;
+var selectedSwitchObject;
+var eraserSeg = null;
 
 var MouseActionEnum = {
 	NONE:1,
@@ -31,7 +34,9 @@ var ToolActionEnum = {
 	PAN:4,
 	EDITTEXT:5,
 	ROTATE:6,
-	ERASE:7
+	ERASE:7,
+    CONNECT:9,
+	REMOVE_CONNECTION:10
 }
 
 var MouseButtonEnum = {
@@ -54,7 +59,7 @@ var zoom = 1;
 var minZoom = 0.25;
 
 var mouseStatus = MouseStatusEnum.UP;
-var toolAction = ToolActionEnum.SCALE;
+var toolAction = ToolActionEnum.DRAG;
 var drawObjectType = ObjectType.WALL;
 
 var drawElements = [];
@@ -73,6 +78,7 @@ var currentMasterEraserPoints = new Array();
 var currentEraserPoints = new Array();
 var eraserColor = '#ffffff';
 var eraserSize = 15;
+var eraserType = 'round';
 
 var clickTimeout = 1000; /* in milli seconds */
 var checkDoubleClick = 0;
@@ -121,8 +127,21 @@ var wallPointsCount = 0;
  * Defines mouse related event listeners */
  
 function init(){
-	checkIE();
 	
+	// $('#design-area').width($(window).width()-275);
+	// $('#ruler-canvas').width($(window).width()-275);
+	// $('#bg-canvas').width($(window).width()-275);
+	// $('#draw-tool-canvas').width($(window).width()-275);
+	// $('#top-canvas').width($(window).width()-275);
+	// $('#top-menu').width($(window).width()-275);
+	// //$('#sidebar').height($(window).height());
+	// $('#sidebar').height($(window).height());
+	
+	//var topCanvasWidth = $('#draw-tool-canvas').width();
+	//alert(aa);
+	
+	checkIE();
+
 	canvasOrig = document.getElementById('draw-tool-canvas');
 	contextOrig = canvasOrig.getContext("2d");
 	contextOrig.strokeStyle = "#0000FF";
@@ -135,7 +154,7 @@ function init(){
 	canvas.id = "top-canvas";
 
 	bg_Canvas = document.getElementById("bg-canvas");
-// canvas resizing
+        era_canvas = document.getElementById("era-canvas");
 	
 	adjustCanvas();	
   $("#draw-tool-canvas").removeClass("hide-canvas");
@@ -144,7 +163,8 @@ function init(){
     var container = canvasOrig.parentNode;
     canvas = document.createElement('canvas');
     canvas.id = "top-canvas";
-    canvas.width = canvasOrig.width;
+    canvas.width = canvasOrig.width; // -by UIUX //edited again
+    //canvas.width = topCanvasWidth;    // + by UIUX
     canvas.height = canvasOrig.height;
 
     container.appendChild(canvas);
@@ -174,16 +194,19 @@ function init(){
 	}, false);	
 
     canvas.addEventListener("dblclick", function (e){ 
-        perfromEscapeAction();
+        performEscapeAction();
+        mouseDoubleClick(e);
         return true;
     }, false);
 
 	
-	preloadAndCacheImages(['/img/lightdemo.png','/img/swtichdemo.PNG']);
+	preloadAndCacheImages(['img/lightdemo.png','img/swtichdemo.PNG']);
 	drawAllObjects();
 	drawBackgroundImage();
-	drawEraserObj();
 }
+
+
+
 
 $("body").on("contextmenu", "canvas", function(e) {
   return false;
@@ -191,6 +214,7 @@ $("body").on("contextmenu", "canvas", function(e) {
 
 /* Handles what happens on a right click */
 function contextMenu(e){
+	hideDialog();
 	var curZoom = this.zoom;
 	startX = getX(e);
 	startY = getY(e);
@@ -239,32 +263,47 @@ function fixWhich(e) {
 }
 
 
-/* Handles what happens when mouse down.
- * 
- * When draw - it marks the starting points to draw the object
- * When drag and scale - it selects the object
- * 
- *  */
+
+function mouseDoubleClick(e){
+    // fixWhich(e);
+    // if (e.which != 1) return false;
+    // $('#mouse-action-container').hide();
+    // var curZoom = this.zoom;
+
+    // startX = getX(e);
+    // startY = getY(e);
+
+    // selObj = getSelObject(startX, startY);
+
+    // if (selObj != null){
+    // 	alert(selObj.getCatType());
+	// }
+    // if (toolAction == ToolActionEnum.ERASE) {
+
+    // }
+}
+
+        /* Handles what happens when mouse down.
+         *
+         * When draw - it marks the starting points to draw the object
+         * When drag and scale - it selects the object
+         *
+         *  */
 function mouseDown(e){
 	fixWhich(e);
 	if (e.which != 1) return false;
 	$('#mouse-action-container').hide();
 	var curZoom = this.zoom;
+	mouseStatus = MouseStatusEnum.DOWN;
 	
 	startX = getX(e);
 	startY = getY(e);
 	
 	if (toolAction == ToolActionEnum.ERASE){		
-		bg_Canvas = document.getElementById("bg-canvas");
-		var ctx = bg_Canvas.getContext('2d');		
-		
-		isErasing = true;
-		ctx.lineWidth = eraserSize;		
-		ctx.lineJoin = ctx.lineCap = 'round';
-		ctx.moveTo(startX, startY);
-		var startX_fixed = startX / curZoom;
-		var startY_fixed = startY / curZoom;
-		currentEraserPoints.push({x:startX_fixed, y:startY_fixed});
+		var eraX = startX / curZoom;
+		var eraY = startY / curZoom;
+		eraserSeg = new Eraser();
+		eraserSeg.setErasePoints(eraX,eraY);	
 	}
 
 	if (toolAction == ToolActionEnum.DRAW){
@@ -307,6 +346,7 @@ function mouseDown(e){
 			changeObj = new ChangeObject(selObj);
 			
 			mouseStatus = MouseStatusEnum.DRAG;
+			hideDialog();
 			clickX = startX / curZoom;
 			clickY = startY / curZoom;
 			if (selObj.getType() == ObjectType.TEXT){
@@ -328,11 +368,14 @@ function mouseDown(e){
 		for (var i=0; i< drawElements.length; i++){
 			selObj = drawElements[i];
 			
-			if (selObj.getType() == ObjectType.CHANGE) continue;
+			if (!(selObj instanceof CanvasItem)) continue;
 			
 			if (selObj.getType() == ObjectType.TEXT){
 				offsetX = (selObj.getObjStartX() - (startX / curZoom));
 				offsetY = (selObj.getObjEndY() - (startY / curZoom));
+			}else if (selObj.getType() == ObjectType.ERASER){
+				offsetX = (selObj.getObjStartX() - (startX / curZoom));
+				offsetY = (selObj.getObjStartY() - (startY / curZoom));				
 			} else {
 				offsetX = (selObj.getObjStartX() - (startX / curZoom));
 				offsetY = (selObj.getObjStartY() - (startY / curZoom));
@@ -439,11 +482,11 @@ function mouseMove(e){
 		hideCanvasProductTooltip();
     }
 
-    if (selObj != null && selObj.tooltip) {
-        if (selObjStat == true) {
-            selObjStat = false;
-			showCanvasProductTooltip(e);
-        }
+    if (selObj != null && selObj.tooltip != null) {
+        // if (selObjStat == true) {
+        //     selObjStat = false;
+			// showCanvasProductTooltip(e);
+        // }
     } else {
         selObjStat = true;
 		hideCanvasProductTooltip();
@@ -452,16 +495,12 @@ function mouseMove(e){
 	var w,h;
 
 	if (toolAction == ToolActionEnum.ERASE){
-		bg_Canvas = document.getElementById("bg-canvas");
-		var ctx = bg_Canvas.getContext('2d');		
+		if (mouseStatus == MouseStatusEnum.DOWN) {
+			var eraX = endX / curZoom;
+			var eraY = endY / curZoom;			
 
-		if (isErasing) {
-			var startX_fixed = endX / curZoom;
-			var startY_fixed = endY / curZoom;
-			ctx.lineTo(endX, endY);
-			ctx.strokeStyle = eraserColor;
-			ctx.stroke();
-			currentEraserPoints.push({x:startX_fixed, y:startY_fixed});
+			eraserSeg.setErasePoints(eraX,eraY);
+			drawEraserObj(eraserSeg);
 		}
 	}
 	
@@ -493,9 +532,8 @@ function mouseMove(e){
 		}
 		
 		rulerOffsetX = rulerOrigOffsetX+ (endX - clickX * curZoom);
-		rulerOffsetY = rulerOrigOffsetY+ (endY - clickY * curZoom);
+		rulerOffsetY = rulerOrigOffsetY+ (endY - clickY * curZoom);		
 		drawBackgroundImage();
-		drawEraserObj(rulerOffsetX,rulerOffsetY);
 	} else if (mouseStatus == MouseStatusEnum.SCALE){
 		scaleObj.resize(this.scaleDirection, endX/curZoom, endY/curZoom, offsetX, offsetY);
 	} else if (mouseStatus == MouseStatusEnum.ROTATE){
@@ -513,7 +551,7 @@ function mouseMove(e){
 	drawDrawerDetails();
 }
 
-
+var temp_selected_obj
 /* Handles what happens when mouse up.
  * 
  * When draw - it creates the draw object and adds to the object container (drawElements)
@@ -523,6 +561,9 @@ function mouseMove(e){
  *  */
 function mouseUp(e){
 	fixWhich(e);
+    if (toolAction != ToolActionEnum.CONNECT && toolAction != ToolActionEnum.REMOVE_CONNECTION){
+        hideDialog();
+    }
 	if (e.which != 1) return false;
 	endX = this.getX(e);
 	endY = this.getY(e);
@@ -530,11 +571,8 @@ function mouseUp(e){
 	var curZoom = this.zoom;
 
 	if (toolAction == ToolActionEnum.ERASE){
-		isErasing = false;
-		currentMasterEraserPoints.push(currentEraserPoints);	
-		console.log(currentMasterEraserPoints);
-		console.log(currentEraserPoints);	
-		currentEraserPoints=[];
+		pushElementToDrawElement(eraserSeg);
+		mouseStatus = MouseStatusEnum.UP;
 	}
 
 	if (toolAction == ToolActionEnum.DRAW){
@@ -641,7 +679,61 @@ function mouseUp(e){
 			
 		}
 		drawAllObjects();
-	} else if (toolAction == ToolActionEnum.DRAG){
+	}else if (toolAction == ToolActionEnum.REMOVE_CONNECTION){
+        selObj = getSelObject(startX, startY);
+        if (selObj != null){
+            if(lightBulbConnected(selObj.getLabel())){
+				for (var i =0;i<temp_selected_obj.getConnections().length;i++){
+                   if(selObj.getLabel() == temp_selected_obj.getConnections()[i].getLabel()){
+                       temp_selected_obj.getConnections().splice(i, 1);
+				   }
+				}
+                for (var i =0;i<connectedLightBulbLabels.length;i++){
+                    if(selObj.getLabel() == connectedLightBulbLabels[i]){
+                        connectedLightBulbLabels.splice(i, 1);
+                    }
+                }
+                drawAllObjects();
+                //updateSwitchConnectedBulbLabelsInCurrentTimeState(selObj);
+
+			}
+		}
+        drawAllObjects();
+	}else if (toolAction == ToolActionEnum.CONNECT){
+        //populateDialog(e,selectedSwitchObject);
+        selObj = getSelObject(startX, startY);
+        if (selObj != null){
+            if(selObj.getType()== ObjectType.LIGHT_BULB){
+                if(!lightBulbConnected(selObj.getLabel())){
+                    lastConectedObj.addLightBulbObj(selObj);
+                    //drawWiresFromSwitchOrBulbToConnectedLightBulbs(selectedSwitchObject,selObj);
+                    //selectedSwitchObject.addLightBulbObj(selObj);
+                    connectedLightBulbLabels.push(selObj.getLabel());
+                    //drawWiresFromSwitchOrBulbToConnectedLightBulbs(selectedSwitchObject,selObj);
+                    updateSwitchConnectedBulbLabelsInCurrentTimeState(selObj);
+                    selObj.setConectingMood(false);
+                    lastConectedObj = selObj;
+                    drawAllObjects();
+                }else {
+                    alert ('Light bulb already connected');
+                }
+            }
+            // if (outermostObj.getType()== ObjectType.LIGHT_SWITCH || !lightBulbConnected(bulbObj.getLabel())){
+            //     outermostObj.addLightBulbObj(bulbObj);
+            //     connectedLightBulbLabels.push(bulbObj.getLabel());
+            //     updateSwitchConnectedBulbLabelsInCurrentTimeState();
+            // } else {
+            //     alert ('Light bulb already connected');
+            // }
+            //resetLightBulbMenu();
+            event.preventDefault();
+            drawAllObjects();
+        }
+
+
+
+
+    } else if (toolAction == ToolActionEnum.DRAG){
 		mouseStatus = MouseStatusEnum.UP;
 		showSelectedObjects = false;
 		/* If starting and end points are same, there is no need to add a change object.*/
@@ -651,7 +743,25 @@ function mouseUp(e){
 				pushElementToDrawElement(changeObj);
 				changeObj = null;
 			}
-		}
+		} else {
+            //todo ish
+            selObj = getSelObject(startX, startY);
+            if (selObj != null){
+                temp_selected_obj =selObj;
+                //ishara
+                if(temp_selected_obj.getType()==ObjectType.LIGHT_SWITCH){
+                    selectedSwitchObject = selObj;
+                    lastConectedObj = selectedSwitchObject;
+					populateDialog(e,selObj);
+                } else if(temp_selected_obj.getType()==ObjectType.LIGHT_BULB){
+					lastConectedObj = selectedSwitchObject;
+					populateDialog(e,selObj);
+				}
+                //ishara
+                
+            }
+
+        }
 		
 		selObj = null;
 
@@ -666,49 +776,49 @@ function mouseUp(e){
 			startY = getY(e);
 			selObj = getSelObject(startX, startY);
 			if (selObj != null) {
-				if (selObj.objType == ObjectType.LIGHT_BULB) {
-					document.getElementById('b-name').value = selObj.name;
-					document.getElementById('b-x').value = selObj.objStartX;
-					document.getElementById('b-y').value = selObj.objStartY;
-					document.getElementById('elevation').value = selObj.elevation;
-					document.getElementById('angle').value = selObj.angle;
-					document.getElementById('power').value = selObj.lightpower;
-
-					document.getElementById('bulb-prop').style.display = "block";
-				} else if (selObj.objType == ObjectType.LIGHT_SWITCH) {
-					var tmpObjIndex = getSelObjectIndex(endX * curZoom, endY * curZoom);
-					if (!isNaN(tmpObjIndex)) {
-						var tmpObj = drawElements[tmpObjIndex];
-						if (tmpObj.getType() == ObjectType.LIGHT_SWITCH) {
-							$('#switch-lig').attr('data-root-obj-id', tmpObjIndex);
-						}
-					}
-
-					document.getElementById("switch-lig").innerHTML = "";
-
-					document.getElementById('s-name').value = selObj.name;
-					document.getElementById('s-x').value = selObj.objStartX;
-					document.getElementById('s-y').value = selObj.objStartY;
-					document.getElementById('s-elevation').value = selObj.s_elevation;
-					document.getElementById('s-angle').value = selObj.s_angle;
-
-					document.getElementById('switch-prop').style.display = "block";
-
-					var x = document.getElementById("switch-b");
-					var option = document.createElement("option");
-					option.text = selObj.name;
-					option.value = "x_pos=" + selObj.objStartX + ",y_pos=" + selObj.objStartY;
-
-					for (var i = drawElements.length - 1; i >= 0; i--) {
-						if (drawElements[i].objType == ObjectType.LIGHT_BULB) {
-							var sx = document.getElementById("switch-lig");
-							var optionTwo = document.createElement("option");
-							optionTwo.text = drawElements[i].name;
-							optionTwo.value = parseInt(drawElements[i].label) - 1;
-							sx.add(optionTwo);
-						}
-					}
-				}
+				// if (selObj.objType == ObjectType.LIGHT_BULB) {
+				// 	document.getElementById('b-name').value = selObj.name;
+				// 	document.getElementById('b-x').value = selObj.objStartX;
+				// 	document.getElementById('b-y').value = selObj.objStartY;
+				// 	document.getElementById('elevation').value = selObj.elevation;
+				// 	document.getElementById('angle').value = selObj.angle;
+				// 	document.getElementById('power').value = selObj.lightpower;
+                //
+				// 	document.getElementById('bulb-prop').style.display = "block";
+				// } else if (selObj.objType == ObjectType.LIGHT_SWITCH) {
+				// 	var tmpObjIndex = getSelObjectIndex(endX * curZoom, endY * curZoom);
+				// 	if (!isNaN(tmpObjIndex)) {
+				// 		var tmpObj = drawElements[tmpObjIndex];
+				// 		if (tmpObj.getType() == ObjectType.LIGHT_SWITCH) {
+				// 			$('#switch-lig').attr('data-root-obj-id', tmpObjIndex);
+				// 		}
+				// 	}
+                //
+				// 	document.getElementById("switch-lig").innerHTML = "";
+                //
+				// 	document.getElementById('s-name').value = selObj.name;
+				// 	document.getElementById('s-x').value = selObj.objStartX;
+				// 	document.getElementById('s-y').value = selObj.objStartY;
+				// 	document.getElementById('s-elevation').value = selObj.s_elevation;
+				// 	document.getElementById('s-angle').value = selObj.s_angle;
+                //
+				// 	document.getElementById('switch-prop').style.display = "block";
+                //
+				// 	var x = document.getElementById("switch-b");
+				// 	var option = document.createElement("option");
+				// 	option.text = selObj.name;
+				// 	option.value = "x_pos=" + selObj.objStartX + ",y_pos=" + selObj.objStartY;
+                //
+				// 	for (var i = drawElements.length - 1; i >= 0; i--) {
+				// 		if (drawElements[i].objType == ObjectType.LIGHT_BULB) {
+				// 			var sx = document.getElementById("switch-lig");
+				// 			var optionTwo = document.createElement("option");
+				// 			optionTwo.text = drawElements[i].name;
+				// 			optionTwo.value = parseInt(drawElements[i].label) - 1;
+				// 			sx.add(optionTwo);
+				// 		}
+				// 	}
+				// }
 			}
 		}
 		
@@ -716,7 +826,7 @@ function mouseUp(e){
 		panObjectOffsets = [];
 		mouseStatus = MouseStatusEnum.UP;
 		drawBackgroundImage();
-		drawEraserObj(rulerOffsetX,rulerOffsetY);
+//		drawEraserObj();
 	} else if (toolAction == ToolActionEnum.SCALE){
 		mouseStatus = MouseStatusEnum.UP;
 		if (startX != endX && startY != endY){
@@ -750,6 +860,9 @@ function hideCanvasProductTooltip(params) {
 }
 
 function showCanvasProductTooltip(mouse_event) {
+    if (temp_selected_obj != null){
+        selObj=temp_selected_obj;
+    }
 	var tooltipSpan = document.getElementById('span-tooltip-can');
 	var toolImg = document.getElementById('can-tool-image');
 	document.getElementById('can-tool-title').innerHTML = selObj.name;
@@ -814,17 +927,20 @@ function pushElementToDrawElement(e, ignoreCopyToStack){
 		copyDrawElementsToStack();
 		currentTimeIndex = currentTimeIndex + 1;
 	}
+	drawelementListChanged = true;
 }
 
 function popElementFromDrawElementsAndStack(){
 	drawElements.pop();
 	drawElementsStack.pop();
 	currentTimeIndex = currentTimeIndex - 1;
+	drawelementListChanged = true;
 }
 
 /* Handles what happens when mouse gets out of the canvas. */
 function mouseOut(e){
 	drawAllObjects();
+	// performEscapeAction();
 }
 
 /* Clears any statuses in objects which are marked clear */
@@ -1042,58 +1158,65 @@ function drawContWall(pointsArr, targetContext, curX, curY){
 }
 
 /* Draws light bulb */
-function drawLightBulb(x,y,r,targetContext, w,h,path){
+function drawLightBulb(x,y,r,targetContext, w,h,path,conMood,colour){
 	var curZoom = this.zoom;
     var imageObj = new Image();
     imageObj.src = path;
+    if(conMood){
+        targetContext.shadowColor = colour;
+        targetContext.shadowBlur = 10;
+        targetContext.shadowOffsetX = 0;
+        targetContext.shadowOffsetY = 0;
+        targetContext.fill();
+    }
     targetContext.strokeStyle = '#000000';
     targetContext.drawImage(imageObj, x, y, w, h);
 }
 
 /* Draws light switch */
-function drawLightSwitch(x,y,r,targetContext,w,h){
+function drawLightSwitch(x,y,r,targetContext,w,h,path){
     var img = document.createElement('img');
-    img.src = '/img/swtichdemo.PNG';
+    img.src = path;
     targetContext.strokeStyle = '#000000';
     targetContext.drawImage(img, x, y, w, h);
 }
 
 /* Draws light bulb connections from a switch */
 function drawWiresFromSwitchOrBulbToConnectedLightBulbs(rootObj, targetContext){
-	var curZoom = this.zoom;
-	var lightBulbs = rootObj.getConnections();
-	var tmpLightBulb;
-	var rootCoordinates = rootObj.getCoordinates();
-	var sX, sY, bX,bY;
-	
-	sX = rootCoordinates.x + rootObj.getObjWidth()/2;
-	sY = rootCoordinates.y + rootObj.getObjHeight()/2;
-	
-	var bulbCoordinates;
-	var tmpOffsetCenterPoint = {x:0, y:0};
-	
-	targetContext.lineWidth = 1;
-	targetContext.strokeStyle = '#000000';
-	
-	for (var i=0; i<lightBulbs.length; i++){
-		tmpLightBulb = lightBulbs[i];
-		if (tmpLightBulb != undefined){
-			if (getWhetherLightBulbOnCanvas(tmpLightBulb.label)){
-				if (isBulbLabelInSwitchConnectedBulbLabelsInCurrentTimeState(tmpLightBulb.label)) {
-					
-					bulbCoordinates = tmpLightBulb.getCoordinates();
-					bX = bulbCoordinates.x + tmpLightBulb.getObjWidth()/2;
-					bY = bulbCoordinates.y + tmpLightBulb.getObjHeight()/2;
-					
-					targetContext.beginPath();
-					targetContext.moveTo(sX * curZoom, sY * curZoom);
-					tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinates.x, rootCoordinates.y,bulbCoordinates.x,bulbCoordinates.y);
-					targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom, bX * curZoom, bY * curZoom);
-					targetContext.stroke();
-				}
-			}
-		}
-	}
+	// var curZoom = this.zoom;
+	// var lightBulbs = rootObj.getConnections();
+	// var tmpLightBulb;
+	// var rootCoordinates = rootObj.getCoordinates();
+	// var sX, sY, bX,bY;
+	//
+	// sX = rootCoordinates.x + rootObj.getObjWidth()/2;
+	// sY = rootCoordinates.y + rootObj.getObjHeight()/2;
+	//
+	// var bulbCoordinates;
+	// var tmpOffsetCenterPoint = {x:0, y:0};
+	//
+	// targetContext.lineWidth = 1;
+	// targetContext.strokeStyle = '#000000';
+	//
+	// for (var i=0; i<lightBulbs.length; i++){
+	// 	tmpLightBulb = lightBulbs[i];
+	// 	if (tmpLightBulb != undefined){
+	// 		if (getWhetherLightBulbOnCanvas(tmpLightBulb.label)){
+	// 			if (isBulbLabelInSwitchConnectedBulbLabelsInCurrentTimeState(tmpLightBulb.label)) {
+	//
+	// 				bulbCoordinates = tmpLightBulb.getCoordinates();
+	// 				bX = bulbCoordinates.x + tmpLightBulb.getObjWidth()/2;
+	// 				bY = bulbCoordinates.y + tmpLightBulb.getObjHeight()/2;
+	//
+	// 				targetContext.beginPath();
+	// 				targetContext.moveTo(sX * curZoom, sY * curZoom);
+	// 				tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinates.x, rootCoordinates.y,bulbCoordinates.x,bulbCoordinates.y);
+	// 				targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom, bX * curZoom, bY * curZoom);
+	// 				targetContext.stroke();
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 
@@ -1146,49 +1269,67 @@ function drawAllObjects(){
 	if (mouseStatus == MouseStatusEnum.DRAW || mouseStatus == MouseStatusEnum.CONT_DRAW){
 		drawCurrentObj();
 	}
-	
+
 	for (var i =0; i<this.drawElements.length; i++){
 		drawLightsOnCanvas(this.drawElements[i]);
+        drawConnections(this.drawElements[i]);
+		drawObjectOnCanvas(this.drawElements[i]);
+		drawEraserObj(this.drawElements[i]);
 	}
+	if(drawelementListChanged)
+	{
+		drawelementListChanged = false;
+		updateBomTable(drawElements);
+	}
+
+	// for (var i =0; i<this.drawElements.length; i++){
+	// 	drawLightsOnCanvas(this.drawElements[i]);
+	// }
 	
-	for (var i =0; i<this.drawElements.length; i++){
-		drawWiresOnCanvas(this.drawElements[i]);
-	}
+	// for (var i =0; i<this.drawElements.length; i++){
+	// 	drawWiresOnCanvas(this.drawElements[i]);
+	// }
 	
-	for (var i =0; i<this.drawElements.length; i++){
-		if (drawElements[i].getType() != ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
-	}
+	// for (var i =0; i<this.drawElements.length; i++){
+	// 	if (drawElements[i].getType() != ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
+	// }
 	
-	for (var i =0; i<this.drawElements.length; i++){
-		if (drawElements[i].getType() == ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
-	}
+	// for (var i =0; i<this.drawElements.length; i++){
+	// 	if (drawElements[i].getType() == ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
+	// }
 
 	if (showSelectedObjects && selObj != null) {
 		highlightObject(selObj)
 	}
 
-	drawScaleFactorDetails();
-	drawZoomFactorDetails();
+	if (eraserSeg != null) {
+		drawEraserObj(eraserSeg);
+	}
 
-	// console.log(drawElements);
+	drawScaleFactorDetails();
+	drawZoomFactorDetails();	
 }
 
-function drawEraserObj(offsetX, offsetY){
-	bg_Canvas = document.getElementById("bg-canvas");
-	var ctx = bg_Canvas.getContext('2d');		
-	
-	var curZoom = this.zoom;
-	
-	for(var i = 0; i < currentMasterEraserPoints.length; i++){
-		for(var j = 0; j < currentMasterEraserPoints[i].length; j++){
-			tmpX = currentMasterEraserPoints[i][j].x * curZoom + offsetX;
-			tmpY = currentMasterEraserPoints[i][j].y * curZoom + offsetY;
-			if ( j == 0){				
-				ctx.moveTo(tmpX, tmpY);
+function drawEraserObj(obj){
+	if (obj.getType() == ObjectType.ERASER){
+		era_canvas = document.getElementById("era-canvas");
+
+		var ectx = era_canvas.getContext('2d');	
+		ectx.clearRect(0, 0, era_canvas.width, era_canvas.height);	
+		var curZoom = this.zoom;
+		ectx.beginPath();
+		ectx.lineWidth = eraserSize;		
+		ectx.strokeStyle = eraserColor;
+		ectx.lineJoin = ectx.lineCap = eraserType;
+				
+		for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
+			eraX = obj.eraserPointsArr[iy].x * curZoom ;
+			eraY = obj.eraserPointsArr[iy].y * curZoom ;
+			if ( iy == 0){				
+				ectx.moveTo(eraX, eraY);
 			} else {				
-				ctx.strokeStyle = eraserColor;
-				ctx.lineTo(tmpX, tmpY);
-				ctx.stroke();	
+				ectx.lineTo(eraX, eraY);
+				ectx.stroke();	
 			}
 		}
 	}
@@ -1207,7 +1348,7 @@ function drawBackgroundImage() {
 	if (backgroundImage != undefined){
 		var ctx = bg_Canvas.getContext("2d");
 		ctx.clearRect(0, 0, bg_Canvas.width, bg_Canvas.height);		
-		ctx.beginPath();
+		//ctx.beginPath();
 		var curZoom = this.zoom;
 		ctx.drawImage(backgroundImage, rulerOffsetX, rulerOffsetY, backgroundImage.width * curZoom, backgroundImage.height * curZoom);
 	}
@@ -1264,7 +1405,7 @@ function drawObjectOnCanvas(obj){
 	var tmpCenter, tmpRotation;
 	var sX, sY, eX, eY;
 	
-	if (obj.getType() == ObjectType.CHANGE) return;
+	if (!(obj instanceof CanvasItem)) return;
 	
 	tmpCenter = obj.getCenter();
 	tmpRotation = obj.getRotation();
@@ -1305,12 +1446,12 @@ function drawObjectOnCanvas(obj){
 	} else if (obj.getType() == ObjectType.LIGHT_BULB){
 		var coor = obj.getCoordinates();
 		var rad = obj.getRadius();
-		drawLightBulb(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getIconPath());
-	} else if (obj.getType() == ObjectType.LIGHT_SWITCH){
+        drawLightBulb(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
+    } else if (obj.getType() == ObjectType.LIGHT_SWITCH){
 		var coor = obj.getCoordinates();
 		var rad = obj.getRadius();
-		drawLightSwitch(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom);
-	} else if (obj.getType() == ObjectType.TEXT){
+        drawLightSwitch(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath());
+    } else if (obj.getType() == ObjectType.TEXT){
 		drawText(obj,contextOrig,sX,sY,eX,eY);		
 	}
 	
@@ -1375,7 +1516,7 @@ function drawObjectOnCanvas(obj){
 
 /* Call draw functions to draw light of a bulb */
 function drawLightsOnCanvas(obj){
-
+	
 	if( obj.hasOwnProperty("visibility") && !obj.getVisibility()){
 		//alert('called for switches');
 		return;
@@ -1408,6 +1549,33 @@ function drawWiresOnCanvas(obj){
 	}
 }
 
+function drawConnections(rootObj) {
+    if(rootObj.getType() == ObjectType.LIGHT_SWITCH ||rootObj.getType() == ObjectType.LIGHT_BULB){
+        var curZoom = this.zoom;
+        var lightBulbs = rootObj.getConnections();
+        var rootCoordinate = rootObj.getCoordinates();
+        var rootX, rootY, EndX,EndY;
+        rootX = rootCoordinate.x + rootObj.getObjWidth()/2;
+        rootY = rootCoordinate.y + rootObj.getObjHeight()/2;
+        var bulbCoordinates;
+        var tmpOffsetCenterPoint = {x:0, y:0};
+        contextOrig.lineWidth = 1;
+        contextOrig.strokeStyle = '#000000';
+        for (var i=0; i<lightBulbs.length; i++){
+            tmpLightBulb = lightBulbs[i];
+            bulbCoordinates = tmpLightBulb.getCoordinates();
+            EndX = bulbCoordinates.x + tmpLightBulb.getObjWidth()/2;
+            EndY = bulbCoordinates.y + tmpLightBulb.getObjHeight()/2;
+
+            contextOrig.beginPath();
+            contextOrig.moveTo(rootX * curZoom, rootY * curZoom);
+            tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinate.x, rootCoordinate.y,bulbCoordinates.x,bulbCoordinates.y);
+            // targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom, EndX * curZoom, EndY * curZoom);
+            contextOrig.bezierCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom,(tmpOffsetCenterPoint.x+20)* curZoom ,(tmpOffsetCenterPoint.y+20 )* curZoom, EndX * curZoom, EndY * curZoom);
+            contextOrig.stroke();
+        }
+    }
+}
 /* Draws the outline of an object */
 function drawOutlinesOnCanvas(obj){
 	var sX,sY,eX,sY;
@@ -1478,7 +1646,7 @@ function drawObjectScalerOnCanvas(obj) {
 
         m = (y2 - y1) / (x2 - x1);
 
-        contextOrig.fillStyle = "#FF8000";
+        contextOrig.fillStyle = "#FF0000";
         if (m < 0) {
             contextOrig.fillRect(coor.NE.SX * curZoom, coor.NE.SY * curZoom, (coor.NE.EX - coor.NE.SX) * curZoom, (coor.NE.EY - coor.NE.SY) * curZoom);
             contextOrig.fillRect(coor.SW.SX * curZoom, coor.SW.SY * curZoom, (coor.SW.EX - coor.SW.SX) * curZoom, (coor.SW.EY - coor.SW.SY) * curZoom);
@@ -1541,7 +1709,7 @@ function getSelObject(x, y){
 	var tmpObj = null;
 	for (var i=drawElements.length-1; i>=0 ; i--){
 		tmpObj = drawElements[i];
-		if ((tmpObj.getType() != ObjectType.CHANGE) && (tmpObj.pointInsideObj(checkX,checkY))){
+		if ( tmpObj instanceof CanvasItem && tmpObj.pointInsideObj(checkX,checkY)){
 			return tmpObj;
 		}
 	}
@@ -1560,9 +1728,10 @@ function getSelObjectIndex(x, y){
 	for (var i=drawElements.length-1; i>=0 ; i--){
 		tmpObj = drawElements[i];
 		
-		if (tmpObj.getType() == ObjectType.CHANGE) continue;
-		if (tmpObj.pointInsideObj(checkX,checkY)){
-			return i;
+		if (tmpObj instanceof CanvasItem){
+			if (tmpObj.pointInsideObj(checkX,checkY)){
+				return i;
+			}
 		}
 	}
 	return null;
@@ -1575,9 +1744,10 @@ function getScalingObject(){
 	for (var i=drawElements.length-1; i>=0 ; i--){
 		tmpObj = drawElements[i];
 		
-		if (tmpObj.getType() == ObjectType.CHANGE) continue;
-		if (tmpObj.getStatus() == ObjectStatus.SCALE){
-			return tmpObj;
+		if (tmpObj instanceof CanvasItem){
+			if (tmpObj.getStatus() == ObjectStatus.SCALE){
+				return tmpObj;
+			}
 		}
 	}
 	return null;
@@ -1589,9 +1759,10 @@ function getRotatingObject(){
 	for (var i=drawElements.length-1; i>=0 ; i--){
 		tmpObj = drawElements[i];
 		
-		if (tmpObj.getType() == ObjectType.CHANGE) continue;
-		if (tmpObj.getStatus() == ObjectStatus.ROTATE){
-			return tmpObj;
+		if (tmpObj instanceof CanvasItem){
+			if (tmpObj.getStatus() == ObjectStatus.ROTATE){
+				return tmpObj;
+			}
 		}
 	}
 	return null;
@@ -1650,20 +1821,28 @@ function generateAndLoadObjectFromParams(params){
 		currentObj = new LightBulb();
 		currentObj.setConnections(params.connections);
 		currentObj.setLabel(params.label);
-		currentObj.setIconPath(params.iconpath);
+		currentObj.setSymbolPath(params.symbolPath);
 		currentObj.setImgPath(params.imgPath);
 		currentObj.setName(params.name);
+		currentObj.setPrice(params.price);
 		currentObj.notes = params.notes;
 		lightBulbArr.push(currentObj);
 	} else if (params.objType == ObjectType.LIGHT_SWITCH){
 		currentObj = new LightSwitch();
 		currentObj.setConnections(params.connections);
+		currentObj.setSymbolPath(params.symbolPath);
+		currentObj.setImgPath(params.imgPath);
+		currentObj.setName(params.name);
+		currentObj.setPrice(params.price);
+		currentObj.notes = params.notes;
 	} else if (params.objType == ObjectType.TEXT){
 		currentObj = new DrawText();
 		currentObj.setDrawText(params.drawText);
 		currentObj.setFontSize(params.fontSize);
 	} else if (params.objType == ObjectType.CHANGE){
 		// Need to fill Change object when integrate file loading
+	} else if (params.objType == ObjectType.ERASER){
+		currentObj = new Eraser();
 	}
 	 else {
 		alert ('Invalid Object Type');
@@ -1730,7 +1909,6 @@ function zoomIn(){
 	zoom = zoom + minZoom;
 	drawAllObjects();
 	drawBackgroundImage();
-	drawEraserObj(0,0);
 }
 
 /* Decrements the zoom ratio */
@@ -1739,7 +1917,6 @@ function zoomOut(){
 	if (this.zoom <minZoom) this.zoom =minZoom;
 	drawAllObjects();
 	drawBackgroundImage();
-	drawEraserObj(0,0);
 }
 
 /* Resets the zoom ratio to 1 */
@@ -1747,14 +1924,14 @@ function zoomReset(){
 	this.zoom = 1;
 	drawAllObjects();
 	drawBackgroundImage();
-	drawEraserObj(0,0);
 }
 
 /* Scales up all elements */
 function scale(currentScaleFactor, newScaleFactor){
 	for (var i=0; i< drawElements.length; i++){
-		if (drawElements[i].getType() == ObjectType.CHANGE) continue;
-		drawElements[i].scale(currentScaleFactor,newScaleFactor);
+		if (drawElements[i] instanceof CanvasItem){
+			drawElements[i].scale(currentScaleFactor,newScaleFactor);
+		}
 	}
 	drawAllObjects();
 }
@@ -1943,7 +2120,6 @@ function resetLightBulbMenu(){
 $("#add-s-buld").on("click", function() {
         var bulbIndex = $("#switch-lig option:selected").val();
         var bulbObj = lightBulbArr[bulbIndex];
-        console.log("Light bulb arr ", lightBulbArr);
         var rootObjIndex = $('#switch-lig').attr('data-root-obj-id');
         var rootObj = drawElements[rootObjIndex];
 
@@ -2038,7 +2214,7 @@ function drawRuler(){
 	var pixelsPerSmallStep = pixelsperMajorDivision / rulerParams.smallDivsPerMajorDiv  
 	var count;
 	/* Draw top center to right ruler */
-	count = 0;
+	count = 4;
 	for (var i=rulerOffsetX; i<= (canvasOrig.width) ;i = i + pixelsPerSmallStep){
 		
 		j = i+rulerWidth;
@@ -2059,7 +2235,7 @@ function drawRuler(){
 	}
 	
 	/* Draw top center to left ruler */
-	count = 0;
+	count = 4;
 	for (var i=rulerOffsetX; i >0 ;i = i - pixelsPerSmallStep){
 		j = i+rulerWidth;
 		rulerContext.moveTo(j,rulerHeight);
@@ -2077,7 +2253,7 @@ function drawRuler(){
 	}
 	
 	/* Draw left middle to bottom ruler */
-	count = 0;
+	count = 4;
 	for (var i=rulerOffsetY; i<= (canvasOrig.height); i = i + pixelsPerSmallStep){
 		j = i+rulerHeight;
 		if (j<rulerHeight) continue;
@@ -2096,7 +2272,7 @@ function drawRuler(){
 	}
 	
 	/* Draw left middle to top ruler */
-	count = 0;
+	count = 4;
 	for (var i=rulerOffsetY; i>=0; i = i - pixelsPerSmallStep){
 		j = i+rulerHeight;
 		rulerContext.moveTo(rulerWidth, j);
@@ -2206,7 +2382,7 @@ function logElementStacks(){
 
 
 function undo(){
-	console.log("IN UNDO");
+	//console.log("IN UNDO");
 	if (drawElements.length >0 ){
 		var changeObj, trackObj, trackOldParams, tmpOldCoordinates;
 		currentTimeIndex = (parseInt(currentTimeIndex) >0 ) ? parseInt(currentTimeIndex) - 1 : 0;
@@ -2250,15 +2426,14 @@ function undo(){
 		updateLightBulbArray();
 		populateLightBulbMenu();
 		updateSwitchConnectedBulbLabelsInCurrentTimeState();
+		drawelementListChanged = true;
 		drawAllObjects();
 		
 	}
-	
-	
 }
 
 function redo(){
-	console.log("In REDO");
+	//console.log("In REDO");
 	var changeObj, trackObj, trackOldParams,tmpNewCoordinates;
 	currentTimeIndex = (currentTimeIndex < drawElementsStack.length ) ? currentTimeIndex + 1 : drawElementsStack.length;	
 	
@@ -2272,7 +2447,7 @@ function redo(){
 	
 	changeObj = drawElementsStack[currentTimeIndex-1];
 	
-	console.log(currentTimeIndex, changeObj);
+	//console.log(currentTimeIndex, changeObj);
 	
 	tmpDrawElements.push (changeObj);
 	
@@ -2306,6 +2481,7 @@ function redo(){
 	updateLightBulbArray();
 	populateLightBulbMenu();
 	updateSwitchConnectedBulbLabelsInCurrentTimeState();
+	drawelementListChanged = true;
 	drawAllObjects();
 }
 
@@ -2440,9 +2616,38 @@ function paste(selObjIndex){
 	updateLightBulbArray();
 }
 
+function deleteContainingPack(productitem){
+	if (productitem.isInsidePack) {
+		var containingPack = drawElements.find( function(e){
+			if (e.getType() == ObjectType.PACK) {
+				return e.product_list.find( function (p) { return p == productitem });
+			}
+			return false;
+		});
+		// var canDeletePack = confirm("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
+		alert("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
+		var canDeletePack = true;
+
+		if(canDeletePack){
+			containingPack.product_list.forEach( removeObjectFromDrawElements );
+			removeObjectFromDrawElements(containingPack);
+		}
+		$('#mouse-action-container').hide();
+		drawelementListChanged = true;
+		drawAllObjects();
+		//TODO undo redo support
+	}
+}
+
 /* Deletes an object and put it on the deleted objects array */
 function deleteObj(selObjIndex){
 	memObject = drawElements[selObjIndex];
+	if (memObject instanceof ProductItem) {
+		if (memObject.isInsidePack) {
+			deleteContainingPack(memObject);
+			return;
+		}
+	}
 	changeObj = new ChangeObject(memObject);
 	changeObj.setDrawElementIndex(selObjIndex);
 	
@@ -2456,8 +2661,19 @@ function deleteObj(selObjIndex){
 	updateLightBulbArray();
 	populateLightBulbMenu();
 	$('#mouse-action-container').hide();
+	drawelementListChanged = true;
 	drawAllObjects();
 }
+
+function removeObjectFromDrawElements(obj){
+	var tmpDrawElements = drawElements;
+	var retObj;
+	drawElements = [];
+	drawElements = tmpDrawElements.filter( function(e){
+		return e != obj;	
+	});
+}
+
 
 function pullObjectFromDrawElements(index){
 	var tmpDrawElements = drawElements;
@@ -2580,24 +2796,43 @@ $(document).keydown(function(e) {
 
 $(document).keyup(function(e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
-        perfromEscapeAction();
+        performEscapeAction();
     }
 	if (e.keyCode == 17) {
 		isCtrlPressed = false;  
 	}
 	if (e.keyCode == 18) {
 		isAltPressed = false;  
-	}		
+	}
+    //(+)TBIRD VB0.4 - START
+    if (e.keyCode == 46){
+        performDelAction();
+    }
+    //(+)TBIRD VB0.4 - FINISH
 });
 
 
-function perfromEscapeAction(){
+function performEscapeAction(){
     mouseStatus = MouseStatusEnum.UP;
     wallPointsCount = 0;
-    currentCWallPoints.pop();
-    currentCWallPoints.pop();
+    currentCWallPoints.pop();	    
 	drawAllObjects();
 }
+
+//(+)TBIRD VB0.4 - START
+function performDelAction(){
+    var link = $(this);
+    var selObjIndex = $(link).attr('data-id');
+    //console.log(" Link => " + link);
+    //console.log(" Object ID => " + selObjIndex);
+    deleteObj(selObjIndex);
+}
+
+function simulateEScPressForMenu() {
+    $('#mouse-action-container').hide();
+    performEscapeAction();
+}
+//(+)TBIRD VB0.4 - FINISH
 
 
 

@@ -1,6 +1,9 @@
 <?php
 
 
+Route::get('rest/api/products', 'TempController@products');
+Route::get('rest/api/canvas/{id}', 'TempController@loadOne');
+Route::post('rest/api/canvas', 'TempController@save');
 
 Route::auth();
 
@@ -76,6 +79,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('templates/create/add-plans/{id}/canvas/templates/load-latest', 'TemplatesController@loadPlanDataInCanvas');
 
     Route::post('templates/create/add-plans/{id}/crop', 'TemplatesController@cropPlanImage');
-    
+
+
+
+    Route::get('projects/{id}/canvas', 'ProjectsController@editPlanInCanvas');
+    Route::post('projects/{id}/canvas/templates/updates', 'ProjectsController@updatePlanDataInCanvas');
+    Route::get('projects/{id}/canvas/templates/load-latest', 'ProjectsController@loadPlanDataInCanvas');
 });
 
