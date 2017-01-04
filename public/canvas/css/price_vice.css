@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#adapto-logo {
+    width: 267px;
+    float: right;
+}
+
+#tbl_price_vice {
+    width: 100%;
+}
+
+div#header-wrapper {
+    background: #5c5e5d;
+    padding: 22px 20px 1px 20px;
+}
+
+#header-wrapper p {
+    color: #FFFFFF;
+}
+
+#body-wrapper {
+    padding: 20px;
+    font-size: 14px;
+}
+
+#tbl_price_vice {
+    border-spacing: 0 !important;
+}
+
+.hedder-tr {
+    background: #0060dB;
+    color: #FFFFFF;
+}
+
+td {
+    padding: 10px;
+}
+
+th {
+    text-align: center !important;
+}
+
+.detail-title {
+    margin-bottom: 10px;
+}
+
+.ul-detail {
+    margin-left: -36px;
+    line-height: 24px;
+}
+
+.ul-detail li {
+    list-style: none;
+    font-weight: 600;
+}
+
+.ul-detail li > span {
+    font-weight: 300 !important;
+}
+
+.basic-detail {
+    width: 79%;
+    float: left;
+}
+
+.print-date {
+    width: 200px;
+    float: right;
+    background: #dedada;
+    color: #4a87d6;
+    padding: 14px;
+    line-height: 6px;
+}
+
+/*@media all and (max-width: 700px) and (max-width: 1000px) {*/
+    /*.basic-detail {*/
+        /*width: 75%;*/
+        /*float: left;*/
+    /*}*/
+/*}*/

@@ -90,9 +90,9 @@
                                         <label for="_name" class="col-xs-12 col-lg-4 control-label">More</label>
                                         <div class="col-md-12 col-lg-8">
                                             @if($itemProduct->is_composite)
-                                                <p><a href="{!! url('products/composite-products/'.$itemProduct->child) !!}">Link</a></p>
+                                                <p><a href="{!! url('products/composite-products/'.$child->id) !!}">Link</a></p>
                                             @else
-                                                <p><a href="{!! url('products/single-products/'.$itemProduct->child) !!}">Link</a></p>
+                                                <p><a href="{!! url('products/single-products/'.$child->id) !!}">Link</a></p>
                                             @endif
                                         </div>
                                     </div>

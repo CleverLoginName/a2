@@ -119,7 +119,7 @@ class ProductsController extends Controller
                 $tmp['type']        = 'Pack';
                 $tmp['category']      = $category_name;
                 $tmp['sub_category']  = 'Not Applicable';
-                $tmp['builder_price'] = $compositeProduct->builder_price;
+                $tmp['builder_price'] = $pack->builder_price;
                 $tmp['image']         = 'Not Applicable';
                 $tmp['more_url']    = '/products/packs/'.$pack->id;
                 $tmp['edit_url']    = '/products/packs/'.$pack->id.'/edit';
@@ -130,4 +130,8 @@ class ProductsController extends Controller
         $response = ['data' => $out];
         return Response::json($response);
     }//end allData()
+
+    public function create(){
+        return view('products.create');
+    }
 }//end class

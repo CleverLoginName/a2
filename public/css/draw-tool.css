@@ -1,0 +1,147 @@
+#mouse-action-container{
+	width:0px;
+	height:0px;
+	overflow:visible;
+	position:absolute;
+	display:none;
+}
+
+#mouse-action-menu{
+    width: 100px;
+    border: 1px solid black;
+    background: rgba(53, 94, 122, 0.86);
+    color: #fff;
+    padding: 2px;
+}
+
+#mouse-action-container li:hover{
+    color: #c4c4c4;
+    background: rgba(0, 0, 0, 0.33);
+}
+
+#mouse-action-container li.inactive:hover{
+	background: transparent;
+}
+
+#mouse-action-container li.inactive{
+	color: #E5E5E5;
+}
+
+#mouse-action-container li{
+    list-style-type: none;
+    padding: 5px 0 5px 0;
+    border-bottom: solid 1px #ccc;
+}
+
+#text-container{
+	position:absolute;
+	left:0px;
+	top:0px;
+	display:none;
+	z-index:1000;
+	background:#fff;
+	padding:2px;
+}
+
+#type-text-size{
+	width:30px;
+}
+
+#text-container input{
+	background: transparent;
+    border: none;
+    font-size:15px;
+}
+
+#draw-tool-canvas {
+	background:#FFF;
+	border:1px solid black;
+}
+
+#scale-ratio-display,#zoom-ratio-display {
+	position:absolute;
+	bottom:0px;
+	width:100px;
+	padding:3px;
+}
+
+#scale-ratio-display {
+	right:28px;
+	text-align:right;
+}
+
+#zoom-ratio-display{
+	left:30px;
+	text-align:left;
+}
+
+canvas {
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+#draw-tool-canvas, #top-canvas{
+	position:absolute;
+	top:0px;
+	left:0px;
+	border:1px solid #000;
+}
+
+#container { position: relative; height:560px; width:560px; }
+
+#draw-tool-canvas { border: 1px solid #000; }
+
+#control-grid ul{
+	list-style-type:none;
+}
+
+#control-grid ul li{
+	display:inline-block;
+}
+
+#wrapper>div{
+	display:inline-block;
+	float:left;
+}
+
+#loadable_files li{
+	display:block !important;
+}
+
+.zoom-control, .scale-control {
+	width:30px;
+	height:30px;
+}
+
+#switch-menu{
+	position:absolute;
+	display:none;
+	background: #fff;
+}
+
+.canvas-tooltip-span {
+	display:none;
+	z-index: 100;
+    position: fixed;
+}
+
+.tool-show {
+	display: block;
+	position:fixed;
+    overflow:hidden;
+}
+
+img#can-tool-image {
+    width: 36px;
+    height: auto;
+}
+
+@media print{
+	.noPrint {
+		display:none !important;
+	}
+	canvas {
+		border:none !important;
+	}
+}

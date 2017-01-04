@@ -673,8 +673,16 @@ class DummyDataSeeder extends Seeder
 
 
 
+        DB::table('product_category_types')->insert(['name' =>'Lights']);
+        DB::table('product_category_types')->insert(['name' =>'Switches']);
+        DB::table('product_category_types')->insert(['name' =>'Power Points']);
+        DB::table('product_category_types')->insert(['name' =>'Data Points']);
+        DB::table('product_category_types')->insert(['name' =>'AV Points']);
+        DB::table('product_category_types')->insert(['name' =>' Heating Panel']);
 
-
+        for ($i=1;$i<=10;$i++){
+            $id = DB::table('product_suppliers')->insertGetId(['name' => 'Supplier Name '.$i]);
+        }
 
     }
 }

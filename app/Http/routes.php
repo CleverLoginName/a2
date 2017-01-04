@@ -29,11 +29,36 @@ Route::group(['middleware' => ['auth']], function () {
     /******************* Products  ****************************************************************/
 
     Route::group(['prefix' => 'products'], function () {
+
+        Route::post('composite-products/selected', 'CompositeProductsController@updateDragndrop');
+        Route::post('composite-products/remove', 'CompositeProductsController@removeDragndrop');
+        Route::post('packs/selected', 'PacksController@updateDragndrop');
+        Route::post('packs/remove', 'PacksController@removeDragndrop');
+        Route::post('single-products/edit', 'SingleProductsController@update');
+        Route::post('composite-products/edit', 'CompositeProductsController@update');
+        Route::post('packs/edit', 'PacksController@update');
+
+        Route::get('composite-products/done', 'CompositeProductsController@done');
+        Route::get('packs/done', 'PacksController@done');
+        Route::get('packs/edit/done', 'PacksController@editDone');
+        Route::get('composite-products/edit/done', 'CompositeProductsController@editDone');
+        Route::get('packs/edit/done', 'PacksController@editDone');
         Route::resource('/', 'ProductsController');
         Route::resource('/all', 'ProductsController@allData');
         Route::resource('single-products', 'SingleProductsController');
         Route::resource('composite-products', 'CompositeProductsController');
         Route::resource('packs', 'PacksController');
     });
+
+    Route::post('ajax/catalogs', 'ProductCatalogsController@ajaxStore');
+    Route::post('/ajax/categories', 'ProductCategoriesController@ajaxStore');
+    Route::post('/ajax/sub-categories', 'ProductSubCategoriesController@ajaxStore');
+
+    Route::get('categories-by-catalog', 'ProductCategoriesController@categoriesByCatalogId');
+    Route::get('/subcategories-by-category', 'ProductSubCategoriesController@subCategoriesByCategoryId');
+    Route::get('/fields-by-subcategory', 'ProductCustomFieldsController@fieldsBySubCategoryId');
+    
+
     /**********************************************************************************************/
 });
+

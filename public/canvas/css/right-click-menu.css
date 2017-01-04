@@ -1,0 +1,26 @@
+#right-click-menu {
+    width: 140px;
+    background: #FFF;
+    z-index: 1000;
+    position: absolute;
+    left: 40%;
+    top: 20%;
+    box-shadow: #ccc 0px 0px 16px;
+    border: solid 1px rgba(0, 0, 0, 0.71);
+}
+
+#right-click-menu div {
+    background-color: #2b669a;
+    cursor: pointer;
+    color: #fff;
+    text-align: center;
+    margin: 2px 1px;
+}
+
+#right-click-menu div:hover{
+    background-color: #fff;
+    cursor: pointer;
+    color: #000;
+    text-align: center;
+    margin: 2px 1px;
+}

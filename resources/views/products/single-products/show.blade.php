@@ -79,19 +79,19 @@
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">CONTRACTOR PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->contractor_price !!}</p>
+                                <p>{!! $single_product->contractor_price !!}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">SUPPLIER PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->supplier_price !!}</p>
+                                <p>{!! $single_product->supplier_price !!}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">SALES PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->builder_price !!}</p>
+                                <p>{!! $single_product->builder_price !!}</p>
                             </div>
                         </div>
 
