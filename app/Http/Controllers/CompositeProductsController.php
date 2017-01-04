@@ -343,4 +343,11 @@ class CompositeProductsController extends ProductsController
     }
 
 
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        Flash::error('Product Deleted', 'Composite-Product has been deleted successfully.');
+        return redirect()->action('ProductsController@index');
+    }
 }

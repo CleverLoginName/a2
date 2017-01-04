@@ -312,4 +312,11 @@ class SingleProductsController extends ProductsController
         return view('products.create_main')
             ->with('product', $product);
     }
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        Flash::error('Product Deleted', 'Single-Product has been deleted successfully.');
+        return redirect()->action('ProductsController@index');
+    }
 }

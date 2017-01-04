@@ -181,4 +181,12 @@ class PacksController extends ProductsController
 
 
     }
+
+    public function destroy($id)
+    {
+        $product = ProductSubCategory::find($id);
+        $product->delete();
+        Flash::error('Pack Deleted', 'Pack has been deleted successfully.');
+        return redirect()->action('ProductsController@index');
+    }
 }

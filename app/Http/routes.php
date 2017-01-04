@@ -45,8 +45,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('packs/edit/done', 'PacksController@editDone');
         Route::resource('/', 'ProductsController');
         Route::resource('/all', 'ProductsController@allData');
+        Route::get('single-products/{id}/delete', 'SingleProductsController@destroy');
         Route::resource('single-products', 'SingleProductsController');
+        Route::get('composite-products/{id}/delete', 'CompositeProductsController@destroy');
         Route::resource('composite-products', 'CompositeProductsController');
+        Route::get('packs/{id}/delete', 'PacksController@destroy');
         Route::resource('packs', 'PacksController');
     });
 
