@@ -10,95 +10,49 @@
 
             <div class="form_container clearfix">
 
-                <div class="col-lg-3">
-                    <img src="{!! asset($composite_product->image) !!}" class="img-responsive col-md-12" alt=""/>
+              <!--  <div class="col-lg-3">
+                    <img src="{!! asset($pack->image) !!}" class="img-responsive col-md-12" alt=""/>
                     <div class="product_desc clearfix">
-                        <label for="_name" class="control-label">{!! $composite_product->name !!}</label>
+                        <label for="_name" class="control-label">{!! $pack->name !!}</label>
                         <div >
-                            <p>{!! $composite_product->description !!}</p>
+                            <p>{!! $pack->description !!}</p>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
-                <div class="col-lg-9 product_details">
+                <div class="col-lg-12 product_details">
                     <form class="form-horizontal">
 
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Name</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">NAME</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->name !!}</p>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Icon</label>
-                            <div class="col-md-12 col-lg-10">
-                                @php
-                                    $icon = \App\ProductIcon::find($composite_product->icon);
-                                @endphp
-                                <p>@if($icon)<img src="{!! $icon->path !!}" class="col-md-1"> @else Icon Deleted @endif</p>
+                                <p>{!! $pack->name !!}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Description</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">DESCRIPTION</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->description !!}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">TYPE</label>
-                            <div class="col-md-12 col-lg-10">
-                                <p>@if($composite_product->is_composite) Composite Product @else Single Product @endif</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">SUPPLIER CODE</label>
-                            <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->manufacturing_product_code !!}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">BUILDERS PRODUCT CODE</label>
-                            <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->builder_code !!}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">CONTRACTOR CODE</label>
-                            <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->pronto_code !!}</p>
+                                <p>{!! $pack->description !!}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">CONTRACTOR PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->contractor_price !!}</p>
+                                <p>{!! $pack->contractor_price !!}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">SUPPLIER PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->supplier_price !!}</p>
+                                <p>{!! $pack->supplier_price !!}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="_name" class="col-xs-12 col-lg-2 control-label">SALES PRICE ($)</label>
                             <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->builder_price !!}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Discount (%)</label>
-                            <div class="col-md-12 col-lg-10">
-                                <p>{!! $composite_product->discount !!}</p>
+                                <p>{!! $pack->builder_price !!}</p>
                             </div>
                         </div>
 
@@ -108,17 +62,15 @@
                 <div class="col-md-12 related_products" >
                     <h4>Products Contains</h4>
 
-                    @if($composite_product->is_composite)
 
-
-                        <?php $itemProducts = \App\ProductCompositeMap::where('parent','=',$composite_product->id)->get();  ?>
+                        <?php $itemProducts = \App\ProductSubCategoryMap::where('sub_category_id','=',$pack->id)->get();  ?>
                         @foreach($itemProducts as $itemProduct)
                             @php
-                                $child = \App\Product::find($itemProduct->child);
-                                @endphp
+                                $child = \App\Product::find($itemProduct->product_id);
+                            @endphp
                             @if($child)
 
-                                @endif
+                            @endif
                             <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
                                 <div class="product">
                                     <img src="{!! asset($child->image) !!}" class="img-responsive col-md-12"/>
@@ -138,8 +90,8 @@
                                         <label for="_name" class="col-xs-12 col-lg-4 control-label">More</label>
                                         <div class="col-md-12 col-lg-8">
                                             @if($itemProduct->is_composite)
-                                            <p><a href="{!! url('products/composite-products/'.$itemProduct->child) !!}">Link</a></p>
-                                                @else
+                                                <p><a href="{!! url('products/composite-products/'.$itemProduct->child) !!}">Link</a></p>
+                                            @else
                                                 <p><a href="{!! url('products/single-products/'.$itemProduct->child) !!}">Link</a></p>
                                             @endif
                                         </div>
@@ -149,12 +101,10 @@
 
 
                         @endforeach
-                    @endif
 
 
 
                 </div>
-
             </div>
 
         </div>
@@ -189,9 +139,9 @@
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn cursor-normal" type="submit" id="2-bc"><span
-                class="breadcrumb-text">Composite-Products</span></button>
+                class="breadcrumb-text">Packs</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">{!! $composite_product->name !!}</span></button>
+                class="breadcrumb-text">{!! $pack->name !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
 @stop

@@ -353,9 +353,10 @@ class DummyDataSeeder extends Seeder
                 'manufacturing_product_code' => $faker->text(10),
                 'image' => $faker->imageUrl(640,480,null,true,null),
                 'builder_price' => $faker->numberBetween(0,10000),
+                'contractor_price' => $faker->numberBetween(0,10000),
+                'supplier_price' => $faker->numberBetween(0,10000),
                 'discount' => $faker->numberBetween(0,100),
                 'icon' => $faker->numberBetween(0,250),
-                'sale_price' => $faker->numberBetween(0,10000),
                 'is_composite' => $is_composite,
                 'supplier_id'=>$faker->numberBetween(1,10)
             ]);
