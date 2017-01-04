@@ -104,7 +104,7 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('resources/images/home_ico_black.png') }}"></span><span
+                                           src="{{ URL::asset('resources/images/products_ico_black.png') }}"></span><span
                 class="breadcrumb-text">Products</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 

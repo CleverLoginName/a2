@@ -71,7 +71,7 @@
                 <section class="row form-group">
                     <section class="col-md-2"><label>Profile Image</label></section>
                     <section class="col-md-8"> <input type="file" name="profile_pic" id="profile_pic">
-                        <img id="blah" src="#" alt="your image" width="150px"/></section>
+                        <img id="blah" src="#" alt="your image" width="150px" style="visibility: hidden"/></section>
                     <section class="col-md-2"></section>
                 </section>
                 <section class="row box-footer" id="form-footer">
@@ -108,7 +108,7 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('resources/images/home_ico_black.png') }}"></span><span
+                                           src="{{ URL::asset('resources/images/prof_ico_black.png') }}"></span><span
                 class="breadcrumb-text">Users</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
@@ -125,6 +125,7 @@
 
                 reader.onload = function (e) {
                     $('#blah').attr('src', e.target.result);
+                    $('#blah').css('visibility', 'visible');
                 }
 
                 reader.readAsDataURL(input.files[0]);

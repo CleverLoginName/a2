@@ -22,56 +22,64 @@
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>First Name</label></section>
-                    <section class="col-md-6"><input class="form-control required" id="first_name"
+                    <section class="col-md-8"><input class="form-control required" id="first_name"
                                                      name="first_name" aria-required="true" type="text" value="{!! $user->first_name !!}"></section>
                     <section class="col-md-2"></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Last Name</label></section>
-                    <section class="col-md-6"><input class="form-control required" id="last_name"
+                    <section class="col-md-8"><input class="form-control required" id="last_name"
                                                      name="last_name" aria-required="true" type="text" value="{!! $user->last_name !!}"></section>
                     <section class="col-md-2"></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>E-mail</label></section>
-                    <section class="col-md-6"><input class="form-control required" id="email"
+                    <section class="col-md-8"><input class="form-control required" id="email"
                                                      name="email" aria-required="true" type="text" value="{!! $user->email !!}"></section>
                     <section class="col-md-2"></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Mobile</label></section>
-                    <section class="col-md-6"><input class="form-control required" id="mobile"
+                    <section class="col-md-8"><input class="form-control required" id="mobile"
                                                      name="mobile" aria-required="true" type="text" value="{!! $user->mobile !!}"></section>
                     <section class="col-md-2"></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>User Role</label></section>
-                    <section class="col-md-6">
+                    <section class="col-md-8">
                         <select class="form-control required"
                                 id="prod-frm-sub-cat" name="role_id" aria-required="true"
                                 aria-invalid="true">
-                            {!! \App\Role::find(DB::table('role_user')->where('user_id','=',$user->id)->first()->role_id)->display_name !!}
                             @foreach($roles as $role)
-                                @if(DB::table('role_user')->where('user_id','=',$user->id)->first()->role_id == $role->id)
-                            <option value="{!! $role->id !!}" selected="selected">{!! $role->display_name !!}</option>
-                                @else
-                                    <option value="{!! $role->id !!}">{!! $role->display_name !!}</option>
-                                @endif
+                                <option value="{!! $role->id !!}">{!! $role->display_name !!}</option>
                             @endforeach
                         </select>
                     </section>
                     <section class="col-md-2"></section>
                 </section>
+                <section class="row form-group">
+                    <section class="col-md-2"><label>Old Password</label></section>
+                    <section class="col-md-8"><input class="form-control required" id="old_password"
+                                                     name="old_password" aria-required="true" type="password"></section>
+                    <section class="col-md-2"></section>
+                </section>
+                <section class="row form-group">
+                    <section class="col-md-2"><label>New Password</label></section>
+                    <section class="col-md-8"><input class="form-control required" id="password"
+                                                     name="password" aria-required="true" type="password"></section>
+                    <section class="col-md-2"></section>
+                </section>
+                <section class="row form-group">
+                    <section class="col-md-2"><label>Profile Image</label></section>
+                    <section class="col-md-8"> <input type="file" name="profile_pic" id="profile_pic">
+                        <img id="blah" src="/{!! $user->profile_pic !!}" alt="your image" width="150px"/></section>
+                    <section class="col-md-2"></section>
+                </section>
 
                 <section class="row box-footer" id="form-footer">
                     <button type="submit"
-                            class="btn add-item-btn">Add <img src="resources/images/spinning-circles.svg"
+                            class="btn add-item-btn">Save <img src="resources/images/spinning-circles.svg"
                                                               class="loading-img-btn" style="display:none;"
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
@@ -103,7 +111,7 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('resources/images/home_ico_black.png') }}"></span><span
+                                           src="{{ URL::asset('resources/images/prof_ico_black.png') }}"></span><span
                 class="breadcrumb-text">Users</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 

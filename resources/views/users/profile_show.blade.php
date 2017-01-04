@@ -57,6 +57,9 @@
                             <p>{!! \App\Role::find(DB::table('role_user')->where('user_id','=',$user->id)->first()->role_id)->display_name !!}</p>
                         </div>
                     </div>
+                    <div class="wr_btn clearfix">
+                        <a name="Save" type="button" class="btn_save" id="Save" href="{!! url('profile/edit') !!}">Edit Profile</a>
+                    </div>
                 </form>
             </div>
         </div>

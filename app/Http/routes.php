@@ -18,7 +18,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', 'UsersController');
     Route::get('users/{id}/delete', 'UsersController@destroy');
 
-    Route::get('/profile', 'UsersController@profile');
+    Route::get('/profile', 'UsersController@viewProfile');
     Route::get('/profile/edit', 'UsersController@editProfile');
 
     /**********************************************************************************************/
@@ -63,5 +63,19 @@ Route::group(['middleware' => ['auth']], function () {
     
 
     /**********************************************************************************************/
+
+
+    Route::resource('templates', 'TemplatesController');
+    Route::get('templates/{id}/delete', 'TemplatesController@destroy');
+    Route::post('templates/create/plan-image', 'TemplatesController@addTemplatePlansImage');
+    Route::post('templates/create/plan-data', 'TemplatesController@addTemplatePlansData');
+    Route::get('templates/create/add-plans', 'TemplatesController@addPlan');
+    Route::get('templates/create/add-plans/{id}/canvas', 'TemplatesController@editPlanInCanvas');
+    Route::get('templates/create/add-plans/{id}/delete', 'TemplatesController@deletePlanInCanvas');
+    Route::post('templates/create/add-plans/{id}/canvas/templates/updates', 'TemplatesController@updatePlanDataInCanvas');
+    Route::get('templates/create/add-plans/{id}/canvas/templates/load-latest', 'TemplatesController@loadPlanDataInCanvas');
+
+    Route::post('templates/create/add-plans/{id}/crop', 'TemplatesController@cropPlanImage');
+    
 });
 

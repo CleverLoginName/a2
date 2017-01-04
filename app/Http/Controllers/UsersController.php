@@ -110,7 +110,8 @@ class UsersController extends Controller
 
         Flash::success('User Added', 'User has been added successfully.');
 
-        return redirect()->action('UsersController@index');
+       // return redirect()->action('UsersController@index');
+        return Redirect::to('/users');
     }//end store()
 
 
@@ -135,6 +136,28 @@ class UsersController extends Controller
         $user->email      = $request->get('email');
         $user->mobile     = $request->get('mobile');
         // $user->password = Hash::make($request->get('password'));
+
+        if (array_key_exists("profile_pic",$request->all())) {
+            $profile_pic = $request->file('profile_pic');
+            $randStr = Str::random(16);
+
+            // Move Uploaded File
+            $destinationPath = 'uploads/profile_pics/' . $user->id . '/originals/';
+            if ($profile_pic) {
+                $randFileName = $randStr . '.' . $profile_pic->getClientOriginalExtension();
+                $profile_pic->move($destinationPath, $randFileName);
+            } else {
+                $img = Image::make(Gravatar::fallback('/resources/images/default.png')->get($user->email));
+                $randFileName = $randStr . '.png';
+                $img->save($destinationPath . $randFileName);
+            }
+
+            $user->profile_pic = $destinationPath . $randFileName;
+        }
+        if (Hash::check($request->get('old_password'), $user->password)) {
+            $user->password   = Hash::make($request->get('password'));
+        }
+
         $user->save();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $role = DB::table('role_user')->where('user_id', '=', $user->id)->update(['role_id' => $request->get('role_id')]);
@@ -161,11 +184,17 @@ class UsersController extends Controller
     }//end edit()
 
 
+    public function viewProfile()
+    {
+        $user  = Auth::user();
+        $roles = Role::all();
+        return view('users.profile_show')->with('user', $user)->with('roles', $roles);
+    }
     public function editProfile()
     {
         $user  = Auth::user();
         $roles = Role::all();
-        return view('users.edit')->with('user', $user)->with('roles', $roles);
+        return view('users.profile_edit')->with('user', $user)->with('roles', $roles);
     }//end editProfile()
 
 
