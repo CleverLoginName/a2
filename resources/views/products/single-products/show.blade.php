@@ -30,6 +30,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Icon</label>
+                            <div class="col-md-12 col-lg-10">
+                                @php
+                                    $icon = \App\ProductIcon::find($single_product->icon);
+                                @endphp
+                                <p>@if($icon)<img src="{!! $icon->path !!}" class="col-md-1"> @else Icon Deleted @endif</p>
+                            </div>
+                        </div>
 
 
                         <div class="form-group">
@@ -47,7 +56,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">MANUFACTURING PRODUCT CODE</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">SUPPLIER CODE</label>
                             <div class="col-md-12 col-lg-10">
                                 <p>{!! $single_product->manufacturing_product_code !!}</p>
                             </div>
@@ -61,7 +70,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">PRONTO CODE</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">CONTRACTOR CODE</label>
                             <div class="col-md-12 col-lg-10">
                                 <p>{!! $single_product->pronto_code !!}</p>
                             </div>
