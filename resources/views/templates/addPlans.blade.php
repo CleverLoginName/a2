@@ -52,10 +52,6 @@
 
 
 
-
-
-
-
     <div class="content_area clearfix">
     <div class="col-xs -12 col-sm-12 col-md-9 col-lg-12 content_left">
 
@@ -98,7 +94,7 @@
 
                                 {{Form::hidden('id',$templatesPlan->id)}}
                                 <h5>Save Template Plan</h5>
-                                <p>TheUploadedFile name.pdf : file size.kbs </p>
+                                <p>{!! $templatesPlan->client_file_name !!} : (Not Available Yet)kbs </p>
 
                                 <div class="col-md-12 margin_top_20">
                                     <div class="form-group">
