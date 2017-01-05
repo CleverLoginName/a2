@@ -81,6 +81,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('templates/create/add-plans/{id}/crop', 'TemplatesController@cropPlanImage');
 
 
+    Route::resource('projects', 'ProjectsController');
+    Route::get('projects/{id}/delete', 'ProjectsController@destroy');
+    Route::post('projects/{id}/edit', 'ProjectsController@update');
 
     Route::get('projects/{id}/canvas', 'ProjectsController@editPlanInCanvas');
     Route::post('projects/{id}/canvas/templates/updates', 'ProjectsController@updatePlanDataInCanvas');
