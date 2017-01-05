@@ -58,13 +58,18 @@
         <div class="form_container clearfix">
             {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone']) !!}
 
+            <div id="dropzonePreview" class="dz-default dz-message">
                 <div class="form-group">
                     <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
                     <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
                     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                     <input type="hidden" name="template_id" id="template_id" value="{!! session('template')->id !!}">
 
-            </div>{!! Form::close() !!}
+                </div>
+            </div>
+
+
+            {!! Form::close() !!}
 
             <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 model_search_results new_template_uploader consultant_results_bg clearfix">
                 <ul>
