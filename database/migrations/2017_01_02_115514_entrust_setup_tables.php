@@ -63,9 +63,11 @@ class EntrustSetupTables extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Schema::drop('permission_role');
         Schema::drop('permissions');
         Schema::drop('role_user');
         Schema::drop('roles');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
