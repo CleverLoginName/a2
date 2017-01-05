@@ -209,7 +209,7 @@
                                 <div class="consultant_wrapper clearfix">
                                     <div class="col-md-4 img_consultant">
                                         <img src="{!! asset($consultant->profile_pic) !!}" class="col-md-12"/>
-                                        <button class="btn_assign assign" data-consultant-id="{!! $consultant->id !!}" data-consultant-name="{!! $consultant->first_name.' '.$consultant->first_name !!}">Assign</button>
+                                        <button class="btn_assign assign" data-consultant-id="{!! $consultant->id !!}" data-consultant-name="{!! $consultant->first_name.' '.$consultant->last_name !!}">Assign</button>
                                     </div>
                                     <div class="col-md-8 desc_consultant">
                                         <h5><span class="name">{!! $consultant->first_name.' '.$consultant->last_name !!}</span></h5>

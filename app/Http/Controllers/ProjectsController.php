@@ -166,7 +166,7 @@ class ProjectsController extends Controller
             $projectPlan->save();
         };
 
-        $projectPlans = ProjectPlan::where('project_id','=',$project->id)->get();dd($projectPlans);
+        $projectPlans = ProjectPlan::where('project_id','=',$project->id)->get();
         $projectPlansCount = ProjectPlan::where('project_id','=',$project->id)->count();
         if($projectPlansCount > 0){
             session(['project_id' => $project->id ]);
@@ -174,6 +174,11 @@ class ProjectsController extends Controller
         }
 
         Flash::success('Project Added', 'Project has been added successfully.');
+
+        return redirect()->action(
+            'ProjectsController@editPlanInCanvas', ['id' => $projectPlans[0]->id]
+        );
+
         return view('canvas.index_project')
             ->with('showPop', true)
             ->with('bgImg', '')
@@ -185,13 +190,16 @@ class ProjectsController extends Controller
     public function editPlanInCanvas($id)
     {
         $projectPlan = DB::table('project_plans')->where('id','=',$id)->first();
-        $allPlans = DB::table('project_plans')->where('project_id','=',$projectPlan->project_id)->get();
-        session(['project_plan_id' => $projectPlan->id ]);
-        session(['plan_id' => $id ]);
-        return view('canvas.index_project')
-            ->with('bgImg', $projectPlan->img)
-            ->with('showPop', false)
-            ->with('plans', $allPlans);
+        if($projectPlan){
+            $allPlans = DB::table('project_plans')->where('project_id','=',$projectPlan->project_id)->get();
+            session(['project_plan_id' => $projectPlan->id ]);
+            session(['plan_id' => $id ]);
+            return view('canvas.index_project')
+                ->with('bgImg', $projectPlan->img)
+                ->with('showPop', false)
+                ->with('plans', $allPlans);
+        }
+
     }
 
     public function updatePlanDataInCanvas(Request $request)

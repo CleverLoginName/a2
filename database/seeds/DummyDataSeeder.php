@@ -266,7 +266,22 @@ class DummyDataSeeder extends Seeder
         $user->profile_pic = '/resources/images/default.png';
         $user->save();
 
-
+        for ($i=1;$i<=100;$i++){
+            $role = $faker->numberBetween(1,2);
+            $user = new User();
+            $user->first_name = $faker->firstName;
+            $user->last_name = $faker->lastName;
+            $user->email = $faker->email;
+            $user->password = Hash::make($faker->text(10));
+            $user->created_by = 1;
+            $user->profile_pic = 'resources/images/default.png';
+            $user->mobile = $faker->phoneNumber;
+            $user->save();
+            DB::table('role_user')->insert([
+                'user_id' => $user->id,
+                'role_id' => $role
+            ]);
+        }
 
         DB::table('role_user')->insert([
             'user_id' => 1,
@@ -343,7 +358,7 @@ class DummyDataSeeder extends Seeder
 
 
 
-        for ($i=1;$i<=250;$i++){
+        for ($i=1;$i<=2500;$i++){
             $is_composite = $faker->boolean(50);
             DB::table('products')->insert([
                 'name' => $faker->sentence(2),

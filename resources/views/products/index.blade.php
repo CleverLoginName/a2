@@ -6,7 +6,7 @@
             <div class="box-header"></div>
             <div class="box-body table-responsive">
 
-                <table id="product-table-view"
+                <table id="product_table"
                        class="table table-bordered table-striped table-view no-cursor  dataTable no-footer"
                        role="grid" aria-describedby="product-table-view_info">
                     <thead>
@@ -89,7 +89,8 @@
                 $(image_id).attr("src",$(this).attr("src"));
                 $(image_id).css("display","block");
             });
-            $('#product-table-view').DataTable({
+
+            var table =$('#product_table').DataTable({
                 ajax:'/products/all',/*
                 "aoColumns": [
                 { "mDataProp": "name" },
@@ -128,6 +129,13 @@
                 } ],
                 pageLength:50
             });
+
+            $('#product_table tbody')
+                    .on( 'mouseenter', 'td', function () {
+                        var colIdx = table.cell(this).index().column;
+                        $( table.cells().nodes() ).removeClass( 'highlight' );
+                        $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+                    } );
 
         });
 

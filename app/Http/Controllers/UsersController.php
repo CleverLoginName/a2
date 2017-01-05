@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Szykra\Notifications\Flash;
+use Yajra\Datatables\Facades\Datatables;
 
 class UsersController extends Controller
 {
@@ -33,10 +34,14 @@ class UsersController extends Controller
 
     public function index()
     {
+        //return Datatables::eloquent(User::query())->make(true);
         $users = User::all();
         return view('users.index')->with('users', $users);
     }//end index()
 
+    public function allUsers(){
+
+    }
 
     public function show($id)
     {
