@@ -164,9 +164,9 @@ class ProjectsController extends Controller
             $projectPlan->catalog_id = $templatePlan->catalog_id;
             $projectPlan->template_data = $templatePlan->template_data;
             $projectPlan->save();
-        }
+        };
 
-        $projectPlans = ProjectPlan::where('project_id','=',$project->id)->get();
+        $projectPlans = ProjectPlan::where('project_id','=',$project->id)->get();dd($projectPlans);
         $projectPlansCount = ProjectPlan::where('project_id','=',$project->id)->count();
         if($projectPlansCount > 0){
             session(['project_id' => $project->id ]);
