@@ -193,8 +193,8 @@
                                                               class="loading-img-btn" style="display:none;"
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
-                    <a id="prod-frm-reset" href="{!! url('products') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
-                    <a id="prod-frm-reset" href="{!! url('products/'.$project->id.'/edit/plans') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
+                    <a id="prod-frm-reset" href="{!! url('projects') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
+                    <a id="prod-frm-reset" href="{!! url('projects/'.$project->id.'/canvas') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
                 </section>
             </form>
         </section>
@@ -305,7 +305,7 @@
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
                                            src="{{ URL::asset('resources/images/project_ico_black.png') }}"></span><span
-                class="breadcrumb-text">Products</span></button>
+                class="breadcrumb-text">Projects</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span

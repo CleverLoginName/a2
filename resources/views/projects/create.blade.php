@@ -108,7 +108,6 @@
                     <section class="col-md-3">
                         {!! Form::select('state', ['VIC' => 'VIC',
                          'TAS' => 'TAS',
-                         'Mrs' => 'Mrs',
                          'NSW' => 'NSW',
                          'WA' => 'WA',
                          'NT' => 'NT',

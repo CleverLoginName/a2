@@ -169,13 +169,23 @@
 </div >
 
     <div id="design-area" class="col-xs-12 col-sm-12 col-md-8 col-lg-10">
+		@php
+			$project_id = session('project_id');
+            $project_plan_id = session('project_plan_id');
+        $project = \App\Project::where('id','=',$project_id)->first();
+        $project_plan = \App\ProjectPlan::where('id','=',$project_plan_id)->first();
+        if($project){
+        $address = \App\Address::where('id','=',$project->address_id)->first();
+        }
 
+		@endphp
     <div id="address-bar" class="clearfix">
         <div class="headerDiv first border-left-add">
-                Job #: PID0001
+                Job #: {!! $project->job !!}
         </div>
         <div class="headerDiv second">
-                Project: Street Adress/Lot No, Postcode, Sturb, State.
+
+			{!! $address->street_name.' / '.$address->no.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}
         </div>
         <div class="headerDiv third">
                 <img src="/img/adopto.png" width="90"/>

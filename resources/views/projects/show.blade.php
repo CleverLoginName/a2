@@ -107,7 +107,13 @@
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Catalog</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p>U{!! $projectPlan->catalog !!}</p>
+                                    <p>{!! $projectPlan->catalog !!}</p>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="_name" class="col-xs-12 col-lg-4 control-label">Edit in Canvas</label>
+                                <div class="col-md-12 col-lg-8">
+                                    <p><a href="{!! url('projects/'.$projectPlan->id.'/canvas') !!}">Link</a> </p>
                                 </div>
                             </div>
                         </div>
