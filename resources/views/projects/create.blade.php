@@ -136,7 +136,7 @@
                         House
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}
+                        {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
 
 
@@ -144,7 +144,7 @@
                         Garage
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}
+                        {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
                     <section class="col-md-1">
 
@@ -154,7 +154,7 @@
                         Porch
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}
+                        {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
 
 

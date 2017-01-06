@@ -604,12 +604,12 @@
 
 </script>
 
-
+<!--
 <div class="modal fade template_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div id="templates">
-                <!-- Child elements of container with class="list" becomes list items -->
+                Child elements of container with class="list" becomes list items
                 <ul class="list">
                     @foreach($plans as $plan)
 
@@ -633,6 +633,54 @@
             </div>
         </div>
     </div>
+</div>-->
+
+
+<!-- ========================= MODEL POPUP STARTS ============================ -->
+
+<!-- Modal -->
+<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content clearfix">
+			<div class="modal-header">
+
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Project Plans:</h4>
+
+			</div>
+			<div class="modal-body" id="templates">
+				<form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
+					  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/catalogs') !!}">
+					<div class="form-group">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<section class="row form-group">
+								<section class="col-md-12" style="margin-left: 100px">
+									<ul>
+										@foreach($plans as $plan)
+											<div class="row">
+												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan->img) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+
+												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$plan->id.'/canvas') !!}">Open</a></div>
+											</div>
+
+
+
+
+										@endforeach
+									</ul>
+								</section>
+							</section>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+
+	</div>
 </div>
 </body>
 

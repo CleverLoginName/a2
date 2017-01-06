@@ -18,29 +18,34 @@
             @endphp
 
             <div class="modal fade" id="{!! $model !!}" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog col-xs-10 col-sm-10 col-md-10 col-lg-10" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="modalLabel">Cropper</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="img-container">
-                                <img id="image_{!! $templatesPlan->id !!}" src="{!! asset($templatesPlan->img) !!}" alt="Picture">
+                            <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <img id="image_{!! $templatesPlan->id !!}" src="{!! asset($templatesPlan->img) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             </div>
-                            <button onclick="rotate_left_{!! $templatesPlan->id !!}()">Rotate Clockwise</button>
-                            <button onclick="rotate_right_{!! $templatesPlan->id !!}()">Rotate Anti-clockwisw</button>
+                            <div style="padding-top: 15px">
+                               {!! Form::open(['url' => 'templates/create/add-plans/'.$templatesPlan->id.'/crop', 'method' => 'post']) !!}
+                                <input type="hidden" name="width" id="width_{!! $templatesPlan->id !!}" value="">
+                                <input type="hidden" name="height" id="height_{!! $templatesPlan->id !!}" value="">
+                                <input type="hidden" name="x" id="x_{!! $templatesPlan->id !!}" value="">
+                                <input type="hidden" name="y" id="y_{!! $templatesPlan->id !!}" value="">
+                                <input type="hidden" name="rotate" id="rotate_{!! $templatesPlan->id !!}" value="">
+                                {!! Form::submit('Save & Exit',['class'=>'btn_save']) !!}
+                                {!! Form::close() !!}
+                                <button class="btn_save" onclick="rotate_left_{!! $templatesPlan->id !!}()">Rotate Clockwise</button>
+                                <button class="btn_save" onclick="rotate_right_{!! $templatesPlan->id !!}()">Rotate Anti-clockwisw</button>
+
+                                <button type="button" class="btn_save" data-dismiss="modal">Close</button>
+                            </div>
+
                         </div>
                         <div class="modal-footer">
-                            {!! Form::open(['url' => 'templates/create/add-plans/'.$templatesPlan->id.'/crop', 'method' => 'post']) !!}
-                            <input type="hidden" name="width" id="width_{!! $templatesPlan->id !!}" value="">
-                            <input type="hidden" name="height" id="height_{!! $templatesPlan->id !!}" value="">
-                            <input type="hidden" name="x" id="x_{!! $templatesPlan->id !!}" value="">
-                            <input type="hidden" name="y" id="y_{!! $templatesPlan->id !!}" value="">
-                            <input type="hidden" name="rotate" id="rotate_{!! $templatesPlan->id !!}" value="">
-                            {!! Form::submit('Save & Exit') !!}
-                            {!! Form::close() !!}
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
                         </div>
                     </div>
                 </div>
@@ -79,18 +84,24 @@
                     <li>
                         <div class="consultant_wrapper clearfix">
                             <div class="col-md-4 img_consultant">
-                            <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}">
-                                <p>@if($templatesPlan->design){!! $templatesPlan->design !!}@else{!! \App\Template::find($templatesPlan->template_id)->name !!}@endif {!! '_'.$levels[($templatesPlan->level-1)].'_'.$catalogs[($templatesPlan->catalog_id-1)]->name !!}</p>
-                                <img src="{!! asset($templatesPlan->img) !!}" class="col-md-8"/>
-                            </a>
-
-                                @php
-                                    $model = "#modal_".$templatesPlan->id;
-                                @endphp
-                                <br/>
-                                <div class="row clearfix">
-                                <a data-target="{!! $model !!}" data-toggle="modal" class="col-md-12">Crop / Rotate Plan</a>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+                                    <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}">
+                                        <p>@if($templatesPlan->design){!! $templatesPlan->design !!}@else{!! \App\Template::find($templatesPlan->template_id)->name !!}@endif {!! '_'.$levels[($templatesPlan->level-1)].'_'.$catalogs[($templatesPlan->catalog_id-1)]->name !!}</p>
+                                        <img src="{!! asset($templatesPlan->img) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8"/>
+                                    </a>
                                 </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    @php
+                                        $model = "#modal_".$templatesPlan->id;
+                                    @endphp
+                                    <br/>
+
+                                        <a data-target="{!! $model !!}" data-toggle="modal" class="col-md-12">Crop / Rotate Plan</a>
+
+                                </div>
+
+
+
                             </div>
 
                             <div class="col-md-8 desc_plan">
@@ -379,6 +390,17 @@
         }
         .dz-error-mark{
             display: none !important;
+        }
+
+
+        @media screen and (min-width: 768px){
+            .modal-dialog {
+                left: 10%;
+                width: 80%;
+            }
+        }
+        .modal-dialog {
+
         }
     </style>
 @stop

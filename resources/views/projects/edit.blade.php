@@ -164,7 +164,7 @@
                         House
                     </section>
                     <section class="col-md-1">
-                        <input class="form-control required" id="house" name="house" aria-required="true" type="text" placeholder="5w per SQM" disabled="disabled" value="{!! $template->sqm_house !!}">
+                        <input class="form-control required" id="house" name="house" aria-required="true" type="text" placeholder="5w per SQM" disabled="disabled" value="{!! $template->sqm_house !!}">(w per SQM)
                     </section>
 
                     <section class="col-md-1"></section>
@@ -173,7 +173,7 @@
                         Garage
                     </section>
                     <section class="col-md-1">
-                        <input class="form-control required" id="garage" name="garage" aria-required="true" type="text" placeholder="3w per SQM" disabled="disabled" value="{!! $template->sqm_garage !!}">
+                        <input class="form-control required" id="garage" name="garage" aria-required="true" type="text" placeholder="3w per SQM" disabled="disabled" value="{!! $template->sqm_garage !!}">(w per SQM)
                     </section>
 
                     <section class="col-md-1"></section>
@@ -182,7 +182,7 @@
                         Porch
                     </section>
                     <section class="col-md-1">
-                        <input class="form-control required" id="porch" name="porch" aria-required="true" type="text" placeholder="4w per SQM" disabled="disabled" value="{!! $template->sqm_porch !!}">
+                        <input class="form-control required" id="porch" name="porch" aria-required="true" type="text" placeholder="4w per SQM" disabled="disabled" value="{!! $template->sqm_porch !!}">(w per SQM)
                     </section>
 
 

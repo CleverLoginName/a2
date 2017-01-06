@@ -174,7 +174,7 @@
      total = (parseInt($( "#house_watts_per_sqm" ).val()) || 0)+
              (parseInt($( "#garage_watts_per_sqm" ).val()) || 0)+
              (parseInt($( "#porch_watts_per_sqm" ).val()) || 0);
-     $('#total').val(total+'W');
+     $('#total').val(total+'W Per SQM');
  }
         $( "#house_watts_per_sqm" ).keyup(function() {
             calTotal();

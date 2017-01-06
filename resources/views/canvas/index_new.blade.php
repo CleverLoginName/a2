@@ -628,13 +628,13 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
 									<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									<section class="row form-group">
-										<section class="col-md-12">
+										<section class="col-md-12" style="margin-left: 100px">
 											<ul>
 												@foreach($plans as $plan)
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="{!! asset($plan->img) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8 img-responsive"/></div>
-</div><div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><<a class="btn_assign" href="{!! url('templates/create/add-plans/'.$plan->id.'/canvas') !!}">Open</a></div>
+	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan->img) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+
+	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/add-plans/'.$plan->id.'/canvas') !!}">Open</a></div>
 </div>
 
 
