@@ -42,8 +42,12 @@
                         {!! Form::text('job',$project->job,['class'=>'form-control required','placeholder'=>"Job#",'id'=>'job']) !!}
                     </section>
                     <section class="col-md-8">
-                        {!! Form::text('consultant',$consultant->first_name.' '. $consultant->last_name,['class'=>'form-control required','placeholder'=>"Consultant",'id'=>'consultant']) !!}
-                    </section>
+                        @if($consultant)
+                            {!! Form::text('consultant',$consultant->first_name.' '. $consultant->last_name,['class'=>'form-control required','placeholder'=>"Consultant",'id'=>'consultant']) !!}
+                        @else
+                            {!! Form::text('consultant',null,['class'=>'form-control required','placeholder'=>"Consultant",'id'=>'consultant']) !!}
+                        @endif
+                        </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Client Detail 1</label></section>
@@ -52,20 +56,39 @@
                         {!! Form::select('title_1', ['Mr.' => 'Mr', 'Miss.' => 'Miss', 'Mrs.' => 'Mrs', 'Ms.' => 'Ms'],null,['id'=>'title_1','class'=>'form-control required']) !!}
                     </section>
                     <section class="col-md-4">
+                        @if($user_1)
                         {!! Form::text('first_name_1',$user_1->first_name,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_1']) !!}
+                            @else
+                            {!! Form::text('first_name_1',null,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_1']) !!}
+                        @endif
                     </section>
                     <section class="col-md-4">
-                        {!! Form::text('last_name_1',$user_1->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_1']) !!}
+
+                        @if($user_1)
+                            {!! Form::text('last_name_1',$user_1->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_1']) !!}
+                        @else
+                            {!! Form::text('last_name_1',null,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_1']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"></section>
                     <section class="col-md-2"></section>
                     <section class="col-md-4">
-                        {!! Form::text('mobile_1',$user_1->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_1']) !!}
+
+                        @if($user_1)
+                            {!! Form::text('mobile_1',$user_1->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_1']) !!}
+                        @else
+                            {!! Form::text('mobile_1',null,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_1']) !!}
+                        @endif
                     </section>
                     <section class="col-md-4">
-                        {!! Form::email('email_1',$user_1->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_1']) !!}
+
+                        @if($user_1)
+                            {!! Form::email('email_1',$user_1->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_1']) !!}
+                        @else
+                            {!! Form::email('email_1',null,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_1']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
@@ -74,60 +97,128 @@
                         {!! Form::select('title_2', ['Mr.' => 'Mr', 'Miss.' => 'Miss', 'Mrs.' => 'Mrs', 'Ms.' => 'Ms'],null,['id'=>'title_2','class'=>'form-control required']) !!}
                     </section>
                     <section class="col-md-4">
-                        {!! Form::text('first_name_2',$user_2->first_name,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_2']) !!}
+
+                        @if($user_2)
+                            {!! Form::text('first_name_2',$user_2->first_name,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_2']) !!}
+                        @else
+                            {!! Form::text('first_name_2',null,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_2']) !!}
+                        @endif
                     </section>
                     <section class="col-md-4">
-                        {!! Form::text('last_name_2',$user_2->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_2']) !!}
+
+                        @if($user_2)
+                            {!! Form::text('last_name_2',$user_2->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_2']) !!}
+                        @else
+                            {!! Form::text('last_name_2',null,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_2']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"></section>
                     <section class="col-md-2"></section>
                     <section class="col-md-4">
-                        {!! Form::text('mobile_2',$user_2->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_2']) !!}
+
+                        @if($user_2)
+                            {!! Form::text('mobile_2',$user_2->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_2']) !!}
+                        @else
+                            {!! Form::text('mobile_2',null,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_2']) !!}
+                        @endif
                     </section>
                     <section class="col-md-4">
-                        {!! Form::email('email_2',$user_2->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_2']) !!}
+
+                        @if($user_2)
+                            {!! Form::email('email_2',$user_2->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_2']) !!}
+                        @else
+                            {!! Form::email('email_2',null,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_2']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Design Template</label></section>
                     <section class="col-md-7">
-                        {!! Form::text('template', $template->name ,['class'=>'form-control required','placeholder'=>"Template",'id'=>'template']) !!}
+
+                        @if($template)
+                            {!! Form::text('template', $template->name ,['class'=>'form-control required','placeholder'=>"Template",'id'=>'template']) !!}
+                        @else
+                            {!! Form::text('template', null,['class'=>'form-control required','placeholder'=>"Template",'id'=>'template']) !!}
+                        @endif
                     </section>
                     <section class="col-md-3">
-                        {!! Form::text('scale', $template->scale,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'scale', 'disabled'=>'disabled']) !!}
+
+                        @if($template)
+                            {!! Form::text('scale', $template->scale,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'scale', 'disabled'=>'disabled']) !!}
+                        @else
+                            {!! Form::text('scale', null,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'scale', 'disabled'=>'disabled']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Build Address</label></section>
                     <section class="col-md-2">
-                        {!! Form::text('lot',$address->lot ,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
+
+                        @if($address)
+                            {!! Form::text('lot',$address->lot ,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
+                        @else
+                            {!! Form::text('lot',null ,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
+                        @endif
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('no_unit',$address->no,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
+
+                        @if($address)
+                            {!! Form::text('no_unit',$address->no,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
+                        @else
+                            {!! Form::text('no_unit',null,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
+                        @endif
                     </section>
                     <section class="col-md-6">
-                        {!! Form::text('street_name',$address->street_name,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
+
+                        @if($address)
+                            {!! Form::text('street_name',$address->street_name,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
+                        @else
+                            {!! Form::text('street_name',null,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label></label></section>
                     <section class="col-md-5">
-                        {!! Form::text('town',$address->town,['class'=>'form-control required','placeholder'=>"Suburb/Town",'id'=>'town']) !!}
+
+                        @if($address)
+                            {!! Form::text('town',$address->town,['class'=>'form-control required','placeholder'=>"Suburb/Town",'id'=>'town']) !!}
+                        @else
+                            {!! Form::text('town',null,['class'=>'form-control required','placeholder'=>"Suburb/Town",'id'=>'town']) !!}
+                        @endif
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('postal_code',$address->postal_code,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
+
+                        @if($address)
+                            {!! Form::text('postal_code',$address->postal_code,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
+                        @else
+                            {!! Form::text('postal_code',null,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
+                        @endif
                     </section>
                     <section class="col-md-3">
-                        {!! Form::select('state', ['VIC' => 'VIC',
-                         'TAS' => 'TAS',
-                         'NSW' => 'NSW',
-                         'WA' => 'WA',
-                         'NT' => 'NT',
-                         'QLD' => 'QLD',
-                         'SA' => 'SA',
-                         ],$address->state,['id'=>'state','class'=>'form-control required','placeholder'=>"State"]) !!}
+                        @if($address)
+                            {!! Form::select('state', ['VIC' => 'VIC',
+                       'TAS' => 'TAS',
+                       'NSW' => 'NSW',
+                       'WA' => 'WA',
+                       'NT' => 'NT',
+                       'QLD' => 'QLD',
+                       'SA' => 'SA',
+                       ],$address->state,['id'=>'state','class'=>'form-control required','placeholder'=>"State"]) !!}
+                        @else
+                            {!! Form::select('state', ['VIC' => 'VIC',
+                        'TAS' => 'TAS',
+                        'NSW' => 'NSW',
+                        'WA' => 'WA',
+                        'NT' => 'NT',
+                        'QLD' => 'QLD',
+                        'SA' => 'SA',
+                        ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"State"]) !!}
+                        @endif
+
+
 
                     </section>
 
@@ -135,13 +226,24 @@
                 <section class="row form-group">
                     <section class="col-md-2"><label>Budget/Energy</label></section>
                     <section class="col-md-3">
-                        {!! Form::text('budget',$project->budget,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
+
+                        @if($project)
+                            {!! Form::text('budget',$project->budget,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
+                        @else
+                            {!! Form::text('budget',null,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
+                        @endif
                     </section>
                     <section class="col-md-3">
                         {!! Form::text('energy_consumption',$project->energy_consumption,['class'=>'form-control required','placeholder'=>"Total Energy per SQM",'id'=>'energy_consumption']) !!}
                     </section>
                     <section class="col-md-4">
-                        {!! Form::text('rating',$template->energy_rating,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
+
+
+                        @if($template)
+                            {!! Form::text('rating',$template->energy_rating,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
+                        @else
+                            {!! Form::text('rating',null,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
+                        @endif
                     </section>
                 </section>
                 <section class="row form-group">
@@ -150,7 +252,12 @@
                         House
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('house',$template->sqm_house,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+
+                        @if($template)
+                            {!! Form::text('house',$template->sqm_house,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @else
+                            {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @endif
                     </section>
 
 
@@ -158,7 +265,12 @@
                         Garage
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('garage',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
+
+                        @if($template)
+                            {!! Form::text('garage',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @else
+                            {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @endif
                     </section>
                     <section class="col-md-1">
 
@@ -168,7 +280,12 @@
                         Porch
                     </section>
                     <section class="col-md-2">
-                        {!! Form::text('porch',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
+
+                        @if($template)
+                            {!! Form::text('porch',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @else
+                            {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
+                        @endif
                     </section>
 
 
@@ -306,13 +423,6 @@
                         </ul>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center btn_load">
-                        <div class="form-group">
-                            <div class="col-md-12 col-lg-2  pull-right clearfix">
-                                <input name="Save" type="button" class="btn_save" id="Save" value="Load" data-toggle="modal" data-target="#myModal">
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 

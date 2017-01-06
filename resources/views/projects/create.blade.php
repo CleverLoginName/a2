@@ -291,13 +291,6 @@
                         </ul>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center btn_load">
-                        <div class="form-group">
-                            <div class="col-md-12 col-lg-2  pull-right clearfix">
-                                <input name="Save" type="button" class="btn_save" id="Save" value="Load" data-toggle="modal" data-target="#myModal">
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 
