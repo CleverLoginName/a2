@@ -2,79 +2,124 @@
 
 
 @section('main-content')
-    <section class="box new-item-wrapper">
-        <section class="box-header"></section>
-        <section class="box-body">
-            <form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-                  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/users') !!}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Job#</label></section>
-                    <section class="col-md-6">@if($project){!! $project->job !!}@endif</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @if(\App\User::find($project->consultant_id))
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Consultant</label></section>
-                    <section class="col-md-6">{!! \App\User::find($project->consultant_id)->first_name.' '.\App\User::find($project->consultant_id)->last_name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @endif
-                @if(\App\User::find($project->user_id_1))
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Client 1</label></section>
-                    <section class="col-md-6">{!! \App\User::find($project->user_id_1)->first_name.' '.\App\User::find($project->user_id_1)->last_name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @endif
-                    @if(\App\User::find($project->user_id_2))
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Client 2</label></section>
-                    <section class="col-md-6">{!! \App\User::find($project->user_id_2)->first_name.' '.\App\User::find($project->user_id_2)->last_name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @endif
-                        @if(\App\Template::find($project->template_id))
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Template</label></section>
-                    <section class="col-md-6">{!! \App\Template::find($project->template_id)->name !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @endif
 
-            <?php
+    <div class="content_area clearfix">
+
+        <!-- -------- Left Content Area Starts ---------- -->
+        <div class="col-xs -12 col-sm- 12 col-md-12 col-lg-12 content_left">
+
+            <div class="form_container clearfix">
+
+                <div class="col-lg-12 product_details">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Job#</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>@if($project){!! $project->job !!}@endif</p>
+                            </div>
+                        </div>
+                    @php
+                        $consultant = \App\User::find($project->consultant_id);
             $address = App\Address::find($project->address_id);
+            $user_1 = \App\User::find($project->user_id_1);
+            $user_2 = \App\User::find($project->user_id_2);
+            $template = \App\Template::find($project->template_id);
+                    @endphp
+                        @if($consultant)
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Consultant</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $consultant->first_name.' '.$consultant->last_name !!}</p>
+                            </div>
+                        </div>
+                        @endif
+                        @if($user_1)
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Client 1</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $user_1->first_name.' '.$user_1->last_name !!}</p>
+                            </div>
+                        </div>
+                        @endif
+                        @if($user_2)
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Client 2</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $user_2->first_name.' '.$user_2->last_name !!}</p>
+                            </div>
+                        </div>
+                        @endif
+                        @if($template)
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Template</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $template->name !!}</p>
+                            </div>
+                        </div>
+                        @endif
+                        @if($address)
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Build Address</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $address->lot.', '.$address->no.', '.$address->street_name.', '.$address->town.', '.$address->state !!}</p>
+                            </div>
+                        </div>
+                        @endif
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Budget</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p><small>$</small>{!! $project->budget !!}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Energy Consumption</label>
+                            <div class="col-md-12 col-lg-10">
+                                <p>{!! $project->energy_consumption !!}<small>%</small></p>
+                            </div>
+                        </div>
 
-                ?>
-                @if($address)
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Build Address</label></section>
-                    <section class="col-md-6">{!! $address->lot.', '.$address->no.', '.$address->street_name.', '.$address->town.', '.$address->state; !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                @endif
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Budget</label></section>
-                    <section class="col-md-6"><small>$</small>{!! $project->budget !!}</section>
-                    <section class="col-md-2"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Energy Consumption</label></section>
-                    <section class="col-md-6">{!! $project->energy_consumption !!}<small>%</small></section>
-                    <section class="col-md-2"></section>
-                </section>
 
-            </form>
-        </section>
-    </section>
+                    </form>
+                </div>
+                <div class="col-md-12 related_products">
+                    <h4>Project Plans</h4>
+                    @php
+                        $projectPlans = \App\ProjectPlan::where('project_id','=',$project->id)->get();
+                    @endphp
+
+                @foreach($projectPlans as $projectPlan)
+                    <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
+                        <div class="product">
+                            <img src="/{!! $projectPlan->img !!}" class="img-responsive col-md-12">
+                            <div class="form-group clearfix">
+                                <label for="_name" class="col-xs-12 col-lg-4 control-label">Design</label>
+                                <div class="col-md-12 col-lg-8">
+                                    <p>{!! $projectPlan->design !!}</p>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="_name" class="col-xs-12 col-lg-4 control-label">Level</label>
+                                <div class="col-md-12 col-lg-8">
+                                    <p>{!! $projectPlan->level !!}</p>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="_name" class="col-xs-12 col-lg-4 control-label">Catalog</label>
+                                <div class="col-md-12 col-lg-8">
+                                    <p>U{!! $projectPlan->catalog !!}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 @stop
 
 

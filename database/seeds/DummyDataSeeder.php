@@ -358,7 +358,7 @@ class DummyDataSeeder extends Seeder
 
 
 
-        for ($i=1;$i<=2500;$i++){
+        for ($i=1;$i<=50;$i++){
             $is_composite = $faker->boolean(50);
             DB::table('products')->insert([
                 'name' => $faker->sentence(2),

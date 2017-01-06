@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('projects/{id}/delete', 'ProjectsController@destroy');
     Route::post('projects/{id}/edit', 'ProjectsController@update');
 
+    Route::get('canvas/templates/load-latest', 'ProjectsController@showPlanInCanvas');
     Route::get('projects/{id}/canvas', 'ProjectsController@editPlanInCanvas');
     Route::post('projects/{id}/canvas/templates/updates', 'ProjectsController@updatePlanDataInCanvas');
     Route::get('projects/{id}/canvas/templates/load-latest', 'ProjectsController@loadPlanDataInCanvas');

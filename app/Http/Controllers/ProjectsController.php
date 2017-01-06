@@ -82,6 +82,8 @@ class ProjectsController extends Controller
             'mobile_1'    => 'required',
             'title_2'    => 'required',
             'job'    => 'required',
+            'consultant'    => 'required',
+            'template'    => 'required',
             'energy_consumption'    => 'required'
         );
         session(["email_1"=>$request->get('email_1'),"email_2"=>$request->get('email_2')]);
@@ -174,11 +176,11 @@ class ProjectsController extends Controller
         }
 
         Flash::success('Project Added', 'Project has been added successfully.');
-
-        return redirect()->action(
+/*
+       return redirect()->action(
             'ProjectsController@editPlanInCanvas', ['id' => $projectPlans[0]->id]
         );
-
+*/
         return view('canvas.index_project')
             ->with('showPop', true)
             ->with('bgImg', '')
