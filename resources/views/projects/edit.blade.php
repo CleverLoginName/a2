@@ -7,7 +7,6 @@
         <section class="box-body">
             <form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
                   enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/projects/'.$project->id.'/edit') !!}">
-
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 <input type="hidden" name="consultant_id" id="consultant_id" value="{!! $project->consultant_id !!}">
@@ -16,13 +15,15 @@
                 <input type="hidden" name="address_id" id="address_id" value="{!! $project->address_id !!}">
                 <input type="hidden" name="user_id_1" id="user_id_1" value="{!! $project->user_id_1 !!}">
                 <input type="hidden" name="user_id_2" id="user_id_2" value="{!! $project->user_id_2 !!}">
-
                 {{ method_field('POST') }}
                 {{Form::hidden('id',$project->id)}}
-<?php
-                    $template = App\Template::find($project->template_id);
+                <?php
+                $template = App\Template::find($project->template_id);
                 $consultant= App\User::find($project->consultant_id);
-                    ?>
+                $user_1 = App\User::find($project->user_id_1);
+                $user_2 = App\User::find($project->user_id_2);
+                $address = App\Address::find($project->address_id);
+                ?>
                 <section class="row form-group">
                     <section class="col-md-12">
                         @if ($errors->has())
@@ -35,154 +36,139 @@
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Job# / Consultant</label></section>
-                    <section class="col-md-3">
-                        <input class="form-control required" id="job"
-                               name="job" aria-required="true" type="text" placeholder="Job#" value="{!! $project->job !!}">
-                    </section>
-                    <section class="col-md-5"><input class="form-control required" id="consultant"
-                                                     name="consultant" aria-required="true" type="text" placeholder="Consultant" value="{!! $consultant->first_name.' '. $consultant->last_name !!}"></section>
-                </section>
-                <?php
-                    $user_1 = App\User::find($project->user_id_1);
-                    $user_2 = App\User::find($project->user_id_2);
-                    ?>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Client Name 1</label></section>
                     <section class="col-md-2">
-                        <select class="form-control required"
-                                id="prod-frm-sub-cat" name="title_1" aria-required="true"
-                                aria-invalid="true">
-                            <option value="Mr.">Mr</option>
-                            <option value="Miss.">Miss</option>
-                            <option value="Mrs.">Mrs</option>
-                        </select>
+
+                        {!! Form::text('job',$project->job,['class'=>'form-control required','placeholder'=>"Job#",'id'=>'job']) !!}
                     </section>
-                    <section class="col-md-3"><input class="form-control required" id="first_name_1"
-                                                     name="first_name_1" aria-required="true" type="text" placeholder="First Name" value="{!! $user_1->first_name !!}"></section>
-                    <section class="col-md-3"><input class="form-control required" id="last_name_1"
-                                                     name="last_name_1" aria-required="true" type="text" placeholder="Last Name" value="{!! $user_1->last_name !!}"></section>
-                </section>
-                <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"></section>
-                    <section class="col-md-4">
-                        <input class="form-control required" id="mobile_1"
-                               name="mobile_1" aria-required="true" type="text" placeholder="Mobile" value="{!! $user_1->mobile !!}" >
-                    </section>
-                    <section class="col-md-4">
-                        <input class="form-control required" id="email_1"
-                               name="email_1" aria-required="true" type="text" placeholder="E-Mail" value="{!! $user_1->email !!}">
+                    <section class="col-md-8">
+                        {!! Form::text('consultant',$consultant->first_name.' '. $consultant->last_name,['class'=>'form-control required','placeholder'=>"Consultant",'id'=>'consultant']) !!}
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Client Name 2</label></section>
+                    <section class="col-md-2"><label>Client Detail 1</label></section>
                     <section class="col-md-2">
-                        <select class="form-control required"
-                                id="prod-frm-sub-cat" name="title_2" aria-required="true"
-                                aria-invalid="true">
-                            <option value="Mr.">Mr</option>
-                            <option value="Miss.">Miss</option>
-                            <option value="Mrs.">Mrs</option>
-                        </select>
+
+                        {!! Form::select('title_1', ['Mr.' => 'Mr', 'Miss.' => 'Miss', 'Mrs.' => 'Mrs', 'Ms.' => 'Ms'],null,['id'=>'title_1','class'=>'form-control required']) !!}
                     </section>
-                    <section class="col-md-3"><input class="form-control required" id="first_name_2"
-                                                     name="first_name_2" aria-required="true" type="text" placeholder="First Name" value="{!! $user_2->first_name !!}"></section>
-                    <section class="col-md-3"><input class="form-control required" id="last_name_2"
-                                                     name="last_name_2" aria-required="true" type="text" placeholder="Last Name" value="{!! $user_2->last_name !!}"></section>
+                    <section class="col-md-4">
+                        {!! Form::text('first_name_1',$user_1->first_name,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_1']) !!}
+                    </section>
+                    <section class="col-md-4">
+                        {!! Form::text('last_name_1',$user_1->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_1']) !!}
+                    </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"></section>
                     <section class="col-md-2"></section>
                     <section class="col-md-4">
-                        <input class="form-control required" id="mobile_2"
-                               name="mobile_2" aria-required="true" type="text" placeholder="Mobile" value="{!! $user_2->mobile !!}">
+                        {!! Form::text('mobile_1',$user_1->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_1']) !!}
                     </section>
                     <section class="col-md-4">
-                        <input class="form-control required" id="email_2"
-                               name="email_2" aria-required="true" type="text" placeholder="E-Mail" value="{!! $user_2->email !!}">
+                        {!! Form::email('email_1',$user_1->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_1']) !!}
+                    </section>
+                </section>
+                <section class="row form-group">
+                    <section class="col-md-2"><label>Client Detail 2</label></section>
+                    <section class="col-md-2">
+                        {!! Form::select('title_2', ['Mr.' => 'Mr', 'Miss.' => 'Miss', 'Mrs.' => 'Mrs', 'Ms.' => 'Ms'],null,['id'=>'title_2','class'=>'form-control required']) !!}
+                    </section>
+                    <section class="col-md-4">
+                        {!! Form::text('first_name_2',$user_2->first_name,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_2']) !!}
+                    </section>
+                    <section class="col-md-4">
+                        {!! Form::text('last_name_2',$user_2->last_name,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_2']) !!}
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"></section>
+                    <section class="col-md-2"></section>
+                    <section class="col-md-4">
+                        {!! Form::text('mobile_2',$user_2->mobile,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_2']) !!}
+                    </section>
+                    <section class="col-md-4">
+                        {!! Form::email('email_2',$user_2->email,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_2']) !!}
+                    </section>
+                </section>
+                <section class="row form-group">
                     <section class="col-md-2"><label>Design Template</label></section>
-                    <section class="col-md-6"><input class="form-control required" id="template"
-                                                     name="template" aria-required="true" type="text" value="{!! $template->name !!}"></section>
-                    <section class="col-md-2"><input class="form-control required" id="scale"
-                                                     name="scale" aria-required="true" type="text" placeholder="Scale" disabled="disabled"  value="1 : {!! $template->scale !!}"></section>
+                    <section class="col-md-7">
+                        {!! Form::text('template', $template->name ,['class'=>'form-control required','placeholder'=>"Template",'id'=>'template']) !!}
+                    </section>
+                    <section class="col-md-3">
+                        {!! Form::text('scale', $template->scale,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'scale', 'disabled'=>'disabled']) !!}
+                    </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Build Address</label></section>
-                    <?php
-
-                        $address = App\Address::find($project->address_id);
-                        ?>
-                    <section class="col-md-2"><input class="form-control required" id="lot"
-                                                     name="lot" aria-required="true" type="text" placeholder="Lot#" value="{!! $address->lot !!}">
+                    <section class="col-md-2">
+                        {!! Form::text('lot',$address->lot ,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
                     </section>
-                    <section class="col-md-2"><input class="form-control required" id="no_unit"
-                                                     name="no_unit" aria-required="true" type="text" placeholder="No/Unit" value="{!! $address->no !!}">
+                    <section class="col-md-2">
+                        {!! Form::text('no_unit',$address->no,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
                     </section>
-                    <section class="col-md-4"><input class="form-control required" id="street_name"
-                                                     name="street_name" aria-required="true" type="text" placeholder="Street Name" value="{!! $address->street_name !!}">
+                    <section class="col-md-6">
+                        {!! Form::text('street_name',$address->street_name,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label></label></section>
-                    <section class="col-md-4"><input class="form-control required" id="town" name="town" aria-required="true" type="text" placeholder="Suburb/Town" value="{!! $address->town !!}">
+                    <section class="col-md-5">
+                        {!! Form::text('town',$address->town,['class'=>'form-control required','placeholder'=>"Suburb/Town",'id'=>'town']) !!}
                     </section>
-                    <section class="col-md-2"><input class="form-control required" id="postal_code"
-                                                     name="postal_code" aria-required="true" type="text" placeholder="Postal Code" value="{!! $address->postal_code !!}">
+                    <section class="col-md-2">
+                        {!! Form::text('postal_code',$address->postal_code,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
                     </section>
-                    <section class="col-md-2"><input class="form-control required" id="state"
-                                                     name="state" aria-required="true" type="text" placeholder="State" value="{!! $address->state !!}">
+                    <section class="col-md-3">
+                        {!! Form::select('state', ['VIC' => 'VIC',
+                         'TAS' => 'TAS',
+                         'NSW' => 'NSW',
+                         'WA' => 'WA',
+                         'NT' => 'NT',
+                         'QLD' => 'QLD',
+                         'SA' => 'SA',
+                         ],$address->state,['id'=>'state','class'=>'form-control required','placeholder'=>"State"]) !!}
+
                     </section>
 
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Budget/Energy</label></section>
-                    <section class="col-md-2"><input class="form-control required" id="budget"
-                                                     name="budget" aria-required="true" type="text" placeholder="$ Budget(If App)" value="{!! $project->budget !!}">
+                    <section class="col-md-3">
+                        {!! Form::text('budget',$project->budget,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
                     </section>
-                    <section class="col-md-2"><input class="form-control required" id="energy_consumption"
-                                                     name="energy_consumption" aria-required="true" type="text" placeholder="Total Energy per SQM" value="{!! $project->energy_consumption !!}">
+                    <section class="col-md-3">
+                        {!! Form::text('energy_consumption',$project->energy_consumption,['class'=>'form-control required','placeholder'=>"Total Energy per SQM",'id'=>'energy_consumption']) !!}
                     </section>
-                    <section class="col-md-4"><input class="form-control required" id="rating"
-                                                     name="rating" aria-required="true" type="text" placeholder="Rating" disabled="disabled" value="{!! $template->energy_rating !!}">
+                    <section class="col-md-4">
+                        {!! Form::text('rating',$template->energy_rating,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label></label></section>
                     <section class="col-md-1">
                         House
                     </section>
-                    <section class="col-md-1">
-                        <input class="form-control required" id="house" name="house" aria-required="true" type="text" placeholder="5w per SQM" disabled="disabled" value="{!! $template->sqm_house !!}">(w per SQM)
+                    <section class="col-md-2">
+                        {!! Form::text('house',$template->sqm_house,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
 
-                    <section class="col-md-1"></section>
 
                     <section class="col-md-1">
                         Garage
                     </section>
-                    <section class="col-md-1">
-                        <input class="form-control required" id="garage" name="garage" aria-required="true" type="text" placeholder="3w per SQM" disabled="disabled" value="{!! $template->sqm_garage !!}">(w per SQM)
+                    <section class="col-md-2">
+                        {!! Form::text('garage',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
+                    <section class="col-md-1">
 
-                    <section class="col-md-1"></section>
+                    </section>
 
                     <section class="col-md-1">
                         Porch
                     </section>
-                    <section class="col-md-1">
-                        <input class="form-control required" id="porch" name="porch" aria-required="true" type="text" placeholder="4w per SQM" disabled="disabled" value="{!! $template->sqm_porch !!}">(w per SQM)
+                    <section class="col-md-2">
+                        {!! Form::text('porch',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
                     </section>
 
 
@@ -193,92 +179,145 @@
                                                               class="loading-img-btn" style="display:none;"
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
-                    <a id="prod-frm-reset" href="{!! url('projects') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
+                    <a id="prod-frm-reset" href="{!! url('products') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
                     <a id="prod-frm-reset" href="{!! url('projects/'.$project->id.'/canvas') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
                 </section>
             </form>
         </section>
     </section>
 
-    <div class="modal fade consultant_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div id="consultants">
 
-                    <!-- class="search" automagically makes an input a search field. -->
-                    <input class="search" placeholder="Search" />
-                    <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
-                    <button class="sort" data-sort="name">
-                        Sort
-                    </button>
 
-                    <!-- Child elements of container with class="list" becomes list items -->
-                    <ul class="list">
-                        @foreach($consultants as $consultant)
 
-                            <li>
-                                <div class="row form-group">
-                                    <section class="col-md-4">
-                                        <div class="row">
-                                            IMG
-                                        </div>
-                                        <div class="row">
-                                            <button class="assign" data-consultant-id="{!! $consultant->id !!}" data-consultant-name="{!! $consultant->first_name.' '.$consultant->first_name !!}">Assign</button>
-                                        </div>
-                                    </section>
-                                    <section class="col-md-8">
-                                        <div class="row">
-                                            <h3 class="name">{!! $consultant->first_name.' '.$consultant->first_name !!}</h3>
-                                        </div>
-                                        <div class="row">
-                                            test
-                                        </div>
-                                    </section>
-                                </div>
 
-                            </li>
-                        @endforeach
-                    </ul>
+
+
+    <!-- ========================= MODEL POPUP STARTS ============================ -->
+
+    <!-- Modal -->
+    <div class="modal fade common_popup consultant_modal" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content clearfix">
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title ttl_consultants">Consultants:</h4>
 
                 </div>
+
+
+                <div class="modal-body" id="consultants">
+
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 common_searchBox">
+                            <input type="text" class="form-control search" id="budget" placeholder="Search">
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 model_search_results consultant_results_bg clearfix">
+                        <ul class="list">
+                            @foreach($consultants as $consultant)
+                                <li>
+                                    <div class="consultant_wrapper clearfix">
+                                        <div class="col-md-4 img_consultant">
+                                            <img src="{!! asset($consultant->profile_pic) !!}" class="col-md-12"/>
+                                            <button class="btn_assign assign" data-consultant-id="{!! $consultant->id !!}" data-consultant-name="{!! $consultant->first_name.' '.$consultant->last_name !!}">Assign</button>
+                                        </div>
+                                        <div class="col-md-8 desc_consultant">
+                                            <h5><span class="name">{!! $consultant->first_name.' '.$consultant->last_name !!}</span></h5>
+                                            <p>Department</p>
+                                            <ul>
+                                                <li>Job Title </li>
+                                                <li>{!! $consultant->mobile !!}</li>
+                                                <li>{!! $consultant->email !!}</li>
+                                                <li></li>
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+
+                </div>
+
             </div>
+
         </div>
     </div>
 
-    <div class="modal fade template_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div id="templates">
+    <!-- ========================= MODEL POPUP ============================ -->
 
-                    <!-- class="search" automagically makes an input a search field. -->
-                    <input class="search" placeholder="Search" />
-                    <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
-                    <button class="sort" data-sort="name_1">
-                        Sort
-                    </button>
 
-                    <!-- Child elements of container with class="list" becomes list items -->
-                    <ul class="list">
-                        @foreach($templates as $template)
 
-                            <li>
 
-                                <h3 class="name_1 template-item"
-                                    data-template-id="{!! $template->id !!}"
-                                    data-template-name="{!! $template->name !!}"
-                                    data-template-scale="{!! $template->scale !!}"
-                                    data-template-energy-rating="{!! $template->energy_rating !!}"
-                                    data-template-sqm-house="{!! $template->sqm_house !!}"
-                                    data-template-sqm-porch="{!! $template->sqm_porch !!}"
-                                    data-template-sqm-garage="{!! $template->sqm_garage !!}"
-                                >{!! $template->name !!}</h3>
 
-                            </li>
-                        @endforeach
-                    </ul>
+
+
+    <!-- Modal -->
+    <div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content clearfix">
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Design Template:</h4>
 
                 </div>
+
+
+                <div class="modal-body" id="templates">
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 common_searchBox">
+                            <input placeholder="Search" id="budget" class="form-control search"/>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 model_search_results clearfix">
+                        <ul class="list">
+                            @php
+                                $ii = 0;
+                            @endphp
+                            @foreach($templates as $template)
+
+                                <li  class="template-item"
+                                     data-template-id="{!! $template->id !!}"
+                                     data-template-name="{!! $template->name !!}"
+                                     data-template-scale="{!! $template->scale !!}"
+                                     data-template-energy-rating="{!! $template->energy_rating !!}"
+                                     data-template-sqm-house="{!! $template->sqm_house !!}"
+                                     data-template-sqm-porch="{!! $template->sqm_porch !!}"
+                                     data-template-sqm-garage="{!! $template->sqm_garage !!}"
+                                >   @if($ii %4 ==0 )<a> @endif
+                                        <span class="name">{!! $template->name !!}</span>
+                                        @if($ii %4 ==0 ) </a> @endif
+
+                                </li>
+                                @php
+                                    $ii++;
+                                @endphp
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center btn_load">
+                        <div class="form-group">
+                            <div class="col-md-12 col-lg-2  pull-right clearfix">
+                                <input name="Save" type="button" class="btn_save" id="Save" value="Load" data-toggle="modal" data-target="#myModal">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
     </div>
 @stop
@@ -361,5 +400,13 @@
 
             $('.template_modal').modal('hide');
         });
+        $('#town').bind('keyup', function () {
+            $("#town").val(($("#town").val()).toUpperCase());
+        });
+
     </script>
 @stop
+@section('post-css')
+    {!! Html::style('css/common.css') !!}
+@stop
+

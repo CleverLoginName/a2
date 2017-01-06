@@ -83,12 +83,13 @@
     {{ Html::script('resources/js/plugins/datatables/dataTables.bootstrap.js') }}
     <script>
         $(document).ready(function () {
-            $(".product-link-hover").mouseover(function(){ console.log('f');
+           /* $(".product-link-hover").mouseover(function(){ console.log('f');
                 var id = $(this).attr("id");
                 var image_id = '#image_'+id;
                 $(image_id).attr("src",$(this).attr("src"));
                 $(image_id).css("display","block");
-            });
+            });*/
+
 
             var table =$('#product_table').DataTable({
                 ajax:'/products/all',/*
@@ -113,6 +114,8 @@
                      visible: true,
                     "data": function ( row, type, val, meta ) {
 
+                        //return '<a href="">Demonstration<span><img class="tooltip" src="http://www.scriptol.com/images/apache.png"> <h3>How use my site</h3>The description with an image. </span></a>';
+
                         return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12" style="display: none" id ="image_'+row.id+'"/><a href="#" class="product-link-hover" id ="'+row.id+'">View Image</a>';
                         return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12 product-link-hover"/>';
                     }
@@ -129,18 +132,70 @@
                 } ],
                 pageLength:50
             });
-
+            var table = $('#product_table').DataTable();
             $('#product_table tbody')
                     .on( 'mouseenter', 'td', function () {
+                        if(table.cell(this).index().column == 6){
+
+                        }
+/*
                         var colIdx = table.cell(this).index().column;
+
                         $( table.cells().nodes() ).removeClass( 'highlight' );
-                        $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+                        $( table.column( colIdx ).nodes() ).addClass( 'highlight' );*/
                     } );
 
         });
+
 
 
     </script>
 
     @include('includes.confirmDelete')
 @stop
+
+@section('post-css')
+    <style>
+    .tooltip
+    {
+    text-decoration:none;
+    position:relative;
+    }
+
+
+    .tooltip span
+    {
+    display:none;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    color:black;
+    background:white;
+    }
+
+
+    .tooltip span img
+    {
+    float:left;
+    margin:0px 8px 8px 0;
+    }
+
+
+    .tooltip:hover span
+    {
+    display:block;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1000;
+    width:auto;
+    max-width:320px;
+    min-height:128px;
+    border:1px solid black;
+    margin-top:12px;
+    margin-left:32px;
+    overflow:hidden;
+    padding:8px;
+    }
+    </style>
+    @stop

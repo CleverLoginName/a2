@@ -202,9 +202,9 @@
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 model_search_results consultant_results_bg clearfix">
-                        <ul>
+                        <ul class="list">
                             @foreach($consultants as $consultant)
-                            <li class="list">
+                            <li>
                                 <div class="consultant_wrapper clearfix">
                                     <div class="col-md-4 img_consultant">
                                         <img src="{!! asset($consultant->profile_pic) !!}" class="col-md-12"/>
