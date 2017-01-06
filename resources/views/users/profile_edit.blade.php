@@ -73,7 +73,7 @@
                 <section class="row form-group">
                     <section class="col-md-2"><label>Profile Image</label></section>
                     <section class="col-md-8"> <input type="file" name="profile_pic" id="profile_pic">
-                        <img id="blah" src="/{!! $user->profile_pic !!}" alt="your image" width="150px"/></section>
+                        <img id="blah" src="{!! $user->profile_pic !!}" alt="your image" width="150px"/></section>
                     <section class="col-md-2"></section>
                 </section>
 

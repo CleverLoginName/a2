@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="wr_btn clearfix">
-                        <a name="Save" type="button" class="btn_save" id="Save" href="{!! url('profile/edit') !!}">Edit Profile</a>
+                        <a name="Save" style="color: white" type="button" class="btn_save" id="Save" href="{!! url('profile/edit') !!}">Edit Profile</a>
                     </div>
                 </form>
             </div>
