@@ -1,6 +1,7 @@
 <style>
-    .nav > li > a {
+    .nav > li >ul>li>a {
         padding: 10px 15px 15px 35px;
+        border-bottom: 2px solid black !important;
     }
 
     .hid{

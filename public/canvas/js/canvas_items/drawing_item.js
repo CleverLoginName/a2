@@ -515,3 +515,10 @@ Eraser.prototype.moveObjTo = function(newStartX, newStartY){
         this.eraserPointsArr[i].y = this.eraserPointsArr[i].y - yOffset;
     }    
 }
+
+Eraser.prototype.setVertices = function(pointsArrIncoming){
+    var tmpObjVerticesArr = this.eraserPointsArr;
+    $(pointsArrIncoming).each(function(i,e){
+        tmpObjVerticesArr.push({x:e.x, y:e.y});
+    });
+}

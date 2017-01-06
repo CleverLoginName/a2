@@ -111,11 +111,33 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('/resources/images/prof_ico_white.png') }}"></span><span
+                                           src="{{ URL::asset('/resources/images/profile.png') }}"></span><span
                 class="breadcrumb-text">Users</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
                 class="breadcrumb-text">Edit</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
+@stop
+
+@section('post-js')
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                    $('#blah').css('visibility', 'visible');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#profile_pic").change(function(){
+            readURL(this);
+        });
+    </script>
 @stop

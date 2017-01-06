@@ -24,7 +24,6 @@
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
 
-	{{ Html::style('css/common.css') }}
 
 
 </head>

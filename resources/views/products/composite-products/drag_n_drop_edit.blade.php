@@ -79,7 +79,7 @@
 
                     <!-- -------- Buttons Start ---------- -->
                     <div class="wr_btn clearfix">
-                        <a href="{!! url('/products/composite-products/edit/done') !!}" name="Save" type="button" class="btn_save" id="Save" value="Done" >Done</a>
+                        <a href="{!! url('/products/composite-products/edit/done') !!}" name="Save"  style="color: white" type="button" class="btn_save" id="Save" value="Done" >Done</a>
                     </div>
                     <!-- -------- Buttons End ---------- -->
 

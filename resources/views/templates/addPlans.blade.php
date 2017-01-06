@@ -109,7 +109,7 @@
                                 {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
 
                                 {{Form::hidden('id',$templatesPlan->id)}}
-                                <h5>Save Template Plan</h5>
+                                <h5>House Design Template</h5>
                                 <p>{!! $templatesPlan->client_file_name !!} : (Not Available Yet)kbs </p>
 
                                 <div class="col-md-12 margin_top_20">
@@ -183,7 +183,7 @@
                                         {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
 
                                         {{Form::hidden('id',$templatesPlan->id)}}
-                                        <h5>Save Template Plan</h5>
+                                        <h5>House Design Template</h5>
                                         <p>TheUploadedFile name.pdf : file size.kbs </p>
 
                                         <div class="col-md-12 margin_top_20">

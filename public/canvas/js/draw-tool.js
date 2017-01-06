@@ -1810,6 +1810,7 @@ function generateAndLoadObjectFromParams(params){
 		currentObj.setLabel(params.label);
 		currentObj.setSymbolPath(params.symbolPath);
 		currentObj.setImgPath(params.imgPath);
+		currentObj.setID(params.id);
 		currentObj.setName(params.name);
 		currentObj.setPrice(params.price);
 		currentObj.notes = params.notes;
@@ -1820,6 +1821,7 @@ function generateAndLoadObjectFromParams(params){
 		currentObj.setSymbolPath(params.symbolPath);
 		currentObj.setImgPath(params.imgPath);
 		currentObj.setName(params.name);
+		currentObj.setID(params.id);
 		currentObj.setPrice(params.price);
 		currentObj.notes = params.notes;
 	} else if (params.objType == ObjectType.TEXT){
@@ -1829,20 +1831,23 @@ function generateAndLoadObjectFromParams(params){
 	} else if (params.objType == ObjectType.CHANGE){
 		// Need to fill Change object when integrate file loading
 	} else if (params.objType == ObjectType.ERASER){
-		// currentObj = new Eraser();
-		currentObj = JSON.parse(params); //todo check
+		currentObj = new Eraser();
+		currentObj.eraserColor = params.eraserColor;
+		currentObj.setVertices(params.eraserPointsArr);
 	} else if (params.objType == ObjectType.PACK){
-		// currentObj = new Eraser();
-		currentObj = JSON.parse(params); //todo check
+		currentObj = new PackItem();
+		currentObj.setID(params.id);
+		currentObj.setName(params.name);
+		currentObj.setPrice(params.price);
+		//todo : product links
 	}
-	 else {
+	else {
 		alert ('Invalid Object Type');
 		return;
 	}
-	
-	
+
 	currentObj.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
-	
+
 	pushElementToDrawElement(currentObj);
 }
 
