@@ -274,6 +274,7 @@ class DummyDataSeeder extends Seeder
             $user->email = $faker->email;
             $user->password = Hash::make($faker->text(10));
             $user->created_by = 1;
+            $user->is_enabled = true;
             $user->profile_pic = 'resources/images/default.png';
             $user->mobile = $faker->phoneNumber;
             $user->save();
