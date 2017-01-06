@@ -5,3 +5,7 @@
 .unpin-pannel-hight-body{
     height: 200px;
 }
+
+.lobipanel-minimized-toolbar{
+    background-color:transparent !important;
+}

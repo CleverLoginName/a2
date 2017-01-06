@@ -485,6 +485,9 @@ Eraser.prototype.constructor = Eraser;
 function Eraser(){    
     this.objStatus = ObjectStatus.DRAW;
     this.objType = ObjectType.ERASER;
+    this.eraserColor = 'rgba(255, 0, 0, 0.2)';
+    this.eraserSize = 15;
+    this.eraserType = 'round';
     this.eraserPointsArr = new Array();    
 }
 

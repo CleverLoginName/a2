@@ -1,3 +1,4 @@
+var canvasOrig, contextOrig, canvas, rulerCanvas, rulerContext, context, currentObj, changeObj, bg_Canvas, era_canvas
 var isIE = false;
 var isCtrlPressed = false;
 var isAltPressed = false;
@@ -73,17 +74,8 @@ var selObj, scaleObj, scaleDirection, rotateObj, tmpInitialRotation, selObjCente
 var wallThickness = 10;
 var currentCWallPoints = new Array();
 
-// Eraser related
-var currentMasterEraserPoints = new Array();
-var currentEraserPoints = new Array();
-var eraserColor = '#ffffff';
-var eraserSize = 15;
-var eraserType = 'round';
-
 var clickTimeout = 1000; /* in milli seconds */
 var checkDoubleClick = 0;
-
-var isErasing = false;
 
 var scaleFactor = 1; /* Scale of the map. This get changes when user scales up or down the map */
 var scaleItemSelTrigger =false; /* Flag to identify whether the click is to select the scaleing object. Useful to ommit it on undo operations */
@@ -154,18 +146,18 @@ function init(){
 	canvas.id = "top-canvas";
 
 	bg_Canvas = document.getElementById("bg-canvas");
-        era_canvas = document.getElementById("era-canvas");
+    era_canvas = document.getElementById("era-canvas");
 	
 	adjustCanvas();	
   $("#draw-tool-canvas").removeClass("hide-canvas");
 // canvas resizing end
 
-    var container = canvasOrig.parentNode;
-    canvas = document.createElement('canvas');
-    canvas.id = "top-canvas";
-    canvas.width = canvasOrig.width; // -by UIUX //edited again
-    //canvas.width = topCanvasWidth;    // + by UIUX
-    canvas.height = canvasOrig.height;
+    // var container = canvasOrig.parentNode;
+    // canvas = document.createElement('canvas');
+    // canvas.id = "top-canvas";
+    // //canvas.width = canvasOrig.width; // -by UIUX
+    // canvas.width = topCanvasWidth;    // + by UIUX
+    // canvas.height = canvasOrig.height;
 
     container.appendChild(canvas);
     context = canvas.getContext('2d');
@@ -500,7 +492,6 @@ function mouseMove(e){
 			var eraY = endY / curZoom;			
 
 			eraserSeg.setErasePoints(eraX,eraY);
-			drawEraserObj(eraserSeg);
 		}
 	}
 	
@@ -531,8 +522,8 @@ function mouseMove(e){
 			selObj.moveObjTo( (endX/curZoom + tmpOffsetX), (endY/curZoom+tmpOffsetY));
 		}
 		
-		rulerOffsetX = rulerOrigOffsetX+ (endX - clickX * curZoom);
-		rulerOffsetY = rulerOrigOffsetY+ (endY - clickY * curZoom);		
+		rulerOffsetX = rulerOrigOffsetX+ (endX / curZoom - clickX);
+		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);		
 		drawBackgroundImage();
 	} else if (mouseStatus == MouseStatusEnum.SCALE){
 		scaleObj.resize(this.scaleDirection, endX/curZoom, endY/curZoom, offsetX, offsetY);
@@ -571,7 +562,9 @@ function mouseUp(e){
 	var curZoom = this.zoom;
 
 	if (toolAction == ToolActionEnum.ERASE){
+		eraserSeg.eraserColor = "#ffffff";
 		pushElementToDrawElement(eraserSeg);
+		eraserSeg = null;
 		mouseStatus = MouseStatusEnum.UP;
 	}
 
@@ -1260,10 +1253,15 @@ function getOffsetCenterPoint(x1,y1,x2,y2){
 }
  
 
-/* Call draw functions to draw all objects in the stack */
-function drawAllObjects(){
+function clearCanvasContexts() {
 	context.clearRect(0,0,canvas.width, canvas.height);
 	contextOrig.clearRect(0,0,canvasOrig.width, canvasOrig.height);
+	era_canvas.getContext("2d").clearRect(0, 0, era_canvas.width, era_canvas.height);	
+}
+
+/* Call draw functions to draw all objects in the stack */
+function drawAllObjects(){
+	clearCanvasContexts();
 	drawRuler();
 	
 	if (mouseStatus == MouseStatusEnum.DRAW || mouseStatus == MouseStatusEnum.CONT_DRAW){
@@ -1312,26 +1310,23 @@ function drawAllObjects(){
 
 function drawEraserObj(obj){
 	if (obj.getType() == ObjectType.ERASER){
-		era_canvas = document.getElementById("era-canvas");
-
 		var ectx = era_canvas.getContext('2d');	
-		ectx.clearRect(0, 0, era_canvas.width, era_canvas.height);	
 		var curZoom = this.zoom;
 		ectx.beginPath();
-		ectx.lineWidth = eraserSize;		
-		ectx.strokeStyle = eraserColor;
-		ectx.lineJoin = ectx.lineCap = eraserType;
-				
+		ectx.lineWidth = obj.eraserSize * curZoom;		
+		ectx.strokeStyle = obj.eraserColor;
+		ectx.lineJoin = ectx.lineCap = obj.eraserType;
+		
 		for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
 			eraX = obj.eraserPointsArr[iy].x * curZoom ;
 			eraY = obj.eraserPointsArr[iy].y * curZoom ;
 			if ( iy == 0){				
 				ectx.moveTo(eraX, eraY);
-			} else {				
+			} else {	
 				ectx.lineTo(eraX, eraY);
-				ectx.stroke();	
 			}
 		}
+		ectx.stroke();	
 	}
 }
 
@@ -1350,7 +1345,7 @@ function drawBackgroundImage() {
 		ctx.clearRect(0, 0, bg_Canvas.width, bg_Canvas.height);		
 		//ctx.beginPath();
 		var curZoom = this.zoom;
-		ctx.drawImage(backgroundImage, rulerOffsetX, rulerOffsetY, backgroundImage.width * curZoom, backgroundImage.height * curZoom);
+		ctx.drawImage(backgroundImage, rulerOffsetX * curZoom, rulerOffsetY * curZoom, backgroundImage.width * curZoom, backgroundImage.height * curZoom);
 	}
 }
 
@@ -1366,19 +1361,11 @@ function drawDrawerDetails(){
 	var left_X = endX; //endX = mouseX
 	var top_Y = endY;
 
-	var posX = endX - rulerOffsetX;
-	var posY = endY - rulerOffsetY;
 	var curZoom = this.zoom;
+	var posX = endX/curZoom - rulerOffsetX;
+	var posY = endY/curZoom - rulerOffsetY;
 	
-	// context.lineWidth=1;
-	// context.strokeStyle = '#E0790B';
-	// context.fillStyle = '#FFFFFF';
-	// context.fillRect(left_X+1, top_Y+1, 150-1, 50-1);
-	// context.strokeRect(left_X, top_Y, 150, 50);
-	// context.fillStyle = '#000000';
-	// context.font = "15px Arial";
-	// context.fillText("X:"+(posX/curZoom).toFixed(0)+" Y:"+(posY/curZoom).toFixed(0),left_X+20, top_Y+30);
-	context.fillText("( "+(posX/curZoom).toFixed(0)+", "+(posY/curZoom).toFixed(0)+" )",left_X+20, top_Y+30);
+	context.fillText("( "+(posX).toFixed(0)+", "+(posY).toFixed(0)+" )",left_X+20, top_Y+30);
 }
 
 /* Draws the current scale factor details */
@@ -1842,7 +1829,11 @@ function generateAndLoadObjectFromParams(params){
 	} else if (params.objType == ObjectType.CHANGE){
 		// Need to fill Change object when integrate file loading
 	} else if (params.objType == ObjectType.ERASER){
-		currentObj = new Eraser();
+		// currentObj = new Eraser();
+		currentObj = JSON.parse(params); //todo check
+	} else if (params.objType == ObjectType.PACK){
+		// currentObj = new Eraser();
+		currentObj = JSON.parse(params); //todo check
 	}
 	 else {
 		alert ('Invalid Object Type');
@@ -2213,9 +2204,11 @@ function drawRuler(){
 	var pixelsperMajorDivision = rulerParams.pixelsPerUnit * rulerParams.unitsPerMajorDiv; 
 	var pixelsPerSmallStep = pixelsperMajorDivision / rulerParams.smallDivsPerMajorDiv  
 	var count;
+	var xOffset = rulerOffsetX * curZoom;
+	var yOffset = rulerOffsetY * curZoom;
 	/* Draw top center to right ruler */
-	count = 4;
-	for (var i=rulerOffsetX; i<= (canvasOrig.width) ;i = i + pixelsPerSmallStep){
+	count = rulerParams.smallDivsPerMajorDiv - 1;
+	for (var i=xOffset; i<= (canvasOrig.width) ;i = i + pixelsPerSmallStep){
 		
 		j = i+rulerWidth;
 		if (j < rulerWidth) continue;
@@ -2225,7 +2218,7 @@ function drawRuler(){
 		if (count == rulerParams.smallDivsPerMajorDiv) {
 			rulerContext.lineTo(j,rulerHeight-cmMarkingHeight);
 			drawGridLine(i,0,i, canvasOrig.height,cmLineWidth, cmLineColor);
-			rulerContext.fillText((i - rulerOffsetX)/pixelsperMajorDivision,j+2,cmMarkingHeight/2);
+			rulerContext.fillText((i - xOffset)/pixelsperMajorDivision,j+2,cmMarkingHeight/2);
 			count = 0;
 		}
 		else {
@@ -2235,15 +2228,15 @@ function drawRuler(){
 	}
 	
 	/* Draw top center to left ruler */
-	count = 4;
-	for (var i=rulerOffsetX; i >0 ;i = i - pixelsPerSmallStep){
+	count = rulerParams.smallDivsPerMajorDiv - 1;
+	for (var i=xOffset; i >0 ;i = i - pixelsPerSmallStep){
 		j = i+rulerWidth;
 		rulerContext.moveTo(j,rulerHeight);
 		count += 1;
 		if (count == rulerParams.smallDivsPerMajorDiv) {
 			rulerContext.lineTo(j,rulerHeight-cmMarkingHeight);
 			drawGridLine(i,0,i, canvasOrig.height,cmLineWidth, cmLineColor);
-			//~ rulerContext.fillText((i - rulerOffsetX)/pixelsperMajorDivision,j+2,cmMarkingHeight/2);
+			//~ rulerContext.fillText((i - xOffset)/pixelsperMajorDivision,j+2,cmMarkingHeight/2);
 			count = 0;
 		}
 		else {
@@ -2253,8 +2246,8 @@ function drawRuler(){
 	}
 	
 	/* Draw left middle to bottom ruler */
-	count = 4;
-	for (var i=rulerOffsetY; i<= (canvasOrig.height); i = i + pixelsPerSmallStep){
+	count = rulerParams.smallDivsPerMajorDiv - 1;
+	for (var i=yOffset; i<= (canvasOrig.height); i = i + pixelsPerSmallStep){
 		j = i+rulerHeight;
 		if (j<rulerHeight) continue;
 		rulerContext.moveTo(rulerWidth, j);
@@ -2262,7 +2255,7 @@ function drawRuler(){
 		if (count == rulerParams.smallDivsPerMajorDiv) {
 			rulerContext.lineTo(rulerWidth-cmMarkingHeight,j);
 			drawGridLine(0,i,canvasOrig.width,i,cmLineWidth, cmLineColor);
-			//~ rulerContext.fillText((i-rulerOffsetY)/pixelsperMajorDivision, cmMarkingHeight/2 -10, j-2);
+			//~ rulerContext.fillText((i-yOffset)/pixelsperMajorDivision, cmMarkingHeight/2 -10, j-2);
 			count = 0;
 		}
 		else {
@@ -2272,15 +2265,15 @@ function drawRuler(){
 	}
 	
 	/* Draw left middle to top ruler */
-	count = 4;
-	for (var i=rulerOffsetY; i>=0; i = i - pixelsPerSmallStep){
+	count = rulerParams.smallDivsPerMajorDiv - 1;
+	for (var i=yOffset; i>=0; i = i - pixelsPerSmallStep){
 		j = i+rulerHeight;
 		rulerContext.moveTo(rulerWidth, j);
 		count += 1;
 		if (count == rulerParams.smallDivsPerMajorDiv) {
 			rulerContext.lineTo(rulerWidth-cmMarkingHeight,j);
 			drawGridLine(0,i,canvasOrig.width,i,cmLineWidth, cmLineColor);
-			//~ rulerContext.fillText((i-rulerOffsetY)/pixelsperMajorDivision, cmMarkingHeight/2 -10, j-2);
+			//~ rulerContext.fillText((i-yOffset)/pixelsperMajorDivision, cmMarkingHeight/2 -10, j-2);
 			count = 0;
 		}
 		else {

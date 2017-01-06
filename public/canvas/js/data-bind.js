@@ -307,13 +307,13 @@
                 // handle a drop into the canvas
                 function dragDrop(e, ui) {
 
-                    var $canvas = $("#top-canvas");
-                    var Offset = $canvas.offset();
+                    var Offset = $("#top-canvas").offset();
                     var offsetX = Offset.left;
                     var offsetY = Offset.top;
 
-                   var x = e.clientX - offsetX;// parseInt(ui.offset.left - offsetX);
-                   var y = e.clientY - offsetY;//parseInt(ui.offset.top - offsetY)+30;
+                    var curZoom = zoom;
+                    var x = (e.clientX - offsetX) / curZoom;
+                    var y = (e.clientY - offsetY) / curZoom;
 
 
                     var draggableName = ui.draggable.attr("data-name");
@@ -326,17 +326,12 @@
                                     $.each(v1.data, function(i2, v2) {
                                         if(pack_id ==  parseInt(v2.sub_category_id)){
                                             addPack(x,y, v2);
-                                            // $.each(v2.data, function(i3, prod) {
-                                            //     drowbulb(x, y, prod.id, prod.name, prod.sale_price, selectedProduct, 
-                                            //     lightBulbArr, prod.path, "http://45.79.179.53"+prod.icon, i3*40);
-                                            // });
                                         }
                                 });
                             });
                         });
                     } else {
                         addProduct(x, y, prod_type, prod_id, prod_name, sale_price, image_path, iconPath);
-                        //drowbulb(x,y,prod_id,prod_name,sale_price,selectedProduct,lightBulbArr,image_path,bulb_icon,0);
                     }
                     // drawAllObjects();
                     $('#tool-items-ul li').removeClass('active');
@@ -390,24 +385,6 @@
                     pushElementToDrawElement(currentObj); //TODO check for pack 
                     return currentObj;
                 }
-
-                // function drowbulb(x,y,prod_id,prod_name,sale_price,selectedProduct,lightBulbArr,imgPath,iconPath,xOffSet) {
-                //     var currentObj = new LightBulb();
-                //     currentObj.setCoordinates(x+xOffSet, y);
-                //     // currentObj.setProductInfo(selectedProduct);
-                //     var lightBulbIndex = lightBulbArr.length + 1;
-                //     currentObj.id = prod_id;
-                //     currentObj.setLabel(lightBulbIndex);
-                //     currentObj.setName(prod_name);
-                //     currentObj.setPrice(sale_price);
-                //     currentObj.setSymbolPath(iconPath);
-                //     currentObj.setImgPath(imgPath);
-                //     currentObj.setCatType(category_type);
-                //     pushElementToDrawElement(currentObj);
-                //     lightBulbArr.push(currentObj);
-                //     populateLightBulbMenu();
-                // }
-
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log('Error in Operation');

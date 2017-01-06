@@ -82,7 +82,7 @@
 
 
 
-			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan" id="main-pannel-body" style="overflow: auto" >
+			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body" style="overflow: auto" >
 				<div class="panel panel-default inner-class cat-1 hide-catelog" id="main-0">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
@@ -143,7 +143,7 @@
 					BOM
 				</div>
 				</div>
-				<div class="panel-body back-ground-colour-inner">
+				<div class="panel-body back-ground-colour-inner selected-panel-body-pan">
 				<div class="side-bar2" id="bom-table">
 					<div class="property-div" >
 						<table id="productInfo" border="1" cellpadding="2">
@@ -334,8 +334,8 @@
 				</li>
 			</ul>
 		</div>
-		<div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
-			<ul id="tool-items-ul1" style="float:right">
+		<div class="pull-right wr_logout">
+			<ul id="tool-items-ul1" style="float:right; padding:0">
 				<li class="tool-item">
 					<a href="javascript:void(0)" id="help-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/infomationIcon.png') !!}">
@@ -601,7 +601,18 @@
 
 		$('.template_modal').modal('show');
 	});
+	(function($){
+		$(window).on("load",function(){
+			$.mCustomScrollbar.defaults.scrollButtons.enable=true; //enable scrolling buttons by default
+			$.mCustomScrollbar.defaults.axis="yx"; //enable 2 axis scrollbars by default
 
+			$(".scroller").mCustomScrollbar({
+				setTop: "-200px",
+				autoDraggerLength: true,
+			});
+
+		});
+	})(jQuery);
 </script>
 
 <!--

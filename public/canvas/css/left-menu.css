@@ -254,7 +254,7 @@ tbody {
 .search-input {
     width: 100%;
     /*height: 19px;*/
-
+	
 }
 
 .tool-item {
@@ -698,9 +698,6 @@ tbody {
     font-weight: 600;
 }
 
-.panel-body {
-    padding: 0px !important;
-}
 
 .inside-text{
     color: white;
@@ -724,12 +721,12 @@ tbody {
     /*padding: 5px;*/
 }
 .pro-detail-container, .pro-price-container {
-
+    
    align-items: center;
     color: #FFF;
     /*background-color: rgba(255, 254, 254, 0.37);*/
-    margin-left: 2px;
-    margin-right: 2px;
+    margin left: 2px;
+    margin right: 2px;
    /* height: 100px;*/
 }
 
@@ -873,4 +870,11 @@ tbody {
     height: 200px !important;
 }
 
+.minimize-border{
+    border: solid 1px #fff;
+    padding: 5px !important;
+   }
 
+.selected-panel-body-pan{
+    padding: 0px !important;
+}

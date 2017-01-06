@@ -503,7 +503,7 @@ function adjustCanvas() {
     $('#top-menu').width(width);
 
     $('#container').height(height);
-    // adjustSidebar();
+    drawBackgroundImage();
 }
 
 adjustSidebar()
