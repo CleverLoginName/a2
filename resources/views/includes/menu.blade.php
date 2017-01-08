@@ -160,4 +160,39 @@
         </a>
     </li>
 
+    <li class="products main-left-menu-item">
+        <a class="main-menu-item tree-toggle" id="Products">
+            <img class="main-menu-icon" src="{{ URL::asset('resources/images/products_ico_white.png') }}">
+            <span class="main-menu-item-text">Advanced</span>
+            <span class="menu-selected-item"></span>
+        </a>
+
+        <ul class="nav nav-list tree hid white-background">
+            @if(Auth::user()->can('view-products'))
+                <li>
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/custom-fields") !!}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <span class="main-menu-item-text sub-menu-item-text">Custom Fields</span>
+                    </a>
+                </li>
+            @endif
+            @if(Auth::user()->can('create-products'))
+                <li>
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/products/create") !!}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <span class="main-menu-item-text sub-menu-item-text">Data Import</span>
+                    </a>
+                </li>
+            @endif
+            @if(Auth::user()->can('view-products'))
+                <li>
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("") !!}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <span class="main-menu-item-text sub-menu-item-text">Search</span>
+                    </a>
+                </li>
+                @endif
+
+        </ul>
+    </li>
 </ul>

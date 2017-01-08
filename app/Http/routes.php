@@ -92,3 +92,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('projects/{id}/canvas/templates/load-latest', 'ProjectsController@loadPlanDataInCanvas');
 });
 
+Route::get('export/excel-format/products','ExcelFormatExportsController@productsExport');
+
+
+Route::group(['prefix' => 'custom-fields'], function () {
+
+    Route::get('/','CustomFieldsController@index');
+
+});
+
+
+
