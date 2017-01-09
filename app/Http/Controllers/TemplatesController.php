@@ -195,7 +195,7 @@ class TemplatesController extends Controller
 
         $templatesPlans = TemplatePlan::where('template_id','=',session('template')->id)->get();
 
-        Flash::success('Data Added', 'Data has been added successfully.');
+        Flash::success('Updated successfully', 'Updated successfully.');
         return Redirect::to('/templates/create/add-plans');
         return  view('templates.addPlans')
             ->with('template',session('template'))
@@ -343,7 +343,7 @@ class TemplatesController extends Controller
 
             $templatesPlans = TemplatePlan::where('template_id','=',session('template')->id)->get();
 
-            Flash::success('Data Added', 'Data has been added successfully.');
+            Flash::success('Updated Successfully', 'Updated Successfully');
             return Redirect::to('/templates/create/add-plans');
             return  view('templates.addPlans')
                 ->with('template',session('template'))
