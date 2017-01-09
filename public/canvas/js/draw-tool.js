@@ -1516,7 +1516,7 @@ function drawLightsOnCanvas(obj){
 	if (obj.getType() == ObjectType.LIGHT_BULB){
 		var coor = obj.getCoordinates();
 		var rad = obj.getRadius();
-		drawRayCasts(obj, contextOrig);
+		//drawRayCasts(obj, contextOrig);
 		drawWiresFromSwitchOrBulbToConnectedLightBulbs(obj, contextOrig);
 	} 
 }

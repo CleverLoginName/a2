@@ -90,13 +90,26 @@
                                         <img src="{!! asset($templatesPlan->img) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8"/>
                                     </a>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                     @php
                                         $model = "#modal_".$templatesPlan->id;
                                     @endphp
                                     <br/>
 
-                                        <a data-target="{!! $model !!}" data-toggle="modal" class="col-md-12">Crop / Rotate Plan</a>
+
+                                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 "></div>
+
+
+<table>
+    <tr>
+        <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate Plan</a>
+        </td>
+        <td width="15"></td>
+        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
+
+        </td>
+    </tr>
+</table>
 
                                 </div>
 
@@ -163,7 +176,7 @@
 
                                     <div class="col-md-12">
                                         <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                        <input name="Reset" type="reset" class="btn_reset" id="Reset" value="Delete">
+                                        <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
                                     </div>
                                 </div>
                                 {!! Form::close() !!}
@@ -211,7 +224,8 @@
 
                                             <div class="col-md-12">
                                                 <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                <input name="Reset" type="reset" class="btn_reset" id="Reset" value="Delete">
+                                                <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+
                                             </div>
                                         </div>
                                         {!! Form::close() !!}
@@ -226,7 +240,13 @@
 
                 </ul>
             </div>
+            <section class="row box-footer" id="form-footer">
+                <a id="prod-frm-reset" href="{!! url('/') !!}" class="btn_save" style="color: white">Done</a>
+            </section>
         </div>
+
+
+
     </div>
     </div>
 

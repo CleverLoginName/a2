@@ -563,6 +563,7 @@
 {{ Html::script('canvas/js/canvas_items/drawing_item.js') }}
 {{ Html::script('canvas/js/canvas_items/product_item.js') }}
 {{ Html::script('canvas/js/draw-tool.js') }}
+{{ Html::script('canvas/js/bom.js') }}
 {{ Html::script('canvas/js/controllers_project.js') }}
 {{ Html::script('canvas/js/product-json.js') }}
 {{ Html::script('canvas/js/functions.js') }}
