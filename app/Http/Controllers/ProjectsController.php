@@ -196,6 +196,7 @@ class ProjectsController extends Controller
             $allPlans = DB::table('project_plans')->where('project_id','=',$projectPlan->project_id)->get();
             session(['project_plan_id' => $projectPlan->id ]);
             session(['plan_id' => $id ]);
+            session(['project_id' => $projectPlan->project_id ]);
             return view('canvas.index_project')
                 ->with('bgImg', $projectPlan->img)
                 ->with('showPop', false)

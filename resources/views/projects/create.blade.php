@@ -5,7 +5,7 @@
     <section class="box new-item-wrapper">
         <section class="box-header"></section>
         <section class="box-body">
-            <form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
+            <form class="row new-item-from-wrapper" role="form" method="post" id="new-proj-form"
                   enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/projects') !!}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="consultant_id" id="consultant_id" value="">
@@ -113,7 +113,7 @@
                          'NT' => 'NT',
                          'QLD' => 'QLD',
                          'SA' => 'SA',
-                         ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"State"]) !!}
+                         ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"State","required"=>""]) !!}
 
                     </section>
 
@@ -333,6 +333,7 @@
 
 @section('post-js')
     {{ Html::script('js/list.min.js') }}
+    {{ Html::script('resources/js/parsley.min.js') }}
 <script>
 
     var options = {
@@ -382,9 +383,27 @@
         $("#town").val(($("#town").val()).toUpperCase());
     });
 
+    $(function () {
+        $('#new-proj-form').parsley().on('field:validated', function() {
+            var ok = $('.parsley-error').length === 0;
+            $('.bs-callout-info').toggleClass('hidden', !ok);
+            $('.bs-callout-warning').toggleClass('hidden', ok);
+        })
+                .on('form:submit', function() {
+                    return false; // Don't submit form for this demo
+                });
+    });
+
 </script>
 @stop
 @section('post-css')
     {!! Html::style('css/common.css') !!}
+    <style>
+        input.parsley-error, select.parsley-error, textarea.parsley-error {
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border: 1px solid #EED3D7;
+        }
+    </style>
 @stop
 

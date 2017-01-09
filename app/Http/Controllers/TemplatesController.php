@@ -215,6 +215,7 @@ class TemplatesController extends Controller
     {
         $template = Template::find($id);
         $plans = TemplatePlan::where('template_id','=',$id)->get();
+        session(['template' => $template]);
         return view('templates.show')
             ->with('plans', $plans)
             ->with('template', $template);
@@ -229,6 +230,7 @@ class TemplatesController extends Controller
     public function edit($id)
     {
         $template = Template::find($id);
+        session(['template' => $template]);
         return view('templates.edit')
             ->with('template', $template);
     }

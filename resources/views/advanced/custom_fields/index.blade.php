@@ -6,7 +6,7 @@
         <section class="title-wrapper"><h4 class="dashboard-title">Select a Custom Field Type</h4></section>
         <section id="aeda35c3-bad5-70bc-697f-d3f05bec1dbb-widget-wrapper">
             <section class="row" style="margin-bottom:10px;">
-                <a href="{!! url('/custom-fields/products') !!}">
+                <a href="{!! url('/advanced/custom-fields/products') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span

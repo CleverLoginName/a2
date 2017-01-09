@@ -95,9 +95,15 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('export/excel-format/products','ExcelFormatExportsController@productsExport');
 
 
-Route::group(['prefix' => 'custom-fields'], function () {
 
-    Route::get('/','CustomFieldsController@index');
+Route::group(['prefix' => 'advanced'], function () {
+    Route::group(['prefix' => 'custom-fields'], function () {
+
+        Route::get('/','CustomFieldsController@index');
+        Route::get('/products','CustomFieldsController@productsCustomFields');
+
+    });
+
 
 });
 

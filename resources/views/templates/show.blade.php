@@ -56,9 +56,12 @@
                 <div class="product">
                     <img src="/{!! $plan->img !!}" class="img-responsive col-md-9 col-lg-9"/>
                     <div class="form-group clearfix">
-                        <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label">Name</label>
+                        <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label"></label>
                         <div class="col-md-8 col-lg-8">
                             <p>{!! $plan->name !!}</p>
+                        </div>
+                        <div class="col-md-12 col-lg-12">
+
                         </div>
                         <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label"></label>
                         <div class="col-md-8 col-lg-8">
@@ -95,7 +98,7 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('resources/images/FloorPlans.png') }}"></span><span
+                                           src="{{ URL::asset('resources/images/Black/plan.png') }}"></span><span
                 class="breadcrumb-text">Templates</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 

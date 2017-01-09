@@ -261,9 +261,9 @@ $(function () {
                 data: 'file_data=' + JSON.stringify(saveData),
                 success: function (msg) {
                     new PNotify({
-                        title: 'Data Saved',
+                        title: 'Plan Saved',
                         title_escape: false,
-                        text: 'Plan data saved',
+                        text: 'Plan saved',
                         text_escape: false,
                         styling: "bootstrap3",
                         type: "success",
