@@ -390,7 +390,7 @@
             $('.bs-callout-warning').toggleClass('hidden', ok);
         })
                 .on('form:submit', function() {
-                    return false; // Don't submit form for this demo
+                   // return false; // Don't submit form for this demo
                 });
     });
 
