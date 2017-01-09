@@ -7,9 +7,9 @@
         <section class="box-body">
             <form class="row new-item-from-wrapper" role="form" method="post" id="new-proj-form"
                   enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/projects') !!}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="consultant_id" id="consultant_id" value="">
-                <input type="hidden" name="template_id" id="template_id" value="">
+                {{ Form::hidden('_token',  csrf_token() , array('id' => '_token')) }}
+                {{ Form::hidden('consultant_id', null, array('id' => 'consultant_id')) }}
+                {{ Form::hidden('template_id', null, array('id' => 'template_id')) }}
                 <section class="row form-group">
                     <section class="col-md-12">
                         @if ($errors->has())
