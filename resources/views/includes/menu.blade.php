@@ -159,7 +159,7 @@
             <span class="menu-selected-item"></span>
         </a>
     </li>
-
+    @if(Auth::user()->can('advanced'))
     <li class="products main-left-menu-item">
         <a class="main-menu-item tree-toggle" id="Products">
             <img class="main-menu-icon" src="{{ URL::asset('resources/images/products_ico_white.png') }}">
@@ -203,4 +203,5 @@
 
         </ul>
     </li>
+    @endif
 </ul>

@@ -34,19 +34,25 @@ $products_custom_field_count = DB::table('product_custom_fields')
 ?>
 <table>
     <tr>
+        @for($i=1;$i<=$total_column_count;$i++)
+            <td style="background-color: #000">{!! $i !!}</td>
+        @endfor
+
+    </tr>
+    <tr>
         <td colspan="{!! $total_column_count !!}" style="background-color: #fcfcd6;font-size: 16px;">Product Import Sheet
         </td>
     </tr>
     <tr><td colspan="2">Catalog</td><td colspan="3">{!! $catalogName !!}</td><td colspan="{!! ($total_column_count-5) !!}"></td> </tr>
     <tr><td colspan="2">Category</td><td colspan="3">{!! $categoryName !!}</td><td colspan="{!! ($total_column_count-5) !!}"></td> </tr>
     <tr><td colspan="2">Sub-Category</td><td colspan="3">{!! $sub_category->name !!}</td><td colspan="{!! ($total_column_count-5) !!}"></td> </tr>
+
     <tr>
         @for($i=1;$i<=$total_column_count;$i++)
-        <td style="background-color: #000">{!! $i !!}</td>
+            <td></td>
         @endfor
 
     </tr>
-
 
 <tr>
     <td>name</td>

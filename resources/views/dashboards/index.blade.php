@@ -22,7 +22,7 @@
                                 class="dashboard-item-name">Products </span><span
                                 class="dashboard-item-count"> {!! DB::table('products')->count() !!}</span></section>
                 </section></a>
-                <a href="{!! url('/categories') !!}">
+                <a href="{!! url('/') !!}">
                 <section class="col-md-4 dashboard-widget-col">
                     <section class="dashboard-widget"><span class="dahsboard-item-icon dashboard-item-cat"></span><span
                                 class="dashboard-item-name">Categories </span><span
@@ -37,13 +37,7 @@
                                 class="dashboard-item-name">Projects </span><span
                                 class="dashboard-item-count">{!! DB::table('projects')->count() !!} </span></section>
                 </section>
-                    </a><a href="{!! url('/projects') !!}">
-                <section class="col-md-4 dashboard-widget-col">
-                    <section class="dashboard-widget"><span
-                                class="dahsboard-item-icon dashboard-item-projects"></span><span
-                                class="dashboard-item-name">Floor Plans </span><span
-                                class="dashboard-item-count">{!! DB::table('project_plans')->count() !!}</span></section>
-                </section></a>
+                    </a>
             </section>
         </section>
     </section>

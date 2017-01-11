@@ -214,6 +214,12 @@ class DummyDataSeeder extends Seeder
         $view_plans->description = "view-schedules";
         $view_plans->save();
 
+        $view_plans = new \App\Permission();
+        $view_plans->name = "advanced";
+        $view_plans->display_name = "Manage Advanced";
+        $view_plans->description = "Manage Advanced";
+        $view_plans->save();
+
 
         DB::table('permission_role')->insert(
             [['permission_id' => 1,'role_id' => 1],
@@ -241,7 +247,8 @@ class DummyDataSeeder extends Seeder
             ['permission_id' => 23,'role_id' => 1],
             ['permission_id' => 24,'role_id' => 1],
             ['permission_id' => 25,'role_id' => 1],
-            ['permission_id' => 26,'role_id' => 1]]
+            ['permission_id' => 26,'role_id' => 1],
+            ['permission_id' => 27,'role_id' => 1]]
         );
 
         $user = new User();
@@ -417,7 +424,7 @@ class DummyDataSeeder extends Seeder
 //            $id = DB::table('product_suppliers')->insertGetId(['name' => 'Supplier Name '.$i]);
 //        }
 //
-//        
+//
         /**********************************Product Icons****************************************************/
         DB::table('product_icons')->insert(['path' =>'/img/icons/AMP.png', 'name' =>'AMP','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AUT-001.png', 'name' =>'AUT-001','category_id'=>1]);

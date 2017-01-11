@@ -14,14 +14,14 @@
                                     class="dashboard-item-count"></span></section>
                     </section>
                 </a>
-                <a href="{!! url('/products/composite-products/create') !!}">
+                <!--<a href="{!! url('/products/composite-products/create') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span
                                     class="dashboard-item-name">Composite Product </span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
-                </a>
+                </a>-->
                 <a href="{!! url('/products/packs/create') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span

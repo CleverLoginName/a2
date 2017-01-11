@@ -225,7 +225,7 @@ class ImportRawProductDataController extends Controller
            // Cache::tags('product_categories')->flush();
 
         }
-
+        DB::table('import_raw_product_datas')->truncate();
         return Redirect::to('/advanced/data-import/products');
     }
 }

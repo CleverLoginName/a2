@@ -25,14 +25,37 @@ class ImportProductsController extends ImportController
         return view('advanced.data_import.products.index');
     }
 
+    public function _checkSheetTitle($pValue)
+    {
+       /* // Some of the printable ASCII characters are invalid:  * : / \ ? [ ]
+        if (str_replace(self::$_invalidCharacters, '', $pValue) !== $pValue) {
+            //throw new Exception('Invalid character found in sheet title');
+
+            //Hack to remove bad characters from sheet name instead of throwing an exception
+            return str_replace(self::$_invalidCharacters, '', $pValue);
+        }
+
+        // Maximum 31 characters allowed for sheet title
+        if (PHPExcel_Shared_String::CountCharacters($pValue) > 31) {
+            throw new Exception('Maximum 31 characters allowed in sheet title.');
+        }
+
+        return $pValue;*/
+        return strlen($pValue) > 25 ? substr($pValue,0,20)."..." : $pValue;
+
+    }
+
     public function productExport(){
 
         Excel::create('Products', function($excel) {
             $subcategories = ProductSubCategory::where('is_pack','=',false)->get();
+            $ii =0;
             foreach ($subcategories as $subcategory){
-                $excel->sheet($subcategory->name, function($sheet) use ($subcategory)  {
+                $sub = $this->_checkSheetTitle($subcategory->name);
+                $excel->sheet('Sheet'.$ii, function($sheet) use ($subcategory)  {
                     $sheet->loadView('advanced.data_import.products.products_format_export')->with('sub_category',$subcategory);
                 });
+                $ii++;
             }
         })->download('xls');
 

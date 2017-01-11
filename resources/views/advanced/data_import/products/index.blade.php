@@ -10,7 +10,7 @@
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span
-                                    class="dashboard-item-name">Export Format</span><span
+                                    class="dashboard-item-name">Std. Export Format</span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
                 </a>
@@ -18,7 +18,7 @@
                     <section class="col-md-4 dashboard-widget-col" id="OpenImgUpload">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span
-                                    class="dashboard-item-name">Select File</span><span
+                                    class="dashboard-item-name">Std. Import</span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
                 <input type="file" id="excel_file" name="excel_file" style="display:none" onchange="this.form.submit()"/>
@@ -27,26 +27,27 @@
                     <section class="col-md-4 dashboard-widget-col" id="OpenRawImgUpload">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span
-                                    class="dashboard-item-name">Select File ( RAW Data )</span><span
+                                    class="dashboard-item-name">Select File - RAW Data</span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
                 <input type="file" id="raw_excel_file" name="raw_excel_file" style="display:none" onchange="this.form.submit()"/>
                 {!! Form::close() !!}
-                <a href="{!! url('/advanced/reset-products') !!}">
-                    <section class="col-md-4 dashboard-widget-col">
-                        <section class="dashboard-widget"><span
-                                    class="dahsboard-item-icon dashboard-item-user"></span><span
-                                    class="dashboard-item-name">Remove Products</span><span
-                                    class="dashboard-item-count"></span></section>
-                    </section>
                 </a> <a href="{!! url('/advanced/data-import/merge-data') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
                                     class="dahsboard-item-icon dashboard-item-user"></span><span
-                                    class="dashboard-item-name">Merge Data</span><span
+                                    class="dashboard-item-name">Merge - RAW Data</span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
                 </a>
+                <a href="{!! url('/advanced/reset-products') !!}">
+                    <section class="col-md-4 dashboard-widget-col">
+                        <section class="dashboard-widget"><span
+                                    class="dahsboard-item-icon dashboard-item-user"></span><span
+                                    class="dashboard-item-name">Remove All Products</span><span
+                                    class="dashboard-item-count"></span></section>
+                    </section>
+
                </section>
            </section>
        </section>
