@@ -13,7 +13,7 @@
         <section class="sidebar">
             @include('includes.menu')
 
-            <center style="color: white;"><h4 >Adapto VB0.5.1(20170106)</h4><br>Copyright © Adapto.<br> All Rights Reserved</center>
+            <center style="color: white;"><h4 >Adapto VB0.5.2(20170111)</h4><br>Copyright © Adapto.<br> All Rights Reserved</center>
         </section>
     </aside>
     <aside class="right-side">

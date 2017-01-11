@@ -32,7 +32,7 @@
                         <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
                             aria-label="Product Name: activate to sort column ascending">Image
                         </th>
-                        <th>
+                        <th width="130px">
                             Actions
                         </th>
                     </tr>

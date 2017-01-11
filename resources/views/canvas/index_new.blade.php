@@ -16,7 +16,6 @@
     {{ Html::style('canvas/demo/documentation.css') }}
     {{ Html::style('canvas/demo/demo.css') }}
     {{ Html::style('canvas/css/rating-stars.css') }}
-    {{ Html::style('canvas/css/custom-css.css') }}
     {{ Html::style('canvas/css/lobipannel-styles.css') }}
 
 	{{ Html::style('canvas/css/jquery.mCustomScrollbar.css') }}

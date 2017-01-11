@@ -71,7 +71,11 @@
                                         <select class="image-picker show-html" id="symbol"
                                                 name="symbol">
                                             @foreach($icons as $symbol)
-                                                <option data-img-src="{!! $symbol->path !!}" value="{!! $symbol->id !!}">{!! $symbol->name !!}</option>
+                                                @if(\Illuminate\Support\Facades\File::exists(public_path().$symbol->path))
+                                                    <option data-img-src="{!! $symbol->path !!}" value="{!! $symbol->id !!}" alt="{!! $symbol->name !!}">{!! $symbol->name !!}</option>
+                                                @else
+                                                    <option data-img-src="{!! asset('/img/NoIconAvailible.png') !!}" value="{!! $symbol->id !!}" alt="{!! $symbol->name !!}">{!! $symbol->name !!}</option>
+                                                @endif
                                             @endforeach
                                         </select>
 

@@ -15,23 +15,23 @@
         color: black;
     }
     .nav > li > a:hover, .nav > li > a:focus{
-        background-color: blue;
+        background-color: #0060d8;
     }
     .nav > li > a:hover, .nav > li > a:focus{
-        background-color: blue;
+        background-color: #0060d8;
     }
     .sub-left-menu-item:hover{
         background-color: white !important;
     }
     .sub-left-menu-item:hover > span{
-        color: blue !important;
+        color: #0060d8 !important;
     }
     .skin-blue .sidebar > .sidebar-menu > li:hover{
-        background-color: blue;
+        background-color: #0060d8;
     }
 
     .skin-blue .sidebar > .sidebar-menu > li:hover >{
-        background-color: blue;
+        background-color: #0060d8;
     }
 
     #menu_home_icon{
@@ -159,7 +159,7 @@
             <span class="menu-selected-item"></span>
         </a>
     </li>
-<!--
+
     <li class="products main-left-menu-item">
         <a class="main-menu-item tree-toggle" id="Products">
             <img class="main-menu-icon" src="{{ URL::asset('resources/images/products_ico_white.png') }}">
@@ -178,7 +178,7 @@
             @endif
             @if(Auth::user()->can('create-products'))
                 <li>
-                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/products/create") !!}">
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/data-import") !!}">
                         <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
                         <span class="main-menu-item-text sub-menu-item-text">Data Import</span>
                     </a>
@@ -186,13 +186,21 @@
             @endif
             @if(Auth::user()->can('view-products'))
                 <li>
-                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("") !!}">
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/manage") !!}">
                         <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
-                        <span class="main-menu-item-text sub-menu-item-text">Search</span>
+                        <span class="main-menu-item-text sub-menu-item-text">Manage</span>
+                    </a>
+                </li>
+                @endif
+            @if(Auth::user()->can('view-products'))
+                <li>
+                    <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/reset") !!}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <span class="main-menu-item-text sub-menu-item-text">Reset System</span>
                     </a>
                 </li>
                 @endif
 
         </ul>
-    </li>-->
+    </li>
 </ul>

@@ -281,19 +281,21 @@ class ProjectsController extends Controller
             'email_1'    => 'required',
             'mobile_1'    => 'required',
             'title_2'    => 'required',
-            'first_name_2'    => 'required',
-            'last_name_2'    => 'required',
-            'email_2'    => 'required',
-            'mobile_2'    => 'required',
             'job'    => 'required',
-            'energy_consumption'    => 'required',
-            'budget'    => 'required'
+            'consultant'    => 'required',
+            'template'    => 'required',
+            'energy_consumption'    => 'required'
         );
 
+        session(["email_1"=>$request->get('email_1'),"email_2"=>$request->get('email_2')]);
         $validator = Validator::make($request->all(), $rules);
+
+
         if ($validator->fails())
-            return Redirect::to('/projects/create')
-                ->withErrors($validator);
+            return Redirect::to('/projects/'.$id.'/edit')
+                ->withErrors($validator)
+                ->withInput();
+
 
         $address = Address::find($request->get('address_id'));
         $address->no = $request->get('no_unit');
@@ -316,16 +318,17 @@ class ProjectsController extends Controller
         $user_1->profile_pic = '';
         $user_1->save();
         //$user_1->attachRole(3);
-
-        $user_2 = User::find($request->get('user_id_2'));
-        $user_2->first_name = $request->get('first_name_2');
-        $user_2->last_name = $request->get('last_name_2');
-        $user_2->email = $request->get('email_2');
-        $user_2->mobile = $request->get('mobile_2');
-        $user_2->password = Hash::make(str_random(10));
-        $user_2->is_enabled = true;
-        $user_2->profile_pic = '';
-        $user_2->save();
+        if(($request->get('first_name_2'))&&($request->get('email_2'))) {
+            $user_2 = User::find($request->get('user_id_2'));
+            $user_2->first_name = $request->get('first_name_2');
+            $user_2->last_name = $request->get('last_name_2');
+            $user_2->email = $request->get('email_2');
+            $user_2->mobile = $request->get('mobile_2');
+            $user_2->password = Hash::make(str_random(10));
+            $user_2->is_enabled = true;
+            $user_2->profile_pic = '';
+            $user_2->save();
+        }
         ////$user_2->attachRole(3);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -335,7 +338,9 @@ class ProjectsController extends Controller
         $project->job = $request->get('job');
         $project->status_id = 1;
         $project->user_id_1 = $user_1->id;
-        $project->user_id_2 = $user_2->id;
+        if(($request->get('first_name_2'))&&($request->get('email_2'))) {
+            $project->user_id_2 = $user_2->id;
+        }
         $project->address_id = $address->id;
         $project->energy_consumption = $request->get('energy_consumption');
         $project->budget = $request->get('budget');

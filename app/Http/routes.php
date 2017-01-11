@@ -95,6 +95,8 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('export/excel-format/products','ExcelFormatExportsController@productsExport');
 
 
+Route::post('advanced/data-import/raw','ImportRawProductDataController@productImport');
+Route::get('advanced/data-import/merge-data','ImportRawProductDataController@mergeData');
 
 Route::group(['prefix' => 'advanced'], function () {
     Route::group(['prefix' => 'custom-fields'], function () {
@@ -104,7 +106,39 @@ Route::group(['prefix' => 'advanced'], function () {
 
     });
 
+    Route::group(['prefix' => 'data-import'], function () {
 
+        Route::get('/','ImportController@index');
+        Route::get('/products','ImportProductsController@index');
+        Route::get('/products/export','ImportProductsController@productExport');
+        Route::post('/products','ImportProductsController@productImport');
+
+
+
+    });
+    Route::group(['prefix' => 'manage'], function () {
+
+//        Route::get('/','ImportController@index');
+//        Route::get('/products','ImportProductsController@index');
+//        Route::get('/products/export','ImportProductsController@productExport');
+//        Route::post('/products','ImportProductsController@productImport');
+
+    });
+    Route::group(['prefix' => 'reset'], function () {
+
+//        Route::get('/','ImportController@index');
+//        Route::get('/products','ImportProductsController@index');
+//        Route::get('/products/export','ImportProductsController@productExport');
+//        Route::post('/products','ImportProductsController@productImport');
+
+    });
+
+    Route::get('/reset-products', function () {
+        Artisan::call('advanced:reset-products');
+        return Redirect::to('/advanced/data-import/products');
+    });
+
+    
 });
 
 
