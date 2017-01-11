@@ -40,7 +40,7 @@ $products_custom_field_count = DB::table('product_custom_fields')
 
     </tr>
     <tr>
-        <td colspan="{!! $total_column_count !!}" style="background-color: #fcfcd6;font-size: 20px;">Product Import Sheet
+        <td colspan="{!! $total_column_count !!}" style="background-color: #fcfcd6;">Product Import Sheet
         </td>
     </tr>
     <tr><td colspan="2">Catalog</td><td colspan="3">{!! $catalogName !!}</td><td colspan="{!! ($total_column_count-5) !!}"></td> </tr>
