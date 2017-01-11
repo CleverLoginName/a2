@@ -169,12 +169,12 @@
 
         <ul class="nav nav-list tree hid white-background">
             @if(Auth::user()->can('view-products'))
-                <li>
+                <!--<li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/custom-fields") !!}">
                         <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
                         <span class="main-menu-item-text sub-menu-item-text">Custom Fields</span>
                     </a>
-                </li>
+                </li>-->
             @endif
             @if(Auth::user()->can('create-products'))
                 <li>
@@ -185,20 +185,20 @@
                 </li>
             @endif
             @if(Auth::user()->can('view-products'))
-                <li>
+               <!-- <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/manage") !!}">
                         <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
                         <span class="main-menu-item-text sub-menu-item-text">Manage</span>
                     </a>
-                </li>
+                </li>-->
                 @endif
             @if(Auth::user()->can('view-products'))
-                <li>
+              <!--  <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/reset") !!}">
                         <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
                         <span class="main-menu-item-text sub-menu-item-text">Reset System</span>
                     </a>
-                </li>
+                </li>-->
                 @endif
 
         </ul>
