@@ -116,10 +116,10 @@ class ImportRawProductDataController extends Controller
             /**************************************************************************/
             $type = '';
                 if (strpos($importRawProductData->category, 'Lighting') !== false) {
-                    $type = 'Lighting';
+                    $type = 1;
                 }
                 if (strpos($importRawProductData->category, 'Switches') !== false) {
-                    $type = 'Switches';
+                    $type = 2;
                 }
             /**************************************************************************/
 
