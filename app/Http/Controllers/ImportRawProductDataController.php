@@ -113,12 +113,22 @@ class ImportRawProductDataController extends Controller
 
             $category = ProductCategory::where('name','=',$importRawProductData->category)->first();
 
+            /**************************************************************************/
+            $type = '';
+                if (strpos($importRawProductData->category, 'Lighting') !== false) {
+                    $type = 'Lighting';
+                }
+                if (strpos($importRawProductData->category, 'Switches') !== false) {
+                    $type = 'Switches';
+                }
+            /**************************************************************************/
+
             if(!$category){
                 $category = new ProductCategory();
                 $category->name = $importRawProductData->category;
                 $category->description = ' ';
                 $category->colour = ' ';
-                $category->type = 1;
+                $category->type = $type;
                 $category->catalog_id = $catalog_id;
                 $category->save();
                 $category_id = $category->id;
