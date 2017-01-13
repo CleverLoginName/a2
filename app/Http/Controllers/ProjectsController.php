@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\Product;
 use App\Project;
+use App\ProjectCanvasData;
 use App\ProjectPlan;
 use App\Template;
 use App\TemplatePlan;
@@ -154,6 +155,10 @@ class ProjectsController extends Controller
         $project->energy_consumption = $request->get('energy_consumption');
         $project->budget = $request->get('budget');
         $project->save();
+
+        $project_canvas_data = new ProjectCanvasData();
+        $project_canvas_data->project_id = $project->id;
+        $project_canvas_data->save();
 
         $templatePlans = TemplatePlan::where('template_id', '=', $project->template_id)->get();
         foreach ($templatePlans as $templatePlan){

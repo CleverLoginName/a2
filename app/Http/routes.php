@@ -141,5 +141,15 @@ Route::group(['prefix' => 'advanced'], function () {
     
 });
 
-
+Route::group(['prefix' => 'rest/api'], function () {
+    Route::group(['prefix' => 'projects'], function () {
+//APICanvasController
+        Route::get('/{id}/packs','APICanvasController@project_pack_list');
+        Route::get('/{id}/bom-dictionary','APICanvasController@project_bom_dict');
+        Route::get('/{id}/bom-dictionary-std','APICanvasController@project_bom_dict_std_inc');
+        Route::post('/{id}/packs','APICanvasController@set_project_pack_list');
+        Route::post('/{id}/bom-dictionary','APICanvasController@set_project_bom_dict');
+        Route::post('/{id}/bom-dictionary-std','APICanvasController@set_project_bom_dict_std_inc');
+    });
+});
 

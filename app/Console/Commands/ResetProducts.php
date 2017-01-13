@@ -38,6 +38,10 @@ class ResetProducts extends Command
      */
     public function handle()
     {
+       // DB::table('product_catalogs')->truncate();
+       // DB::table('product_categories')->truncate();
+        //DB::table('product_category_types')->truncate();
+       // DB::table('product_sub_categories')->truncate();
         DB::table('products')->truncate();
         DB::table('product_sub_category_maps')->truncate();
         DB::table('product_composite_maps')->truncate();

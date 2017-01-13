@@ -196,17 +196,17 @@ class ImportRawProductDataController extends Controller
             $new_img_path = false;
             if(File::exists('temp/'.$importRawProductData->image.'.png')){
                 File::copy("temp/".$importRawProductData->image.'.png', $new_path.'/'.$randStr.'.png');
-                $new_img_path = $new_path.'/'.$randStr.'.png';
+                $new_img_path = '/'.$new_path.'/'.$randStr.'.png';
             }
             if(File::exists('temp/'.$importRawProductData->image.'.jpg')){
 
                 File::copy("temp/".$importRawProductData->image.'.jpg', $new_path.'/'.$randStr.'.jpg');
-                $new_img_path = $new_path.'/'.$randStr.'.jpg';
+                $new_img_path = '/'.$new_path.'/'.$randStr.'.jpg';
             }
             if(File::exists('temp/'.$importRawProductData->image.'.tif')){
 
                 File::copy("temp/".$importRawProductData->image.'.tif', $new_path.'/'.$randStr.'.tif');
-                $new_img_path = $new_path.'/'.$randStr.'.tif';
+                $new_img_path = '/'.$new_path.'/'.$randStr.'.tif';
             }
 
             if(!$new_img_path){

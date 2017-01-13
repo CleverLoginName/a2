@@ -1,4 +1,19 @@
-  (function() {
+
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/\\n/g, "\\n")
+        .replace(/\//g,  "-")
+        .replace(/\\'/g, "\\'")
+        .replace(/\\"/g, '\\"')
+        .replace(/\\&/g, "\\&")
+        .replace(/\\r/g, "\\r")
+        .replace(/\\t/g, "\\t")
+        .replace(/\\b/g, "\\b")
+        .replace(/\\f/g, "\\f");
+
+}
+
+(function() {
     var catalog= '';
     var category = '';
     var subCategory= '';
@@ -142,7 +157,7 @@
                                     +'</li>';
                         $('#catlog-'+index).append(category);
                         $.each(catValue.data,function(index2,subValue){
-                            var subCatName = subValue.sub_category_name.replace(/\s+/g, '');
+                            var subCatName = escapeHtml(subValue.sub_category_name.replace(/\s+/g, ''));
                             subCategory =   '<li>'
                                         +'<div>'
                                             +' <div class="row">'
@@ -272,7 +287,7 @@
                     helper: function () {
                         is_pack = parseInt(this.getAttribute("data-is_pack"));
                         pack_id = parseInt(this.getAttribute("data-cat"));//sub catagory id
-                        image_path = this.getAttribute("data-image_path");
+                        image_path = '/'+this.getAttribute("data-image_path");
                         prod_id = this.getAttribute("data-prod_id");
                         prod_type = this.getAttribute("data-prod_type");
                         sale_price = this.getAttribute("data-sale_price");
@@ -370,7 +385,7 @@
                             currentObj.setLabel(lightBulbIndex);
                             lightBulbArr.push(currentObj);
                             break;
-                    
+
                         default:
                             currentObj = new ProductItem();
                             break;
@@ -382,7 +397,7 @@
                     currentObj.setImgPath(imgPath);
                     currentObj.setSymbolPath(symbolPath);
 
-                    pushElementToDrawElement(currentObj); //TODO check for pack 
+                    pushElementToDrawElement(currentObj); //TODO check for pack
                     return currentObj;
                 }
             },

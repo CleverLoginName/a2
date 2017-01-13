@@ -18,7 +18,7 @@
     {{ Html::style('canvas/css/rating-stars.css') }}
     {{ Html::style('canvas/css/lobipannel-styles.css') }}
 
-	{{ Html::style('canvas/css/jquery.mCustomScrollbar.css') }}
+
 	{{ Html::style('canvas/css/product-popup.css') }}
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
@@ -573,7 +573,6 @@
 {{ Html::script('lib/highlight/highlight.pack.js') }}
 {{ Html::script('canvas/js/data-bind.js') }}
 {{ Html::script('canvas/js/lobipannel-query.js') }}
-{{ Html::script('canvas/js/jquery.mCustomScrollbar.concat.min.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}
 
