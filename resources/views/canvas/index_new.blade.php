@@ -587,18 +587,6 @@
 
 		$('.template_modal').modal('show');
 	});
-	(function($){
-		$(window).on("load",function(){
-			$.mCustomScrollbar.defaults.scrollButtons.enable=true; //enable scrolling buttons by default
-			$.mCustomScrollbar.defaults.axis="yx"; //enable 2 axis scrollbars by default
-
-			$(".scroller").mCustomScrollbar({
-				setTop: "-200px",
-				autoDraggerLength: true,
-			});
-
-		});
-	})(jQuery);
 </script>
 
 
