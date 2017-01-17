@@ -21,14 +21,16 @@
                         @endif
                     </section>
                 </section>
-                <section class="row form-group">
-                    <section class="col-md-2"><label>Job# / Consultant</label></section>
-                    <section class="col-md-2">
+                <section class="row form-group ">
+                    <section class="col-md-2"><label>Job # / Consultant</label></section>
+                    <section class="col-md-2 @if ($errors->has('job')) has-error @endif">
 
                         {!! Form::text('job',null,['class'=>'form-control required','placeholder'=>"Job#",'id'=>'job']) !!}
+                        @if ($errors->has('job')) <p class="error_message">{{ $errors->first('job') }}</p> @endif
                     </section>
-                    <section class="col-md-8">
+                    <section class="col-md-8 @if ($errors->has('consultant')) has-error @endif">
                         {!! Form::text('consultant',null,['class'=>'form-control required','placeholder'=>"Consultant",'id'=>'consultant']) !!}
+                        @if ($errors->has('consultant_id')) <p class="error_message">The consultant field is required</p> @endif
                     </section>
                 </section>
                 <section class="row form-group">
@@ -37,21 +39,25 @@
 
                         {!! Form::select('title_1', ['Mr.' => 'Mr', 'Miss.' => 'Miss', 'Mrs.' => 'Mrs', 'Ms.' => 'Ms'],null,['id'=>'title_1','class'=>'form-control required']) !!}
                     </section>
-                    <section class="col-md-4">
+                    <section class="col-md-4 @if ($errors->has('first_name_1')) has-error @endif">
                         {!! Form::text('first_name_1',null,['class'=>'form-control required','placeholder'=>"First Name",'id'=>'first_name_1']) !!}
+                        @if ($errors->has('first_name_1')) <p class="error_message">The first name is required</p> @endif
                     </section>
-                    <section class="col-md-4">
+                    <section class="col-md-4 @if ($errors->has('last_name_1')) has-error @endif">
                         {!! Form::text('last_name_1',null,['class'=>'form-control required','placeholder'=>"Last Name",'id'=>'last_name_1']) !!}
+                        @if ($errors->has('last_name_1')) <p class="error_message">The last name is required</p> @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"></section>
                     <section class="col-md-2"></section>
-                    <section class="col-md-4">
+                    <section class="col-md-4 @if ($errors->has('mobile_1')) has-error @endif">
                         {!! Form::text('mobile_1',null,['class'=>'form-control required','placeholder'=>"Mobile",'id'=>'mobile_1']) !!}
+                        @if ($errors->has('mobile_1')) <p class="error_message">The mobile is required</p> @endif
                     </section>
-                    <section class="col-md-4">
+                    <section class="col-md-4 @if ($errors->has('email_1')) has-error @endif">
                         {!! Form::email('email_1',null,['class'=>'form-control required','placeholder'=>"E-Mail",'id'=>'email_1']) !!}
+                        @if ($errors->has('email_1')) <p class="error_message">The e-mail is required</p> @endif
                     </section>
                 </section>
                 <section class="row form-group">
@@ -78,8 +84,9 @@
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Design Template</label></section>
-                    <section class="col-md-7">
+                    <section class="col-md-7 @if ($errors->has('template')) has-error @endif">
                         {!! Form::text('template',null,['class'=>'form-control required','placeholder'=>"Template",'id'=>'template']) !!}
+                        @if ($errors->has('template')) <p class="error_message">The template is required</p> @endif
                     </section>
                     <section class="col-md-3">
                         {!! Form::text('scale',null,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'scale', 'disabled'=>'disabled']) !!}
@@ -87,23 +94,28 @@
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Build Address</label></section>
-                    <section class="col-md-2">
+                    <section class="col-md-2 @if ($errors->has('lot')) has-error @endif">
                         {!! Form::text('lot',null,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
+                        @if ($errors->has('lot')) <p class="error_message">The lot field is required</p> @endif
                     </section>
-                    <section class="col-md-2">
+                    <section class="col-md-2 @if ($errors->has('no_unit')) has-error @endif">
                         {!! Form::text('no_unit',null,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
+                        @if ($errors->has('lot')) <p class="error_message">The no/unit field is required</p> @endif
                     </section>
-                    <section class="col-md-6">
+                    <section class="col-md-6 @if ($errors->has('street_name')) has-error @endif">
                         {!! Form::text('street_name',null,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
+                        @if ($errors->has('street_name')) <p class="error_message">The street name field is required</p> @endif
                     </section>
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label></label></section>
-                    <section class="col-md-5">
+                    <section class="col-md-5 @if ($errors->has('town')) has-error @endif">
                         {!! Form::text('town',null,['class'=>'form-control required','placeholder'=>"Suburb/Town",'id'=>'town']) !!}
+                        @if ($errors->has('town')) <p class="error_message">The suburb/town field is required</p> @endif
                     </section>
-                    <section class="col-md-2">
+                    <section class="col-md-2 @if ($errors->has('postal_code')) has-error @endif">
                         {!! Form::text('postal_code',null,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
+                        @if ($errors->has('postal_code')) <p class="error_message">The postal code field is required</p> @endif
                     </section>
                     <section class="col-md-3">
                         {!! Form::select('state', ['VIC' => 'VIC',
@@ -113,7 +125,8 @@
                          'NT' => 'NT',
                          'QLD' => 'QLD',
                          'SA' => 'SA',
-                         ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"State","required"=>""]) !!}
+                         ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"Plaese select a State","required"=>""]) !!}
+                        @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
 
                     </section>
 
@@ -122,9 +135,11 @@
                     <section class="col-md-2"><label>Budget/Energy</label></section>
                     <section class="col-md-3">
                         {!! Form::text('budget',null,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
+                        @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
                     </section>
                     <section class="col-md-3">
                         {!! Form::text('energy_consumption',null,['class'=>'form-control required','placeholder'=>"Total Energy per SQM",'id'=>'energy_consumption']) !!}
+                        @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
                     </section>
                     <section class="col-md-4">
                         {!! Form::text('rating',null,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
@@ -159,14 +174,10 @@
 
 
                 </section>
-                <section class="row box-footer" id="form-footer">
-                    <button type="submit"
-                            class="btn add-item-btn">Add <img src="resources/images/spinning-circles.svg"
-                                                              class="loading-img-btn" style="display:none;"
-                                                              id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
-                    </button>
-                    <a id="prod-frm-reset" href="{!! url('products') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
-                </section>
+                <div class="wr_btn clearfix">
+                    <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
+                    <a name="Reset" href="{!! url('projects/create') !!}" class="btn_reset" id="Reset">Reset</a>
+                </div>
             </form>
         </section>
     </section>
@@ -333,7 +344,6 @@
 
 @section('post-js')
     {{ Html::script('js/list.min.js') }}
-    {{ Html::script('resources/js/parsley.min.js') }}
 <script>
 
     var options = {

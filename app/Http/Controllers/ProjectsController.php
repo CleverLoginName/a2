@@ -83,6 +83,7 @@ class ProjectsController extends Controller
             'mobile_1'    => 'required',
             'title_2'    => 'required',
             'job'    => 'required',
+            'state'    => 'required',
             'consultant'    => 'required',
             'template'    => 'required',
             'energy_consumption'    => 'required'

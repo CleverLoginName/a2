@@ -85,5 +85,10 @@
 {{ Html::script('resources/js/login/login.js') }}
 {{ Html::script('resources/js/utils.js') }}
 {{ Html::script('resources/js/components/signup/signup.js') }}
+<script>
+   // window.addEventListener("hashchange", function(e) {
+        history.pushState(null, null, window.location.pathname);
+   // })
+</script>
 </body>
 </html>
