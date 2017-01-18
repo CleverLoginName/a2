@@ -17,11 +17,12 @@
     {{ Html::style('canvas/demo/demo.css') }}
     {{ Html::style('canvas/css/rating-stars.css') }}
     {{ Html::style('canvas/css/custom-css.css') }}
-    {{ Html::style('canvas/css/lobipannel-styles.css') }}
+
 
 	{{ Html::style('canvas/css/product-popup.css') }}
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
+
 
 
 
@@ -130,13 +131,212 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="panel panel-default inner-class cat-4 hide-catelog" id="main-3">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="3">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-3">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-5 hide-catelog" id="main-4">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="4">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-4">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-6 hide-catelog" id="main-5">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="5">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-5">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-7 hide-catelog" id="main-6">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="6">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-6">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-8 hide-catelog" id="main-7">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="7">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-7">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-9 hide-catelog" id="main-8">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="8">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-8">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-10 hide-catelog" id="main-9">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="9">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-9">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-11 hide-catelog" id="main-10">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="10">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-10">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-12 hide-catelog" id="main-11">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="11">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-11">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-13 hide-catelog" id="main-12">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="12">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-12">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default inner-class cat-14 hide-catelog" id="main-13">
+					<div class="panel-heading ">
+						<div class="panel-title ading-left-padding title titel-text-size" >
+							<div id="13">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
+							<ul class="level-2" style="" id="catlog-13">
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
 
-	<div  style="vertical-align: bottom;" class="clearfix">
-		<div class="panel panel-default bom-medder" id="bom-area">
-			<div class="panel-heading test1">
+	<div  style="vertical-align: bottom;" class="clearfix ">
+		<div class="panel panel-default bom-medder bom-hide" id="bom-area">
+			<div class="panel-heading test1 ">
 				<div class="panel-title ading-left-padding title titel-text-size" >
 					BOM
 				</div>
@@ -334,7 +534,7 @@
 		</div>
 		<div class="pull-right wr_logout">
 			<ul id="tool-items-ul1" style="float:right; padding:0">
-				<li class="tool-item">
+				<li class="tool-item bom-hide">
 					<a href="javascript:void(0)" id="help-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/infomationIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/infomationIcon.png') !!}">
@@ -564,7 +764,6 @@
 {{ Html::script('canvas/js/draw-tool.js') }}
 {{ Html::script('canvas/js/bom.js') }}
 {{ Html::script('canvas/js/controllers_project.js') }}
-{{ Html::script('canvas/js/product-json.js') }}
 {{ Html::script('canvas/js/functions.js') }}
 {{ Html::script('canvas/js/rays/polyk.js') }}
 {{ Html::script('canvas/js/rays/ivank.js') }}
@@ -575,7 +774,7 @@
 {{ Html::script('canvas/bootstrap/js/bootstrap.min.js') }}
 {{ Html::script('canvas/dist/js/lobipanel.js') }}
 {{ Html::script('lib/highlight/highlight.pack.js') }}
-{{ Html::script('canvas/js/data-bind.js') }}
+{{ Html::script('canvas/js/get-products.js') }}
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}

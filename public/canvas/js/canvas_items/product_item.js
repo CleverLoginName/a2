@@ -1,3 +1,10 @@
+// ------ item interface duck type
+// id;   -- item id
+// name;
+// price;
+// -------------------------------
+
+
 /////////////////////////////////////////////////////////////////////////////
 /* PackItem
 - pack item does not inherit from CanvasItem structure
@@ -5,20 +12,34 @@
 */
 /////////////////////////////////////////////////////////////////////////////
 function PackItem(){
-    this.id;
-    this.name;
-    this.price;
+    this.uid = -1;  // unique project item id
+    this.is_std_inclusion = false;
+
+    //---- item interface duck type
+    this.id = -1;   // pack id
+    this.name = "";
+    this.price = 0;
+    //----------------------------
+
     this.objType = ObjectType.PACK;
     this.product_list = [];
 }
 
+PackItem.prototype.getUniqueItemID = function(){
+    return this.uid;
+}
+
+PackItem.prototype.setUniqueItemID = function(id){
+    this.uid = id;
+}
+
 /* Sets the pack_id*/
-PackItem.prototype.setID = function(id){
+PackItem.prototype.setPackID = function(id){
     this.id = id;
 }
 
 /* Gets the pack_id*/
-PackItem.prototype.getID = function(){
+PackItem.prototype.getPackID = function(){
     return this.id;
 }
 
@@ -59,6 +80,25 @@ PackItem.prototype.setStatus = function(status){
     //TODO is this method really needed for pack ?? 
 }
 
+/* copy properties */
+PackItem.prototype.copyProperties = function (params){
+    for(var key in params) {
+        if(key in this){
+            if (Array.isArray(params[key])) {
+                this[key] = [];
+                var destinationArr = this[key];
+                var sourceArray = params[key];
+                for (var index = 0; index < sourceArray.length; index++) {
+                    destinationArr.push(sourceArray[index]);
+                }
+            }
+            else{
+                this[key] = params[key];
+            }
+        }
+    } 
+}
+
 /////////////////////////////////////////////////////////////////////////////
 /* ProductItem */
 /////////////////////////////////////////////////////////////////////////////
@@ -68,18 +108,22 @@ function ProductItem(){
     this.objStatus = ObjectStatus.DRAW;
     this.objType = ObjectType.PRODUCT;
 
-    this.name = ""
+    //---- item interface duck type --Start  //please dont change variable names
+    this.id = -1;   // product id
+    this.name = "";
+    this.price = 0;
+    //---------------------------- --End
+
     this.tooltip = true;
     this.visibility = true;
-    this.price;
-    this.itemCode;
+    this.itemCode = -1;
     this.imgPath = "";
     this.symbolPath = "";
-    this.category_type;
+    this.category_type = "";
     this.notes = ""
 
-    this.id;
     this.isInsidePack = false;
+    this.parentPackId = null; //only valid for pack items 
 
     // this.scalerSize = 10;
     this.width = 40;
@@ -97,13 +141,23 @@ ProductItem.prototype.getName = function(){
 }
 
 /* Sets the id*/
-ProductItem.prototype.setID = function(id){
+ProductItem.prototype.setProductID = function(id){
     this.id = id;
 }
 
 /* Gets the id*/
-ProductItem.prototype.getID = function(){
+ProductItem.prototype.getProductID = function(){
     return this.id;
+}
+
+/* Sets the id*/
+ProductItem.prototype.setParentPackID = function(packId){
+    this.parentPackId = packId;
+}
+
+/* Gets the id*/
+ProductItem.prototype.getParentPackID = function(){
+    return this.parentPackId;
 }
 
 /* Sets the price*/
@@ -198,7 +252,6 @@ function LightBulb(){
     this.elevation = 0;
     this.angle = 0;
     this.lightpower = 0;
-    this.iconpath;
     // this.category_type1 = cat_type;
 
     this.connections = [];

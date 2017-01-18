@@ -64,6 +64,15 @@ function getCrossSectionBetweenTwoLines(l1x1, l1y1, l1x2, l1y2, l2x1, l2y1, l2x2
 	return {x:crossX, y:crossY};
 }
 
+function generateUID() {
+    var date = new Date().getTime();
+    var uid = 'xxxxxxx-xxxy-xxyx-'.replace(/[xy]/g, function(c) {
+        var r = (date + Math.random()*16)%16 | 0;
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uid + date;
+};
+
 
 
 

@@ -18,7 +18,7 @@
     var subCategory= '';
     var products = '';
     var serch ='';
-    var baseUrl ='http://23.239.13.202';
+    var baseUrl ='';
     
 
         $.ajax({

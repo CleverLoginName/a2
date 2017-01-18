@@ -1,5 +1,5 @@
 
-function escapeHtml(unsafe) {
+  function escapeHtml(unsafe) {
     return unsafe
         .replace(/\\n/g, "\\n")
         .replace(/\//g,  "-")
@@ -12,14 +12,13 @@ function escapeHtml(unsafe) {
         .replace(/\\f/g, "\\f");
 
 }
-
-(function() {
+  (function() {
     var catalog= '';
     var category = '';
     var subCategory= '';
     var products = '';
     var serch ='';
-    var baseUrl ='';
+    var baseUrl='/';
     
 
         $.ajax({
@@ -27,6 +26,7 @@ function escapeHtml(unsafe) {
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
+                $('#bom-area').removeClass("bom-hide");
                    $.each(data, function( index, value ) {
                     $('#'+index).text(value.catalog_name);
                     if($('#main-'+index).hasClass("hide-catelog")){
@@ -177,10 +177,10 @@ function escapeHtml(unsafe) {
                                     +'</li>';
                             $('#catagory-'+index1).append(subCategory);
                             $.each(subValue.data,function(index3,products){
-                                products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id='+products.id+'  data-prod_type='+products.type+' data-name="'+products.name+'" data-sale_price="'+products.sale_price+'" data-image_path="'+products.path+'" data-path1 ="'+baseUrl+products.icon+'" data-is_pack="'+subValue.is_pack+'" data-cat="'+subValue.sub_category_id+'" data-category-type="'+catValue.category_name+'">'
+                                products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id='+products.id+'  data-prod_type='+products.type+' data-name="'+products.name+'" data-builder_price="'+products.builder_price+'" data-image_path="'+baseUrl+products.path+'" data-path1 ="'+baseUrl+products.icon+'" data-is_pack="'+subValue.is_pack+'" data-cat="'+subValue.sub_category_id+'" data-category-type="'+catValue.category_name+'">'
                                                 +'<div class="clearfix">'
                                                     +'<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_img">'
-                                                        +'<img src="'+products.path+'" class="imege-props product-item">'
+                                                        +'<img src="'+baseUrl+products.path+'" class="imege-props product-item">'
                                                     +'</div>'
                                                      +'<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_desc">'
                                                         +'<span  class=" without-margin product-name">'+products.name+'</span></br>'
@@ -346,7 +346,7 @@ function escapeHtml(unsafe) {
                             });
                         });
                     } else {
-                        addProduct(x, y, prod_type, prod_id, prod_name, sale_price, image_path, iconPath);
+                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath);
                     }
                     // drawAllObjects();
                     $('#tool-items-ul li').removeClass('active');
@@ -355,14 +355,16 @@ function escapeHtml(unsafe) {
 
                 function addPack(x,y,params){
                     var pack = new PackItem();
-                    pack.setID(params.sub_category_id);
+                    pack.setUniqueItemID( generateUID() );
+                    pack.setPackID(params.sub_category_id);
                     pack.setName(params.sub_category_name);
                     pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
                     
                     $.each(params.data, function(i, product) {
-                        var currentProduct = addProduct(x + i*40, y, product.type, product.id, product.name, product.sale_price, product.path, baseUrl+product.icon);
+                        var currentProduct = addProduct(x + i*40, y, product.type, product.id, product.name, product.builder_price, product.path, baseUrl+product.icon);
                         currentProduct.isInsidePack = true;
-                        pack.pushProduct(currentProduct);
+                        currentProduct.setParentPackID(pack.getUniqueItemID());
+                        pack.pushProduct(currentProduct.getUniqueItemID());
                     });
                     pushElementToDrawElement(pack);
                 }
@@ -385,19 +387,21 @@ function escapeHtml(unsafe) {
                             currentObj.setLabel(lightBulbIndex);
                             lightBulbArr.push(currentObj);
                             break;
-
+                    
                         default:
                             currentObj = new ProductItem();
                             break;
                     }
+                    currentObj.setUniqueItemID( generateUID() );
                     currentObj.setCoordinates(x, y);
-                    currentObj.setID(id);
+                    currentObj.setProductID(id);
                     currentObj.setName(name);
                     currentObj.setPrice(price);
                     currentObj.setImgPath(imgPath);
                     currentObj.setSymbolPath(symbolPath);
+                    currentObj.setPlanID(planID);
 
-                    pushElementToDrawElement(currentObj); //TODO check for pack
+                    pushElementToDrawElement(currentObj); //TODO check for pack 
                     return currentObj;
                 }
             },

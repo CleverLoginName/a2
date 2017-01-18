@@ -878,3 +878,12 @@ tbody {
 .selected-panel-body-pan{
     padding: 0px !important;
 }
+
+.bom-hide{
+    display: none !important;
+}
+
+.lobi-pannel-border{
+    border: solid 1px #fff;
+    /*padding: 5px !important;*/
+   }

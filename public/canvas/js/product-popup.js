@@ -5,15 +5,15 @@ selObj ;
 var isHide =false;
 var imgHight = 0;
 var imgWidth =0;
-function populateDialog(e,selObj1) {
+function populateDialog(e,selObj1, xOffset, yOffset) {
     this.selObj =selObj1;
     var canvas_offset = $(canvasOrig).offset();
     var width =  $(window).width() - canvas_offset.left;
     var height = $(window).height() - canvas_offset.top;
 
-    var center = selObj1.getCenter();
-    center.x = center.x*zoom + canvas_offset.left;
-    center.y = center.y*zoom + canvas_offset.top;
+    var center = getConvertedPoint(selObj1.getCenter());
+    center.x += canvas_offset.left;
+    center.y += canvas_offset.top;
     hideDialog();
     if(imgHight == 0 && imgWidth == 0){
         imgHight = $('.image-background').height();
@@ -84,6 +84,20 @@ function populateDialog(e,selObj1) {
             }
         }
     }
+
+    // function changeBulbMood() {
+    //     for (var i = drawElements.length - 1; i >= 0; i--) {
+    //         if (drawElements[i].objType == ObjectType.LIGHT_BULB) {
+    //               if(lightBulbConnected(drawElements[i].getLabel())){
+    //                     drawElements[i].setConectingMood(false);
+    //                 }else{
+    //                     drawElements[i].setConectingMood(true);
+    //                     //drawElements[i].setSelectionColour('#008000');
+    //                 }
+    //         }
+    //     }
+    // }
+
     function getConnectedBulbs() {
         for (var i = drawElements.length - 1; i >= 0; i--) {
             if (drawElements[i].objType == ObjectType.LIGHT_BULB) {

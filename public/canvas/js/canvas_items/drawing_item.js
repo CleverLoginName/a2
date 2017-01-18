@@ -376,7 +376,7 @@ CWall.prototype.resize = function (direction, newX, newY, offsetX, offsetY){
 /* Scales up or down the object by a given factor */
 CWall.prototype.scale = function (oldScaleFactor, newScaleFactor){
     var tmpObjVerticesArr = [];
-    for(var i = 0 ; i < this.objVerticesArr.length ; i++){
+    for(var i = 0 ; i < this.objVerticesdrawArr.length ; i++){
         tmpObjVerticesArr.push({ x: ((this.objVerticesArr[i].x / oldScaleFactor) * newScaleFactor), y: ( (this.objVerticesArr[i].y / oldScaleFactor) * newScaleFactor)});
     }
     this.objVerticesArr = [];
@@ -417,6 +417,8 @@ function DrawText(){
     this.objStartY = 0;
     this.objEndX = 0;
     this.objEndY = 0;
+    this.minWidth = 10;
+    this.maxHeight= 15;
 }
 
 /* Scales up or down the object by a given factor */
@@ -433,6 +435,25 @@ DrawText.prototype.setDrawText = function(text){
 /* Gets the text */
 DrawText.prototype.getDrawText = function(){
     return this.drawText;
+
+}
+
+DrawText.prototype.setMaxHeight = function(height){
+    this.maxHeight = height;
+}
+
+DrawText.prototype.getMaxHeight = function(){
+    return  this.maxHeight;
+
+}
+
+
+DrawText.prototype.setMinWidth = function(width){
+    this.minWidth = width;
+}
+
+DrawText.prototype.getMinWidth = function(){
+    return this.minWidth;
 
 }
 
@@ -456,24 +477,116 @@ DrawText.prototype.getFontFamily = function(){
     return this.fontFamily;
 }
 
+DrawText.prototype.resize = function (direction, newX, newY, offsetX, offsetY){
+
+    var tmpStartX, tmpStartY, tmpEndX, tmpEndY;
+
+    switch (direction){
+        case ObjectDirection.NE :
+            tmpStartX = this.objStartX;
+            tmpStartY = newY - offsetY;
+            tmpEndX = newX + offsetX;
+            tmpEndY = this.objEndY;
+
+            break;
+        case ObjectDirection.SE :
+            tmpStartX = this.objStartX;
+            tmpStartY = this.objStartY;
+            tmpEndX = newX + offsetX;
+            tmpEndY = newY + offsetY;
+
+            break;
+        case ObjectDirection.SW :
+            tmpStartX = newX - offsetX;
+            tmpStartY = this.objStartY;
+            tmpEndX = this.objEndX;
+            tmpEndY = newY + offsetY;
+
+            break;
+        case ObjectDirection.NW :
+            tmpStartX = newX - offsetX;
+            tmpStartY = newY - offsetY;
+            tmpEndX = this.objEndX;
+            tmpEndY = this.objEndY;
+            break;
+    }
+
+	/* Let's keep it a square */
+
+    var minWidth = this.minWidth;
+    var minHeight = this.maxHeight;
+    var maxHeight = this.maxHeight;
+
+    switch (direction){
+        case ObjectDirection.NE :
+
+            if (tmpEndX <= (tmpStartX + minWidth)) tmpEndX = tmpStartX + minWidth;
+            if (tmpStartY >= (tmpEndY -minHeight)) tmpStartY = tmpEndY - minHeight;
+            if (tmpStartY <= (tmpEndY -maxHeight)) tmpStartY = tmpEndY - maxHeight;
+
+
+            break;
+        case ObjectDirection.SE :
+
+            if (tmpEndX <= (tmpStartX + minWidth)) tmpEndX = tmpStartX + minWidth;
+            if (tmpEndY <= (tmpStartY + minHeight)) tmpEndY = tmpStartY + minHeight;
+            if (tmpEndY >= (tmpStartY + maxHeight)) tmpEndY = tmpStartY + maxHeight;
+
+
+
+            break;
+        case ObjectDirection.SW :
+            if (tmpStartX >= (tmpEndX - minWidth)) tmpStartX = tmpEndX - minWidth;
+            if (tmpEndY <=(tmpStartY + minHeight)) tmpEndY = tmpStartY + minHeight;
+            if (tmpEndY >=(tmpStartY + maxHeight)) tmpEndY = tmpStartY + maxHeight;
+
+
+            break;
+        case ObjectDirection.NW :
+            if (tmpStartX >= (tmpEndX - minWidth)) tmpStartX = tmpEndX - minWidth;
+            if (tmpStartY >= tmpEndY - minHeight) tmpStartY = tmpEndY - minHeight;
+            if (tmpStartY <= tmpEndY - maxHeight) tmpStartY = tmpEndY - maxHeight;
+
+
+            break;
+
+    }
+
+    this.objStartX = tmpStartX;
+    this.objStartY = tmpStartY;
+    this.objEndX = tmpEndX;
+    this.objEndY = tmpEndY;
+}
+
+
+
+
 /* Changes the boundaries of the object without changing the dimensions. In text object, we need to
  * make sure borders are set according to the font size, etc.. so that drag and scale borderes are not 
  * a line */
 DrawText.prototype.moveObjTo = function(newStartX, newStartY){
-    this.setPoints(newStartX,newStartY,parseInt(newStartX)+250,newStartY);
+    var eX = newStartX + this.objEndX - this.objStartX;
+    var eY = newStartY + this.objEndY - this.objStartY;
+    this.setPoints(newStartX,newStartY, eX, eY);
 }
 
 /* Sets the boundaries of any object */
 DrawText.prototype.setPoints = function(sX, sY, eX, eY){
-    var tmp;
+    // var tmp;
+    // this.objStartX = parseInt(sX);
+    // this.objEndY = parseInt(eY);
+
+    // tmpEX = parseInt(sX) + this.drawText.length * this.fontSize * 6/10;
+    // tmpSY = parseInt(eY) - this.fontSize * 7/10;
+
+    // this.objStartY = parseInt(tmpSY);
+    // this.objEndX = parseInt(tmpEX);
     this.objStartX = parseInt(sX);
+    this.objStartY = parseInt(sY);
+
+
     this.objEndY = parseInt(eY);
-
-    tmpEX = parseInt(sX) + this.drawText.length * this.fontSize * 6/10;
-    tmpSY = parseInt(eY) - this.fontSize * 7/10;
-
-    this.objStartY = parseInt(tmpSY);
-    this.objEndX = parseInt(tmpEX);
+    this.objEndX = parseInt(eX);
 }
 
 
@@ -486,7 +599,7 @@ function Eraser(){
     this.objStatus = ObjectStatus.DRAW;
     this.objType = ObjectType.ERASER;
     this.eraserColor = 'rgba(255, 0, 0, 0.2)';
-    this.eraserSize = 15;
+    this.eraserSize = curEraserSize;
     this.eraserType = 'round';
     this.eraserPointsArr = new Array();    
 }

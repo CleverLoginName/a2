@@ -10,6 +10,7 @@ var drawelementListChanged =false;
 var lastConectedObj;
 var selectedSwitchObject;
 var eraserSeg = null;
+var curEraserSize = 15;
 
 var MouseActionEnum = {
 	NONE:1,
@@ -45,7 +46,13 @@ var MouseButtonEnum = {
 	RIGHT:3
 }
 
-
+//------------------------------
+var isTemplate = true;
+var planID = -1;
+var project_pack_list = []; //array of packs in the project
+var project_bom_dict = {};
+var project_bom_dict_std_inc = {};
+//------------------------------
 
 var lightBulbArr = []; /* Holds the light bulbs */
 var connectedLightBulbLabels = []; /* Holds the connected light bulb labels to avoid re-adding */
@@ -84,6 +91,7 @@ var currentTimeIndex = 0; /* Index of drawElement we draw upto. This value chang
 var	rotateObjInitAngle = 0;
 var rotateOffsetAngle = 0;
 
+var object_id_map = {}
 
 /* Continuous wall realted variables */
 
@@ -191,8 +199,7 @@ function init(){
         return true;
     }, false);
 
-	
-	preloadAndCacheImages(['img/lightdemo.png','img/swtichdemo.PNG']);
+	//preloadAndCacheImages(['img/lightdemo.png','img/swtichdemo.PNG']);
 	drawAllObjects();
 	drawBackgroundImage();
 }
@@ -254,33 +261,16 @@ function fixWhich(e) {
   }
 }
 
-
-
 function mouseDoubleClick(e){
-    // fixWhich(e);
-    // if (e.which != 1) return false;
-    // $('#mouse-action-container').hide();
-    // var curZoom = this.zoom;
-
-    // startX = getX(e);
-    // startY = getY(e);
-
-    // selObj = getSelObject(startX, startY);
-
-    // if (selObj != null){
-    // 	alert(selObj.getCatType());
-	// }
-    // if (toolAction == ToolActionEnum.ERASE) {
-
-    // }
+	//todo
 }
 
-        /* Handles what happens when mouse down.
-         *
-         * When draw - it marks the starting points to draw the object
-         * When drag and scale - it selects the object
-         *
-         *  */
+/* Handles what happens when mouse down.
+ *
+ * When draw - it marks the starting points to draw the object
+ * When drag and scale - it selects the object
+ *
+ *  */
 function mouseDown(e){
 	fixWhich(e);
 	if (e.which != 1) return false;
@@ -292,18 +282,18 @@ function mouseDown(e){
 	startY = getY(e);
 	
 	if (toolAction == ToolActionEnum.ERASE){		
-		var eraX = startX / curZoom;
-		var eraY = startY / curZoom;
+		var erPnt = getReverseConvertedPoint({x:startX, y:startY});
 		eraserSeg = new Eraser();
-		eraserSeg.setErasePoints(eraX,eraY);	
+		eraserSeg.setErasePoints(erPnt.x, erPnt.y);
 	}
 
 	if (toolAction == ToolActionEnum.DRAW){
 		if (drawObjectType == ObjectType.CONT_WALL){
 			mouseStatus = MouseStatusEnum.CONT_DRAW;
 			console.log("MS "+mouseStatus, "SX=",startX, "SY=",startY);
-			var startX_fixed = startX / curZoom;
-			var startY_fixed = startY / curZoom;
+			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			var startX_fixed = pnt.x;
+			var startY_fixed = pnt.y;
 			wallPointsCount = wallPointsCount + 1;
 			// currentCWallPoints.push({x:startX_fixed, y:startY_fixed});
 			var filtered_pnt = getFilteredCoordinates(currentCWallPoints, startX_fixed, startY_fixed);
@@ -357,23 +347,23 @@ function mouseDown(e){
 		
 		/* We need to store all the offsets of objects w.r.t. the mouse click location */
 		panObjectOffsets = [];
-		for (var i=0; i< drawElements.length; i++){
-			selObj = drawElements[i];
+		// for (var i=0; i< drawElements.length; i++){
+		// 	selObj = drawElements[i];
 			
-			if (!(selObj instanceof CanvasItem)) continue;
+		// 	if (!(selObj instanceof CanvasItem)) continue;
 			
-			if (selObj.getType() == ObjectType.TEXT){
-				offsetX = (selObj.getObjStartX() - (startX / curZoom));
-				offsetY = (selObj.getObjEndY() - (startY / curZoom));
-			}else if (selObj.getType() == ObjectType.ERASER){
-				offsetX = (selObj.getObjStartX() - (startX / curZoom));
-				offsetY = (selObj.getObjStartY() - (startY / curZoom));				
-			} else {
-				offsetX = (selObj.getObjStartX() - (startX / curZoom));
-				offsetY = (selObj.getObjStartY() - (startY / curZoom));
-			}
-			panObjectOffsets.push({id:i, offsetX:offsetX, offsetY:offsetY});
-		}
+		// 	if (selObj.getType() == ObjectType.TEXT){
+		// 		offsetX = (selObj.getObjStartX() - (startX / curZoom));
+		// 		offsetY = (selObj.getObjEndY() - (startY / curZoom));
+		// 	}else if (selObj.getType() == ObjectType.ERASER){
+		// 		offsetX = (selObj.getObjStartX() - (startX / curZoom));
+		// 		offsetY = (selObj.getObjStartY() - (startY / curZoom));
+		// 	} else {
+		// 		offsetX = (selObj.getObjStartX() - (startX / curZoom));
+		// 		offsetY = (selObj.getObjStartY() - (startY / curZoom));
+		// 	}
+		// 	panObjectOffsets.push({id:i, offsetX:offsetX, offsetY:offsetY});
+		// }
 		
 		/* Set ruler offset */
 		rulerOrigOffsetX = rulerOffsetX;
@@ -389,11 +379,13 @@ function mouseDown(e){
 		} 
 		scaleObj = getScalingObject();
 		if ((scaleObj != null)){
-			scaleDirection = scaleObj.getScaleDirection(startX / curZoom, startY/curZoom);
+			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			scaleDirection = scaleObj.getScaleDirection(pnt.x, pnt.y);
 			if (scaleDirection != null){
 				changeObj = new ChangeObject(scaleObj); /* Scaling of object, so record the change */
-				clickX = startX / curZoom;
-				clickY = startY / curZoom;
+
+				clickX = pnt.x;
+				clickY = pnt.y;
 				if (scaleDirection == ObjectDirection.NE){
 					offsetX = scaleObj.getObjEndX() - clickX;
 					offsetY = clickY - scaleObj.getObjStartY();
@@ -488,10 +480,8 @@ function mouseMove(e){
 
 	if (toolAction == ToolActionEnum.ERASE){
 		if (mouseStatus == MouseStatusEnum.DOWN) {
-			var eraX = endX / curZoom;
-			var eraY = endY / curZoom;			
-
-			eraserSeg.setErasePoints(eraX,eraY);
+			var erPnt = getReverseConvertedPoint({x:endX, y:endY});
+			eraserSeg.setErasePoints(erPnt.x, erPnt.y);
 		}
 	}
 	
@@ -515,18 +505,41 @@ function mouseMove(e){
 	} else if (mouseStatus == MouseStatusEnum.PAN){
 		var tmpOffsetX, tmpOffsetY;
 		
-		for (var i=0; i< panObjectOffsets.length; i++){
-			selObj = drawElements[panObjectOffsets[i].id];
-			tmpOffsetX = panObjectOffsets[i].offsetX;
-			tmpOffsetY = panObjectOffsets[i].offsetY;
-			selObj.moveObjTo( (endX/curZoom + tmpOffsetX), (endY/curZoom+tmpOffsetY));
-		}
+		// for (var i=0; i< panObjectOffsets.length; i++){
+		// 	selObj = drawElements[panObjectOffsets[i].id];
+		// 	tmpOffsetX = panObjectOffsets[i].offsetX;
+		// 	tmpOffsetY = panObjectOffsets[i].offsetY;
+		// 	selObj.moveObjTo( (endX/curZoom + tmpOffsetX), (endY/curZoom+tmpOffsetY));
+		// }
 		
 		rulerOffsetX = rulerOrigOffsetX+ (endX / curZoom - clickX);
-		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);		
+		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);
+
+		var minOffsetX = -1;
+		var minOffsetY = -1;
+		if (backgroundImage != undefined){
+			minOffsetX = backgroundImage.width - canvas.width / curZoom;
+			minOffsetY = backgroundImage.height - canvas.height / curZoom;
+		}
+		minOffsetX = (minOffsetX < 0) ? 0 : -minOffsetX;
+		minOffsetY = (minOffsetY < 0) ? 0 : -minOffsetY;
+
+		if (rulerOffsetX > 0) {
+			rulerOffsetX = 0;
+		} else if (rulerOffsetX < minOffsetX) {
+			rulerOffsetX = minOffsetX;
+		}
+
+		if (rulerOffsetY > 0) {
+			rulerOffsetY = 0;
+		} else if (rulerOffsetY < minOffsetY) {
+			rulerOffsetY = minOffsetY;
+		}
+
 		drawBackgroundImage();
 	} else if (mouseStatus == MouseStatusEnum.SCALE){
-		scaleObj.resize(this.scaleDirection, endX/curZoom, endY/curZoom, offsetX, offsetY);
+		var r_pnt = getReverseConvertedPoint({x:endX, y:endY})
+		scaleObj.resize(this.scaleDirection, r_pnt.x, r_pnt.y, offsetX, offsetY);
 	} else if (mouseStatus == MouseStatusEnum.ROTATE){
 		canToolTip = false;
 		switch (rotateObj.getType()){
@@ -540,6 +553,7 @@ function mouseMove(e){
 	}
 	drawAllObjects();
 	drawDrawerDetails();
+	drawEraserPointer();
 }
 
 var temp_selected_obj
@@ -570,10 +584,12 @@ function mouseUp(e){
 
 	if (toolAction == ToolActionEnum.DRAW){
 		if ((mouseStatus == MouseStatusEnum.DRAW) || (mouseStatus == MouseStatusEnum.DOWN) || (mouseStatus == MouseStatusEnum.CONT_DRAW)){
-			var startX_fixed = startX / curZoom;
-			var startY_fixed = startY / curZoom;
-			var endX_fixed = endX / curZoom;
-			var endY_fixed = endY / curZoom;
+			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			var startX_fixed = pnt.x;
+			var startY_fixed = pnt.y;
+			pnt = getReverseConvertedPoint({x:endX, y:endY});
+			var endX_fixed = pnt.x;
+			var endY_fixed = pnt.y;
 			
 			if (drawObjectType == ObjectType.SQUARE){
 				currentObj = new Square();
@@ -591,25 +607,7 @@ function mouseUp(e){
 				currentObj.setWallThickness(wallThickness);
 			} else if (drawObjectType == ObjectType.CONT_WALL){
 				//Wall drawing code moved to mouseup
-			
-				//~ if (checkDoubleClick == false) {
-					//~ checkDoubleClick = true;
-					//~ setTimeout(function(){
-						//~ checkDoubleClick = false;
-					//~ },200);
-				//~ } else {
-					//~ /* In a double click */
-					//~ currentCWallPoints.pop();
-					//~ currentCWallPoints.pop();
-					//~ currentObj = new CWall();
-					//~ currentObj.setVertices(currentCWallPoints);
-					//~ currentCWallPoints.splice(0);
-					//~ pushElementToDrawElement(currentObj);
-					//~ mouseStatus = MouseStatusEnum.UP;
-					//~ checkDoubleClick = false;
-				//~ }
-				
-				
+
 			} else if (drawObjectType == ObjectType.LIGHT_BULB){
 				/*	currentObj = new LightBulb();
 					currentObj.setCoordinates(endX_fixed,endY_fixed);
@@ -620,10 +618,10 @@ function mouseUp(e){
 					addToTable(currentObj);
 					populateLightBulbMenu();*/
 			} else if (drawObjectType == ObjectType.LIGHT_SWITCH){
-					currentObj = new LightSwitch();
-					currentObj.setCoordinates(endX_fixed, endY_fixed);
-					addToSwitchTable(currentObj);
-					pushElementToDrawElement(currentObj);
+					// currentObj = new LightSwitch();
+					// currentObj.setCoordinates(endX_fixed, endY_fixed);
+					// addToSwitchTable(currentObj);
+					// pushElementToDrawElement(currentObj);
 			} else if (drawObjectType == ObjectType.TEXT){
 				/* Checks if user double clicks */
 				if (checkDoubleClick == false){
@@ -999,10 +997,10 @@ function drawCurrentObj(){
 	} else if (drawObjectType == ObjectType.WALL){
 		drawWall(sX, sY, eX, eY, wallThickness * curZoom, context);;
 	} else if (drawObjectType == ObjectType.CONT_WALL){
+		var pnt;
 		$(currentCWallPoints).each(function(i,e){
-			tmpX = e.x * curZoom ;
-			tmpY = e.y*curZoom ;
-			tmpCWallPoints.push ({x: tmpX, y: tmpY});
+			pnt = getConvertedPoint(e);
+			tmpCWallPoints.push ({x: pnt.x, y: pnt.y});
 		});
 		// drawContWall(tmpCWallPoints,context, eX, eY);
 		var filtered_pnt = getFilteredCoordinates(tmpCWallPoints, eX, eY);
@@ -1160,7 +1158,7 @@ function drawLightBulb(x,y,r,targetContext, w,h,path,conMood,colour){
         targetContext.shadowBlur = 10;
         targetContext.shadowOffsetX = 0;
         targetContext.shadowOffsetY = 0;
-        targetContext.fill();
+        //targetContext.fill();
     }
     targetContext.strokeStyle = '#000000';
     targetContext.drawImage(imageObj, x, y, w, h);
@@ -1215,15 +1213,117 @@ function drawWiresFromSwitchOrBulbToConnectedLightBulbs(rootObj, targetContext){
 
 function drawText(obj, targetContext, sX, sY, eX, eY){
 	
+	// var fontSize = obj.getFontSize();
+	// var fontColor = obj.getFontColor();
+	// var drawText = obj.getDrawText();
+	// var fontFamily = obj.getFontFamily();
+	// targetContext.fillStyle = obj.getFontColor();
+	// targetContext.font=fontSize+ 'px '+ fontFamily;
+	// targetContext.fillText(drawText,sX,eY);
+	var width = 140;
 	var fontSize = obj.getFontSize();
 	var fontColor = obj.getFontColor();
 	var drawText = obj.getDrawText();
 	var fontFamily = obj.getFontFamily();
+    targetContext.backgroundColor = "#0000ff";
 	targetContext.fillStyle = obj.getFontColor();
-	targetContext.font=fontSize+ 'px '+ fontFamily;
-	targetContext.fillText(drawText,sX,eY);
-	
+	targetContext.font=fontSize*zoom+ 'px '+ fontFamily;
+	 var words = drawText.split(' ');
+	 var minWidth = 0;
+	for(var n = 0; n < words.length; n++) {
+        	// var word ='';
+        	// word = words[n] + '';
+			var metricsStart= targetContext.measureText(words[n]);
+			var valN = metricsStart.width;
+			if (minWidth < valN){
+					minWidth = valN;
+				}
+
+    }
+	obj.setMinWidth(minWidth);
+	wrapText(targetContext,drawText,sX, sY,eX-sX,parseInt(fontSize)*zoom,-parseInt(fontSize)*zoom-5*zoom,obj);
 }
+
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight,boxHight,obj) {
+        var words = text.split(' ');
+        var line = '';
+        var lines = [];
+        var tempLine = '';
+		for(var n = 0; n < words.length; n++) {
+        	// var word ='';
+        	// word = words[n] + '';
+            var metrics = ctx.measureText(words[n]);
+          	var testWidth = metrics.width;
+            if (testWidth > maxWidth){
+            	maxWidth = testWidth;
+            }
+        }
+			//obj.setMinWidth(maxWidth);
+        for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = ctx.measureText(testLine);
+          var testWidth = metrics.width;
+		  if (testWidth > maxWidth && n > 0)  {
+
+            lines.push(line);
+            line = words[n] + ' ';
+          }
+          else {
+            line = testLine;
+          }
+		  if (n == words.length -1) {
+            lines.push(line);
+		  }
+        }
+		obj.setMaxHeight(parseInt(obj.getFontSize())*lines.length);
+        //ctx.fillRect(x-5, y-lineHeight, maxWidth+maxWidth, lineHeight*lines.length);
+
+		// if(obj.getType() == ObjectType.TEXT){
+		// 	currentObj = new DrawText();
+		// 	currentObj.setPoints(parseInt(sX),sY, maxWidth+maxWidth,parseInt(eY-sY));
+		// 	pushElementToDrawElement(currentObj);
+    	// }
+		var sX = x;
+		var sY = y;
+		var eX = sX + maxWidth;
+		var eY = sY + lineHeight*lines.length;
+
+		//obj.setPoints(sX,sY,eX,eY);
+		//obj.setEndY(eY);
+		// ctx.rect(sX, sY, maxWidth, lineHeight*lines.length);
+		// ctx.fillStyle = 'yellow';
+		// ctx.fill();
+		// ctx.lineWidth = 1;
+		// ctx.strokeStyle = 'black';
+		// ctx.stroke();
+		// drawBorder(ctx,sX, sY, maxWidth, lineHeight*lines.length);
+		ctx.fillStyle = 'yellow';
+		ctx.fillRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
+		ctx.strokeStyle = 'red';
+		ctx.strokeRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
+
+
+		y += lineHeight;
+        ctx.fillStyle = "black";
+        for (var index = 0; index < lines.length; index++) {
+          var line = lines[index];
+          ctx.fillText(line, x, y+lineHeight*index);
+
+        }
+
+      }
+
+
+
+function drawBorder(ctx,xPos, yPos, width, height, thickness = 1){
+  ctx.fillStyle='#000';
+  ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
+}
+
+
+
+
 
 /* Gets the offset center point to construct the quadraticCurve */
 function getOffsetCenterPoint(x1,y1,x2,y2){
@@ -1269,7 +1369,7 @@ function drawAllObjects(){
 	}
 
 	for (var i =0; i<this.drawElements.length; i++){
-		drawLightsOnCanvas(this.drawElements[i]);
+		//drawLightsOnCanvas(this.drawElements[i]);
         drawConnections(this.drawElements[i]);
 		drawObjectOnCanvas(this.drawElements[i]);
 		drawEraserObj(this.drawElements[i]);
@@ -1279,22 +1379,6 @@ function drawAllObjects(){
 		drawelementListChanged = false;
 		updateBomTable(drawElements);
 	}
-
-	// for (var i =0; i<this.drawElements.length; i++){
-	// 	drawLightsOnCanvas(this.drawElements[i]);
-	// }
-	
-	// for (var i =0; i<this.drawElements.length; i++){
-	// 	drawWiresOnCanvas(this.drawElements[i]);
-	// }
-	
-	// for (var i =0; i<this.drawElements.length; i++){
-	// 	if (drawElements[i].getType() != ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
-	// }
-	
-	// for (var i =0; i<this.drawElements.length; i++){
-	// 	if (drawElements[i].getType() == ObjectType.LIGHT_BULB) drawObjectOnCanvas(this.drawElements[i]);
-	// }
 
 	if (showSelectedObjects && selObj != null) {
 		highlightObject(selObj)
@@ -1316,14 +1400,13 @@ function drawEraserObj(obj){
 		ectx.lineWidth = obj.eraserSize * curZoom;		
 		ectx.strokeStyle = obj.eraserColor;
 		ectx.lineJoin = ectx.lineCap = obj.eraserType;
-		
+		var erPnt;
 		for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
-			eraX = obj.eraserPointsArr[iy].x * curZoom ;
-			eraY = obj.eraserPointsArr[iy].y * curZoom ;
+			erPnt = getConvertedPoint(obj.eraserPointsArr[iy]);
 			if ( iy == 0){				
-				ectx.moveTo(eraX, eraY);
+				ectx.moveTo(erPnt.x, erPnt.y);
 			} else {	
-				ectx.lineTo(eraX, eraY);
+				ectx.lineTo(erPnt.x, erPnt.y);
 			}
 		}
 		ectx.stroke();	
@@ -1357,15 +1440,26 @@ function getDrawElementIndexByObject(obj){
 }
 
 /* Draws the square following the mouse pointer showing some information */
-function drawDrawerDetails(){
+function drawDrawerDetails() {
 	var left_X = endX; //endX = mouseX
 	var top_Y = endY;
+	var mPnt = getReverseConvertedPoint({x:endX, y:endY});
 
+	context.fillText("( " + (mPnt.x).toFixed(0) + ", " + (mPnt.y).toFixed(0) + " )", left_X + 20, top_Y + 30);
+}
+
+/* Draw Eraser pointer*/
+function drawEraserPointer() {
+	if (toolAction != ToolActionEnum.ERASE){
+		return;
+	}
 	var curZoom = this.zoom;
-	var posX = endX/curZoom - rulerOffsetX;
-	var posY = endY/curZoom - rulerOffsetY;
-	
-	context.fillText("( "+(posX).toFixed(0)+", "+(posY).toFixed(0)+" )",left_X+20, top_Y+30);
+	context.beginPath();
+	context.lineWidth = 1;
+	context.strokeStyle = '#000000';
+	var radius = curEraserSize / 2;
+	context.arc(endX, endY, radius * curZoom, false, Math.PI * 2, false);
+	context.stroke();
 }
 
 /* Draws the current scale factor details */
@@ -1401,20 +1495,26 @@ function drawObjectOnCanvas(obj){
 	contextOrig.rotate(tmpRotation);
 	contextOrig.translate(-tmpCenter.x * curZoom, -tmpCenter.y * curZoom);
 	
+	var pnt;
 	if (obj.getType() == ObjectType.CONT_WALL){
 		pointsArr = obj.getVerticesArr();
 		$(pointsArr).each(function(i,e){
-			tmpPointsArr.push({x:e.x * curZoom, y: e.y * curZoom});
+			pnt = getConvertedPoint(e);
+			tmpPointsArr.push({x:pnt.x, y: pnt.y});
 		});
 		var tmpPolygon = obj.getPolygon();
 		for (var i=0; i< (tmpPolygon.length-1); i = i + 2){
-			tmpBorderPointsArr.push ({x: tmpPolygon[i] * curZoom, y: tmpPolygon[i+1] * curZoom});
+			pnt = getConvertedPoint(tmpPolygon[i]);
+			tmpBorderPointsArr.push({x:pnt.x, y: pnt.y});
 		}
 	} else {
-		sX = parseInt(obj.getObjStartX()) * curZoom;
-		sY = parseInt(obj.getObjStartY()) * curZoom;
-		eX = parseInt(obj.getObjEndX()) * curZoom;
-		eY = parseInt(obj.getObjEndY()) * curZoom;
+		pnt = getConvertedPoint( {x:obj.getObjStartX(), y:obj.getObjStartY()} );
+		sX = pnt.x;
+		sY = pnt.y;
+
+		pnt = getConvertedPoint( {x:obj.getObjEndX(), y:obj.getObjEndY() });
+		eX = pnt.x;
+		eY = pnt.y;
 	}
 	
 	if (toolAction == ToolActionEnum.SCALE || toolAction == ToolActionEnum.DRAG){
@@ -1516,8 +1616,9 @@ function drawLightsOnCanvas(obj){
 	if (obj.getType() == ObjectType.LIGHT_BULB){
 		var coor = obj.getCoordinates();
 		var rad = obj.getRadius();
-		//drawRayCasts(obj, contextOrig);
-		drawWiresFromSwitchOrBulbToConnectedLightBulbs(obj, contextOrig);
+		// ray casts removed for now
+		// drawRayCasts(obj, contextOrig);
+		// drawWiresFromSwitchOrBulbToConnectedLightBulbs(obj, contextOrig);
 	} 
 }
 
@@ -1540,39 +1641,43 @@ function drawConnections(rootObj) {
     if(rootObj.getType() == ObjectType.LIGHT_SWITCH ||rootObj.getType() == ObjectType.LIGHT_BULB){
         var curZoom = this.zoom;
         var lightBulbs = rootObj.getConnections();
-        var rootCoordinate = rootObj.getCoordinates();
-        var rootX, rootY, EndX,EndY;
-        rootX = rootCoordinate.x + rootObj.getObjWidth()/2;
-        rootY = rootCoordinate.y + rootObj.getObjHeight()/2;
+		var rootCoordinate = getConvertedPoint(rootObj.getCenter());
         var bulbCoordinates;
         var tmpOffsetCenterPoint = {x:0, y:0};
         contextOrig.lineWidth = 1;
         contextOrig.strokeStyle = '#000000';
         for (var i=0; i<lightBulbs.length; i++){
             tmpLightBulb = lightBulbs[i];
-            bulbCoordinates = tmpLightBulb.getCoordinates();
-            EndX = bulbCoordinates.x + tmpLightBulb.getObjWidth()/2;
-            EndY = bulbCoordinates.y + tmpLightBulb.getObjHeight()/2;
+            bulbCoordinates = getConvertedPoint(tmpLightBulb.getCenter());
 
             contextOrig.beginPath();
-            contextOrig.moveTo(rootX * curZoom, rootY * curZoom);
+            contextOrig.moveTo(rootCoordinate.x, rootCoordinate.y);
             tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinate.x, rootCoordinate.y,bulbCoordinates.x,bulbCoordinates.y);
-            // targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom, EndX * curZoom, EndY * curZoom);
-            contextOrig.bezierCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom,(tmpOffsetCenterPoint.x+20)* curZoom ,(tmpOffsetCenterPoint.y+20 )* curZoom, EndX * curZoom, EndY * curZoom);
+
+			// S like curve ----start
+// 			var offset = Math.sqrt( (EndX - rootX)*(EndX - rootX) +  (EndY - rootY)*(EndY - rootY)) * curZoom;
+// 			offset /= 2;
+//			contextOrig.bezierCurveTo(rootX-offset, rootY-offset, EndX+offset ,EndY+offset, EndX, EndY);
+			// S like curve ----end
+
+            contextOrig.quadraticCurveTo(tmpOffsetCenterPoint.x ,tmpOffsetCenterPoint.y, bulbCoordinates.x, bulbCoordinates.y);
             contextOrig.stroke();
         }
     }
 }
+
+
 /* Draws the outline of an object */
 function drawOutlinesOnCanvas(obj){
 	var sX,sY,eX,sY;
 	var curZoom = this.zoom;
 	var center = obj.getCenter();
-	
-	sX = (obj.objBorderStartX) * curZoom;
-	sY = (obj.objBorderStartY) * curZoom;
-	eX = (obj.objBorderEndX) * curZoom;
-	eY = (obj.objBorderEndY) * curZoom;
+	var pnt = getConvertedPoint({x:obj.objBorderStartX, y:obj.objBorderStartY});
+	sX = pnt.x;
+	sY = pnt.y;
+	pnt = getConvertedPoint({x:obj.objBorderEndX, y:obj.objBorderEndY});
+	eX = pnt.x;
+	eY = pnt.y;
 	
 	contextOrig.beginPath();
 	contextOrig.moveTo(sX,sY);
@@ -1594,21 +1699,28 @@ function highlightObject(obj) {
     objType = obj.getType();
 	var r = 5;
 	points = [];
+	var pnt;
     if (objType == ObjectType.CONT_WALL) {
         objVertices = obj.getVerticesArr();
-        x1 = objVertices[0].x * curZoom;
-        y1 = objVertices[0].y * curZoom;
-        x2 = objVertices[1].x * curZoom;
-        y2 = objVertices[1].y * curZoom;
+		pnt = getConvertedPoint(objVertices[0]);
+        x1 = pnt.x;
+        y1 = pnt.y;
+
+		pnt = getConvertedPoint(objVertices[1]);
+        x2 = pnt.x;
+        y2 = pnt.y;
 
 		points.push({x:x1, y:y1});
 		points.push({x:x2, y:y2});
 
     } else {
-		sX = parseInt(obj.getObjStartX()) * curZoom;
-		sY = parseInt(obj.getObjStartY()) * curZoom;
-		eX = parseInt(obj.getObjEndX()) * curZoom;
-		eY = parseInt(obj.getObjEndY()) * curZoom;
+		pnt = getConvertedPoint( {x:obj.getObjStartX(), y:obj.getObjStartY()} );
+		sX = pnt.x;
+		sY = pnt.y;
+
+		pnt = getConvertedPoint( {x:obj.getObjEndX(), y:obj.getObjEndY() });
+		eX = pnt.x;
+		eY = pnt.y;
 
 		points.push({x:eX, y:sY})
 		points.push({x:eX, y:eY})
@@ -1624,6 +1736,19 @@ function drawObjectScalerOnCanvas(obj) {
     var coor = obj.getResizeCornerCoordinates();
     var curZoom = this.zoom;
     objType = obj.getType();
+
+	var pntNE_srt = getConvertedPoint({x:coor.NE.SX, y:coor.NE.SY});
+	var pntNE_end = getConvertedPoint({x:coor.NE.EX, y:coor.NE.EY});
+
+	var pntSE_srt = getConvertedPoint({x:coor.SE.SX, y:coor.SE.SY});
+	var pntSE_end = getConvertedPoint({x:coor.SE.EX, y:coor.SE.EY});
+
+	var pntSW_srt = getConvertedPoint({x:coor.SW.SX, y:coor.SW.SY});
+	var pntSW_end = getConvertedPoint({x:coor.SW.EX, y:coor.SW.EY});
+
+	var pntNW_srt = getConvertedPoint({x:coor.NW.SX, y:coor.NW.SY});
+	var pntNW_end = getConvertedPoint({x:coor.NW.EX, y:coor.NW.EY});
+
     if (objType == ObjectType.CONT_WALL) {
         objVertices = obj.getVerticesArr();
         x1 = objVertices[0].x;
@@ -1635,19 +1760,27 @@ function drawObjectScalerOnCanvas(obj) {
 
         contextOrig.fillStyle = "#FF0000";
         if (m < 0) {
-            contextOrig.fillRect(coor.NE.SX * curZoom, coor.NE.SY * curZoom, (coor.NE.EX - coor.NE.SX) * curZoom, (coor.NE.EY - coor.NE.SY) * curZoom);
-            contextOrig.fillRect(coor.SW.SX * curZoom, coor.SW.SY * curZoom, (coor.SW.EX - coor.SW.SX) * curZoom, (coor.SW.EY - coor.SW.SY) * curZoom);
+            contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x) * curZoom, (pntNE_end.y - pntNE_srt.y));
+			contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
         } else {
-            contextOrig.fillRect(coor.SE.SX * curZoom, coor.SE.SY * curZoom, (coor.SE.EX - coor.SE.SX) * curZoom, (coor.SE.EY - coor.SE.SY) * curZoom);
-            contextOrig.fillRect(coor.NW.SX * curZoom, coor.NW.SY * curZoom, (coor.NW.EX - coor.NW.SX) * curZoom, (coor.NW.EY - coor.NW.SY) * curZoom);
+            contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
+            contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
         }
         contextOrig.fillStyle = "#000000";
-    } else {
-        contextOrig.fillStyle = "#FF0000";
-        contextOrig.fillRect(coor.NE.SX * curZoom, coor.NE.SY * curZoom, (coor.NE.EX - coor.NE.SX) * curZoom, (coor.NE.EY - coor.NE.SY) * curZoom);
+    }else if(obj.getType == ObjectType.TEXT){
+	    contextOrig.fillStyle = "#FF0000";
+        contextOrig.fillRect(coor.NE.SX * curZoom, coor.NE.SY-5 * curZoom, (coor.NE.EX - coor.NE.SX) * curZoom, (coor.NE.EY - coor.NE.SY) * curZoom);
         contextOrig.fillRect(coor.SE.SX * curZoom, coor.SE.SY * curZoom, (coor.SE.EX - coor.SE.SX) * curZoom, (coor.SE.EY - coor.SE.SY) * curZoom);
         contextOrig.fillRect(coor.SW.SX * curZoom, coor.SW.SY * curZoom, (coor.SW.EX - coor.SW.SX) * curZoom, (coor.SW.EY - coor.SW.SY) * curZoom);
         contextOrig.fillRect(coor.NW.SX * curZoom, coor.NW.SY * curZoom, (coor.NW.EX - coor.NW.SX) * curZoom, (coor.NW.EY - coor.NW.SY) * curZoom);
+        contextOrig.fillStyle = "#000000";
+
+	} else {
+        contextOrig.fillStyle = "#FF0000";
+        contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x), (pntNE_end.y - pntNE_srt.y));
+        contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
+        contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
+        contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
         contextOrig.fillStyle = "#000000";
     }
 }
@@ -1688,10 +1821,9 @@ function drawArcArrow(cX, cY, r, sA, eA, targetContext){
  * factor variable is used to expand the area of sensitivity
  * */
 function getSelObject(x, y){
-	var curZoom = this.zoom;
-	
-	var checkX = x / curZoom;
-	var checkY = y / curZoom;
+	var pnt = getReverseConvertedPoint({x:x, y:y});
+	var checkX = pnt.x;
+	var checkY = pnt.y;
 	
 	var tmpObj = null;
 	for (var i=drawElements.length-1; i>=0 ; i--){
@@ -1707,9 +1839,9 @@ function getSelObject(x, y){
  * Returns object index */
  
 function getSelObjectIndex(x, y){
-	var curZoom = this.zoom;
-	var checkX = x / curZoom;
-	var checkY = y / curZoom;
+	var pnt = getReverseConvertedPoint({x:x, y:y});
+	var checkX = pnt.x;
+	var checkY = pnt.y;
 	
 	var tmpObj = null;
 	for (var i=drawElements.length-1; i>=0 ; i--){
@@ -1800,53 +1932,29 @@ function generateAndLoadObjectFromParams(params){
 		currentObj = new Circle();
 	} else if (params.objType == ObjectType.WALL){
 		currentObj = new Wall();
-		currentObj.setWallThickness(params.objWallThickness);
 	} else if (params.objType == ObjectType.CONT_WALL){
 		currentObj = new CWall();
-		currentObj.setVertices(params.objVerticesArr);
 	} else if (params.objType == ObjectType.LIGHT_BULB){
 		currentObj = new LightBulb();
-		currentObj.setConnections(params.connections);
-		currentObj.setLabel(params.label);
-		currentObj.setSymbolPath(params.symbolPath);
-		currentObj.setImgPath(params.imgPath);
-		currentObj.setID(params.id);
-		currentObj.setName(params.name);
-		currentObj.setPrice(params.price);
-		currentObj.notes = params.notes;
 		lightBulbArr.push(currentObj);
 	} else if (params.objType == ObjectType.LIGHT_SWITCH){
 		currentObj = new LightSwitch();
-		currentObj.setConnections(params.connections);
-		currentObj.setSymbolPath(params.symbolPath);
-		currentObj.setImgPath(params.imgPath);
-		currentObj.setName(params.name);
-		currentObj.setID(params.id);
-		currentObj.setPrice(params.price);
-		currentObj.notes = params.notes;
 	} else if (params.objType == ObjectType.TEXT){
 		currentObj = new DrawText();
-		currentObj.setDrawText(params.drawText);
-		currentObj.setFontSize(params.fontSize);
 	} else if (params.objType == ObjectType.CHANGE){
-		// Need to fill Change object when integrate file loading
+		return;
 	} else if (params.objType == ObjectType.ERASER){
 		currentObj = new Eraser();
-		currentObj.eraserColor = params.eraserColor;
-		currentObj.setVertices(params.eraserPointsArr);
 	} else if (params.objType == ObjectType.PACK){
 		currentObj = new PackItem();
-		currentObj.setID(params.id);
-		currentObj.setName(params.name);
-		currentObj.setPrice(params.price);
-		//todo : product links
 	}
-	else {
+	 else {
 		alert ('Invalid Object Type');
 		return;
 	}
 
-	currentObj.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
+	currentObj.copyProperties(params);
+	//currentObj.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
 
 	pushElementToDrawElement(currentObj);
 }
@@ -2036,18 +2144,17 @@ function drawRayCasts(lightBulbObj, targetContext)
 		lineTargetX = ax+dx*minDist;
 		lineTargetY = ay+dy*minDist;
 		
-		lineTargetX = lineTargetX * curZoom;
-		lineTargetY = lineTargetY * curZoom
-		
-		lightEndPoints.push ({x:lineTargetX, y:lineTargetY});
+		lineTarget = getConvertedPoint({x:lineTargetX, y:lineTargetY});
+		lightEndPoints.push (lineTarget);
 	}
 	
 	/* Now draw the light polygon */
 	var first = true;
 	var prevX, prevY;
 	var tmpX, tmpY;
-	var centerX = ax * curZoom;
-	var centerY = ay * curZoom;
+	var c_pnt = getConvertedPoint({x:ax, y:ay});
+	var centerX = c_pnt.x;
+	var centerY = c_pnt.y;
 	
 	var lightGradient=targetContext.createRadialGradient(centerX,centerY,0,centerX,centerY,rayLength * curZoom);
 	lightGradient.addColorStop(0,"yellow");
@@ -2312,7 +2419,8 @@ function createAndInsertTextObject(){
 		if (currentObj.getType() == ObjectType.TEXT){
 			currentObj.setDrawText(insertText);
 			currentObj.setFontSize(fontSize);
-			currentObj.setPoints(insertX,insertY - 25,parseInt(insertX)+250,insertY);
+			currentObj.setPoints(insertX,insertY - 25,parseInt(insertX)+200,insertY);
+			//currentObj.setPoints(100,100,500,500);
 			
 			if (toolAction != ToolActionEnum.EDITTEXT){
 				pushElementToDrawElement(currentObj);
@@ -2338,13 +2446,16 @@ function createAndInsertTextObject(){
 	toolAction = ToolActionEnum.DRAW;
 }
 
-function showTextEdit(endX,endY, text, fontSize){
+function showTextEdit(endX,endY, text, fontSize,obj){
 	var curZoom = this.zoom;
-	
+	// if(obj != null){
+	// 	text = obj.getDrawText();
+	// }
+
 	if (text == undefined) text= "";
 	if (fontSize == undefined) fontSize = 15;
-	
-	$('#text-container').css('left', (endX *curZoom)+ rulerWidth + 7).css('top', (endY * curZoom)+ rulerHeight- 8).attr('data-x', endX).attr('data-y', endY);
+	var pnt = getConvertedPoint({x:endX, y:endY});
+	$('#text-container').css('left', pnt.x + rulerWidth + 7).css('top', pnt.y + rulerHeight- 8).attr('data-x', endX).attr('data-y', endY);
 	$('#text-container').show();
 	$('#type-text-size').val(fontSize);
 	$('#type-text').val(text).focus();
@@ -2616,18 +2727,15 @@ function paste(selObjIndex){
 
 function deleteContainingPack(productitem){
 	if (productitem.isInsidePack) {
-		var containingPack = drawElements.find( function(e){
-			if (e.getType() == ObjectType.PACK) {
-				return e.product_list.find( function (p) { return p == productitem });
-			}
-			return false;
-		});
+		var containingPack = getObjectFromId(productitem.getParentPackID());
 		// var canDeletePack = confirm("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
 		alert("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
 		var canDeletePack = true;
 
 		if(canDeletePack){
-			containingPack.product_list.forEach( removeObjectFromDrawElements );
+			containingPack.product_list.forEach( function (p_uid) {
+				removeObjectFromDrawElements(getObjectFromId(p_uid));
+			});
 			removeObjectFromDrawElements(containingPack);
 		}
 		$('#mouse-action-container').hide();
@@ -2774,14 +2882,14 @@ function preloadAndCacheImages(imgArray) {
     }
 }
 
-$(document).keydown(function(e) {
-	console.log("key down :" + e.keyCode); 
+$(document).keydown(function (e) {
+	console.log("key down :" + e.keyCode);
 	if (e.keyCode == 17) {
-		isCtrlPressed = true;  
+		isCtrlPressed = true;
 	}
 	if (e.keyCode == 18) {
-		isAltPressed = true;  
-	}		
+		isAltPressed = true;
+	}
 	if (isCtrlPressed && isAltPressed) {
 		if (e.keyCode == 65) { //a
 			isAngleSnappingOn = !isAngleSnappingOn;
@@ -2789,26 +2897,77 @@ $(document).keydown(function(e) {
 		if (e.keyCode == 71) { //g
 			isGridSnappingOn = !isGridSnappingOn;
 		}
+	} else if (e.keyCode == 69) { // 'e' for eraser
+		changeToolAction(ToolActionEnum.ERASE);
+	} else if (e.keyCode == 87) { // 'w' for walls
+		changeToolAction(ToolActionEnum.DRAW);
+	} else if (e.keyCode == 86) { // 'v' for Move
+		changeToolAction(ToolActionEnum.DRAG);
+	} else if (e.keyCode == 84) { // 't' for text
+		changeToolAction(ToolActionEnum.EDITTEXT);
+	} else if (e.keyCode == 84) { // 's' for scale
+		changeToolAction(ToolActionEnum.SCALE);
+	} else if (e.keyCode == 80) { // 'p' for pan
+		changeToolAction(ToolActionEnum.PAN);
+	} else if (e.keyCode == 90) { // 'z' for zoom in
+		zoomIn();
+		hideDialog();
+	} else if (e.keyCode == 88) { // 't' for zoom out
+		zoomOut();
+		hideDialog();
 	}
 });
 
-$(document).keyup(function(e) {
-    if (e.keyCode == 27) { // escape key maps to keycode `27`
-        performEscapeAction();
-    }
+$(document).keyup(function (e) {
+	if (e.keyCode == 27) { // escape key maps to keycode `27`
+		performEscapeAction();
+	}
 	if (e.keyCode == 17) {
-		isCtrlPressed = false;  
+		isCtrlPressed = false;
 	}
 	if (e.keyCode == 18) {
-		isAltPressed = false;  
+		isAltPressed = false;
 	}
-    //(+)TBIRD VB0.4 - START
-    if (e.keyCode == 46){
-        performDelAction();
-    }
-    //(+)TBIRD VB0.4 - FINISH
+	//(+)TBIRD VB0.4 - START
+	if (e.keyCode == 46) {
+		performDelAction();
+	}
+	//(+)TBIRD VB0.4 - FINISH
 });
 
+function changeToolAction(action) {
+	$('.toggle-button').removeClass('active');
+	performEscapeAction();
+
+	switch (action) {
+		case ToolActionEnum.ERASE:
+			$('#eraser').parent().addClass('active');
+			toolAction = ToolActionEnum.ERASE;
+			break;
+		case ToolActionEnum.DRAW:
+    		drawObjectType = ObjectType.CONT_WALL;
+			toolAction = ToolActionEnum.DRAW;
+			$('#cwall').parent().addClass('active');
+			break;
+		case ToolActionEnum.DRAG:
+			toolAction = ToolActionEnum.DRAG;
+			$('#drag').parent().addClass('active');
+			break;
+		case ToolActionEnum.TEXT:
+			drawObjectType = ObjectType.CONT_WALL;
+			toolAction = ToolActionEnum.DRAW;
+			$('#add-text').parent().addClass('active');
+			break;
+		case ToolActionEnum.SCALE:
+			toolAction = ToolActionEnum.SCALE;
+			$('#scale').parent().addClass('active');
+			break;
+		case ToolActionEnum.PAN:
+			toolAction = ToolActionEnum.PAN;
+			$('#pan').parent().addClass('active');
+			break;
+	}
+}
 
 function performEscapeAction(){
     mouseStatus = MouseStatusEnum.UP;
@@ -2847,6 +3006,36 @@ function simulateEScPressForMenu() {
 // 	//alert(txt);
 // }
 
+function getObjectFromId(id) {
+	var object = null;
+	if (object_id_map[id] == undefined){
+		object = drawElements.find( function(e){
+			return e.uid == id;
+		});
+		if (object == null || object == undefined) {
+			//todo search from pack data
+		}
+		if (object != null && object != undefined) {
+			object_id_map[id] = object;
+		}
+	} else {
+		object = object_id_map[id];
+	}
+	return object;
+}
 
+function getConvertedPoint(point) {
+	var curZoom = this.zoom;
+	c_x = (point.x + rulerOffsetX) * curZoom;
+	c_y = (point.y + rulerOffsetY) * curZoom;
 
+	return { x:c_x, y:c_y };
+}
 
+function getReverseConvertedPoint(point) {
+	var curZoom = this.zoom;
+	r_x = point.x / curZoom - rulerOffsetX;
+	r_y = point.y / curZoom - rulerOffsetY;
+
+	return { x:r_x, y:r_y };
+}

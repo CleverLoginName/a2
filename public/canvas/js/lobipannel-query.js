@@ -156,6 +156,7 @@ $(function(){
 //            alert("hi");
         $(this).addClass("unpin-pannel-hight");
         $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
+        $(this).find('.panel-body').addClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -163,6 +164,7 @@ $(function(){
 //            alert("hi");
         $(this).removeClass("unpin-pannel-hight");
         $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+        $(this).find('.panel-body').removeClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -170,6 +172,7 @@ $(function(){
 //            alert("hi");
         $(this).addClass("unpin-pannel-hight");
         $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
+         $(this).find('.panel-body').addClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -177,6 +180,7 @@ $(function(){
 //            alert("hi");
         $(this).removeClass("unpin-pannel-hight");
         $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+        $(this).find('.panel-body').removeClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -184,6 +188,7 @@ $(function(){
 //            alert("hi");
         $(this).addClass("unpin-pannel-hight");
         $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
+         $(this).find('.panel-body').addClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -191,6 +196,7 @@ $(function(){
 //            alert("hi");
         $(this).removeClass("unpin-pannel-hight");
         $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+        $(this).find('.panel-body').removeClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -198,6 +204,7 @@ $(function(){
 //            alert("hi");
         $(this).addClass("unpin-pannel-hight");
         $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
+         $(this).find('.panel-body').addClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
@@ -205,6 +212,7 @@ $(function(){
 //            alert("hi");
         $(this).removeClass("unpin-pannel-hight");
         $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+        $(this).find('.panel-body').removeClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 

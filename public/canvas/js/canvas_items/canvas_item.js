@@ -62,6 +62,10 @@ function ChangeObject(obj){
     this.drawElementIndex = null;
 };
 
+CanvasItem.prototype.getUniqueItemID = function(){
+    return null;
+}
+
 ChangeObject.prototype.setDeleteElementIndex =  function(index){
     this.deleteElementIndex = index;
 };
@@ -105,6 +109,10 @@ ChangeObject.prototype.getType = function(){
 /* This is the fundamental drawing object used in the app. This has many children classes which are actually being used
  * to draw different objects in the app. */
 function CanvasItem (){
+    this.uid;
+    this.is_std_inclusion = false;
+    this.plan_id = -1;
+    
     var objType, objStatus;
     var objStartX;
     var objStartY;
@@ -116,8 +124,24 @@ function CanvasItem (){
     var objBorderEndX;
     var objBorderEndY;
 
-    var scalerSize = 10;
+    this.scalerSize = 10;
     this.rotation = 0; /* in radians. Range is 0 - 2pi */
+}
+
+CanvasItem.prototype.getUniqueItemID = function(){
+    return this.uid;
+}
+
+CanvasItem.prototype.setUniqueItemID = function(id){
+    this.uid = id;
+}
+
+CanvasItem.prototype.getPlanID = function(){
+    return this.plan_id;
+}
+
+CanvasItem.prototype.setPlanID = function(id){
+    this.plan_id = id;
 }
 
 /* Updates border to rotate objects. Not in use in current version but will require in future */
@@ -288,7 +312,7 @@ CanvasItem.prototype.resize = function (direction, newX, newY, offsetX, offsetY)
 
 	/* Let's keep it a square */
 
-    var minWidth = 20;
+    var minWidth = 100;
 
     switch (direction){
         case ObjectDirection.NE :
@@ -478,6 +502,26 @@ CanvasItem.prototype.scale = function (oldScaleFactor, newScaleFactor){
     this.objEndX = (this.objEndX / oldScaleFactor) * newScaleFactor;
     this.objStartY = (this.objStartY / oldScaleFactor) * newScaleFactor;
     this.objEndY = (this.objEndY / oldScaleFactor) * newScaleFactor;
+}
+
+/* copy properties */
+CanvasItem.prototype.copyProperties = function (params){
+    for(var key in params) {
+        if(key in this){
+            if (Array.isArray(params[key])) {
+                this[key] = [];
+                var destinationArr = this[key];
+                var sourceArray = params[key];
+                for (var index = 0; index < sourceArray.length; index++) {
+                    destinationArr.push(sourceArray[index]);
+                }
+            }
+            else{
+                this[key] = params[key];
+            }
+        }
+    } 
+    this.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
 }
 
 

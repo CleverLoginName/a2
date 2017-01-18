@@ -9,3 +9,7 @@
 .lobipanel-minimized-toolbar{
     background-color:transparent !important;
 }
+
+.bom-hide{
+    display: none;
+}
