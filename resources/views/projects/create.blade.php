@@ -96,7 +96,7 @@
                     <section class="col-md-2"><label>Build Address</label></section>
                     <section class="col-md-2 @if ($errors->has('lot')) has-error @endif">
                         {!! Form::text('lot',null,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
-                        @if ($errors->has('lot')) <p class="error_message">The lot field is required</p> @endif
+                        @if ($errors->has('lot')) <p class="error_message">The lot # field is required</p> @endif
                     </section>
                     <section class="col-md-2 @if ($errors->has('no_unit')) has-error @endif">
                         {!! Form::text('no_unit',null,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
@@ -117,7 +117,7 @@
                         {!! Form::text('postal_code',null,['class'=>'form-control required','placeholder'=>"Postal Code",'id'=>'postal_code']) !!}
                         @if ($errors->has('postal_code')) <p class="error_message">The postal code field is required</p> @endif
                     </section>
-                    <section class="col-md-3">
+                    <section class="col-md-3 @if ($errors->has('state')) has-error @endif">
                         {!! Form::select('state', ['VIC' => 'VIC',
                          'TAS' => 'TAS',
                          'NSW' => 'NSW',
@@ -127,19 +127,18 @@
                          'SA' => 'SA',
                          ],null,['id'=>'state','class'=>'form-control required','placeholder'=>"Plaese select a State","required"=>""]) !!}
                         @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
-
                     </section>
-
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label>Budget/Energy</label></section>
-                    <section class="col-md-3">
+                    <section class="col-md-3 @if ($errors->has('budget')) has-error @endif">
                         {!! Form::text('budget',null,['class'=>'form-control required','placeholder'=>"$ Budget(If App)",'id'=>'budget']) !!}
-                        @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
+                        @if ($errors->has('budget')) <p class="error_message">The budget field is required</p> @endif
                     </section>
-                    <section class="col-md-3">
+                    <section class="col-md-3 @if ($errors->has('energy_consumption')) has-error @endif">
                         {!! Form::text('energy_consumption',null,['class'=>'form-control required','placeholder'=>"Total Energy per SQM",'id'=>'energy_consumption']) !!}
-                        @if ($errors->has('state')) <p class="error_message">The state field is required</p> @endif
+                        (w per SQM)
+                        @if ($errors->has('energy_consumption')) <p class="error_message">The energy consumption field is required</p> @endif
                     </section>
                     <section class="col-md-4">
                         {!! Form::text('rating',null,['class'=>'form-control required','placeholder'=>"Rating",'id'=>'rating', 'disabled'=>'disabled']) !!}
@@ -147,30 +146,35 @@
                 </section>
                 <section class="row form-group">
                     <section class="col-md-2"><label></label></section>
-                    <section class="col-md-1">
-                        House
-                    </section>
-                    <section class="col-md-2">
-                        {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+                    <section class="col-md-10">
+                        <section class="col-md-1" style="text-align: right">House</section>
+                        <section class="col-md-1">
+                            {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
+
+                        <section class="col-md-1" style="text-align: right">Garage</section>
+                        <section class="col-md-1">
+                            {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
+                        <section class="col-md-1" style="text-align: right">Porch</section>
+                        <section class="col-md-1">
+                            {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
+                        <section class="col-md-1" style="text-align: right">Terrace</section>
+                        <section class="col-md-1">
+                            {!! Form::text('house',null,['class'=>'form-control required','placeholder'=>"5w per SQM",'id'=>'house', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
+
+                        <section class="col-md-1" style="text-align: right">Balcony</section>
+                        <section class="col-md-1">
+                            {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
+                        <section class="col-md-1" style="text-align: right">Alfresco</section>
+                        <section class="col-md-1">
+                            {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
+                        </section>
                     </section>
 
-
-                    <section class="col-md-1">
-                        Garage
-                    </section>
-                    <section class="col-md-2">
-                        {!! Form::text('garage',null,['class'=>'form-control required','placeholder'=>"3w per SQM",'id'=>'garage', 'disabled'=>'disabled']) !!}(w per SQM)
-                    </section>
-                    <section class="col-md-1">
-
-                    </section>
-
-                    <section class="col-md-1">
-                        Porch
-                    </section>
-                    <section class="col-md-2">
-                        {!! Form::text('porch',null,['class'=>'form-control required','placeholder'=>"4w per SQM",'id'=>'porch', 'disabled'=>'disabled']) !!}(w per SQM)
-                    </section>
 
 
                 </section>
@@ -384,6 +388,7 @@
         $('#house').val(house);
         $('#garage').val(garage);
         $('#porch').val(porch);
+        $('#energy_consumption').val(parseInt(house)+parseInt(garage)+parseInt(porch));
 
 
 

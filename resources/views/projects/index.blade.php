@@ -16,7 +16,7 @@
                             colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending">#
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
-                            aria-label="Product Code: activate to sort column ascending"> Job#
+                            aria-label="Product Code: activate to sort column ascending"> Job #
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="product-table-view" rowspan="1" colspan="1"
                             aria-label="Product Name: activate to sort column ascending">Address
@@ -54,6 +54,7 @@
                                    data-original-title="Edit Project"><i class="fa fa-edit green-font"></i></a>
 
                                 <form method="GET" action="{!! url('projects/'.$project->id.'/delete') !!}" accept-charset="UTF-8" style="display:inline">
+                                    <span data-toggle="tooltip" data-original-title="Delete Project">
                                     <a class="action-btn btn-app"
                                        data-product-id="2"
                                        data-placement="top"
@@ -63,6 +64,7 @@
                                        data-title="Delete Project"
                                        data-message="Are you sure you want to delete this Project ?"
                                        data-original-title="Remove User"><i class="fa fa-times red-font"></i></a>
+                                    </span>
                                 </form>
                             </td>
                         </tr>
@@ -112,7 +114,11 @@
     <script>
         $(document).ready(function () {
             $('#product-table-view').DataTable({
-                "iDisplayLength": 50
+                "iDisplayLength": 50,
+                "language": {
+                    "lengthMenu": "_MENU_ Records per page",
+                    "search": "Search:",
+                }
             });
         });
     </script>

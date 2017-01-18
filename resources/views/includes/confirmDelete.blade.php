@@ -4,14 +4,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete Parmanently</h4>
+                <h4 class="modal-title modal-title-delete">Delete Parmanently</h4>
             </div>
             <div class="modal-body">
                 <p>Are you sure about this ?</p>
             </div>
-            <div class="modal-footer">
+            <!--<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-danger" id="confirm">Delete</button>
+            </div>-->
+            <div class="wr_btn clearfix wr_btn_no_background">
+                <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
+                <a name="Reset" href="http://adapto.local/projects/create" class="btn_reset" id="Reset">Reset</a>
             </div>
         </div>
     </div>
@@ -23,7 +27,7 @@
         $message = $(e.relatedTarget).attr('data-message');
         $(this).find('.modal-body p').text($message);
         $title = $(e.relatedTarget).attr('data-title');
-        $(this).find('.modal-title').text($title);
+        $(this).find('.modal-title').html('<img src="{!! url('/img/bin.png') !!}" />'+$title);
 
         // Pass form reference to modal for submission on yes/ok
         var form = $(e.relatedTarget).closest('form');
@@ -35,3 +39,12 @@
         $(this).data('form').submit();
     });
 </script>
+
+<style>
+    .wr_btn_no_background{
+        background: none;
+    }
+    .modal-title-delete{
+        padding-left: 0px;
+    }
+</style>

@@ -6,7 +6,7 @@ body, html, ul, li, p, h1, h2, h3, h4, h5 {
 	font-family: 'Roboto Condensed', sans-serif;
 }
 .nav-side-menu li a, label {
-	text-transform: uppercase
+	/*text-transform: uppercase*/
 }
 input, select {
 	font-family: 'Droid Sans', sans-serif;

@@ -60,7 +60,7 @@
                         @endif
                         @if($address)
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Build Address</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Build address</label>
                             <div class="col-md-12 col-lg-10">
                                 <p>{!! $address->lot.', '.$address->no.', '.$address->street_name.', '.$address->town.', '.$address->state !!}</p>
                             </div>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Energy Consumption</label>
+                            <label for="_name" class="col-xs-12 col-lg-2 control-label">Energy consumption</label>
                             <div class="col-md-12 col-lg-10">
                                 <p>{!! $project->energy_consumption !!}<small>%</small></p>
                             </div>

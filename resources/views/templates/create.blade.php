@@ -38,40 +38,67 @@
                     <section class="col-md-8">
                         <section class="col-md-12">
                             <section class="row form-group">
-                                <section class="col-md-4">
+                                <section class="col-md-2" style="text-align: right">
                                     House
                                 </section>
-                                <section class="col-md-8">
+                                <section class="col-md-4 clearfix">
+                                    <input class="form-control required" id="house_watts_per_sqm"
+                                           name="house_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
+                                </section>
+                                <section class="col-md-2" style="text-align: right">
+                                    Terrace
+                                </section>
+                                <section class="col-md-4">
                                     <input class="form-control required" id="house_watts_per_sqm"
                                            name="house_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
                                 </section>
                             </section>
                             <section class="row form-group">
-                            <section class="col-md-4">
+                            <section class="col-md-2" style="text-align: right">
                                 Garage
                             </section>
-                            <section class="col-md-8">
+                            <section class="col-md-4">
+                                <input class="form-control required" id="garage_watts_per_sqm"
+                                       name="garage_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
+                            </section>
+                            <section class="col-md-2" style="text-align: right">
+                                Balcony
+                            </section>
+                            <section class="col-md-4">
                                 <input class="form-control required" id="garage_watts_per_sqm"
                                        name="garage_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
                             </section>
                             </section>
-                            <section class="row form-group">
-                            <section class="col-md-4">
+                            <section class="row form-group" style="text-align: right">
+                            <section class="col-md-2">
                                 Porch
                             </section>
-                            <section class="col-md-8">
+                            <section class="col-md-4">
+                                <input class="form-control required" id="porch_watts_per_sqm"
+                                       name="porch_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                            </section>
+                            <section class="col-md-2" style="text-align: right">
+                                Alfresco
+                            </section>
+                            <section class="col-md-4">
                                 <input class="form-control required" id="porch_watts_per_sqm"
                                        name="porch_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
                             </section>
                             </section>
-                            <section class="row form-group">
-                            <section class="col-md-4">
+                            <section class="row form-group" style="text-align: right">
+                            <section class="col-md-2">
                                 Total
                             </section>
-                            <section class="col-md-8">
+                            <section class="col-md-4">
                                 <input class="form-control required" id="total"
                                        name="total" aria-required="true" type="text" placeholder="Total" disabled>
                                 <input type="hidden" name="energy_rating" id="energy_rating" value="1">
+                            </section>
+                            <section class="col-md-2">
+
+                            </section>
+                            <section class="col-md-4">
+
                             </section>
                             </section>
                         </section>
