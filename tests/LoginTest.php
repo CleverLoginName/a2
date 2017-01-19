@@ -11,7 +11,7 @@ class LoginTest extends TestCase
     public function testLogin()
     {
         $this->visit('/login')
-            ->type('admin@seebo.com.au','email' )
+            ->type('admin@seebo.com.au','email')
             ->type('123','password')
             ->press('Login')
             ->seePageIs('/dashboard');
@@ -20,11 +20,11 @@ class LoginTest extends TestCase
     public function testLoginWithWrongUserNameOrPassword()
     {
         $this->visit('/login')
-            ->type('abc@seebo.com.au','email' )
+            ->type('abc@seebo.com.au','email')
             ->type('123','password')
             ->press('Login')
             ->seePageIs('/login')
-            ->see('These credentials do not match our records.');
+            ->see('Wrong username or password ,Please try again');
     }
 
 }

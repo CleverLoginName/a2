@@ -34,7 +34,7 @@
                         </select></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"><label>Watts Per SQM</label></section>
+                    <section class="col-md-2"><label>SQM</label></section>
                     <section class="col-md-8">
                         <section class="col-md-12">
                             <section class="row form-group">
@@ -49,8 +49,8 @@
                                     Terrace
                                 </section>
                                 <section class="col-md-4">
-                                    <input class="form-control required" id="house_watts_per_sqm"
-                                           name="house_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
+                                    <input class="form-control required" id="terrace_watts_per_sqm"
+                                           name="terrace_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -65,8 +65,8 @@
                                 Balcony
                             </section>
                             <section class="col-md-4">
-                                <input class="form-control required" id="garage_watts_per_sqm"
-                                       name="garage_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
+                                <input class="form-control required" id="balcony_watts_per_sqm"
+                                       name="balcony_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
                             </section>
                             </section>
                             <section class="row form-group" style="text-align: right">
@@ -81,8 +81,8 @@
                                 Alfresco
                             </section>
                             <section class="col-md-4">
-                                <input class="form-control required" id="porch_watts_per_sqm"
-                                       name="porch_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                                <input class="form-control required" id="alfresco_watts_per_sqm"
+                                       name="alfresco_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
                             </section>
                             </section>
                             <section class="row form-group" style="text-align: right">
@@ -92,13 +92,13 @@
                             <section class="col-md-4">
                                 <input class="form-control required" id="total"
                                        name="total" aria-required="true" type="text" placeholder="Total" disabled>
-                                <input type="hidden" name="energy_rating" id="energy_rating" value="1">
+
                             </section>
                             <section class="col-md-2">
-
+                                Rating
                             </section>
                             <section class="col-md-4">
-
+                                <input type="text" name="energy_rating" id="energy_rating" value="1" class="form-control required">
                             </section>
                             </section>
                         </section>
@@ -198,9 +198,12 @@
 
  function calTotal(){
      var total = 0;
-     total = (parseInt($( "#house_watts_per_sqm" ).val()) || 0)+
-             (parseInt($( "#garage_watts_per_sqm" ).val()) || 0)+
-             (parseInt($( "#porch_watts_per_sqm" ).val()) || 0);
+     total = (parseInt($( "#house_watts_per_sqm" ).val()*5) || 0)+
+             (parseInt($( "#garage_watts_per_sqm" ).val()*3) || 0)+
+             (parseInt($( "#porch_watts_per_sqm" ).val()*4) || 0)+
+             (parseInt($( "#terrace_watts_per_sqm" ).val()*4) || 0)+
+             (parseInt($( "#balcony_watts_per_sqm" ).val()*4) || 0)+
+             (parseInt($( "#alfresco_watts_per_sqm" ).val()*4) || 0);
      $('#total').val(total+'W Per SQM');
  }
         $( "#house_watts_per_sqm" ).keyup(function() {

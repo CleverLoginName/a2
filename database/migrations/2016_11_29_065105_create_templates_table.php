@@ -20,6 +20,9 @@ class CreateTemplatesTable extends Migration
             $table->integer('sqm_house');
             $table->integer('sqm_porch');
             $table->integer('sqm_garage');
+            $table->integer('sqm_terrace');
+            $table->integer('sqm_balcony');
+            $table->integer('sqm_alfresco');
             $table->softDeletes();
             $table->timestamps();
         });

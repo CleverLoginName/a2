@@ -22,58 +22,87 @@
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
                     <section class="col-md-2"><label>Template Name</label></section>
-                    <section class="col-md-6">
+                    <section class="col-md-8">
                     {!! Form::text('name',$template->name,['class'=>'form-control required','placeholder'=>"House Design Plan Template Name",'id'=>'name']) !!}</section>
                     <section class="col-md-2">
                         {!! Form::select('scale', ['200' => '1 : 200', '150' => '1 : 150', '100' => '1 : 100', '50' => '1 : 50'],$template->scale,['id'=>'scale','class'=>'form-control required']) !!}
                     </section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"></section>
-                    <section class="col-md-2"><label>Watt Per SQM</label></section>
-                    <section class="col-md-6">
+                    <section class="col-md-2"><label>SQM</label></section>
+                    <section class="col-md-8">
                         <section class="col-md-12">
                             <section class="row form-group">
-                                <section class="col-md-4">
+                                <section class="col-md-2">
                                     House
                                 </section>
-                                <section class="col-md-8">
+                                <section class="col-md-4">
                                     {!! Form::text('house_watts_per_sqm',$template->sqm_house,['class'=>'form-control required','placeholder'=>"5w Per SQM",'id'=>'house_watts_per_sqm']) !!}
                                 </section>
+                            <section class="row form-group">
+                                <section class="col-md-2">
+                                    Terrace
+                                </section>
+                                <section class="col-md-4">
+                                    {!! Form::text('terrace_watts_per_sqm',$template->terrace_watts_per_sqm,['class'=>'form-control required','placeholder'=>"5w Per SQM",'id'=>'terrace_watts_per_sqm']) !!}
+                                </section>
                             </section>
                             <section class="row form-group">
-                                <section class="col-md-4">
+                                <section class="col-md-2">
                                     Garage
                                 </section>
-                                <section class="col-md-8">
+                                <section class="col-md-4">
                                     {!! Form::text('garage_watts_per_sqm',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'garage_watts_per_sqm']) !!}
                                 </section>
+                                <section class="col-md-2">
+                                    Balcony
+                                </section>
+                                <section class="col-md-4">
+                                    {!! Form::text('balcony_watts_per_sqm',$template->balcony_watts_per_sqm,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'balcony_watts_per_sqm']) !!}
+                                </section>
                             </section>
                             <section class="row form-group">
-                                <section class="col-md-4">
+                                <section class="col-md-2">
                                     Porch
                                 </section>
-                                <section class="col-md-8">
+                                <section class="col-md-4">
                                     {!! Form::text('porch_watts_per_sqm',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"3w Per SQM",'id'=>'porch_watts_per_sqm']) !!}
+                                </section>
+                                <section class="col-md-2">
+                                    Alfresco
+                                </section>
+                                <section class="col-md-4">
+                                    {!! Form::text('alfresco_watts_per_sqm',$template->alfresco_watts_per_sqm,['class'=>'form-control required','placeholder'=>"3w Per SQM",'id'=>'alfresco_watts_per_sqm']) !!}
                                 </section>
                             </section>
                             <section class="row form-group">
-                                <section class="col-md-4">
+                                <section class="col-md-2">
                                     Total
                                 </section>
-                                <section class="col-md-8">
-                                    <span id="total">{!! intval($template->sqm_house)+intval($template->sqm_garage)+intval($template->sqm_porch) !!}</span>W
+                                <section class="col-md-4">
+                                    <span id="total">{!!
+                                    (intval($template->sqm_house)*5)+
+                                    (intval($template->sqm_garage)*3)+
+                                    (intval($template->sqm_porch)*4)+
+                                    (intval($template->terrace_watts_per_sqm)*4)+
+                                    (intval($template->balcony_watts_per_sqm)*4)+
+                                    (intval($template->alfresco_watts_per_sqm)*4)
+                                     !!}</span>W
 
-                                    <input type="hidden" name="energy_rating" id="energy_rating" value="1">
+                                </section>
+                                <section class="col-md-2">
+                                    Scale
+                                </section>
+                                <section class="col-md-4">
+                                    {!! Form::text('energy_rating',$template->energy_rating,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'energy_rating']) !!}
                                 </section>
                             </section>
                         </section>
                     </section>
                     <section class="col-md-2"></section>
                 </section>
-
+                </section>
                 <section class="row box-footer" id="form-footer">
                     <button type="submit"
                             class="btn add-item-btn">Edit Plans<img src="resources/images/spinning-circles.svg"
@@ -81,6 +110,7 @@
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
                     <a id="prod-frm-reset" href="{!! url('templates') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
+
                 </section>
             </form>
         </section>

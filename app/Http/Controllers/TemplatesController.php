@@ -71,6 +71,9 @@ class TemplatesController extends Controller
         $template->sqm_house = $request->get('house_watts_per_sqm');
         $template->sqm_porch = $request->get('porch_watts_per_sqm');
         $template->sqm_garage = $request->get('garage_watts_per_sqm');
+        $template->sqm_terrace = $request->get('terrace_watts_per_sqm');
+        $template->sqm_balcony = $request->get('balcony_watts_per_sqm');
+        $template->sqm_porch = $request->get('porch_watts_per_sqm');
         $template->save();
 
         Flash::success('Template Added', 'Template has been added successfully.');
@@ -296,6 +299,9 @@ class TemplatesController extends Controller
         $template->sqm_house = $request->get('house_watts_per_sqm');
         $template->sqm_porch = $request->get('porch_watts_per_sqm');
         $template->sqm_garage = $request->get('garage_watts_per_sqm');
+        $template->sqm_terrace = $request->get('terrace_watts_per_sqm');
+        $template->sqm_balcony = $request->get('balcony_watts_per_sqm');
+        $template->sqm_porch = $request->get('porch_watts_per_sqm');
         $template->save();
 
         Flash::success('Template Updated', 'Template has been updated successfully.');
