@@ -112,6 +112,18 @@ class ImportProductsController extends ImportController
                         $product->icon = $row[12];
                         $product->is_composite = false;
                         $product->save();
+
+                      /*  foreach (array_slice($row,13) as $key => $value) {
+                            //if (strpos($key, 'custom_field') !== false) {
+                                $custom_field_sub_category_id = substr($key, 13);
+                                $customData = new ProductCustomData();
+                                $customData->product_id = $product->id;
+                                $customData->custom_field_sub_category_id = $custom_field_sub_category_id;
+                                $customData->value = $value;
+                                $customData->save();
+                           // }
+                        }*/
+
 /*
                         foreach ($request->all() as $key => $value) {
                             if (strpos($key, 'custom_field') !== false) {

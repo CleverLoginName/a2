@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\ImportRawProductData;
 use App\Product;
 use App\ProductCategory;
+use App\ProductCustomData;
+use App\ProductCustomField;
 use App\ProductIcon;
 use App\ProductSubCategoryMap;
 use App\ProductSupplier;
@@ -195,6 +197,125 @@ class ImportRawProductDataController extends Controller
             $product->icon = $icon_id;
             $product->supplier_id = $supplier_id;
             $product->save();
+/*********************************************************************************************************/
+            if($importRawProductData->watts != 'NA') {
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Watts';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+
+                $productCustomData = new ProductCustomData();
+                $productCustomData->product_id = $product->id;
+                $productCustomData->product_custom_field_id = $productCustomFild->id;
+                $productCustomData->value = $importRawProductData->watts;
+                $productCustomData->save();
+            }
+            if($importRawProductData->lumen != 'NA') {
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Lumens';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+
+                $productCustomData = new ProductCustomData();
+                $productCustomData->product_id = $product->id;
+                $productCustomData->product_custom_field_id = $productCustomFild->id;
+                $productCustomData->value = $importRawProductData->lumen;
+                $productCustomData->save();
+            }
+            if($importRawProductData->style != 'NA') {
+            $productCustomFild = new ProductCustomField();
+            $productCustomFild->name = 'Style';
+            $productCustomFild->custom_field_type_id = 1;
+            $productCustomFild->is_mandatory = true;
+            $productCustomFild->product_sub_category_id = $sub_category_id;
+            $productCustomFild->save();
+
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->value = $importRawProductData->style;
+            $productCustomData->save();
+            }
+
+            if($importRawProductData->colour != 'NA') {
+            $productCustomFild = new ProductCustomField();
+            $productCustomFild->name = 'Colour';
+            $productCustomFild->custom_field_type_id = 1;
+            $productCustomFild->is_mandatory = true;
+            $productCustomFild->product_sub_category_id = $sub_category_id;
+            $productCustomFild->save();
+
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->value = $importRawProductData->colour;
+            $productCustomData->save();
+            }
+
+            if($importRawProductData->discount != 'NA') {
+            $productCustomFild = new ProductCustomField();
+            $productCustomFild->name = 'Discount %';
+            $productCustomFild->custom_field_type_id = 1;
+            $productCustomFild->is_mandatory = true;
+            $productCustomFild->product_sub_category_id = $sub_category_id;
+            $productCustomFild->save();
+
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->value = $importRawProductData->discount;
+            $productCustomData->save();
+            }
+
+            if($importRawProductData->width != 'NA') {
+            $productCustomFild = new ProductCustomField();
+            $productCustomFild->name = 'Width ';
+            $productCustomFild->custom_field_type_id = 1;
+            $productCustomFild->is_mandatory = true;
+            $productCustomFild->product_sub_category_id = $sub_category_id;
+            $productCustomFild->save();
+
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->value = $importRawProductData->width;
+            $productCustomData->save();
+            }
+
+            if($importRawProductData->height != 'NA') {
+            $productCustomFild = new ProductCustomField();
+            $productCustomFild->name = 'Height';
+            $productCustomFild->custom_field_type_id = 1;
+            $productCustomFild->is_mandatory = true;
+            $productCustomFild->product_sub_category_id = $sub_category_id;
+            $productCustomFild->save();
+
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->value = $importRawProductData->height;
+            $productCustomData->save();
+            }
+
+            if($importRawProductData->depth != 'NA') {
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Depth';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+
+                $productCustomData = new ProductCustomData();
+                $productCustomData->product_id = $product->id;
+                $productCustomData->product_custom_field_id = $productCustomFild->id;
+                $productCustomData->value = $importRawProductData->depth;
+                $productCustomData->save();
+            }
+            /****************************************************************************************/
 
             File::exists('uploads/products/'.$product->id) or File::makeDirectory('uploads/products/'.$product->id);
             File::exists('uploads/products/'.$product->id.'/originals') or File::makeDirectory('uploads/products/'.$product->id.'/originals');
