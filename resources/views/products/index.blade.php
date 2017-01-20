@@ -116,26 +116,38 @@
 
                         //return '<a href="">Demonstration<span><img class="tooltip" src="http://www.scriptol.com/images/apache.png"> <h3>How use my site</h3>The description with an image. </span></a>';
 
-                        return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12" style="display: none" id ="image_'+row.id+'"/><a href="#" class="product-link-hover" id ="'+row.id+'">View Image</a>';
+                        return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12" style="display: none" id ="image_'+row.id+'"/><a class="product-link-hover" id ="'+row.id+'">View Image</a>';
                         return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12 product-link-hover"/>';
                     }
                 },{
                     "targets": 7,
                      visible: true,
                     "data": function ( row, type, val, meta ) {
-                        return '<a class="action-btn btn-app" href="'+row.more_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Product"><i class="fa fa-folder-open-o green-font"></i></a>' +
-                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" id="2-edit-action" href="'+row.edit_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Product"><i class="fa fa-edit green-font"></i></a>'+
+                        return '<a class="action-btn btn-app" href="'+row.more_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="View product"><i class="fa fa-folder-open-o green-font"></i></a>' +
+                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" id="2-edit-action" href="'+row.edit_url+'" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit product"><i class="fa fa-edit green-font"></i></a>'+
                                 '<form method="GET" action="'+row.delete_url+'" accept-charset="UTF-8" style="display:inline">' +
-                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" data-placement="top" title="" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Product" data-message="Are you sure you want to delete this Product ?" data-original-title="Remove User"><i class="fa fa-times red-font"></i></a>' +
+                                '<a class="action-btn btn-app" data-product-id="'+row.id+'" data-placement="top" title="" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Product" data-message="Are you sure you want to delete this Product ?" data-original-title="Delete product"><i class="fa fa-times red-font"></i></a>' +
                                 '</form>';
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        //  console.log( nTd );
+                        $("a", nTd).tooltip();
                     }
                 } ],
                 pageLength:50
             });
             var table = $('#product_table').DataTable();
             $('#product_table tbody')
-                    .on( 'mouseenter', 'td', function () {
-                        if(table.cell(this).index().column == 6){
+                    .on( 'click', 'td', function () {
+                        if(table.cell(this).index().column == 6){console.info($(this).html());
+
+                            $(this).find("img").each(function() {
+                                $(this).css('display','block');
+
+                            });
+
+
+                            var img = $(this).html();
 
                         }
 /*

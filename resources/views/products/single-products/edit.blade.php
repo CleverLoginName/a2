@@ -97,7 +97,7 @@
                                 <div class="col-md-2"><label>Product Image</label></div>
                                 <div class="col-md-7">
                                     {!! Form::file('image',['id'=>'image','class'=>"form-control"]) !!}
-                                    <img id="blah" src="{!! asset($product->image) !!}" alt="your image" width="150px" />
+                                    <img id="blah" src="{!! asset($product->image) !!}" alt="your image" width="150px" style="margin-top: 15px"/>
                                     @if ($errors->has('image')) <p class="error_message">{{ $errors->first('image') }}</p> @endif
                                 </div>
                                 <div class="col-md-2"></div>
