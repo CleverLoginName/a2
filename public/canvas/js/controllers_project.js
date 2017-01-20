@@ -311,7 +311,7 @@ function printCanvas() {
                             +'</head>'
                                 +'<body id="print_boddy" class="print-body">'
                                     +'<div>'
-                                        +'<img class="image-print" src="img/img_logo.png"><br/><br/><br/>'
+                                        +'<img class="image-print" src="/img/img_logo.png"><br/><br/><br/>'
                                         +' <div class="braker-div"></div>'
                                     +'</div><br/>'
                                     +'<div>'
