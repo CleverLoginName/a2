@@ -308,7 +308,7 @@ class DummyDataSeeder extends Seeder
 //
 //        DB::table('product_catalogs')->insert(['name' => 'Electrical','description' => 'Electrical description']);
 //        DB::table('product_catalogs')->insert(['name' => 'Home Automation','description' => 'Home Automation description']);
-//        DB::table('product_catalogs')->insert(['name' => 'Interior Design','description' => 'Interior Design description']);
+    //        DB::table('product_catalogs')->insert(['name' => 'Interior Design','description' => 'Interior Design description']);
 //        DB::table('product_catalogs')->insert(['name' => 'Fittings and Fixtures','description' => 'Fittings and Fixtures description']);
 //
 //
@@ -452,7 +452,7 @@ class DummyDataSeeder extends Seeder
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-005.png', 'name' =>'AVC-005','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-006.png', 'name' =>'AVC-006','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-010.png', 'name' =>'AVC-010','category_id'=>1]);
-        DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-011.png', 'name' =>'AVC-011','category_id'=>1]);
+        DB::table('product_icons')->inserdasht(['path' =>'/img/icons/AVC-011.png', 'name' =>'AVC-011','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-012.png', 'name' =>'AVC-012','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-013.png', 'name' =>'AVC-013','category_id'=>1]);
         DB::table('product_icons')->insert(['path' =>'/img/icons/AVC-014.png', 'name' =>'AVC-014','category_id'=>1]);

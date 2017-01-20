@@ -59,13 +59,13 @@
         <ul class="nav nav-list tree hid white-background">
                 <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/projects/create") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">New</span>
                     </a>
                 </li>
                 <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/projects") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Search</span>
                     </a>
                 </li>
@@ -82,7 +82,7 @@
             @if(Auth::user()->can('create-products'))
                 <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/products/create") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">New</span>
                     </a>
                 </li>
@@ -90,7 +90,7 @@
             @if(Auth::user()->can('view-products'))
                 <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/products") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Search</span>
                     </a>
                 </li>@endif
@@ -108,13 +108,13 @@
         <ul class="nav nav-list tree hid white-background">
             <li>
                 <a class="main-menu-item sub-left-menu-item" id="Users" href="{!! url("/templates/create") !!}">
-                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                     <span class="main-menu-item-text sub-menu-item-text">New</span>
                 </a>
             </li>
             <li>
                 <a class="main-menu-item sub-left-menu-item" id="Users" href="{!! url("/templates") !!}">
-                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                     <span class="main-menu-item-text sub-menu-item-text">Search</span>
                 </a>
             </li>
@@ -132,19 +132,19 @@
         <ul class="nav nav-list tree hid white-background">
             <li>
                 <a class="main-menu-item sub-left-menu-item" id="Users" href="{!! url("/users/create") !!}">
-                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                     <span class="main-menu-item-text sub-menu-item-text">New</span>
                 </a>
             </li>
             <li>
                 <a class="main-menu-item sub-left-menu-item" id="Users" href="{!! url("/users") !!}">
-                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                     <span class="main-menu-item-text sub-menu-item-text">Search</span>
                 </a>
             </li>
             <li>
                 <a class="main-menu-item sub-left-menu-item" id="Users" href="{!! url("/users/roles") !!}">
-                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                    <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                     <span class="main-menu-item-text sub-menu-item-text">Roles</span>
                 </a>
             </li>
@@ -162,7 +162,7 @@
     @if(Auth::user()->can('advanced'))
     <li class="products main-left-menu-item">
         <a class="main-menu-item tree-toggle" id="Products">
-            <img class="main-menu-icon" src="{{ URL::asset('resources/images/products_ico_white.png') }}">
+            <img class="main-menu-icon" src="{{ URL::asset('resources/images/white_settings.png') }}">
             <span class="main-menu-item-text">Advanced</span>
             <span class="menu-selected-item"></span>
         </a>
@@ -171,7 +171,7 @@
             @if(Auth::user()->can('view-products'))
                 <!--<li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/custom-fields") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Custom Fields</span>
                     </a>
                 </li>-->
@@ -179,7 +179,7 @@
             @if(Auth::user()->can('create-products'))
                 <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/data-import") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Data Import</span>
                     </a>
                 </li>
@@ -187,7 +187,7 @@
             @if(Auth::user()->can('view-products'))
                <!-- <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/manage") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Manage</span>
                     </a>
                 </li>-->
@@ -195,7 +195,7 @@
             @if(Auth::user()->can('view-products'))
               <!--  <li>
                     <a class="main-menu-item sub-left-menu-item" id="Products" href="{!! url("/advanced/reset") !!}">
-                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}">
+                        <img class="main-menu-icon" src="{{ URL::asset('resources/images/62.png') }}" style="width:15px;height:15px">
                         <span class="main-menu-item-text sub-menu-item-text">Reset System</span>
                     </a>
                 </li>-->

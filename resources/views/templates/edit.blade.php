@@ -95,7 +95,22 @@
                                     Scale
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('energy_rating',$template->energy_rating,['class'=>'form-control required','placeholder'=>"Scale",'id'=>'energy_rating']) !!}
+                                    {!! Form::select('energy_rating', [
+                                    '1' => '1',
+                                    '2' => '2',
+                                    '3' => '3',
+                                    '4' => '4',
+                                    '4.5' => '4.5',
+                                    '5' => '5',
+                                    '5.5' => '5.5',
+                                    '6' => '6',
+                                    '6.5' => '6.5',
+                                    '7' => '7',
+                                    '7.5' => '7.5',
+                                    '8' => '8',
+                                    '8.5' => '8.5'
+                                     ],$template->scale,['id'=>'scale','class'=>'form-control required']) !!}
+
                                 </section>
                             </section>
                         </section>

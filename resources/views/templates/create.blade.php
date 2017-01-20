@@ -98,7 +98,24 @@
                                 Rating
                             </section>
                             <section class="col-md-4">
-                                <input type="text" name="energy_rating" id="energy_rating" value="1" class="form-control required">
+                                <select class="form-control required"
+                                        id="energy_rating" name="energy_rating" aria-required="true"
+                                        aria-invalid="true">
+                                    <option value="1" selected="selected">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3" >3</option>
+                                    <option value="4" >4</option>
+                                    <option value="4.5" >4.5</option>
+                                    <option value="5" >5</option>
+                                    <option value="5.5" >5.5</option>
+                                    <option value="6" >6</option>
+                                    <option value="6.5" >6.5</option>
+                                    <option value="7" >7</option>
+                                    <option value="7.5" >7.5</option>
+                                    <option value="8" >8</option>
+                                    <option value="8.5" >8.5</option>
+                                </select>
+
                             </section>
                             </section>
                         </section>

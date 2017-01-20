@@ -20,23 +20,44 @@
 
 
                     <div class="form-group">
-                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - House</label>
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - House</label>
                         <div class="col-md-12 col-lg-10">
                             <p>{!! $template->sqm_house !!}</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - Garage</label>
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - Garage</label>
                         <div class="col-md-12 col-lg-10">
                             <p>{!! $template->sqm_garage !!}</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Watt Per SQM - Porch</label>
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - Porch</label>
                         <div class="col-md-12 col-lg-10">
                             <p>{!! $template->sqm_porch !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - Terrace</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_terrace !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - Balcony</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_balcony !!}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_name" class="col-xs-12 col-lg-2 control-label">Area( SQM ) - Alfresco</label>
+                        <div class="col-md-12 col-lg-10">
+                            <p>{!! $template->sqm_alfresco !!}</p>
                         </div>
                     </div>
 
@@ -50,7 +71,7 @@
             </div>
         </div>
         <div class="col-md-12 related_products" >
-            <h4>Related Products</h4>
+            <h4>Related Plans</h4>
             @foreach($plans as $plan)
             <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
                 <div class="product">

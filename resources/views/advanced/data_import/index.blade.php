@@ -27,7 +27,7 @@
                                                class="img-responsive"/>
             </div>
             <div class="info-img-wrapper">
-                <h3><img src="{{ URL::asset('resources/images/cus_logo.png') }}" class="img-responsive"
+                <h3><img src="{{ URL::asset('resources/images/black_settings.png') }}" class="img-responsive"
                          style="width:60%;margin:0 auto;"/></h3>
             </div>
         </section>
@@ -40,7 +40,7 @@
     </a>
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
-                                           src="{{ URL::asset('resources/images/products_ico_black.png') }}"></span><span
+                                           src="{{ URL::asset('resources/images/black_settings.png') }}"></span><span
                 class="breadcrumb-text">Data-Import</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 

@@ -146,6 +146,10 @@
                     .on( 'click', 'td', function () {
                         if(table.cell(this).index().column == 6){console.info($(this).html());
 
+                            $("#product_table tbody td").find("img").each(function() {
+                                $(this).css('display','none');
+
+                            });
                             $(this).find("img").each(function() {
                                 $(this).css('display','block');
 
