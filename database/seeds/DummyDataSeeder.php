@@ -75,6 +75,18 @@ class DummyDataSeeder extends Seeder
         $new_products->description = "create-products";
         $new_products->save();
 
+        $new_products = new \App\Permission();
+        $new_products->name = "create-templates";
+        $new_products->display_name = "create-templates";
+        $new_products->description = "create-templates";
+        $new_products->save();
+
+        $new_products = new \App\Permission();
+        $new_products->name = "create-user";
+        $new_products->display_name = "create-user";
+        $new_products->description = "create-user";
+        $new_products->save();
+
         $new_plans = new \App\Permission();
         $new_plans->name = "create-plans";
         $new_plans->display_name = "create-plans";
@@ -190,6 +202,18 @@ class DummyDataSeeder extends Seeder
         $view_products->description = "view-products";
         $view_products->save();
 
+        $view_products = new \App\Permission();
+        $view_products->name = "view-templates";
+        $view_products->display_name = "view-templates";
+        $view_products->description = "view-templates";
+        $view_products->save();
+
+        $view_products = new \App\Permission();
+        $view_products->name = "view-user";
+        $view_products->display_name = "view-user";
+        $view_products->description = "view-user";
+        $view_products->save();
+
         $view_plans = new \App\Permission();
         $view_plans->name = "view-plans";
         $view_plans->display_name = "view-plans";
@@ -219,10 +243,15 @@ class DummyDataSeeder extends Seeder
         $view_plans->display_name = "Manage Advanced";
         $view_plans->description = "Manage Advanced";
         $view_plans->save();
+        $view_plans = new \App\Permission();
+        $view_plans->name = "manage-user-roles";
+        $view_plans->display_name = "manage-user-roles";
+        $view_plans->description = "manage-user-roles";
+        $view_plans->save();
 
 
-        DB::table('permission_role')->insert(
-            [['permission_id' => 1,'role_id' => 1],
+        DB::table('permission_role')->insert([
+            ['permission_id' => 1,'role_id' => 1],
             ['permission_id' => 2,'role_id' => 1],
             ['permission_id' => 3,'role_id' => 1],
             ['permission_id' => 4,'role_id' => 1],
@@ -248,7 +277,39 @@ class DummyDataSeeder extends Seeder
             ['permission_id' => 24,'role_id' => 1],
             ['permission_id' => 25,'role_id' => 1],
             ['permission_id' => 26,'role_id' => 1],
-            ['permission_id' => 27,'role_id' => 1]]
+            ['permission_id' => 27,'role_id' => 1],
+            ['permission_id' => 28,'role_id' => 1],
+            ['permission_id' => 29,'role_id' => 1],
+            ['permission_id' => 30,'role_id' => 1],
+
+            ['permission_id' => 1,'role_id' => 2],
+            ['permission_id' => 2,'role_id' => 2],
+            ['permission_id' => 5,'role_id' => 2],
+            ['permission_id' => 6,'role_id' => 2],
+            ['permission_id' => 7,'role_id' => 2],
+            ['permission_id' => 8,'role_id' => 2],
+            ['permission_id' => 9,'role_id' => 2],
+            ['permission_id' => 10,'role_id' => 2],
+            ['permission_id' => 11,'role_id' => 2],
+            ['permission_id' => 12,'role_id' => 2],
+            ['permission_id' => 13,'role_id' => 2],
+            ['permission_id' => 14,'role_id' => 2],
+            ['permission_id' => 15,'role_id' => 2],
+            ['permission_id' => 16,'role_id' => 2],
+            ['permission_id' => 17,'role_id' => 2],
+            ['permission_id' => 18,'role_id' => 2],
+            ['permission_id' => 19,'role_id' => 2],
+            ['permission_id' => 20,'role_id' => 2],
+            ['permission_id' => 21,'role_id' => 2],
+            ['permission_id' => 22,'role_id' => 2],
+            ['permission_id' => 23,'role_id' => 2],
+            ['permission_id' => 24,'role_id' => 2],
+            ['permission_id' => 25,'role_id' => 2],
+            ['permission_id' => 26,'role_id' => 2],
+            ['permission_id' => 27,'role_id' => 2],
+            ['permission_id' => 28,'role_id' => 2],
+            ['permission_id' => 30,'role_id' => 2]
+            ]
         );
 
         $user = new User();

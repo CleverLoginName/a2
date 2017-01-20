@@ -233,6 +233,16 @@
             calTotal();
         });
 
+        $( "#terrace_watts_per_sqm" ).keyup(function() {
+            calTotal();
+        });
+        $( "#balcony_watts_per_sqm" ).keyup(function() {
+            calTotal();
+        });
+        $( "#alfresco_watts_per_sqm" ).keyup(function() {
+            calTotal();
+        });
+
 
     </script>
 @stop

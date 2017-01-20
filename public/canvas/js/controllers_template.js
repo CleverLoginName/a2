@@ -274,7 +274,7 @@ function printCanvas() {
 
     var windowContent = '<!DOCTYPE html>'
                         +'<html>'
-                            +'<head><title>Bill Of Mastitis</title>'
+                            +'<head><title>Bill Of Materials</title>'
                                 +'<style>'
                                     +'.print-bom-hedder{'
                                         +' background-color: #e2383f !important;'

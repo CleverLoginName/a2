@@ -27,7 +27,7 @@
         $message = $(e.relatedTarget).attr('data-message');
         $(this).find('.modal-body p').text($message);
         $title = $(e.relatedTarget).attr('data-title');
-        $(this).find('.modal-title').html('<img src="{!! url('/img/bin.png') !!}" />'+$title);
+        $(this).find('.modal-title').html('<img src="{!! url('/img/bin.png') !!}" /> '+$title);
 
         // Pass form reference to modal for submission on yes/ok
         var form = $(e.relatedTarget).closest('form');
@@ -47,4 +47,6 @@
     .modal-title-delete{
         padding-left: 0px;
     }
+    .button.close {font-size :38px}
+    .modal-header .close {margin-top: -38px, margin-right:38px}
 </style>
