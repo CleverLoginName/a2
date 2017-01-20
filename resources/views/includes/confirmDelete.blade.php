@@ -14,8 +14,8 @@
                 <button type="button" class="btn btn-danger" id="confirm">Delete</button>
             </div>-->
             <div class="wr_btn clearfix wr_btn_no_background">
-                <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                <a name="Reset" href="http://adapto.local/projects/create" class="btn_reset" id="Reset">Reset</a>
+                <input name="Save" type="submit" class="btn_save"  id="confirm" value="Yes">
+                <a name="Reset" data-dismiss="modal" aria-hidden="true" class="btn_reset" id="Reset">No</a>
             </div>
         </div>
     </div>
@@ -31,11 +31,11 @@
 
         // Pass form reference to modal for submission on yes/ok
         var form = $(e.relatedTarget).closest('form');
-        $(this).find('.modal-footer #confirm').data('form', form);
+        $(this).find('.wr_btn_no_background #confirm').data('form', form);
     });
 
     <!-- Form confirm (yes/ok) handler, submits form -->
-    $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
+    $('#confirmDelete').find('.wr_btn_no_background #confirm').on('click', function(){
         $(this).data('form').submit();
     });
 </script>
