@@ -77,6 +77,11 @@
 
 
     {{ Html::style('resources/css/datatables/dataTables.bootstrap.css') }}
+    <style>
+        .td img{
+            min-width: 100px !important;
+        }
+    </style>
 @stop
 @section('post-js')
     {{ Html::script('resources/js/plugins/datatables/jquery.dataTables.js') }}
@@ -116,7 +121,7 @@
 
                         //return '<a href="">Demonstration<span><img class="tooltip" src="http://www.scriptol.com/images/apache.png"> <h3>How use my site</h3>The description with an image. </span></a>';
 
-                        return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12" style="display: none" id ="image_'+row.id+'"/><a class="product-link-hover" id ="'+row.id+'">View Image</a>';
+                        return '<img src="'+row.image+'" alt="'+row.name+'" style="display: none;width: 100px;" id ="image_'+row.id+'"/><a class="product-link-hover" id ="'+row.id+'">View Image</a>';
                         return '<img src="'+row.image+'" alt="'+row.name+'" class="col-md-12 product-link-hover"/>';
                     }
                 },{

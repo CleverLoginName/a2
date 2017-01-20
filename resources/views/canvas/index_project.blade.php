@@ -383,7 +383,7 @@
         </div>
         <div class="headerDiv second">
 
-			{!! $address->street_name.' / '.$address->no.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}
+			{!! $address->street_name.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}
         </div>
         <div class="headerDiv third">
                 <img src="/img/adopto.png" width="90"/>

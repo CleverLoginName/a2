@@ -75,7 +75,6 @@ class ProjectsController extends Controller
             'town'    => 'required',
             'postal_code'    => 'required',
             'state'    => 'required',
-            'lot'    => 'required',
             'title_1'    => 'required',
             'first_name_1'    => 'required',
             'last_name_1'    => 'required',
@@ -86,9 +85,15 @@ class ProjectsController extends Controller
             'state'    => 'required',
             'consultant'    => 'required',
             'template'    => 'required',
-            'energy_consumption'    => 'required'
+            'energy_consumption'    => 'required',
+            'street_name'    => 'required'
         );
-        session(["email_1"=>$request->get('email_1'),"email_2"=>$request->get('email_2')]);
+        session([
+            "email_1"=>$request->get('email_1'),
+            "email_2"=>$request->get('email_2'),
+            "lot"=>$request->get('lot'),
+            "no_unit"=>$request->get('no_unit')
+        ]);
         $validator = Validator::make($request->all(), $rules);
 
         $validator->after(function($validator) {
@@ -97,6 +102,10 @@ class ProjectsController extends Controller
             }
             if ($this->email_exists(session('email_2'))) {
                 $validator->errors()->add('email_2', 'Email 2 Already in the DB');
+            }
+            if (empty(session('lot'))&empty(session('no_unit'))) {
+
+                $validator->errors()->add('lot', 'Lot # or No/Unit is required');
             }
         });
 
@@ -290,12 +299,22 @@ class ProjectsController extends Controller
             'job'    => 'required',
             'consultant'    => 'required',
             'template'    => 'required',
-            'energy_consumption'    => 'required'
+            'energy_consumption'    => 'required',
+            'street_name'    => 'required'
         );
 
-        session(["email_1"=>$request->get('email_1'),"email_2"=>$request->get('email_2')]);
+        session([
+            "email_1"=>$request->get('email_1'),
+            "email_2"=>$request->get('email_2'),
+            "lot"=>$request->get('lot'),
+            "no_unit"=>$request->get('no_unit')
+        ]);
+
         $validator = Validator::make($request->all(), $rules);
 
+        if (empty(session('lot'))&empty(session('no_unit'))) {
+            $validator->errors()->add('lot', 'Lot # or No/Unit is required');
+        }
 
         if ($validator->fails())
             return Redirect::to('/projects/'.$id.'/edit')

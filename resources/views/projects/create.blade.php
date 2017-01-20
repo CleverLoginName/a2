@@ -10,7 +10,7 @@
                 {{ Form::hidden('_token',  csrf_token() , array('id' => '_token')) }}
                 {{ Form::hidden('consultant_id', null, array('id' => 'consultant_id')) }}
                 {{ Form::hidden('template_id', null, array('id' => 'template_id')) }}
-                <section class="row form-group">
+                <!--<section class="row form-group">
                     <section class="col-md-12">
                         @if ($errors->has())
                             <div class="alert alert-danger">
@@ -20,7 +20,7 @@
                             </div>
                         @endif
                     </section>
-                </section>
+                </section>-->
                 <section class="row form-group ">
                     <section class="col-md-2"><label>Job # / Consultant</label></section>
                     <section class="col-md-2 @if ($errors->has('job')) has-error @endif">
@@ -96,11 +96,10 @@
                     <section class="col-md-2"><label>Build Address</label></section>
                     <section class="col-md-2 @if ($errors->has('lot')) has-error @endif">
                         {!! Form::text('lot',null,['class'=>'form-control required','placeholder'=>"Lot#",'id'=>'lot']) !!}
-                        @if ($errors->has('lot')) <p class="error_message">The lot # field is required</p> @endif
+                        @if ($errors->has('lot')) <p class="error_message">Lot # or No/Unit is required</p> @endif
                     </section>
-                    <section class="col-md-2 @if ($errors->has('no_unit')) has-error @endif">
+                    <section class="col-md-2 @if ($errors->has('lot')) has-error @endif">
                         {!! Form::text('no_unit',null,['class'=>'form-control required','placeholder'=>"No/Unit",'id'=>'no_unit']) !!}
-                        @if ($errors->has('lot')) <p class="error_message">The no/unit field is required</p> @endif
                     </section>
                     <section class="col-md-6 @if ($errors->has('street_name')) has-error @endif">
                         {!! Form::text('street_name',null,['class'=>'form-control required','placeholder'=>"Street Name",'id'=>'street_name']) !!}
