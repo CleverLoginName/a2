@@ -125,8 +125,18 @@ function CanvasItem (){
     var objBorderEndY;
 
     this.scalerSize = 10;
+    this.watts ;
     this.rotation = 0; /* in radians. Range is 0 - 2pi */
 }
+
+CanvasItem.prototype.getWatts = function(){
+    return this.watts;
+}
+
+CanvasItem.prototype.setWatts = function(watts){
+    this.watts = watts;
+}
+
 
 CanvasItem.prototype.getUniqueItemID = function(){
     return this.uid;

@@ -50,8 +50,8 @@ var MouseButtonEnum = {
 var isTemplate = true;
 var planID = -1;
 var project_pack_list = []; //array of packs in the project
-var project_bom_dict = {};
-var project_bom_dict_std_inc = {};
+var project_bom_dict = {}; 
+var project_bom_dict_std_inc = {}; 
 //------------------------------
 
 var lightBulbArr = []; /* Holds the light bulbs */
@@ -269,7 +269,7 @@ function mouseDoubleClick(e){
  *
  * When draw - it marks the starting points to draw the object
  * When drag and scale - it selects the object
- *
+ * 
  *  */
 function mouseDown(e){
 	fixWhich(e);
@@ -284,7 +284,7 @@ function mouseDown(e){
 	if (toolAction == ToolActionEnum.ERASE){		
 		var erPnt = getReverseConvertedPoint({x:startX, y:startY});
 		eraserSeg = new Eraser();
-		eraserSeg.setErasePoints(erPnt.x, erPnt.y);
+		eraserSeg.setErasePoints(erPnt.x, erPnt.y);	
 	}
 
 	if (toolAction == ToolActionEnum.DRAW){
@@ -357,7 +357,7 @@ function mouseDown(e){
 		// 		offsetY = (selObj.getObjEndY() - (startY / curZoom));
 		// 	}else if (selObj.getType() == ObjectType.ERASER){
 		// 		offsetX = (selObj.getObjStartX() - (startX / curZoom));
-		// 		offsetY = (selObj.getObjStartY() - (startY / curZoom));
+		// 		offsetY = (selObj.getObjStartY() - (startY / curZoom));				
 		// 	} else {
 		// 		offsetX = (selObj.getObjStartX() - (startX / curZoom));
 		// 		offsetY = (selObj.getObjStartY() - (startY / curZoom));
@@ -383,7 +383,7 @@ function mouseDown(e){
 			scaleDirection = scaleObj.getScaleDirection(pnt.x, pnt.y);
 			if (scaleDirection != null){
 				changeObj = new ChangeObject(scaleObj); /* Scaling of object, so record the change */
-
+				
 				clickX = pnt.x;
 				clickY = pnt.y;
 				if (scaleDirection == ObjectDirection.NE){
@@ -478,11 +478,11 @@ function mouseMove(e){
 
 	var w,h;
 
-	if (toolAction == ToolActionEnum.ERASE){
+	if (toolAction == ToolActionEnum.ERASE){		
 		if (mouseStatus == MouseStatusEnum.DOWN) {
 			var erPnt = getReverseConvertedPoint({x:endX, y:endY});
 			eraserSeg.setErasePoints(erPnt.x, erPnt.y);
-		}
+		}		
 	}
 	
 	if (mouseStatus == MouseStatusEnum.DRAW){
@@ -513,7 +513,7 @@ function mouseMove(e){
 		// }
 		
 		rulerOffsetX = rulerOrigOffsetX+ (endX / curZoom - clickX);
-		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);
+		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);	
 
 		var minOffsetX = -1;
 		var minOffsetY = -1;
@@ -607,7 +607,7 @@ function mouseUp(e){
 				currentObj.setWallThickness(wallThickness);
 			} else if (drawObjectType == ObjectType.CONT_WALL){
 				//Wall drawing code moved to mouseup
-
+				
 			} else if (drawObjectType == ObjectType.LIGHT_BULB){
 				/*	currentObj = new LightBulb();
 					currentObj.setCoordinates(endX_fixed,endY_fixed);
@@ -1172,6 +1172,14 @@ function drawLightSwitch(x,y,r,targetContext,w,h,path){
     targetContext.drawImage(img, x, y, w, h);
 }
 
+
+function drawProduct(x,y,r,targetContext,w,h,path){
+    var img = document.createElement('img');
+    img.src = path;
+    targetContext.strokeStyle = '#000000';
+    targetContext.drawImage(img, x, y, w, h);
+}
+
 /* Draws light bulb connections from a switch */
 function drawWiresFromSwitchOrBulbToConnectedLightBulbs(rootObj, targetContext){
 	// var curZoom = this.zoom;
@@ -1238,7 +1246,7 @@ function drawText(obj, targetContext, sX, sY, eX, eY){
 			if (minWidth < valN){
 					minWidth = valN;
 				}
-
+            
     }
 	obj.setMinWidth(minWidth);
 	wrapText(targetContext,drawText,sX, sY,eX-sX,parseInt(fontSize)*zoom,-parseInt(fontSize)*zoom-5*zoom,obj);
@@ -1265,7 +1273,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight,boxHight,obj) {
           var metrics = ctx.measureText(testLine);
           var testWidth = metrics.width;
 		  if (testWidth > maxWidth && n > 0)  {
-
+           	
             lines.push(line);
             line = words[n] + ' ';
           }
@@ -1302,16 +1310,16 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight,boxHight,obj) {
 		ctx.fillRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
 		ctx.strokeStyle = 'red';
 		ctx.strokeRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
-
+		
 
 		y += lineHeight;
         ctx.fillStyle = "black";
         for (var index = 0; index < lines.length; index++) {
           var line = lines[index];
           ctx.fillText(line, x, y+lineHeight*index);
-
+    
         }
-
+        
       }
 
 
@@ -1385,7 +1393,7 @@ function drawAllObjects(){
 	}
 
 	if (eraserSeg != null) {
-		drawEraserObj(eraserSeg);
+		drawEraserObj(eraserSeg);		
 	}
 
 	drawScaleFactorDetails();
@@ -1540,6 +1548,8 @@ function drawObjectOnCanvas(obj){
         drawLightSwitch(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath());
     } else if (obj.getType() == ObjectType.TEXT){
 		drawText(obj,contextOrig,sX,sY,eX,eY);		
+	}else if(obj.getType() == ObjectType.PRODUCT){
+		drawProduct(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath());
 	}
 	
 	contextOrig.restore();
@@ -1617,7 +1627,7 @@ function drawLightsOnCanvas(obj){
 		var coor = obj.getCoordinates();
 		var rad = obj.getRadius();
 		// ray casts removed for now
-		// drawRayCasts(obj, contextOrig);
+		// drawRayCasts(obj, contextOrig); 
 		// drawWiresFromSwitchOrBulbToConnectedLightBulbs(obj, contextOrig);
 	} 
 }
@@ -1655,7 +1665,7 @@ function drawConnections(rootObj) {
             tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinate.x, rootCoordinate.y,bulbCoordinates.x,bulbCoordinates.y);
 
 			// S like curve ----start
-// 			var offset = Math.sqrt( (EndX - rootX)*(EndX - rootX) +  (EndY - rootY)*(EndY - rootY)) * curZoom;
+// 			var offset = Math.sqrt( (EndX - rootX)*(EndX - rootX) +  (EndY - rootY)*(EndY - rootY)) * curZoom;	
 // 			offset /= 2;
 //			contextOrig.bezierCurveTo(rootX-offset, rootY-offset, EndX+offset ,EndY+offset, EndX, EndY);
 			// S like curve ----end

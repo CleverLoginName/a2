@@ -7,6 +7,7 @@
     {{ Html::style('canvas/css/left-menu.css') }}
     {{ Html::style('canvas/css/right-click-menu.css') }}
     {{ Html::style('canvas/css/address-bar.css') }}
+    {{ Html::style('canvas/css/popup-window.css') }}
     {{ Html::style('canvas/lib/jquery-ui.min.css') }}
     {{ Html::style('canvas/bootstrap/dist/css/bootstrap.min.css') }}
     {{ Html::style('canvas/bootstrap/css/bootstrap.min.css') }}
@@ -58,37 +59,37 @@
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px;"  >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 text-in-side-menue title">Max Energy :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="max-energy">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="max-energy">0 watts</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px;" >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 col-xs-6 text-in-side-menue title" >Design Energy :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="design-energy">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="design-energy">0 watts</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px; margin-bottom:20px;" >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 col-xs-6 text-in-side-menue title">Variation cost :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="variation-cost">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="variation-cost">0 $</div>
 						</div>
 					</div>
 			</div>
-
-
-
-
-
-
-
-
-
-
-
+            
+            
+            
+            
+            
+            
+            
+                
+                
+                
+                
 			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body" style="overflow: auto" >
 				<div class="panel panel-default inner-class cat-1 hide-catelog" id="main-0">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="0">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -99,34 +100,36 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="panel panel-default inner-class cat-2 hide-catelog" id="main-1">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="1">
-
+								
 							</div>
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
-						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" id="catlog-2">
-							<ul class="level-2" style="">
-
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
+							<ul class="level-2" style=""  id="catlog-1">
+								
 							</ul>
 
 						</div>
 					</div>
 				</div>
+
 				<div class="panel panel-default inner-class cat-3 hide-catelog" id="main-2">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="2">
-
+								
 							</div>
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
-						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" id="catlog-3">
-							<ul class="level-2" style="">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
+							<ul class="level-2" style=""  id="catlog-2">
 							</ul>
 						</div>
 					</div>
@@ -136,9 +139,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="3">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -154,9 +157,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="4">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -172,9 +175,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="5">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -190,9 +193,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="6">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -208,9 +211,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="7">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -226,9 +229,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="8">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -244,9 +247,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="9">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -262,9 +265,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="10">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -280,9 +283,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="11">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -298,9 +301,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="12">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -316,9 +319,9 @@
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="13">
-
+								
 							</div>
-
+						
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
@@ -333,6 +336,47 @@
 			</div>
 		</div>
 	</div>
+        
+        <!--Popup -->
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <br><br><br>
+                <div class="popcontainer">
+                    <header>
+                        <img id="imgProduct"  style="height: 250px;width:250px;"/>
+                    </header>
+                    <nav>
+                        <input type="text" name="smname" id="smname"  value="tttt" style="width: 300px;color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" width="100%"/>
+                        <br>
+                        Product Description : <input type="text" name="productDescription" id="productDescription"  value="tttt" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                    </nav>
+                    <article>
+
+                        Supplier Name :<input type="text" name="suppName" id="suppName"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Colour(s) :
+                        <br>
+                        Style(s) :<input type="text" name="productStyle" id="productStyle"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Type :<input type="text" name="productType" id="productType"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Energy Rating or Watts :<input type="text" name="productWatt" id="productWatt"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Size:
+                    </article>
+                    <footer>
+                        $<input type="text" name="builderproductPrice" id="builderproductPrice"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" size=""/>*(inc GST)
+                        <span id="builderproductPrice" v/>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+        <!-- -->
 
 	<div  style="vertical-align: bottom;" class="clearfix ">
 		<div class="panel panel-default bom-medder bom-hide" id="bom-area">
@@ -700,17 +744,17 @@
 	</div>
 	</div>
 	<div id="item-popup" class="item-popup " title="Connect Lights">
-		<img src="/img/icon_link_alt.png" class="image-background">
+		<img src="/img/DesignCanvassCreateSwitchWire.png" class="image-background">
 	</div>
 	<div id="item-popup1" class="item-popup " title="Product Information">
-		<img src="/img/icon_info_alt.png" class="image-background">
+		<img src="/img/DesignCanvassClose.png" class="image-background">
 	</div>
 	<div id="item-popup2" class="item-popup " title="Close">
-		<img src="/img/icon_close_alt2.png" class="image-background">
+		<img src="/img/DesignCanvassProductInfo.png" class="image-background">
 	</div>
 
 	<div id="delete-item" class="item-popup " title="Remove Connection">
-		<img src="/img/icon_blocked.png" class="image-background">
+		<img src="/img/DesignCanvassRemoveSwitchWire.png" class="image-background">
 	</div>
 </div>
 
@@ -746,7 +790,7 @@
 					<button type="button" id="can-tool-btn-save" class="btn btn-primary">Save</button>
 				</td>
 			</tr>
-		</tbody>
+		</tbody>			
 	</table>
 </span>
 
@@ -785,6 +829,13 @@
 
 		$('.template_modal').modal('show');
 	});
+	
+	clientName = "N/A";
+	clientAdddress = "N/A";
+	projectName = "N/A";
+	consultentName = "N/A";
+	printVersion = "N/A";
+
 </script>
 
 

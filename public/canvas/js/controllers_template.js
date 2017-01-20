@@ -152,22 +152,203 @@ $("#product-container-Prise").on("click", ".single-item", function (e) {
     $("#drag").trigger("click");
 });
 
+function getFullCanvas(){
+    var fullCanvas = document.createElement('canvas');
+    var fullctx = fullCanvas.getContext('2d');
+    if (backgroundImage != undefined){
+        fullCanvas.width = backgroundImage.width;
+        fullCanvas.height = backgroundImage.height;
+        fullctx.drawImage(backgroundImage, 0, 0);
+    } else {
+        fullCanvas.width = canvasOrig.width;
+        fullCanvas.height = canvasOrig.height;
+    }
+
+    //Eraser sould be drawen before products
+    //todo remove eraser drawing duplication
+    for (var index = 0; index < drawElements.length; index++) {
+        var obj = drawElements[index];
+        if (obj.getType() == ObjectType.ERASER){
+            fullctx.beginPath();
+            fullctx.lineWidth = obj.eraserSize;		
+            fullctx.strokeStyle = obj.eraserColor;
+            fullctx.lineJoin = fullctx.lineCap = obj.eraserType;
+            var erPnt;
+            for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
+                erPnt = obj.eraserPointsArr[iy];
+                if ( iy == 0){				
+                    fullctx.moveTo(erPnt.x, erPnt.y);
+                } else {	
+                    fullctx.lineTo(erPnt.x, erPnt.y);
+                }
+            }
+            fullctx.stroke();	
+        }
+    }
+
+
+    for (var index = 0; index < drawElements.length; index++) {
+        var obj = drawElements[index];
+        
+        if (!(obj instanceof CanvasItem)) continue;
+
+		var sX = obj.getObjStartX();
+		var sY = obj.getObjStartY();
+		var eX = obj.getObjEndX();
+		var eY = obj.getObjEndY();
+
+        if (obj.getType() == ObjectType.SQUARE){
+            drawSquare(sX , sY , eX , eY , fullctx);
+        } else if(obj.getType() == ObjectType.CIRCLE){
+            drawCircle(sX , sY , eX , eY , fullctx);
+        } else if (obj.getType() == ObjectType.WALL){
+            drawWall(sX , sY , eX , eY , obj.getWallThickness(), fullctx);
+        } else if (obj.getType() == ObjectType.CONT_WALL){
+            drawContWall(obj.getVerticesArr(), fullctx);
+        } else if (obj.getType() == ObjectType.LIGHT_BULB){
+            var rad = obj.getRadius();
+            drawLightBulb(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
+        } else if (obj.getType() == ObjectType.LIGHT_SWITCH){
+            var rad = obj.getRadius();
+            drawLightSwitch(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath());
+        } else if (obj.getType() == ObjectType.TEXT){
+            drawText(obj,fullctx,sX,sY,eX,eY);		
+        }else if(obj.getType() == ObjectType.PRODUCT){
+            drawProduct(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath());
+        }
+    }
+    return fullCanvas;
+}
+
 function printCanvas() {
-    var dataUrl = document.getElementById('draw-tool-canvas').toDataURL(); //attempt to save base64 string to server using this var
-    var windowContent = '<!DOCTYPE html>';
-    windowContent += '<html>'
-    windowContent += '<head><title>Drawing</title></head>';
-    windowContent += '<body>'
-    windowContent += '<img src="' + dataUrl + '">';
-    windowContent += '</body>';
-    windowContent += '</html>';
-    var printWin = window.open('', '', 'width=600,height=300');
+    var bom_deta = getBomDictionary(drawElements);
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+        dd='0'+dd
+    } 
+    if(mm<10) {
+        mm='0'+mm
+    } 
+    var hour = today.getHours(); 
+    var mins = today.getMinutes()
+    printTime = hour+':'+mins;
+    today = mm+'/'+dd+'/'+yyyy;
+   /* html2canvas($("#productInfo"), {
+        onrendered: function(canvas) {
+            dataUrl = canvas.toDataURL();
+            var windowContent = '<!DOCTYPE html>';
+            windowContent += '<html>'
+            windowContent += '<head><title>Drawing</title></head>';
+            windowContent += '<body>'
+            windowContent += '<img src="' +dataUrl+ '">'; 
+            windowContent += '</body>';
+            windowContent += '</html>';
+            printWin.document.open();
+            printWin.document.write(windowContent);
+            printWin.document.close();
+            printWin.focus();
+            printWin.print();
+            printWin.close();
+            }
+        });*/
+   var dataUrl = getFullCanvas().toDataURL("image/png"); //attempt to save base64 string to server using this var
+    var tableContent = '<table id="productInfo_print" style="width:100%;">'
+                            +'<tr>'
+                            +'<th class ="print-bom-hedder" style=" background-color: #e2383f !important; color: white;-webkit-print-color-adjust: exact;">Name</th>'
+                            +'<th class ="print-bom-hedder">Unit Price ($)</th>'
+                            +'<th class ="print-bom-hedder">Quantity</th>'
+                            +'<th class ="print-bom-hedder">Total Price ($)</th>'
+                            +'</tr>';
+    for(item in bom_deta){
+        var row = '<tr>';
+        row += '<td>'+ bom_deta[item].name+'</td>'
+        row += '<td>'+ bom_deta[item].unit_price+'</td>'
+        row += '<td>'+ bom_deta[item].qty+'</td>'
+        row += '<td>'+ bom_deta[item].tot_price+'</td>'
+        tableContent += row;
+    } 
+    tableContent += '</table>';
+
+    var windowContent = '<!DOCTYPE html>'
+                        +'<html>'
+                            +'<head><title>Bill Of Mastitis</title>'
+                                +'<style>'
+                                    +'.print-bom-hedder{'
+                                        +' background-color: #e2383f !important;'
+                                        +' color: white !important;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +'}'
+                                    +'table {'
+                                        +'border-collapse: collapse;'
+                                        +'width: 100%;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +'}'
+                                    +'th, td {'
+                                        +'text-align: left;'
+                                        +'padding: 8px;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +'}'
+                                    +'tr:nth-child(even){'
+                                        +'background-color: #f2f2f2;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +'}'
+                                    +'.image-print {'
+                                        +'float: right;'
+                                        +' width: 200px;'
+                                        +' height: 50px;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +'}'
+                                    +'.braker-div{'
+                                        +' width: 100%;'
+                                        +' height: 1px;'
+                                        + ' background-color: black;'
+                                        +'-webkit-print-color-adjust: exact;'
+                                    +' } '
+                                +'</style>' 
+                            +'</head>'
+                                +'<body id="print_boddy" class="print-body">'
+                                    +'<div>'
+                                        +'<img class="image-print" src="img/img_logo.png"><br/><br/><br/>'
+                                        +' <div class="braker-div"></div>'
+                                    +'</div><br/>'
+                                    +'<div>'
+                                        +'<table id="productInfo_print" style="width:100%;">'
+                                            +'<tr>'
+                                                +' <td>'
+                                                    +' <div><b>Client Name :</b> '+clientName+'</div>'
+                                                    +'<div><b>Project Address :</b> '+clientAdddress+'</div>'
+                                                    +'<div><b>Project  :</b> '+projectName+'</div>'
+                                                    +' <div><b>Consultant :</b> '+consultentName+' </div>'
+                                                +' </td>'
+                                                +'<td>'
+                                                    +' <div style="float: right;">'
+                                                        +'<div><b>Printout Date :</b> '+today+'</div>'
+                                                        +'<div><b>Time :</b> '+printTime+'</div>'
+                                                        +' <div><b>Version  :</b> '+printVersion+'</div>'
+                                                    +' </div>'
+                                                +' </td>'
+                                            +' </tr>'
+                                        +'</table>'
+                                        +'<div class="braker-div"></div><br/>'
+                                    +'</div>'
+                                    +tableContent
+                                     + '<img src="' + dataUrl + '">';
+                                +'</body>'
+                        +'</html>';   
+    var printWin = window.open('', '', 'width=1000,height=900');
     printWin.document.open();
     printWin.document.write(windowContent);
     printWin.document.close();
     printWin.focus();
+    setTimeout(function() {
     printWin.print();
     printWin.close();
+}, 250);
+    // printWin.print();
+    // printWin.close();
 }
 
 $('#elements').hide();

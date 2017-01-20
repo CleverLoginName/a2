@@ -19,11 +19,20 @@ function PackItem(){
     this.id = -1;   // pack id
     this.name = "";
     this.price = 0;
+    // this.watts = 0;
     //----------------------------
 
     this.objType = ObjectType.PACK;
     this.product_list = [];
 }
+
+// PackItem.prototype.getWatts = function(){
+//     return this.watts;
+// }
+
+// PackItem.prototype.setWatts = function(watts){
+//     this.watts = watts;
+// }
 
 PackItem.prototype.getUniqueItemID = function(){
     return this.uid;
@@ -121,7 +130,7 @@ function ProductItem(){
     this.symbolPath = "";
     this.category_type = "";
     this.notes = ""
-
+    // this.watts = 0;
     this.isInsidePack = false;
     this.parentPackId = null; //only valid for pack items 
 
@@ -129,6 +138,14 @@ function ProductItem(){
     this.width = 40;
     this.height = 40;
 }
+
+// PackItem.prototype.getWatts = function(){
+//     return this.watts;
+// }
+
+// PackItem.prototype.setWatts = function(watts){
+//     this.watts = watts;
+// }
 
 /* Sets the name*/
 ProductItem.prototype.setName = function(name){

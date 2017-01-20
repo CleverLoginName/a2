@@ -155,7 +155,7 @@
                                                 +'</div>'
                                             +'</div>'
                                         +'</div>'
-                                        + '<ul class="level-3"style="padding-left: 10px;-webkit-padding-start: 10px;-moz-padding-start: 10px" id ="catagory-'+index1+'">'
+                                        + '<ul class="level-3"style="padding-left: 10px;-webkit-padding-start: 10px;-moz-padding-start: 10px" id ="catagory-'+catValue.category_id+'">'
                                         +'</ul>'
                                     +'</li>';
                         $('#catlog-'+index).append(category);
@@ -178,7 +178,7 @@
                                             +'</li>'
                                         +'</ul>'
                                     +'</li>';
-                            $('#catagory-'+index1).append(subCategory);
+                            $('#catagory-'+catValue.category_id).append(subCategory);
                         });
                     });
                 });
@@ -211,7 +211,7 @@
                                     $.each(category.data, function(category_index, sub_category) {
                                        if(sub_category.sub_category_id==sub_category_id && !$('#'+selected_positon).hasClass("expanded") ){
                                          $.each( sub_category.data, function(product_index, product) {
-                                            products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id='+product.id+'  data-prod_type='+product.type+' data-name="'+product.name+'" data-builder_price="'+product.builder_price+'" data-image_path="'+baseUrl+products.path+'" data-path1 ="'+baseUrl+product.icon+'" data-is_pack="'+sub_category.is_pack+'" data-cat="'+sub_category.sub_category_id+'" data-category-type="'+category.category_name+'" data-Watts="'+( product.Watts|| '0')+'" data-product-price="'+product.builder_price+'">'
+                                            products =  '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id='+product.id+'  data-prod_type='+product.type+' data-name="'+product.name+'" data-builder_price="'+product.builder_price+'" data-image_path="'+baseUrl+product.path+'" data-path1 ="'+baseUrl+product.icon+'" data-is_pack="'+sub_category.is_pack+'" data-cat="'+sub_category.sub_category_id+'" data-category-type="'+category.category_name+'" data-productStyle='+product.Style+' data-productwatts='+product.Watts+' data-productsupplier ='+product.supplier+' data-pdescription='+product.description+' data-Watts="'+( product.Watts|| '0')+'" data-product-price="'+product.builder_price+'">'
                                                             +'<div class="clearfix">'
                                                                 +'<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_img">'
                                                                     +'<img src="'+baseUrl+product.path+'" class="imege-props product-item">'
@@ -286,7 +286,54 @@
                     var angle, elev, power, type, b_tooltip, s_angle, s_elev, s_power, s_bname, s_type, s_tooltip;
 
                 $(".product-container").on("click", ".single-item", function (e) {
-
+                    //alert('call click event');
+                     var   image_pathwww = this.getAttribute("data-name");
+                   
+                    var imageValue = document.getElementById('smname').value;
+                     
+                   document.getElementById('smname').value = image_pathwww;
+                   document.getElementById('productDescription').value = this.getAttribute("data-pdescription");
+                   var supplier = this.getAttribute("data-productsupplier");
+                   if(supplier == null){
+                       supplier = 'NA';
+                   }
+                   
+                   document.getElementById('suppName').value = supplier;
+                   document.getElementById('productType').value=this.getAttribute("data-category-type");
+                   document.getElementById('productWatt').value=this.getAttribute("data-productwatts");
+                   document.getElementById('productStyle').value=this.getAttribute("data-productStyle");
+                   document.getElementById('builderproductPrice').value=this.getAttribute("data-builder_price");
+                   var lngth = document.getElementById('builderproductPrice').value.length;
+                   document.getElementById('builderproductPrice').size = lngth;
+                   
+                //    var imgURL = this.getAttribute("data-imgurl");
+                   var imgPath = this.getAttribute("data-image_path");
+                   document.getElementById("imgProduct").src=imgPath;
+                   
+                  
+                   
+                   
+                //    console.log(imgURL+imgPath);
+                   
+                    var modal = document.getElementById('myModal');
+                    modal.style.display = "block";
+                   
+                    
+             
+                    
+                    
+                    
+                    var span = document.getElementsByClassName("close")[0];
+                span.onclick = function () {
+                    modal.style.display = "none";
+                };
+                
+                window.onclick = function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                };
+                    
                     var getItemType = $(this).attr("attr");
 
                     if (this.getAttribute("attr") == 'LIGHT_BULB') {
@@ -341,7 +388,7 @@
                             });
                         });
                     } else {
-                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath);
+                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath,product_watt);
                     }
                     drawAllObjects();
                     $('#tool-items-ul li').removeClass('active');
@@ -350,21 +397,24 @@
 
                 function addPack(x,y,params){
                     var pack = new PackItem();
+                    var packWatt = 0;
                     pack.setUniqueItemID( generateUID() );
                     pack.setPackID(params.sub_category_id);
                     pack.setName(params.sub_category_name);
                     pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
                     
                     $.each(params.data, function(i, product) {
+                        packWatt = packWatt+(parseInt(product.Watts)|| 0);
                         var currentProduct = addProduct(x + i*40, y, product.type, product.id, product.name, product.builder_price, product.path, baseUrl+product.icon);
                         currentProduct.isInsidePack = true;
                         currentProduct.setParentPackID(pack.getUniqueItemID());
                         pack.pushProduct(currentProduct.getUniqueItemID());
                     });
+                    pack.setWatts(packWatt);
                     pushElementToDrawElement(pack);
                 }
 
-                function addProduct(x, y, type, id, name, price, imgPath, symbolPath){
+                function addProduct(x, y, type, id, name, price, imgPath, symbolPath,product_watt){
                     var currentObj;
                     var product_type;
                     if (type !== undefined) {
@@ -374,6 +424,7 @@
                     switch (product_type) {
                         case "switches":
                             currentObj = new LightSwitch();
+                            currentObj.setWatts(product_watt);
                             break;
                     
                         case "lights":
@@ -381,10 +432,12 @@
                             var lightBulbIndex = lightBulbArr.length + 1;
                             currentObj.setLabel(lightBulbIndex);
                             lightBulbArr.push(currentObj);
+                            currentObj.setWatts(product_watt);
                             break;
                     
                         default:
                             currentObj = new ProductItem();
+                            currentObj.setWatts(product_watt);
                             break;
                     }
                     currentObj.setUniqueItemID( generateUID() );
@@ -395,7 +448,6 @@
                     currentObj.setImgPath(imgPath);
                     currentObj.setSymbolPath(symbolPath);
                     currentObj.setPlanID(planID);
-
                     pushElementToDrawElement(currentObj); //TODO check for pack 
                     return currentObj;
                 }
@@ -411,7 +463,7 @@ function addDragable(element) {
        helper: function () {
         is_pack = parseInt(this.getAttribute("data-is_pack"));
         pack_id = parseInt(this.getAttribute("data-cat"));//sub catagory id
-                                // image_path = '/'+this.getAttribute("data-image_path");
+        product_watt = parseInt(this.getAttribute("data-Watts"));                       // image_path = '/'+this.getAttribute("data-image_path");
         image_path = this.getAttribute("data-image_path");
         prod_id = this.getAttribute("data-prod_id");
         prod_type = this.getAttribute("data-prod_type");

@@ -5,10 +5,9 @@ function BomRow(){
     this.tot_price="";
 }
 
-var totalValue = 0;
-
 function getBomDictionary(element_array){
     var totel_price = 0;
+    var total_watt = 0;
     var bom_dictionary = {}
     for (var i = 0; i < element_array.length; i++) {
         item = element_array[i];
@@ -36,15 +35,27 @@ function getBomDictionary(element_array){
             bomRow.tot_price = item.price;
             bom_dictionary[key] = bomRow;
             totel_price += item.price ;
+            total_watt += item.watts;
 
         }
         else {
             bom_dictionary[key].qty += 1; 
             bom_dictionary[key].tot_price += item.price; 
             totel_price += item.price ;
+            total_watt += item.watts;
         }
     }
+    upDateTotalPrice(totel_price);
+    upDateTotalWatt(total_watt);
     return bom_dictionary;
+}
+
+function upDateTotalPrice(total_value){
+    $('#variation-cost').html('$ '+total_value);
+}
+
+function upDateTotalWatt(total_value){
+    $('#design-energy').html(total_value+' watts');
 }
 
 function updateBomTable(element_array)

@@ -25,7 +25,7 @@
                     <section class="col-md-2"><label>Job # / Consultant</label></section>
                     <section class="col-md-2 @if ($errors->has('job')) has-error @endif">
 
-                        {!! Form::text('job',null,['class'=>'form-control required','placeholder'=>"Job#",'id'=>'job']) !!}
+                        {!! Form::text('job',null,['class'=>'form-control required','placeholder'=>"Job #",'id'=>'job']) !!}
                         @if ($errors->has('job')) <p class="error_message">{{ $errors->first('job') }}</p> @endif
                     </section>
                     <section class="col-md-8 @if ($errors->has('consultant')) has-error @endif">

@@ -7,6 +7,7 @@
     {{ Html::style('canvas/css/left-menu.css') }}
     {{ Html::style('canvas/css/right-click-menu.css') }}
     {{ Html::style('canvas/css/address-bar.css') }}
+    {{ Html::style('canvas/css/popup-window.css') }}
     {{ Html::style('canvas/lib/jquery-ui.min.css') }}
     {{ Html::style('canvas/bootstrap/dist/css/bootstrap.min.css') }}
     {{ Html::style('canvas/bootstrap/css/bootstrap.min.css') }}
@@ -29,7 +30,35 @@
 </head>
 <body>
 <!--Tool bar started-->
+@php
+	$levels = [
+                 'Basement','Ground Floor','1st Floor','2nd Floor','3rd Floor','4th Floor','5th Floor'
+           ];
+       $project_id = session('project_id');
+       $project_plan_id = session('project_plan_id');
+   $project = \App\Project::where('id','=',$project_id)->first();
+   $project_plan = \App\ProjectPlan::where('id','=',$project_plan_id)->first();
+   if($project){
+   $address = \App\Address::where('id','=',$project->address_id)->first();
+   $template = \App\Template::where('id','=',$project->template_id)->first();
 
+
+	$total = (intval($template->sqm_house)*5)+
+				(intval($template->sqm_porch)*4)+
+				(intval($template->sqm_garage)*3)+
+				(intval($template->sqm_terrace)*4)+
+				(intval($template->sqm_balcony)*4)+
+				(intval($template->sqm_alfresco)*4);
+	$consultant = \App\User::find($project->consultant_id);
+
+   }
+
+	$user_1 = \App\User::find($project->user_id_1);
+
+
+
+
+@endphp
 <div id="parent" class="row">
     <div id="sidebar" class="col-xs-12 col-sm-12 col-md-4 col-lg-2" style="background-color: #E7E7E7">
 	<div style=" background-color:#E7E7E7; ">
@@ -40,33 +69,32 @@
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
 							</div>
-							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">Fist Floor:Electrical</div>
-							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">1:100</div>
+							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">{!! $levels[$project_plan->level] !!}:{!! \App\ProductCatalog::find($project_plan->catalog_id)->name !!}</div>
+							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">@if($template){!! '1 : '.$template->scale !!} @endif</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9  text-in-side-menue title" >Energy Rated :</div>
 							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 " id="energy-reted" >
+								@if($template)
 								<form class="acidjs-rating-stars">
+									@for($i=1;$i<=$template->energy_rating;$i++)
 									<input type="radio" name="group-1" id="group-1-0" value="5" /><label for="group-1-0"></label>
-									<input type="radio" name="group-1" id="group-1-1" value="4" /><label for="group-1-1"></label>
-									<input type="radio" name="group-1" id="group-1-2" value="3" /><label for="group-1-2"></label>
-									<input type="radio" name="group-1" id="group-1-3" value="2" /><label for="group-1-3"></label>
-									<input type="radio" name="group-1" id="group-1-4"  value="1" /><label for="group-1-4"></label>
-									<input type="radio" name="group-1" id="group-1-5"  value="1" /><label for="group-1-4"></label>
+									@endfor
+										@endif
 								</form>
 							</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px;"  >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 text-in-side-menue title">Max Energy :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="max-energy">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="max-energy">{!! $total !!} watts</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px;" >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 col-xs-6 text-in-side-menue title" >Design Energy :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="design-energy">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="design-energy">0 watts</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; margin-top:2px; margin-bottom:20px;" >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 col-xs-6 text-in-side-menue title">Variation cost :</div>
-							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="variation-cost">XXX5</div>
+							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="variation-cost">0 $</div>
 						</div>
 					</div>
 			</div>
@@ -99,6 +127,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="panel panel-default inner-class cat-2 hide-catelog" id="main-1">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
@@ -108,14 +137,15 @@
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
-						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" id="catlog-2">
-							<ul class="level-2" style="">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
+							<ul class="level-2" style=""  id="catlog-1">
 
 							</ul>
 
 						</div>
 					</div>
 				</div>
+
 				<div class="panel panel-default inner-class cat-3 hide-catelog" id="main-2">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
@@ -125,8 +155,8 @@
 						</div>
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
-						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" id="catlog-3">
-							<ul class="level-2" style="">
+						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
+							<ul class="level-2" style=""  id="catlog-2">
 							</ul>
 						</div>
 					</div>
@@ -334,6 +364,47 @@
 		</div>
 	</div>
 
+        <!--Popup -->
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <br><br><br>
+                <div class="popcontainer">
+                    <header>
+                        <img id="imgProduct"  style="height: 250px;width:250px;"/>
+                    </header>
+                    <nav>
+                        <input type="text" name="smname" id="smname"  value="tttt" style="width: 300px;color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" width="100%"/>
+                        <br>
+                        Product Description : <input type="text" name="productDescription" id="productDescription"  value="tttt" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                    </nav>
+                    <article>
+
+                        Supplier Name :<input type="text" name="suppName" id="suppName"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Colour(s) :
+                        <br>
+                        Style(s) :<input type="text" name="productStyle" id="productStyle"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Type :<input type="text" name="productType" id="productType"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Energy Rating or Watts :<input type="text" name="productWatt" id="productWatt"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
+                        <br>
+                        Size:
+                    </article>
+                    <footer>
+                        $<input type="text" name="builderproductPrice" id="builderproductPrice"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" size=""/>*(inc GST)
+                        <span id="builderproductPrice" v/>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+        <!-- -->
+
 	<div  style="vertical-align: bottom;" class="clearfix ">
 		<div class="panel panel-default bom-medder bom-hide" id="bom-area">
 			<div class="panel-heading test1 ">
@@ -367,16 +438,7 @@
 </div >
 
     <div id="design-area" class="col-xs-12 col-sm-12 col-md-8 col-lg-10">
-		@php
-			$project_id = session('project_id');
-            $project_plan_id = session('project_plan_id');
-        $project = \App\Project::where('id','=',$project_id)->first();
-        $project_plan = \App\ProjectPlan::where('id','=',$project_plan_id)->first();
-        if($project){
-        $address = \App\Address::where('id','=',$project->address_id)->first();
-        }
 
-		@endphp
     <div id="address-bar" class="clearfix">
         <div class="headerDiv first border-left-add">
                 Job #: {!! $project->job !!}
@@ -705,17 +767,17 @@
 	</div>
 	</div>
 	<div id="item-popup" class="item-popup " title="Connect Lights">
-		<img src="/img/icon_link_alt.png" class="image-background">
+		<img src="/img/DesignCanvassCreateSwitchWire.png" class="image-background">
 	</div>
 	<div id="item-popup1" class="item-popup " title="Product Information">
-		<img src="/img/icon_info_alt.png" class="image-background">
+		<img src="/img/DesignCanvassClose.png" class="image-background">
 	</div>
 	<div id="item-popup2" class="item-popup " title="Close">
-		<img src="/img/icon_close_alt2.png" class="image-background">
+		<img src="/img/DesignCanvassProductInfo.png" class="image-background">
 	</div>
 
 	<div id="delete-item" class="item-popup " title="Remove Connection">
-		<img src="/img/icon_blocked.png" class="image-background">
+		<img src="/img/DesignCanvassRemoveSwitchWire.png" class="image-background">
 	</div>
 </div>
 
@@ -798,6 +860,13 @@
 
 		$('.template_modal').modal('show');
 	});
+
+	clientName = "{!! $user_1->title.'.'.$user_1->first_name.' '.$user_1->last_name !!}";
+	clientAdddress = "{!! $address->street_name.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}";
+	projectName = "{!! $project->job !!}";
+	consultentName = "{!! $consultant->title.'.'.$consultant->first_name.' '.$consultant->last_name !!}";
+	printVersion = "1";
+
 </script>
 
 <!--

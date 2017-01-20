@@ -22,7 +22,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     $('.image-background').height(imgHight*zoom).width(imgWidth*zoom);
     $('#item-popup').css({ top: center.y-50*zoom , left:  (center.x)-40*zoom});//.slideDown();
     $('#item-popup1').css({ top: center.y-50*zoom, left: center.x+10*zoom});//.slideDown();
-    $('#item-popup2').css({ top: center.y-15, left:  center.x+30*zoom});//.slideDown();
+    $('#item-popup2').css({ top: center.y-15*zoom, left:  center.x+30*zoom});//.slideDown();
     $('#delete-item').css({ top: center.y-15*zoom, left:  center.x-60*zoom});
     $('.item-popup').show();
     if(selObj1.getType()== ObjectType.LIGHT_BULB){
