@@ -27,7 +27,7 @@ class ProductCustomFieldsController extends Controller
                 'is_mandatory'=>$customField->is_mandatory
             ];
 
-        }
+        }//dd($out);
         return $out;
 
     }

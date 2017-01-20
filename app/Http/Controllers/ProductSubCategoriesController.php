@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ProductCustomField;
 use App\ProductSubCategory;
 use Illuminate\Http\Request;
 
@@ -60,6 +61,82 @@ class ProductSubCategoriesController extends Controller
         $subCategories->category_id = $request->get('category_id');
         $subCategories->is_pack = 0;
         $subCategories->save();
+        $sub_category_id = $subCategories->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Watts';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $watt_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Lumens';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $lumens_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Style';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $style_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Colour';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $colour_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Discount %';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $discount_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Width';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $width_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Height';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $height_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Depth';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $depth_productCustomField_id = $productCustomFild->id;
+
+
+
         Flash::success('Sub-Category Added', 'Sub-Category has been added successfully.');
 
         return redirect()->action('SubCategoriesController@index');
@@ -83,6 +160,88 @@ class ProductSubCategoriesController extends Controller
         $subCategory->category_id = $request->get('modal_category_id');
         $subCategory->description = $request->get('sub_category_description');
         $subCategory->save();
+        $sub_category_id = $subCategory->id;
+
+        $subCategories = new SubCategory();
+        $subCategories->name = $request->get('name');
+        $subCategories->description = $request->get('description');
+        $subCategories->category_id = $request->get('category_id');
+        $subCategories->is_pack = 0;
+        $subCategories->save();
+        $sub_category_id = $subCategories->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Watts';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $watt_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Lumens';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $lumens_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Style';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $style_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Colour';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $colour_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Discount %';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $discount_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Width';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $width_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Height';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $height_productCustomField_id = $productCustomFild->id;
+
+
+        $productCustomFild = new ProductCustomField();
+        $productCustomFild->name = 'Depth';
+        $productCustomFild->custom_field_type_id = 1;
+        $productCustomFild->is_mandatory = true;
+        $productCustomFild->product_sub_category_id = $sub_category_id;
+        $productCustomFild->save();
+        $depth_productCustomField_id = $productCustomFild->id;
+
         $subCategories = ProductSubCategory::where('category_id','=',$subCategory->category_id)->get();
         //return $catalogs;
         return Response::json(['sub_categories'=>$subCategories, 'insert_id'=>$subCategory->id]);

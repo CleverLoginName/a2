@@ -180,15 +180,28 @@
                                 </div>
 
                             @foreach($fields as $field)
+                                @php
+                                $customData = \App\ProductCustomData::where('product_custom_field_id','=',intval($field['id']))
+                                ->where('product_id','=',$product->id)
+                                ->first();
+
+                                //dd($field['id'] .'    '.$product->id);
+                                if($customData){
+                                $customData = $customData->value;
+                                }else{
+                                $customData= null;
+                                }
+
+                                @endphp
 
                                 <section class="row form-group @if ($errors->has($field['name'])) has-error @endif">
                                     <section class="col-md-2"><label>{!! $field['name'] !!}</label></section>
                                     <section class="col-md-7">
 
-                                        @if($field['type'] == 'text') {!! Form::text($field['name'], null,['id'=>$field['name'],'class'=>"form-control",':disabled'=>"fields_disabled"]) !!}
+                                        @if($field['type'] == 'text') {!! Form::text($field['name'], $customData,['id'=>$field['name'],'class'=>"form-control",':disabled'=>"fields_disabled"]) !!}
                                         @if ($errors->has($field['name'])) <p class="error_message">{{ $errors->first($field['name']) }}</p> @endif
                                         @elseif($field['type'] == 'textarea')
-                                            <textarea class="form-control required" id="{!! $field['id'] !!}" name="custom_field_{!! $field['id'] !!}" aria-required="true" :disabled="fields_disabled"> </textarea>
+                                            <textarea class="form-control required" id="{!! $field['id'] !!}" name="custom_field_{!! $field['id'] !!}" aria-required="true" :disabled="fields_disabled">{!! $customData !!} </textarea>
                                         @elseif($field['type'] == 'select')
                                         @elseif($field['type'] == 'radio')
                                         @elseif($field['type'] == 'checkbox')

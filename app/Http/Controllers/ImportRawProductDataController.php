@@ -151,8 +151,100 @@ class ImportRawProductDataController extends Controller
                 $sub_category->contractor_price = 0;
                 $sub_category->save();
                 $sub_category_id = $sub_category->id;
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Watts';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $watt_productCustomField_id = $productCustomFild->id;
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Lumens';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $lumens_productCustomField_id = $productCustomFild->id;
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Style';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $style_productCustomField_id = $productCustomFild->id;
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Colour';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $colour_productCustomField_id = $productCustomFild->id;
+
+/*
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Discount %';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $discount_productCustomField_id = $productCustomFild->id;*/
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Width';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $width_productCustomField_id = $productCustomFild->id;
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Height';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $height_productCustomField_id = $productCustomFild->id;
+
+
+                $productCustomFild = new ProductCustomField();
+                $productCustomFild->name = 'Depth';
+                $productCustomFild->custom_field_type_id = 1;
+                $productCustomFild->is_mandatory = true;
+                $productCustomFild->product_sub_category_id = $sub_category_id;
+                $productCustomFild->save();
+                $depth_productCustomField_id = $productCustomFild->id;
+
+
             }else{
                 $sub_category_id = $sub_category->id;
+
+                $watt_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Watts')->first()->id;
+                $lumens_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Lumens')->first()->id;
+                $style_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Style')->first()->id;
+                $style_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Style')->first()->id;
+                $colour_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Colour')->first()->id;
+               /* $discount_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Discount %')->first()->id;*/
+                $width_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Width')->first()->id;
+                $height_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Height')->first()->id;
+                $depth_productCustomField_id = ProductCustomField::where('product_sub_category_id', '=',$sub_category_id )
+                    ->where('name','=','Depth')->first()->id;
             }
 
 
@@ -198,123 +290,75 @@ class ImportRawProductDataController extends Controller
             $product->supplier_id = $supplier_id;
             $product->save();
 /*********************************************************************************************************/
-            if($importRawProductData->watts != 'NA') {
-                $productCustomFild = new ProductCustomField();
-                $productCustomFild->name = 'Watts';
-                $productCustomFild->custom_field_type_id = 1;
-                $productCustomFild->is_mandatory = true;
-                $productCustomFild->product_sub_category_id = $sub_category_id;
-                $productCustomFild->save();
+            //if($importRawProductData->watts != 'NA') {
 
                 $productCustomData = new ProductCustomData();
                 $productCustomData->product_id = $product->id;
-                $productCustomData->product_custom_field_id = $productCustomFild->id;
+                $productCustomData->product_custom_field_id = $watt_productCustomField_id;
                 $productCustomData->value = $importRawProductData->watts;
                 $productCustomData->save();
-            }
-            if($importRawProductData->lumen != 'NA') {
-                $productCustomFild = new ProductCustomField();
-                $productCustomFild->name = 'Lumens';
-                $productCustomFild->custom_field_type_id = 1;
-                $productCustomFild->is_mandatory = true;
-                $productCustomFild->product_sub_category_id = $sub_category_id;
-                $productCustomFild->save();
+          //  }
+          //  if($importRawProductData->lumen != 'NA') {
 
                 $productCustomData = new ProductCustomData();
                 $productCustomData->product_id = $product->id;
-                $productCustomData->product_custom_field_id = $productCustomFild->id;
+                $productCustomData->product_custom_field_id = $lumens_productCustomField_id;
                 $productCustomData->value = $importRawProductData->lumen;
                 $productCustomData->save();
-            }
-            if($importRawProductData->style != 'NA') {
-            $productCustomFild = new ProductCustomField();
-            $productCustomFild->name = 'Style';
-            $productCustomFild->custom_field_type_id = 1;
-            $productCustomFild->is_mandatory = true;
-            $productCustomFild->product_sub_category_id = $sub_category_id;
-            $productCustomFild->save();
+          //  }
+          //  if($importRawProductData->style != 'NA') {
 
             $productCustomData = new ProductCustomData();
             $productCustomData->product_id = $product->id;
-            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->product_custom_field_id = $style_productCustomField_id;
             $productCustomData->value = $importRawProductData->style;
             $productCustomData->save();
-            }
+          //  }
 
-            if($importRawProductData->colour != 'NA') {
-            $productCustomFild = new ProductCustomField();
-            $productCustomFild->name = 'Colour';
-            $productCustomFild->custom_field_type_id = 1;
-            $productCustomFild->is_mandatory = true;
-            $productCustomFild->product_sub_category_id = $sub_category_id;
-            $productCustomFild->save();
+          //  if($importRawProductData->colour != 'NA') {
 
             $productCustomData = new ProductCustomData();
             $productCustomData->product_id = $product->id;
-            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->product_custom_field_id = $colour_productCustomField_id;
             $productCustomData->value = $importRawProductData->colour;
             $productCustomData->save();
-            }
+         //   }
 
-            if($importRawProductData->discount != 'NA') {
-            $productCustomFild = new ProductCustomField();
-            $productCustomFild->name = 'Discount %';
-            $productCustomFild->custom_field_type_id = 1;
-            $productCustomFild->is_mandatory = true;
-            $productCustomFild->product_sub_category_id = $sub_category_id;
-            $productCustomFild->save();
+            /*if($importRawProductData->discount != 'NA') {
 
             $productCustomData = new ProductCustomData();
             $productCustomData->product_id = $product->id;
-            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->product_custom_field_id = $discount_productCustomField_id;
             $productCustomData->value = $importRawProductData->discount;
             $productCustomData->save();
-            }
+            }*/
 
-            if($importRawProductData->width != 'NA') {
-            $productCustomFild = new ProductCustomField();
-            $productCustomFild->name = 'Width ';
-            $productCustomFild->custom_field_type_id = 1;
-            $productCustomFild->is_mandatory = true;
-            $productCustomFild->product_sub_category_id = $sub_category_id;
-            $productCustomFild->save();
+           // if($importRawProductData->width != 'NA') {
 
             $productCustomData = new ProductCustomData();
             $productCustomData->product_id = $product->id;
-            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->product_custom_field_id = $width_productCustomField_id;
             $productCustomData->value = $importRawProductData->width;
             $productCustomData->save();
-            }
+         //   }
 
-            if($importRawProductData->height != 'NA') {
-            $productCustomFild = new ProductCustomField();
-            $productCustomFild->name = 'Height';
-            $productCustomFild->custom_field_type_id = 1;
-            $productCustomFild->is_mandatory = true;
-            $productCustomFild->product_sub_category_id = $sub_category_id;
-            $productCustomFild->save();
+          //  if($importRawProductData->height != 'NA') {
 
             $productCustomData = new ProductCustomData();
             $productCustomData->product_id = $product->id;
-            $productCustomData->product_custom_field_id = $productCustomFild->id;
+            $productCustomData->product_custom_field_id = $height_productCustomField_id;
             $productCustomData->value = $importRawProductData->height;
             $productCustomData->save();
-            }
+          //  }
 
-            if($importRawProductData->depth != 'NA') {
-                $productCustomFild = new ProductCustomField();
-                $productCustomFild->name = 'Depth';
-                $productCustomFild->custom_field_type_id = 1;
-                $productCustomFild->is_mandatory = true;
-                $productCustomFild->product_sub_category_id = $sub_category_id;
-                $productCustomFild->save();
+        //    if($importRawProductData->depth != 'NA') {
 
-                $productCustomData = new ProductCustomData();
-                $productCustomData->product_id = $product->id;
-                $productCustomData->product_custom_field_id = $productCustomFild->id;
-                $productCustomData->value = $importRawProductData->depth;
-                $productCustomData->save();
-            }
+            $productCustomData = new ProductCustomData();
+            $productCustomData->product_id = $product->id;
+            $productCustomData->product_custom_field_id = $depth_productCustomField_id;
+            $productCustomData->value = $importRawProductData->depth;
+            $productCustomData->save();
+           // }
             /****************************************************************************************/
 
             File::exists('uploads/products/'.$product->id) or File::makeDirectory('uploads/products/'.$product->id);

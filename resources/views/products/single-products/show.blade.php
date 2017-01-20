@@ -102,6 +102,54 @@
                             </div>
                         </div>
 
+                        @foreach($fields as $field)
+                            @php
+                                $customData = \App\ProductCustomData::where('product_custom_field_id','=',intval($field['id']))
+                                ->where('product_id','=',$product->id)
+                                ->first();
+
+                                //dd($field['id'] .'    '.$product->id);
+                                if($customData){
+                                $customData = $customData->value;
+                                }else{
+                                $customData= null;
+                                }
+
+                            @endphp
+
+                            <section class="row form-group @if ($errors->has($field['name'])) has-error @endif">
+                                <section class="col-md-2"><label>{!! $field['name'] !!}</label></section>
+                                <section class="col-md-7">
+
+                                    @if($field['type'] == 'text')
+
+                                        <div class="form-group">
+                                            <label for="_name" class="col-xs-12 col-lg-2 control-label">$field['name']</label>
+                                            <div class="col-md-12 col-lg-10">
+                                                <p>{!! $customData !!}</p>
+                                            </div>
+                                        </div>
+
+                                   @elseif($field['type'] == 'textarea')
+
+                                        <div class="form-group">
+                                            <label for="_name" class="col-xs-12 col-lg-2 control-label">$field['name']</label>
+                                            <div class="col-md-12 col-lg-10">
+                                                <p>{!! $customData !!}</p>
+                                            </div>
+                                        </div>
+
+
+                                    @endif
+
+                                </section>
+                                <section class="col-md-3"></section>
+                            </section>
+
+                        @endforeach
+
+
+
 
                     </form>
                 </div>
