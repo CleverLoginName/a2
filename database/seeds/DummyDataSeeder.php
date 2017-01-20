@@ -708,6 +708,9 @@ class DummyDataSeeder extends Seeder
         DB::table('product_category_types')->insert(['name' =>'AV Points']);
         DB::table('product_category_types')->insert(['name' =>' Heating Panel']);
 
-
+        DB::table('custom_field_types')->insert([
+            ['name' => 'text'],
+            ['name' => 'textarea']
+        ]);
     }
 }
