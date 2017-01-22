@@ -83,12 +83,50 @@ class SingleProductsController extends ProductsController
     public function show($id)
     {
         $product = Product::find($id);
+
+        $subCategory = DB::table('product_sub_categories')
+            ->join('product_sub_category_maps','product_sub_category_maps.sub_category_id','=','product_sub_categories.id')
+            ->select('product_sub_categories.id as product_sub_category_id','product_sub_categories.category_id')
+            ->where('is_pack','=',false)
+            ->where('product_sub_category_maps.product_id','=',$id)
+            ->first();
+        if($subCategory){//dd($subCategory);
+            $subCategoryId = $subCategory->product_sub_category_id;
+            $category = ProductCategory::where('id','=',$subCategory->category_id)->first();
+            if($category){
+                $categoryId = $category->id;
+                $catalog = ProductCatalog::where('id','=',$category->catalog_id)->first();
+                if($catalog){
+                    $catalogId = $catalog->id;
+                }
+            }
+        }
+
+        $customFields = ProductCustomField::where('product_sub_category_id','=',$subCategory->product_sub_category_id)->get();
+        $symbols = ProductIcon::where('category_id','=',session('category_id'))->get();
+        $out = [];
+        foreach ($customFields as $customField){
+            $out[] = [
+                'id'=>$customField->id,
+                'name'=>$customField->name,
+                'type'=>CustomFieldType::find($customField->custom_field_type_id)->name,
+                'is_mandatory'=>$customField->is_mandatory
+            ];
+
+        }
+        $symbols = ProductIcon::where('category_id','=',session('category_id'))->get();
+
+        session(['catalog_id'=>$catalogId]);
+        session(['category_id'=>$categoryId]);
+        session(['sub_category_id'=>$subCategoryId]);
+
         return view('products.single-products.show')
+            ->with('fields', $out)
             ->with('single_product', $product);
     }
 
     public function store(Request $request)
-    {// dd($request->all());
+    { //dd($request->all());
 
         $rules = array(
             'catalog_id'   => 'required',
@@ -126,7 +164,7 @@ class SingleProductsController extends ProductsController
                 $custom_field_sub_category_id = substr($key, 13);
                 $customData = new ProductCustomData();
                 $customData->product_id = $product->id;
-                $customData->custom_field_sub_category_id = $custom_field_sub_category_id;
+                $customData->product_custom_field_id = $custom_field_sub_category_id;
                 $customData->value = $value;
                 $customData->save();
             }
@@ -200,7 +238,7 @@ class SingleProductsController extends ProductsController
             }
         }
 
-            $customFields = ProductCustomField::where('product_sub_category_id','=',session('sub_category_id'))->get();
+            $customFields = ProductCustomField::where('product_sub_category_id','=',$subCategory->product_sub_category_id)->get();
             $symbols = ProductIcon::where('category_id','=',session('category_id'))->get();
             $out = [];
             foreach ($customFields as $customField){
@@ -270,7 +308,7 @@ class SingleProductsController extends ProductsController
                 $custom_field_sub_category_id = substr($key, 13);
                 $customData = new ProductCustomData();
                 $customData->product_id = $product->id;
-                $customData->custom_field_sub_category_id = $custom_field_sub_category_id;
+                $customData->product_custom_field_id = $custom_field_sub_category_id;
                 $customData->value = $value;
                 $customData->save();
             }

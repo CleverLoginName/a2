@@ -198,10 +198,10 @@
                                     <section class="col-md-2"><label>{!! $field['name'] !!}</label></section>
                                     <section class="col-md-7">
 
-                                        @if($field['type'] == 'text') {!! Form::text($field['name'], $customData,['id'=>$field['name'],'class'=>"form-control",':disabled'=>"fields_disabled"]) !!}
+                                        @if($field['type'] == 'text') {!! Form::text('custom_field_'.$field['id'], $customData,['id'=>'custom_field_'.$field['id'],'class'=>"form-control",':disabled'=>"fields_disabled"]) !!}
                                         @if ($errors->has($field['name'])) <p class="error_message">{{ $errors->first($field['name']) }}</p> @endif
                                         @elseif($field['type'] == 'textarea')
-                                            <textarea class="form-control required" id="{!! $field['id'] !!}" name="custom_field_{!! $field['id'] !!}" aria-required="true" :disabled="fields_disabled">{!! $customData !!} </textarea>
+                                            <textarea class="form-control required" id="{!! 'custom_field_'.$field['id'] !!}" name="custom_field_{!! $field['id'] !!}" aria-required="true" :disabled="fields_disabled">{!! $customData !!} </textarea>
                                         @elseif($field['type'] == 'select')
                                         @elseif($field['type'] == 'radio')
                                         @elseif($field['type'] == 'checkbox')

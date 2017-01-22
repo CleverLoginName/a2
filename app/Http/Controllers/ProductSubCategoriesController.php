@@ -159,16 +159,17 @@ class ProductSubCategoriesController extends Controller
         $subCategory->name = $request->get('sub_category_name');
         $subCategory->category_id = $request->get('modal_category_id');
         $subCategory->description = $request->get('sub_category_description');
+        $subCategory->is_pack = 0;
         $subCategory->save();
         $sub_category_id = $subCategory->id;
-
-        $subCategories = new SubCategory();
+/*
+        $subCategories = new ProductSubCategory();
         $subCategories->name = $request->get('name');
         $subCategories->description = $request->get('description');
         $subCategories->category_id = $request->get('category_id');
         $subCategories->is_pack = 0;
         $subCategories->save();
-        $sub_category_id = $subCategories->id;
+        $sub_category_id = $subCategories->id;*/
 
 
         $productCustomFild = new ProductCustomField();
