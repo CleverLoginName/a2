@@ -334,7 +334,7 @@ class DummyDataSeeder extends Seeder
         $user->profile_pic = '/resources/images/default.png';
         $user->save();
 
-        for ($i=1;$i<=100;$i++){
+       /* for ($i=1;$i<=100;$i++){
             $role = $faker->numberBetween(1,2);
             $user = new User();
             $user->first_name = $faker->firstName;
@@ -350,7 +350,7 @@ class DummyDataSeeder extends Seeder
                 'user_id' => $user->id,
                 'role_id' => $role
             ]);
-        }
+        }*/
 
         DB::table('role_user')->insert([
             'user_id' => 1,
