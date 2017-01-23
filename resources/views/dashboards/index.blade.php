@@ -9,7 +9,7 @@
                 @foreach(DB::table('roles')->get() as $role)
                 <a href="{!! url('/users') !!}"> <section class="col-md-4 dashboard-widget-col">
                     <section class="dashboard-widget"><span class="dahsboard-item-icon dashboard-item-user"></span><span
-                                class="dashboard-item-name">{!! $role->display_name !!} </span><span
+                                class="dashboard-item-name">{!! $role->display_name !!}s </span><span
                                 class="dashboard-item-count">{!! DB::table('role_user')->join('roles', 'roles.id', '=', 'role_user.role_id')->where('roles.name','=',$role->name)->count() !!}</span></section>
                 </section>
                 </a>
