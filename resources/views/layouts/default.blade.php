@@ -13,7 +13,7 @@
         <section class="sidebar">
             @include('includes.menu')
 
-            <center style="color: white;"><h4 >Adapto VB1.0.1(20170123)</h4><br>© Copyright 2017 - Adapto<br/>
+            <center style="color: white;"><h4 >Adapto VB1.0.1(20170124)</h4><br>© Copyright 2017 - Adapto<br/>
                 Technology Pty Limited <br/>(ACN 608 530 669).</center>
         </section>
     </aside>
