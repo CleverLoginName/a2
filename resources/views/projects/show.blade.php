@@ -113,7 +113,7 @@
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Edit in Canvas</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p><a href="{!! url('projects/'.$projectPlan->id.'/canvas') !!}">Link</a> </p>
+                                    <p><a href="{!! url('projects/'.$project->id.'/canvas') !!}">Link</a> </p>
                                 </div>
                             </div>
                         </div>

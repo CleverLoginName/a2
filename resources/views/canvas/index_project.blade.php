@@ -42,13 +42,16 @@
    $address = \App\Address::where('id','=',$project->address_id)->first();
    $template = \App\Template::where('id','=',$project->template_id)->first();
 
-
+	if($template){
 	$total = (intval($template->sqm_house)*5)+
 				(intval($template->sqm_porch)*4)+
 				(intval($template->sqm_garage)*3)+
 				(intval($template->sqm_terrace)*4)+
 				(intval($template->sqm_balcony)*4)+
 				(intval($template->sqm_alfresco)*4);
+	}else{
+	$total = 0;
+	}
 	$consultant = \App\User::find($project->consultant_id);
 
    }

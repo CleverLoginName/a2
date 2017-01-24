@@ -1957,9 +1957,10 @@ function generateAndLoadObjectFromParams(params){
 		currentObj = new Eraser();
 	} else if (params.objType == ObjectType.PACK){
 		currentObj = new PackItem();
-	}
-	 else {
-		alert ('Invalid Object Type');
+	} else if (params.objType == ObjectType.PRODUCT){
+		currentObj = new ProductItem();
+	} else {
+		console.error('Invalid Object Type :' + params.objType);
 		return;
 	}
 
