@@ -297,7 +297,13 @@
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
                     <a id="prod-frm-reset" href="{!! url('products') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
-                    <a id="prod-frm-reset" href="{!! url('projects/'.$project->id.'/canvas') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
+
+                    @php
+                        $projectPlans = \App\ProjectPlan::where('project_id','=',$project->id)->get();
+                    @endphp
+                    @if($projectPlans)
+                    <a id="prod-frm-reset" href="{!! url('projects/'.$projectPlans[0]->id.'/canvas') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
+                        @endif
                 </section>
             </form>
         </section>

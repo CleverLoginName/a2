@@ -52,6 +52,7 @@
                 <div class="loging_form">
                     <img  class="brand_logo" src="{!! asset('resources/images/logo_login.png') !!}"/>
                     <form name='loginForm' class="landing-login-form" role="form" method="POST" action="{{ url('/login') }}">
+                        {{ csrf_field() }}
                         <input id="email" type="email" required="required"  placeholder="Email" class="input_name" name="email" value="{{ old('email') }}">
                         <input id="password" type="password" required="required" class="input_pass" placeholder="Password"  name="password">
                         <input type="checkbox" name="remember" class="input_checkd_box">
