@@ -15,8 +15,8 @@ return [
     */
 
     'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
+        'domain' => 'test.adapto.com.au',
+        'secret' => 'key-d507f739f97949fbbd08af554d6ee561',
     ],
 
     'ses' => [

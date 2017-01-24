@@ -1,0 +1,599 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+@import url('https://fonts.googleapis.com/css?family=Droid+Sans|Open+Sans+Condensed:300');
+body, html, ul, li, p, h1, h2, h3, h4, h5 {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+.nav-side-menu li a, label {
+	text-transform: uppercase
+}
+input, select {
+	font-family: 'Droid Sans', sans-serif;
+}
+/*---------- Common CSS----------*/
+
+
+.noBg {
+	background: #fff !important;
+	border: 1px solid #fff !important;
+	padding: 0px !important;
+}
+.common_searchBox {
+	padding-right: 0px !important
+}
+.common_searchButton {
+	padding-left: 0px !important
+}
+.padding_R{ padding-right:0px !important}
+.margin_top_20 {
+	margin-top: 20px;
+}
+.btn_search {
+	width: 35px;
+	height: 34px;
+	display: block;
+	padding: 0px 15px 15px 0px;
+	background: #fff;
+	border: 1px solid #ccc;
+	width: 100%;
+	text-align: center;
+	/* padding-top: 41px; */
+	height: 34px;
+	display: block;
+	padding: 5px 15px 15px 0px;
+	border: 1px solid #ccc;
+	background: #fff url(../images/ico_search.jpg) no-repeat center center;
+}
+.common_searchBox input {
+	border-radius: 0px !important;
+   /*	border-right: 0px;*/
+}
+.nav-side-menu li a {
+	font-size: 1.3em
+}
+.nav-side-menu li {
+	line-height: 60px;
+}
+.nav-side-menu ul .sub-menu li {
+	line-height: 40px;
+}
+.nav-side-menu ul .sub-menu li {
+	padding-right: 30px;
+}
+.borderB_10 ul:first-child{border-bottom:10px solid #585555 !important}
+/*
+li.[aria-expanded$="true"] {
+ 	background:#414342;
+	
+	background-image:url(../images/ico_active.png); 
+-o-transition: opacity 0.5s;
+}*/
+ 
+
+.wr_left {
+	background: #2e353d;
+	padding: 0px;
+}
+.btn_logout a {
+	display: block;
+	padding: 10px;
+	border: 1px solid #0060d8;
+	width: 81px;
+	background: url(../images/ico_logout.jpg) no-repeat 5px 11px;
+	float: right;
+	text-transform: uppercase;
+}
+.btn_logout {
+	text-align: right;
+}
+.topBar {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+.breadcrumb {
+	background: #fff url(../images/ico_projects.jpg) no-repeat 5px 5px;
+	padding-left: 45px;
+}
+.form_container {
+	width: 100%;
+	background: #ccc;
+	border: 1px solid #5d5b5c;
+	padding: 17px;
+}
+.form_container a {
+	color: #0097ff;
+	font-family: 'Droid Sans', sans-serif;
+}
+.form_container input[type="text"], .form_container select {
+	margin-bottom: 15px;
+	border-radius: 0px !important;
+}
+.form_container ul li {
+	font-family: 'Droid Sans', sans-serif;
+	list-style: none;
+	border-bottom: 1px solid #ededed;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 10px
+}
+.form_container ul li:nth-child(odd) {
+	background: #d9d9d9;
+	float: left;
+	width: 100%;
+}
+.form_container ul li:nth-child(even) {
+	float: left;
+	width: 100%;
+}
+.wr_btn {
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	background: #5d5b5c;
+}
+.btn_save {
+	font-family: 'Roboto Condensed', sans-serif;
+	float: right;
+	border: 1px solid #333;
+	background: #0060d8;
+	border-radius: 3px;
+	padding: 10px 20px;
+	color: #fff;
+	margin-bottom: 0px !important;
+	margin-left: 10px;
+	text-transform: uppercase;
+}
+.btn_reset {
+	font-family: 'Roboto Condensed', sans-serif;
+	float: right;
+	border: 1px solid #333;
+	background: #5b5d5c;
+	border-radius: 3px;
+	padding: 10px 20px;
+	color: #fff;
+	margin-bottom: 0px !important;
+	text-transform: uppercase;
+}
+.content_right {
+}
+.user_instructions img {
+	margin: auto;
+	display: block;
+	margin-bottom: 20px;
+}
+.user_instructions {
+	background: #3c8dbc;
+	border: 1px solid #357ca5;
+	padding: 17px;
+	color: #fff;
+}
+.user_instructions ul li {
+	list-style: none;
+	margin-bottom: 10px;
+	background: url(../images/ico_user_instructions.jpg) no-repeat 5px 5px;
+	padding-left: 25px;
+}
+.error_message {
+	color: #ff0000;
+	font-family: 'Droid Sans', sans-serif;
+	font-size: 14px;
+}
+.has-error input, .has-error select {
+	margin-bottom: 5px !important;
+}
+/* --------------------- New client CSS -----------------------*/
+
+.common_button a {
+	display: block;
+	color: #333;
+	border: 1px solid #333333;
+	text-align: center;
+	background: #fff;
+	padding: 30px 20px;
+	font-size: 1.4em
+}
+.new_client {
+	background: url(../images/ico_newClient.jpg) no-repeat 5px 5px !important
+}
+/* --------------------- New Project MODEL Popup CSS -----------------------*/
+
+.new_Project_popup .modal-content {
+	border: 2px solid #5d5b5c;
+	box-shadow: 0px 0px 20px #000;
+	border-radius: 5px !important
+}
+.modal-header .close {
+	margin-top: -43px;
+	margin-right: -39px;
+	background: #fff;
+}
+button.close {
+	-webkit-appearance: none;
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	width: 58px;
+	height: 58px;
+	font-size: 48px;
+	font-weight: normal;
+	opacity: 1;
+	border: 3px solid #0060d8;
+	color: #0060d8;
+	padding: 0 !important;
+	text-align: center;
+	vertical-align: top;
+	border-radius: 50%;
+	background:#fff url(../images/ico_close.jpg) no-repeat center center !important;
+}
+button.close:hover {
+	opacity: 1 !important;
+	color: #0060d8;
+}
+.new_Project_popup .modal-content {
+	background: #e7e7e7
+}
+.modal-title {
+	color: #0060d8;
+	font-size: 1.5em;
+	background: url(../images/ico_designTemplate.jpg) no-repeat 5px 5px;
+	padding-left: 37px;
+}
+.ttl_consultants {
+	color: #0060d8;
+	font-size: 1.5em;
+	background: url(../images/ico_consultants.jpg) no-repeat 5px 0px;
+	padding-left: 37px;
+	padding-left: 46px;
+	padding-bottom: 8px;
+}
+ 
+.model_search_results {
+	height: 422px;
+	overflow-y: scroll;
+}
+.model_search_results ul li {
+	list-style: none;
+	display: block;
+	padding: 5px;
+	border-bottom: 2px solid #fff;
+}
+.model_search_results ul li:nth-child(odd) {
+	background: #9c9b9c;
+	color: #fff;
+	float: left;
+	width: 100%;
+}
+.model_search_results ul li:nth-child(even) {
+	background: #ccc;
+	color: #5d5b5c;
+}
+.model_search_results ul li:hover, .model_search_results ul li.selected{
+	color: #0097ff;
+	cursor:pointer;
+	font-weight:bold
+}
+ 
+
+
+.btn_load {
+	margin: 15px 0;
+}
+/* --------------------- New Project MODEL Popup CSS -----------------------*/
+.consultant_wrapper {
+	background: #fff;
+}
+.img_consultant {
+	background: #fff;
+	text-align: center;
+	padding-top: 15px;
+}
+.img_consultant img {
+	border: 1px solid #222;
+}
+
+.desc_consultant {
+	background: #cccccc;
+	border-left: 2px solid #414342;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.desc_consultant ul {
+	margin-top: 15px;
+}
+.desc_consultant ul li {
+	background: none !important;
+	border: none !important;
+	color: #5d5b5c !important;
+	font-weight: bold;
+	font-size: 15px;
+	line-height: 15px;
+	padding-left:0px !important;
+}
+.desc_consultant   ul li{ float:left !important}
+
+
+.btn_assign {
+	border: 1px solid #333;
+	background: #0060d8;
+	border-radius: 3px;
+	padding: 2px 20px;
+	color: #fff;
+	margin-bottom: 0px !important;
+	margin-top: 10px;
+}
+.desc_consultant h5 {
+	color: #5d5b5c;
+	font-size: 16px;
+	font-weight: bold;
+}
+.desc_consultant p {
+	color: #5d5b5c;
+	font-size: 14px;
+	font-weight: bold;
+}
+.consultant_results_bg ul li {
+	background: #585555 !important;
+	border-bottom: none !important;
+	padding: 9px 10px 1px 10px;
+}
+.consultant_results_bg ul li ul li {
+	background: none !important;
+	border-bottom: none !important
+}
+.consultant_results_bg ul li:nth-child(odd) {
+	float: none;
+	width: 100%;
+}
+.modal-content {
+	padding-bottom: 30px;
+}
+/* --------------------- New Template uploading and saving CSS -----------------------*/
+.file_uploader {
+	background: #aaaaaa;
+	border: 1px dashed #e8e8e8;
+	padding: 20px;
+	text-align: center;
+	;
+}
+.file_uploader input[type="file"] {
+	background: none !important;
+	border: 1px solid #333;
+	background: #0060d8 !important;
+	border-radius: 3px;
+	padding: 2px 20px;
+	color: #fff;
+	margin-bottom: 0px !important;
+	margin-top: 10px;
+	display: none
+}
+.browse_file {
+	border: 1px solid #333;
+	background: #0060d8 !important;
+	border-radius: 3px;
+	padding: 2px 20px;
+	color: #fff;
+	margin-bottom: 0px !important;
+	margin-top: 10px;
+	cursor: pointer;
+}
+.desc_plan {
+	background: #cccccc;
+	border-left: 2px solid #414342;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.desc_plan ul {
+	margin-top: 15px;
+}
+.desc_plan ul li {
+	background: none !important;
+	border: none !important;
+	color: #5d5b5c !important;
+	font-weight: bold;
+	font-size: 15px;
+	line-height: 15px;
+}
+.desc_plan h5 {
+	color: #5d5b5c;
+	font-size: 16px;
+	font-weight: bold;
+}
+.desc_plan p {
+	color: #5d5b5c;
+	font-size: 14px;
+}
+.new_template_uploader {
+	min-height: 550px;
+	overflow-y: scroll;
+}
+.new_template_uploader ul li:nth-child(odd) {
+	color: #5d5b5c;
+}
+/* --------------------- New Template CSS -----------------------*/
+
+.energy_rating img {
+	margin: 0px 0px 20px 48px;
+}
+
+/* --------------------- packs CSS -----------------------*/
+
+.dragArea ul li:hover{ cursor:move}
+.dropArea{ border:1px dashed #fff; min-height:400px;}
+
+/* --------------------- Create a product CSS -----------------------*/
+
+.add_new{ padding:0;}
+.add_new a{    display: block;
+    background: #e0e0e0;
+    color: #747474;
+    border: 1px solid #bababa;
+    text-align: center;
+    width: 33px;
+    font-size: 15px;
+    padding: 5px 5px 6px 5px;
+ }
+
+/* --------------------- product view CSS -----------------------*/
+.product_desc{ margin-top:30px; padding-top:30px; border-top:1px solid #fff;}
+.product_details p{ padding-top:5px;}
+.related_products{ margin-top:30px;}
+.product{ border:1px solid #fff !important; padding-top:30px;}
+.product img{margin:auto; margin-bottom:20px;}
+.product .form-group{margin-bottom:5px !important}
+.related_products h4{ text-transform:uppercase; margin-bottom:15px; font-weight:bold}
+
+/*------------------ Canvas Model Popup CSS---------------*/
+
+.canvas_popup .ttl_consultants {
+	color: #51748c;
+	font-size: 1.5em;
+	background: url(../images/ico_project_plans.jpg) no-repeat 5px 0px;
+	padding-left: 37px;
+	padding-left: 46px;
+	padding-bottom: 8px;
+}
+.canvas_popup button.close{
+	border: 3px solid #c43636;
+    color: #c43636;
+}
+.canvas_popup .img_consultant{ background:none}
+
+ 
+
+/*.consultant_results_bg::-webkit-scrollbar {
+    width: 0.5em !important;
+}*/
+ 
+ 
+.consultant_results_bg  {
+  scrollbar-face-color:#575556 !important;
+}
+ 
+.consultant_results_bg::-webkit-scrollbar { width: 1emx; height: 3px;}
+.consultant_results_bg::-webkit-scrollbar-button {  background-color: #f6f6f6; }
+.consultant_results_bg::-webkit-scrollbar-track {  background-color: #999;}
+.consultant_results_bg::-webkit-scrollbar-track-piece { background-color: #ffffff;}
+.consultant_results_bg::-webkit-scrollbar-thumb { height: 50px; background-color: #575556; }
+.consultant_results_bg::-webkit-scrollbar-corner { background-color: #999;}}
+.consultant_results_bg::-webkit-resizer { background-color: #666;}
+
+.designTemp  {
+  scrollbar-face-color:#575556 !important;
+}
+ 
+.designTemp::-webkit-scrollbar { width: 1emx; height: 3px;}
+.designTemp::-webkit-scrollbar-button {  background-color: #f6f6f6; }
+.designTemp::-webkit-scrollbar-track {  background-color: #999;}
+.designTemp::-webkit-scrollbar-track-piece { background-color: #ffffff;}
+.designTemp::-webkit-scrollbar-thumb { height: 50px; background-color: #575556; }
+.designTemp::-webkit-scrollbar-corner { background-color: #999;}}
+.designTemp::-webkit-resizer { background-color: #666;}
+
+
+
+
+
+
+
+
+/* ================================= MDEIA QUARIES ========================================*/
+@media (min-width: 768px) {
+.form-horizontal .control-label {
+	text-align: left !important;
+}
+.canvas_popup .desc_consultant{
+	padding-top:30px;
+	text-align: center;
+}
+.canvas_popup .col-md-8{ position:inherit}
+
+}
+@media (max-width: 768px) {
+.padding_R{ padding-right:0px !important;}
+}
+@media (max-width: 990px) {
+.img_consultant { padding-bottom:15px;}
+.img_consultant img{float:left}
+.img_consultant {clear:both}
+}
+
+@media (min-width: 989px) and (max-width:1920px){
+ .canvas_popup .desc_consultant{
+	padding-top:144px;
+	text-align: center;
+}
+.no_add_lg{ padding-right:0px !important;}
+
+}
+
+
+/* --------------------- Logign popup &  password reset popup -----------------------*/
+.loging_form{
+	width:280px;
+	height:390px;
+	margin:auto;
+	background-color:#fff;
+	border:#000 1px solid;
+	}
+
+.input_name{
+    width: 175px;
+    padding: 0px 6px;
+    margin: 20px 0px 0px 50px;
+    display: inline-block;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
+
+.input_pass{
+	width: 175px;
+    padding: 0px 6px;
+    margin: 10px 0px 0px 50px;
+    display: inline-block;
+    border: 1px solid #000;
+    box-sizing: border-box;
+	}
+	
+.input_checkd_box{
+    margin: 10px 0px 0px 50px !important;
+    display: inline-block;
+	}
+.btn_lg{
+margin: 10px 0px 0px 180px;
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #000;
+	}
+.frogot_pass{
+	    margin: 30px 54px 0px 50px;
+	padding:5px 0px;
+	border-top:1px solid #000;	
+	}
+.copyright_txt{
+	margin: 25px 0px 0px 48px;
+    font-size: 6.5px;
+	
+	}
+.frogot_pass a{
+	color:#272e68;
+	text-decoration:none;
+	}
+.passreset_txt{
+	margin: 15px 0px 0px 50px;
+    font-size: 10.2px;
+	}
+.btn_smb{
+	margin: 30px 0px 0px 166px;
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #000;
+	}
+.brand_logo{
+	margin:55px 0px 0px 50px;
+	font-size:38px;
+	
+	}
+.passreset_txt, .input_checkd_box, .loging_form{color:#272e68;}
+.bg1{ background:url(../images/1.jpg) no-repeat}

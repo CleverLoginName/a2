@@ -4,6 +4,7 @@
 Route::get('rest/api/products', 'TempController@products');
 Route::get('rest/api/canvas/{id}', 'TempController@loadOne');
 Route::post('rest/api/canvas', 'TempController@save');
+Route::get('mailsend', 'MailTestController@mailsend');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::auth();

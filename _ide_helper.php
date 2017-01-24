@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.45 on 2017-01-02.
+ * Generated for Laravel 5.2.45 on 2017-01-23.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -12464,6 +12464,7 @@ namespace {
          * @param callback|null $callback
          * @param string|null $encoding
          * @param bool $noBasePath
+         * @param callback|null $callbackConfigReader
          * @return \Maatwebsite\Excel\LaravelExcelReader 
          * @static 
          */
