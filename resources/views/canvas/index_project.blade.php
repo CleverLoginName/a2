@@ -443,10 +443,10 @@
     <div id="design-area" class="col-xs-12 col-sm-12 col-md-8 col-lg-10">
 
     <div id="address-bar" class="clearfix">
-        <div class="headerDiv first border-left-add">
+        <div class="headerDiv first border-left-add" title="{!! $project->job !!}">
                 Job #: {!! $project->job !!}
         </div>
-        <div class="headerDiv second">
+        <div class="headerDiv second" title="{!! $address->street_name.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}">
 
 			{!! $address->street_name.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}
         </div>

@@ -192,7 +192,7 @@ class TemplatesController extends Controller
         $templatePlan = TemplatePlan::find($request->get('id'));
         $templatePlan->design = $request->get('design');
         $templatePlan->level = $request->get('level');
-        $templatePlan->template_data =   0;
+        //$templatePlan->template_data =   0;
         $templatePlan->catalog_id = $request->get('catalog_id');
         $templatePlan->save();
 

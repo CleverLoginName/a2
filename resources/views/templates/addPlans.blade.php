@@ -102,7 +102,7 @@
 
 <table>
     <tr>
-        <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate Plan</a>
+        <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
         </td>
         <td width="15"></td>
         <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
@@ -234,9 +234,10 @@
                                 </div>
                             </li>
                         @endforeach
-                    @endif
 
-                    <li>
+                    @endif
+                        <li>
+
 
                 </ul>
             </div>
