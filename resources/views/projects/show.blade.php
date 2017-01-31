@@ -87,9 +87,9 @@
                     @php
                         $projectPlans = \App\ProjectPlan::where('project_id','=',$project->id)->get();
                     @endphp
-
+                    <div class="row is-table-row">
                 @foreach($projectPlans as $projectPlan)
-                    <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                         <div class="product">
                             <img src="/{!! $projectPlan->img !!}" class="img-responsive col-md-12">
                             <div class="form-group clearfix">
@@ -119,8 +119,7 @@
                         </div>
                     </div>
                     @endforeach
-
-
+                </div>
                 </div>
             </div>
 
@@ -156,4 +155,19 @@
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
                 class="breadcrumb-text">{!! $project->job !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
+@stop
+@section('post-css')
+    <style>
+            .row is-table-row{
+                overflow: hidden;
+            }
+            .product {
+                margin-bottom: -99999px;
+                padding-bottom: 99999px;
+            }
+            .img-responsive{
+                height: 200px;  overflow-y: hidden;
+            }
+
+    </style>
 @stop

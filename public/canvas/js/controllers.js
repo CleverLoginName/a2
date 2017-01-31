@@ -1,14 +1,4 @@
 // icons actions
-
-// $('#tool-items-ul a').click(function () {
-//     $('#tool-items-ul li').removeClass('active');
-//     $(this).parent().addClass('active');
-//     clearObjStatusesAndSetToDraw();
-//     drawAllObjects();
-// });
-
-// var width =  $(window).width() ;
-// var height = $(window).height();
 	
 $('.toggle-button a').click(function () {
     $('.toggle-button').removeClass('active');
@@ -46,7 +36,7 @@ $('#rotate').click(function () {
 
 $('#pan').click(function () {
     toolAction = ToolActionEnum.PAN;
-    hideDialog();
+    hideItemPopups();
     document.getElementsByTagName("body")[0].style.cursor = "pointer";
 });
 
@@ -70,87 +60,7 @@ $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     printCanvas();
 });
-
-
-$("#b-save").on("click", function () {
-    $("#switch-prop").hide();
-});
-
-$("#bb-save").on("click", function () {
-    $("#bulb-prop").hide();
-});
-
-$("#bulb-prop-close").on("click", function () {
-    $("#bulb-prop").hide();
-});
-
-$("#switch-prop-close").on("click", function () {
-    $("#switch-prop").hide();
-    var selectBulb = document.getElementById("switch-b");
-    var selectSwitch = document.getElementById("switch-lig");
-    selectSwitch.innerHTML = "";
-    // selectBulb.innerHTML = "";
-});
 // icons actions end
-
-// DROP ITEM TO THE CANVAS
-
-var angle, elev, power, type, b_tooltip, s_angle, s_elev, s_power, s_bname, s_type, s_tooltip,bulb_icon,cat_type;
-
-//var single_item = document.getElementsByClassName('single-item');
-
-$(".product-container").on("click", ".single-item", function (e) {
-
-    var getItemType = $(this).attr("attr");
-
-    if (this.getAttribute("attr") == 'LIGHT_BULB') {
-        toolAction = ToolActionEnum.DRAW;
-        drawObjectType = ObjectType.LIGHT_BULB;
-
-        angle = this.getAttribute("data-angle");
-        elev = this.getAttribute("data-evel");
-        power = this.getAttribute("data-power");
-
-        bname = this.getAttribute("data-name");
-        type = this.getAttribute("attr");
-        b_tooltip = this.getAttribute("data-tooltip");
-        bulbPrice = this.getAttribute("data-price");
-        set_itemCode = this.getAttribute("data-item-code");
-        lightImagePath = this.getAttribute("data-path");
-        bulb_icon  = this.getAttribute("data-path1");
-        cat_type = this.getAttribute("data-category-type");
-
-        document.getElementsByTagName("body")[0].style.cursor = "url('img/cursor/bulb-icon.cur'), auto";
-    }
-
-    $('#tool-items-ul li').removeClass('active');
-
-});
-
-
-$("#product-container-switch").on("click", ".single-item", function (e) {
-    var getItemType = $(this).attr("attr");
-    if (this.getAttribute("attr") == 'LIGHT_SWITCH') {
-            toolAction = ToolActionEnum.DRAW;
-            drawObjectType = ObjectType.LIGHT_SWITCH;
-
-            s_angle = this.getAttribute("data-angle");
-            s_elev = this.getAttribute("data-evel");
-            s_bname = this.getAttribute("data-name");
-            s_type = this.getAttribute("attr");
-            s_tooltip = this.getAttribute("data-tooltip");
-            set_itemCode = this.getAttribute("data-item-code");
-            switchImagePath = this.getAttribute("data-path");
-            
-            switchPrice = this.getAttribute("data-price");
-
-            document.getElementsByTagName("body")[0].style.cursor = "url('img/cursor/switch-icon.cur'), auto";
-    }
-});
-
-$("#product-container-Prise").on("click", ".single-item", function (e) {
-    $("#drag").trigger("click");
-});
 
 function getFullCanvas(){
     var fullCanvas = document.createElement('canvas');
@@ -191,6 +101,8 @@ function getFullCanvas(){
         var obj = drawElements[index];
         
         if (!(obj instanceof CanvasItem)) continue;
+
+        drawConnections(obj, fullctx);
 
 		var sX = obj.getObjStartX();
 		var sY = obj.getObjStartY();
@@ -346,77 +258,12 @@ function printCanvas() {
     setTimeout(function() {
     printWin.print();
     printWin.close();
-}, 250);
+}, 750);
     // printWin.print();
     // printWin.close();
 }
 
-$('#elements').hide();
 
-/* Controlls tool selection */
-$('#tools input').change(function () {
-    var val = $(this).val();
-
-    switch (val) {
-        case 'draw':
-            $('#elements').show();
-            toolAction = ToolActionEnum.DRAW;
-            break;
-        case 'scale':
-            $('#elements').hide();
-            toolAction = ToolActionEnum.SCALE;
-            break;
-        case 'drag':
-            $('#elements').hide();
-            toolAction = ToolActionEnum.DRAG;
-            break;
-        case 'pan':
-            $('#elements').hide();
-            toolAction = ToolActionEnum.PAN;
-            break;
-        case 'rotate':
-            $('#elements').hide();
-            toolAction = ToolActionEnum.ROTATE;
-            break;
-        default:
-            $('#elements').hide();
-    }
-
-    console.log("Toola action is " + toolAction);
-    drawAllObjects();
-});
-
-
-/* Controlls drawing element selection */
-$('#elements input').change(function () {
-    var val = $(this).val();
-
-    switch (val) {
-        case 'circle':
-            drawObjectType = ObjectType.CIRCLE;
-            break;
-        case 'wall':
-            drawObjectType = ObjectType.WALL;
-            break;
-        case 'cont_wall':
-            drawObjectType = ObjectType.CONT_WALL;
-            break;
-        case 'bulb':
-            drawObjectType = ObjectType.LIGHT_BULB;
-            break;
-        case 'switch':
-            drawObjectType = ObjectType.LIGHT_SWITCH;
-            break;
-        case 'text' :
-            drawObjectType = ObjectType.TEXT;
-            break;
-        case 'square':
-        default:
-            drawObjectType = ObjectType.SQUARE;
-    }
-
-    $('#tool-items-ul li').removeClass('active');
-});
 
 $(function () {
     $('#print').click(function () {
@@ -488,11 +335,11 @@ $(function () {
         switch (action) {
             case 'zoom-in':
                 zoomIn();
-                hideDialog();
+                hideItemPopups();
                 break;
             case 'zoom-out':
                 zoomOut();
-                hideDialog();
+                hideItemPopups();
                 break;
             case 'zoom-reset':
                 zoomReset();
@@ -650,25 +497,33 @@ $('#tool-items-ul a').click(function () {
 
 $("#sidebar").resizable();
 $('#sidebar').resize(function() {
-    $('#design-area').width($(window).width() - $("#sidebar").width());
-    adjustCanvas();
+    adjustDesignArea();
  });
  
 
 // Changing the canvas width and height according to window resize
 $(window).resize(function () {
-    $('#design-area').width($(window).width() - $("#sidebar").width());
     $('#sidebar').height($(window).height());
     adjustSidebar();
-    adjustCanvas();
+    resizeSidebarContent();
+    adjustDesignArea();
     drawAllObjects();
 });
+
+function adjustDesignArea(){
+    var tol = 3;
+    $('#design-area').width($(window).width() - $("#sidebar").width() -tol);
+    $('#design-area').height($(window).height() - 1);
+    $('#design-area').css({top:0, left: $("#sidebar").width()});    
+    adjustCanvas();    
+}
 
 function adjustCanvas() {
     
     var canvas_offset = $(canvasOrig).offset();
-    var width =  $(window).width() - canvas_offset.left -5;
-    var height = $(window).height() - canvas_offset.top;
+    //var width =  $(window).width() - canvas_offset.left -5;
+    var width =  $('#design-area').width();
+    var height = $('#design-area').height() - canvas_offset.top;
     rulerCanvas.width = width;
     rulerCanvas.height = height;
     canvasOrig.width = width;
@@ -689,16 +544,15 @@ function adjustCanvas() {
 
 adjustSidebar()
 function adjustSidebar(){
-    $('#sidebar').height($(window).height());
-    $('#main-pnnel-drag').height($(window).height() * 70 / 100);
-    $('#bom-area').height($(window).height() * 30 / 100);
+    var height = $(window).height() - 1;
+    $('#sidebar').height(height);
+    // $('#main-pnnel-drag').height(height * 70 / 100);
+    // $('#bom-area').height(height * 30 / 100);
 
-//    $('#bom-area').width($('#main-pnnel-drag').width());
     $('#bom-area').width($('#sidebar').width());
     $('#bom-table').width($('#sidebar').width());
-    $('.body-main').css("height",($(window).height() * 70 / 100));
+    $('.body-main').css("height",(height * 70 / 100));
     $('#main-pannel-body').height( $('#main-pnnel-drag').height()-$('#main-hadder').height())
-    //			document.getElementById("sidebar").setAttribute("style","height:"+screen.height+"px");
 }
 
 $('#plans-button').click( function(){
@@ -723,3 +577,12 @@ $('#plans-button').click( function(){
 $(".toggle-button").click( function () {
     performEscapeAction()
 })
+
+$(document).ready(function() { 
+    showTopIcons();
+});
+
+
+function showTopIcons() {
+    $('.top-menu-item').show();
+}

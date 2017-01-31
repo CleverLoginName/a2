@@ -8,34 +8,45 @@ var imgWidth =0;
 function populateDialog(e,selObj1, xOffset, yOffset) {
     this.selObj =selObj1;
     var canvas_offset = $(canvasOrig).offset();
-    var width =  $(window).width() - canvas_offset.left;
-    var height = $(window).height() - canvas_offset.top;
-
     var center = getConvertedPoint(selObj1.getCenter());
     center.x += canvas_offset.left;
     center.y += canvas_offset.top;
-    hideDialog();
+    hideItemPopups();
     if(imgHight == 0 && imgWidth == 0){
         imgHight = $('.image-background').height();
         imgWidth =$('.image-background').width();
     }
     $('.image-background').height(imgHight*zoom).width(imgWidth*zoom);
-    $('#item-popup').css({ top: center.y-50*zoom , left:  (center.x)-40*zoom});//.slideDown();
-    $('#item-popup1').css({ top: center.y-50*zoom, left: center.x+10*zoom});//.slideDown();
-    $('#item-popup2').css({ top: center.y-15*zoom, left:  center.x+30*zoom});//.slideDown();
-    $('#delete-item').css({ top: center.y-15*zoom, left:  center.x-60*zoom});
-    $('.item-popup').show();
-    if(selObj1.getType()== ObjectType.LIGHT_BULB){
-        $('#item-popup').hide();
-        $('#item-popup1').css({ top: center.y-50*zoom, left: center.x-15*zoom});
+
+    var itemPopupIds = [];
+    itemPopupIds.push('#item-popup-close');
+    itemPopupIds.push('#item-popup-info');
+    if(selObj1.getConnections().length > 0){
+        itemPopupIds.push('#item-popup-remW');
     }
-    $('#item-popup').addClass('animated bounceIn');
-    $('#item-popup1').addClass('animated bounceIn');
-    $('#item-popup2').addClass('animated bounceIn');
-    $('#delete-item').addClass('animated bounceIn');
+    if(selObj1.getType()== ObjectType.LIGHT_SWITCH){
+        itemPopupIds.push('#item-popup-conW');
+    }
+    
+    var theta_step = Math.PI / 6;
+    if (itemPopupIds.length > 3) {
+        theta_step = Math.PI / (2*itemPopupIds.length);
+    }
 
+    var radius = 60;
+    var theta = 0;
+    var x,y;
+    for (var index = 0; index < itemPopupIds.length; index++) {
+        theta += theta_step;
+        x = center.x + (radius * Math.cos(theta) - imgWidth / 2) * zoom;
+        y = center.y - (radius * Math.sin(theta) + imgHight / 2) * zoom;
+        $(itemPopupIds[index]).css({ top: y , left:  x});
+        $(itemPopupIds[index]).show();
+        $(itemPopupIds[index]).addClass('animated bounceIn');
+        theta += theta_step;
+    }
 
-    $('#item-popup').click(function(e) {
+    $('#item-popup-conW').click(function(e) {
        var selObj_new= getSelObject(startX, startY);
         if(selObj_new.getType() == ObjectType.LIGHT_SWITCH){
             isHide = false;
@@ -46,20 +57,20 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     });
 
 
-    $('#item-popup2').click(function() {
-        hideDialog();
+    $('#item-popup-close').click(function() {
+        hideItemPopups();
         isHide = true;
         changeBulbMood();
         toolAction = ToolActionEnum.DRAG;
     });
 
-    $('#item-popup1').click(function(e) {
+    $('#item-popup-info').click(function(e) {
         showCanvasProductTooltip(e);
     });
 
 
 
-    $('#delete-item').click(function(e) {
+    $('#item-popup-remW').click(function(e) {
         isHide = false;
         getConnectedBulbs();
         toolAction = ToolActionEnum.REMOVE_CONNECTION;
@@ -118,7 +129,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
 
 
 
-function hideDialog() {
+function hideItemPopups() {
     $('.item-popup').hide();
 }
 

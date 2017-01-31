@@ -130,7 +130,7 @@ function ProductItem(){
     this.symbolPath = "";
     this.category_type = "";
     this.notes = ""
-    // this.watts = 0;
+    this.watts = 0;
     this.isInsidePack = false;
     this.parentPackId = null; //only valid for pack items 
 
@@ -139,13 +139,16 @@ function ProductItem(){
     this.height = 40;
 }
 
-// PackItem.prototype.getWatts = function(){
-//     return this.watts;
-// }
+ProductItem.prototype.getWatts = function(){
+    return this.watts;
+}
 
-// PackItem.prototype.setWatts = function(watts){
-//     this.watts = watts;
-// }
+ProductItem.prototype.setWatts = function(watts){
+    var watts_checked = parseFloat(watts);
+    if(!isNaN(watts_checked)){
+        this.watts = watts_checked;
+    } 
+}
 
 /* Sets the name*/
 ProductItem.prototype.setName = function(name){
@@ -377,9 +380,9 @@ function LightSwitch(){
     this.scalerSize = 10;
     this.radius = 20;
 
-    this.elevation = s_elev;
-    this.angle = s_angle;
-    this.type = s_type;
+    this.elevation = 0;
+    this.angle = 0;
+    this.type = null;
     this.connections = [];
 }
 

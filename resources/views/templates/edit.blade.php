@@ -45,7 +45,7 @@
                                     Terrace
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('terrace_watts_per_sqm',$template->terrace_watts_per_sqm,['class'=>'form-control required','placeholder'=>"5w Per SQM",'id'=>'terrace_watts_per_sqm']) !!}
+                                    {!! Form::text('terrace_watts_per_sqm',$template->sqm_terrace,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'terrace_watts_per_sqm']) !!}
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -59,7 +59,7 @@
                                     Balcony
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('balcony_watts_per_sqm',$template->balcony_watts_per_sqm,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'balcony_watts_per_sqm']) !!}
+                                    {!! Form::text('balcony_watts_per_sqm',$template->sqm_balcony,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'balcony_watts_per_sqm']) !!}
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -73,7 +73,7 @@
                                     Alfresco
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('alfresco_watts_per_sqm',$template->alfresco_watts_per_sqm,['class'=>'form-control required','placeholder'=>"3w Per SQM",'id'=>'alfresco_watts_per_sqm']) !!}
+                                    {!! Form::text('alfresco_watts_per_sqm',$template->sqm_alfresco,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'alfresco_watts_per_sqm']) !!}
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -92,7 +92,7 @@
 
                                 </section>
                                 <section class="col-md-2">
-                                    Scale
+                                    Rating
                                 </section>
                                 <section class="col-md-4">
                                     {!! Form::select('energy_rating', [
@@ -124,7 +124,7 @@
                                                               class="loading-img-btn" style="display:none;"
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
-                    <a id="prod-frm-reset" href="{!! url('templates') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
+                    <a id="prod-frm-reset" href="{!! url()->current() !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
 
                 </section>
             </form>

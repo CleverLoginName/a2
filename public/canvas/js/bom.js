@@ -14,6 +14,7 @@ function getBomDictionary(element_array){
         var key;
         if(item instanceof ProductItem) {
             var product = item;
+            total_watt += item.watts;
             if (product.isInsidePack) {
                 continue;
             }
@@ -35,14 +36,11 @@ function getBomDictionary(element_array){
             bomRow.tot_price = item.price;
             bom_dictionary[key] = bomRow;
             totel_price += item.price ;
-            total_watt += item.watts;
-
         }
         else {
             bom_dictionary[key].qty += 1; 
-            bom_dictionary[key].tot_price += item.price; 
+            bom_dictionary[key].tot_price += item.price;
             totel_price += item.price ;
-            total_watt += item.watts;
         }
     }
     upDateTotalPrice(totel_price);

@@ -22,11 +22,19 @@
     display:inline-block;
     /*width:110px;*/
     white-space: nowrap;
-    tab-size: 15px;
-    /*overflow:hidden !important;*/
+    /*tab-size: 15px;*/
+    overflow:hidden !important;
     text-overflow: ellipsis;
 }
 
+.catelog-name{
+    /*display:inline-block;*/
+    /*width:80%;*/
+    white-space: nowrap;
+    /*tab-size: 15px;*/
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+}
 
 .inside-body-pan{
     overflow-x: hidden;
@@ -52,7 +60,7 @@
 .lobipanel>.panel-heading .dropdown{ position:absolute !important; right:0px;}
 .lobipanel .panel-heading .dropdown .dropdown-menu{ float:right}
 .level-2{ float:left; width:100%; margin-top:10px;}
-.lobipanel{ height:auto !important}
+/*.lobipanel{ height:auto !important}*/
 #tool-items-ul{ padding-left:0px;}
 
 .wr_logout .tool-item .tooltiptext { 
@@ -117,30 +125,10 @@
  
  
 @media screen and (min-width: 768px){
-.lobipanel .panel-heading .panel-title {
-    max-width: 100% !important;
-}
 .lobipanel>.panel-heading {
     padding: 5px;
-	/*margin-bottom:25px;*/
 	border-bottom:1px solid #fff !important;
+        overflow:hidden !important;
+    text-overflow: ellipsis;
 }
 }
-
-@media screen and (min-width: 1024px){
-#sidebar{
-    width:275px;
-}
-#design-area{width:75%}
-}
-
-
-@media screen and (min-width: 380px) and ( max-width: 990px ){
-#sidebar{
-    width:100%;
-}
-#design-area{width:100% !important}
-/*#top-canvas, #bg-canvas, #draw-tool-canvas{width:100% !important}*/
-}
-/*#ruler-canvas, #bg-canvas, #draw-tool-canvas, #top-canvas, #address-bar, #top-menu{ display:none}*/
- 

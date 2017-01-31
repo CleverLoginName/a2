@@ -334,25 +334,6 @@
                     }
                 };
                     
-                    var getItemType = $(this).attr("attr");
-
-                    if (this.getAttribute("attr") == 'LIGHT_BULB') {
-                        toolAction = ToolActionEnum.DRAW;
-                        drawObjectType = ObjectType.LIGHT_BULB;
-
-                        angle = this.getAttribute("data-angle");
-                        elev = this.getAttribute("data-evel");
-                        power = this.getAttribute("data-power");
-
-                        bname = this.getAttribute("data-name");
-                        type = this.getAttribute("attr");
-                        b_tooltip = this.getAttribute("data-tooltip");
-                        bulbPrice = this.getAttribute("data-price");
-                        set_itemCode = this.getAttribute("data-item-code");
-                        lightImagePath = this.getAttribute("data-path");
-                        iconPath  = this.getAttribute("data-path1");
-
-                    }
 
                 });
 
@@ -373,44 +354,45 @@
                     var y = dropPnt.y;
 
 
-                    var draggableName = ui.draggable.attr("data-name");
-                    var draggableProductID = ui.draggable.attr("data-product-id");
-                    // get the drop payload (here the payload is the $tools index)
+                    var dragItem = ui.draggable[0];
+                    if ($(dragItem).hasClass('single-item')) {
+                        var draggableName = $(dragItem).attr("data-name");
+                        var draggableProductID = $(dragItem).attr("data-product-id");
+                        // get the drop payload (here the payload is the $tools index)
 
-                    if(is_pack == 1){
-                        $.each(data, function( index, value ) {
-                                $.each(value.data, function(i1, v1) {
-                                    $.each(v1.data, function(i2, v2) {
-                                        if(pack_id ==  parseInt(v2.sub_category_id)){
-                                            addPack(x,y, v2);
-                                        }
+                        if(is_pack == 1){
+                            $.each(data, function( index, value ) {
+                                    $.each(value.data, function(i1, v1) {
+                                        $.each(v1.data, function(i2, v2) {
+                                            if(pack_id ==  parseInt(v2.sub_category_id)){
+                                                addPack(x,y, v2);
+                                            }
+                                    });
                                 });
                             });
-                        });
-                    } else {
-                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath,product_watt);
+                        } else {
+                            addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath,product_watt);
+                        }
+                        drawAllObjects();
+                        //$('#tool-items-ul li').removeClass('active');
                     }
-                    drawAllObjects();
-                    $('#tool-items-ul li').removeClass('active');
 
                 }
 
                 function addPack(x,y,params){
                     var pack = new PackItem();
-                    var packWatt = 0;
+
                     pack.setUniqueItemID( generateUID() );
                     pack.setPackID(params.sub_category_id);
                     pack.setName(params.sub_category_name);
                     pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
                     
                     $.each(params.data, function(i, product) {
-                        packWatt = packWatt+(parseInt(product.Watts)|| 0);
                         var currentProduct = addProduct(x + i*40, y, product.type, product.id, product.name, product.builder_price, product.path, baseUrl+product.icon);
                         currentProduct.isInsidePack = true;
                         currentProduct.setParentPackID(pack.getUniqueItemID());
                         pack.pushProduct(currentProduct.getUniqueItemID());
                     });
-                    pack.setWatts(packWatt);
                     pushElementToDrawElement(pack);
                 }
 

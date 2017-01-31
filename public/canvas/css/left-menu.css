@@ -264,17 +264,17 @@ tbody {
 
 .tool-item .tooltiptext {
     visibility: hidden;
-    width: 120px;
-    background-color: #555;
+    /*width: 120px;*/
+    background-color: #4b718d;
     color: #fff;
     text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
+    /*border-radius: 6px;*/
+    padding: 5px ;
     position: absolute;
     z-index: 100;
-    bottom: -170%;
-    left: 60%;
-    margin-left: -60px;
+    /*bottom: -170%;*/
+    /*left: 60%;*/
+    margin-left: 15px;
     opacity: 0;
     transition: opacity 1s;
 }
@@ -471,12 +471,6 @@ tbody {
     left:200px;
     margin-top:10px;
 
-}
-#sidebar{
-    float: left;
-    /*width: 23%;*/
-    /*min-height:100%;*/
-    /*height: 620px;*/
 }
 
 #dragbar{
@@ -812,9 +806,9 @@ tbody {
   position: relative;
   float: left;
   background-color:#51748c !important;
- /* height: 100% !important;
-  /*width: 30%;*/
-  /*min-width:270px;*/
+  /*height: 100% !important;*/
+  width: 280px;
+  min-width:150px;
  }
 /*#top-canvas, #bg-canvas{ min-height:550px;}*/
 .without-margin{
@@ -824,9 +818,10 @@ tbody {
     margin-right: 0 !important;}
 
 #design-area {
-  position: relative;
+  position: absolute;
   float: left;
   height: 100%;
+  min-width:500px;
 }
 
 .ui-icon-gripsmall-diagonal-se { 
@@ -884,7 +879,7 @@ tbody {
 }
 
 .lobi-pannel-border{
-    border: solid 1px #fff;
+    border: solid 1px #000 !important;
     /*padding: 5px !important;*/
    }
 
@@ -919,4 +914,35 @@ tbody {
 
 .print-body{
     transition: none !important;
+}
+
+.top-menu-item{
+    display: none;
+}
+
+
+.lobipanel>.panel-heading .dropdown {
+    /*position: absolute !important;*/
+    right: 0px;
+}
+
+.pin:nth-child(2) {
+    width: 68px;
+}
+
+@media screen and (min-width: 768px){
+.lobipanel .panel-heading .panel-title {
+    max-width: calc(100% - 60px)!important;
+}
+.lobipanel>.panel-heading {
+    padding: 5px;
+	/*margin-bottom:25px;*/
+	border-bottom:1px solid #fff !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+}
+
+.dropdown-menu {
+    /*top: 0% !important;*/
 }

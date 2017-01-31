@@ -1,9 +1,9 @@
 /**
  * Created by ishara on 12/15/16.
  */
+pinedState = true;
+bomMinimize = true;
 $(function(){
-    pinedState = true;
-    bomMinimize = true;
     var size = $('#main-pannel-body').height();
     $('#main-pnnel-drag').lobiPanel({
         //Options go here
@@ -242,7 +242,7 @@ $(function(){
 
 
     $('.inner-class').lobiPanel('minimize');
-    $('#bom-area1').lobiPanel('minimize');
+    $('#bom-area').lobiPanel('minimize');
 
     $('.cat-1').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
     $('.cat-1').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
@@ -289,47 +289,25 @@ $(function(){
     $('.cat-15').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
     $('.cat-15').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
     $('#main-pnnel-drag').on('onPin.lobiPanel',function (ev,lobiPanel) {
-        if(bomMinimize){
-            $(this).height(window.innerHeight*70/100);
-            $('.body-main').css("height",window.innerHeight*70/100);
-            $('#main-pnnel-drag').height(window.innerHeight*94/100);
-            $('#bom-area').css("height",window.innerHeight*6/100);
-            $('#bom-area1').height(window.innerHeight*6/100);
-        } else {
-            $('#main-pnnel-drag').height(window.innerHeight*22/100);
-            $('#bom-area1').height(window.innerHeight*78/100);
-        }
-
         pinedState = true;
-//            $('#main-pannel-body').removeClass("inside-body-pan");
+        resizeSidebarContent();
     }).lobiPanel();
 
     $('#main-pnnel-drag').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {
         pinedState = false;
-        $(this).height(window.innerHeight*70/100);
-        $('.body-main').css("height",window.innerHeight*70/100);
-        $('#bom-area').css("height",window.innerHeight);
-//          $('#main-pannel-body').addClass("inside-body-pan");
+        resizeSidebarContent();
     }).lobiPanel();
 
 
-    $('#bom-area1').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
+    $('#bom-area').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
         bomMinimize = false;
-        if(pinedState){
-            console.log("pin unoooo");
-            $('#main-pnnel-drag').height(window.innerHeight*22/100);
-        } else {
-            console.log("pin nathooo");
-        }
-        $('#bom-area1').height(window.innerHeight*78/100);
+        resizeSidebarContent();
     }).lobiPanel();
 
 
-    $('#bom-area1').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
+    $('#bom-area').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
         bomMinimize = true;
-        $('#main-pnnel-drag').height(window.innerHeight*94/100);
-        $('#bom-area1').height(window.innerHeight*6/100);
-        $('#bom-area-dev').height(window.innerHeight*6/100);
+        resizeSidebarContent();
     }).lobiPanel();
 
 });
@@ -337,13 +315,34 @@ $(function(){
 function unpinPan(element){
     $(element).addClass("unpin-pannel-hight");
     $(element).find('.panel-body').addClass("unpin-pannel-hight-body");
-    $(element).find('.panel-body').addClass("lobi-pannel-border");
+    $(element).addClass("lobi-pannel-border");
     $(element).lobiPanel('maximize');
 }
 
 function pinPan(element){
          $(element).removeClass("unpin-pannel-hight");
         $(element).find('.panel-body').removeClass("unpin-pannel-hight-body");
-        $(element).find('.panel-body').removeClass("lobi-pannel-border");
+        $(element).removeClass("lobi-pannel-border");
         $(element).lobiPanel('maximize');
+}
+
+resizeSidebarContent();
+function resizeSidebarContent() {
+    var height = $(window).height() -1;
+    if (pinedState) {
+        if(bomMinimize){
+            $('.body-main').css("height",height*70/100);
+            $('#main-pnnel-drag').height(height*94/100);
+            $('#bom-area').height(height*6/100);
+        } else {
+            $('#main-pnnel-drag').height(height*50/100);
+            $('#bom-area').height(height*50/100);
+        }    
+    }
+    else{
+        if(!bomMinimize){
+            $('#bom-area').height(height*70/100);
+        }          
+        $('#main-pnnel-drag').height(height*70/100);
+    }
 }

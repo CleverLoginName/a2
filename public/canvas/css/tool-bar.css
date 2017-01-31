@@ -61,13 +61,13 @@ li.toggle-button.active {
 /* Tooltip text */
 .tool-item .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    /*width: 120px;*/
     background-color: black;
     color: #fff;
     text-align: center;
-    margin-top: 2px;
+    /*margin-top: 2px;*/
     margin-left: 0px;
-    padding: 5px 0;
+    /*padding: 5px 0;*/
     border-radius: 3px;
     position: absolute;
     z-index: 1;

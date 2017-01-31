@@ -61,7 +61,7 @@
     <div class="col-xs -12 col-sm-12 col-md-9 col-lg-12 content_left">
 
         <div class="form_container clearfix">
-            {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone']) !!}
+            {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word']) !!}
 
             <div id="dropzonePreview" class="dz-default dz-message">
                 <div class="form-group">

@@ -156,7 +156,8 @@ function init(){
 	bg_Canvas = document.getElementById("bg-canvas");
     era_canvas = document.getElementById("era-canvas");
 	
-	adjustCanvas();	
+	adjustDesignArea();
+	//adjustCanvas();	
   $("#draw-tool-canvas").removeClass("hide-canvas");
 // canvas resizing end
 
@@ -202,6 +203,7 @@ function init(){
 	//preloadAndCacheImages(['img/lightdemo.png','img/swtichdemo.PNG']);
 	drawAllObjects();
 	drawBackgroundImage();
+	changeToolAction(ToolActionEnum.DRAG);
 }
 
 
@@ -213,7 +215,7 @@ $("body").on("contextmenu", "canvas", function(e) {
 
 /* Handles what happens on a right click */
 function contextMenu(e){
-	hideDialog();
+	hideItemPopups();
 	var curZoom = this.zoom;
 	startX = getX(e);
 	startY = getY(e);
@@ -325,20 +327,13 @@ function mouseDown(e){
 		/* create the changeObj and save obj and initial params */
 		
 		if (selObj != null){
-			changeObj = new ChangeObject(selObj);
-			
+			changeObj = new ChangeObject(selObj);			
 			mouseStatus = MouseStatusEnum.DRAG;
-			hideDialog();
+			hideItemPopups();
 			clickX = startX / curZoom;
 			clickY = startY / curZoom;
-			if (selObj.getType() == ObjectType.TEXT){
-				offsetX = (selObj.getObjStartX() - (startX / curZoom));
-				offsetY = (selObj.getObjEndY() - (startY / curZoom));
-			} else {
-				offsetX = (selObj.getObjStartX() - (startX / curZoom));
-				offsetY = (selObj.getObjStartY() - (startY / curZoom));
-			}
-			
+			offsetX = (selObj.getObjStartX() - (startX / curZoom));
+			offsetY = (selObj.getObjStartY() - (startY / curZoom));	
 		} 
 	} else if (toolAction == ToolActionEnum.PAN){
 		mouseStatus = MouseStatusEnum.PAN;
@@ -567,7 +562,7 @@ var temp_selected_obj
 function mouseUp(e){
 	fixWhich(e);
     if (toolAction != ToolActionEnum.CONNECT && toolAction != ToolActionEnum.REMOVE_CONNECTION){
-        hideDialog();
+        hideItemPopups();
     }
 	if (e.which != 1) return false;
 	endX = this.getX(e);
@@ -640,7 +635,7 @@ function mouseUp(e){
 							toolAction = ToolActionEnum.EDITTEXT;
 							currentObj = tmpObj;
 							changeObj = new ChangeObject(currentObj);
-							showTextEdit(tmpObj.getObjStartX(), tmpObj.getObjEndY(), tmpObj.getDrawText(), tmpObj.getFontSize());
+							showTextEdit(tmpObj.getObjStartX(), tmpObj.getObjStartY(), tmpObj.getDrawText(), tmpObj.getFontSize());
 						}
 					}
 				}
@@ -696,7 +691,19 @@ function mouseUp(e){
         if (selObj != null){
             if(selObj.getType()== ObjectType.LIGHT_BULB){
                 if(!lightBulbConnected(selObj.getLabel())){
-                    lastConectedObj.addLightBulbObj(selObj);
+                    // lastConectedObj.addLightBulbObj(selObj);
+                    // //drawWiresFromSwitchOrBulbToConnectedLightBulbs(selectedSwitchObject,selObj);
+                    // //selectedSwitchObject.addLightBulbObj(selObj);
+                    // connectedLightBulbLabels.push(selObj.getLabel());
+                    // //drawWiresFromSwitchOrBulbToConnectedLightBulbs(selectedSwitchObject,selObj);
+                    // updateSwitchConnectedBulbLabelsInCurrentTimeState(selObj);
+                    // selObj.setConectingMood(false);
+                    // lastConectedObj = selObj;
+                    // drawAllObjects();
+                }else {
+                    //alert ('Light bulb already connected');
+                }
+				 lastConectedObj.addLightBulbObj(selObj);
                     //drawWiresFromSwitchOrBulbToConnectedLightBulbs(selectedSwitchObject,selObj);
                     //selectedSwitchObject.addLightBulbObj(selObj);
                     connectedLightBulbLabels.push(selObj.getLabel());
@@ -705,9 +712,6 @@ function mouseUp(e){
                     selObj.setConectingMood(false);
                     lastConectedObj = selObj;
                     drawAllObjects();
-                }else {
-                    alert ('Light bulb already connected');
-                }
             }
             // if (outermostObj.getType()== ObjectType.LIGHT_SWITCH || !lightBulbConnected(bulbObj.getLabel())){
             //     outermostObj.addLightBulbObj(bulbObj);
@@ -1237,17 +1241,17 @@ function drawText(obj, targetContext, sX, sY, eX, eY){
 	targetContext.fillStyle = obj.getFontColor();
 	targetContext.font=fontSize*zoom+ 'px '+ fontFamily;
 	 var words = drawText.split(' ');
-	 var minWidth = 0;
-	for(var n = 0; n < words.length; n++) {
-        	// var word ='';
-        	// word = words[n] + '';
-			var metricsStart= targetContext.measureText(words[n]);
-			var valN = metricsStart.width;
-			if (minWidth < valN){
-					minWidth = valN;
-				}
+	 var minWidth = getMaxWidth(words,targetContext);
+	// for(var n = 0; n < words.length; n++) {
+    //     	// var word ='';
+    //     	// word = words[n] + '';
+	// 		var metricsStart= targetContext.measureText(words[n]);
+	// 		var valN = metricsStart.width;
+	// 		if (minWidth < valN){
+	// 				minWidth = valN;
+	// 			}
             
-    }
+    // }
 	obj.setMinWidth(minWidth);
 	wrapText(targetContext,drawText,sX, sY,eX-sX,parseInt(fontSize)*zoom,-parseInt(fontSize)*zoom-5*zoom,obj);
 }
@@ -1308,6 +1312,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight,boxHight,obj) {
 		// drawBorder(ctx,sX, sY, maxWidth, lineHeight*lines.length);
 		ctx.fillStyle = 'yellow';
 		ctx.fillRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
+		ctx.lineWidth = 1;
 		ctx.strokeStyle = 'red';
 		ctx.strokeRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
 		
@@ -1378,7 +1383,7 @@ function drawAllObjects(){
 
 	for (var i =0; i<this.drawElements.length; i++){
 		//drawLightsOnCanvas(this.drawElements[i]);
-        drawConnections(this.drawElements[i]);
+        drawConnections(this.drawElements[i], contextOrig);
 		drawObjectOnCanvas(this.drawElements[i]);
 		drawEraserObj(this.drawElements[i]);
 	}
@@ -1647,32 +1652,36 @@ function drawWiresOnCanvas(obj){
 	}
 }
 
-function drawConnections(rootObj) {
+function drawConnections(rootObj, targetContext) {
     if(rootObj.getType() == ObjectType.LIGHT_SWITCH ||rootObj.getType() == ObjectType.LIGHT_BULB){
         var curZoom = this.zoom;
         var lightBulbs = rootObj.getConnections();
 		var rootCoordinate = getConvertedPoint(rootObj.getCenter());
         var bulbCoordinates;
         var tmpOffsetCenterPoint = {x:0, y:0};
-        contextOrig.lineWidth = 1;
-        contextOrig.strokeStyle = '#000000';
+		targetContext.save();
+        targetContext.lineWidth = 1;
+        targetContext.strokeStyle = '#000000';
         for (var i=0; i<lightBulbs.length; i++){
             tmpLightBulb = lightBulbs[i];
             bulbCoordinates = getConvertedPoint(tmpLightBulb.getCenter());
 
-            contextOrig.beginPath();
-            contextOrig.moveTo(rootCoordinate.x, rootCoordinate.y);
+            targetContext.beginPath();
+            targetContext.moveTo(rootCoordinate.x, rootCoordinate.y);
             tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinate.x, rootCoordinate.y,bulbCoordinates.x,bulbCoordinates.y);
 
 			// S like curve ----start
 // 			var offset = Math.sqrt( (EndX - rootX)*(EndX - rootX) +  (EndY - rootY)*(EndY - rootY)) * curZoom;	
 // 			offset /= 2;
-//			contextOrig.bezierCurveTo(rootX-offset, rootY-offset, EndX+offset ,EndY+offset, EndX, EndY);
+//			targetContext.bezierCurveTo(rootX-offset, rootY-offset, EndX+offset ,EndY+offset, EndX, EndY);
 			// S like curve ----end
 
-            contextOrig.quadraticCurveTo(tmpOffsetCenterPoint.x ,tmpOffsetCenterPoint.y, bulbCoordinates.x, bulbCoordinates.y);
-            contextOrig.stroke();
+            targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x ,tmpOffsetCenterPoint.y, bulbCoordinates.x, bulbCoordinates.y);
+			targetContext.setLineDash([5]);
+			targetContext.strokeStyle ='#FF0000';
+            targetContext.stroke();
         }
+		targetContext.restore();
     }
 }
 
@@ -1749,16 +1758,16 @@ function drawObjectScalerOnCanvas(obj) {
 
 	var pntNE_srt = getConvertedPoint({x:coor.NE.SX, y:coor.NE.SY});
 	var pntNE_end = getConvertedPoint({x:coor.NE.EX, y:coor.NE.EY});
-
+	
 	var pntSE_srt = getConvertedPoint({x:coor.SE.SX, y:coor.SE.SY});
 	var pntSE_end = getConvertedPoint({x:coor.SE.EX, y:coor.SE.EY});
-
+	
 	var pntSW_srt = getConvertedPoint({x:coor.SW.SX, y:coor.SW.SY});
 	var pntSW_end = getConvertedPoint({x:coor.SW.EX, y:coor.SW.EY});
-
+	
 	var pntNW_srt = getConvertedPoint({x:coor.NW.SX, y:coor.NW.SY});
 	var pntNW_end = getConvertedPoint({x:coor.NW.EX, y:coor.NW.EY});
-
+	
     if (objType == ObjectType.CONT_WALL) {
         objVertices = obj.getVerticesArr();
         x1 = objVertices[0].x;
@@ -1963,10 +1972,10 @@ function generateAndLoadObjectFromParams(params){
 		console.error('Invalid Object Type :' + params.objType);
 		return;
 	}
-
+	
 	currentObj.copyProperties(params);
 	//currentObj.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
-
+	
 	pushElementToDrawElement(currentObj);
 }
 
@@ -2430,7 +2439,11 @@ function createAndInsertTextObject(){
 		if (currentObj.getType() == ObjectType.TEXT){
 			currentObj.setDrawText(insertText);
 			currentObj.setFontSize(fontSize);
-			currentObj.setPoints(insertX,insertY - 25,parseInt(insertX)+200,insertY);
+			var fontFamily = currentObj.getFontFamily();
+			contextOrig.font=fontSize*zoom+ 'px '+ fontFamily;
+			var maxWidth = getMaxWidth(insertText.split(' '),contextOrig)
+			var lineNumber =getLineCount(insertText.split(' '),contextOrig)
+			currentObj.setPoints(insertX,insertY,parseInt(insertX)+parseInt(maxWidth),parseInt(insertY)+(parseInt(fontSize))*lineNumber);
 			//currentObj.setPoints(100,100,500,500);
 			
 			if (toolAction != ToolActionEnum.EDITTEXT){
@@ -2462,11 +2475,12 @@ function showTextEdit(endX,endY, text, fontSize,obj){
 	// if(obj != null){
 	// 	text = obj.getDrawText();
 	// }
-
+	
 	if (text == undefined) text= "";
 	if (fontSize == undefined) fontSize = 15;
 	var pnt = getConvertedPoint({x:endX, y:endY});
-	$('#text-container').css('left', pnt.x + rulerWidth + 7).css('top', pnt.y + rulerHeight- 8).attr('data-x', endX).attr('data-y', endY);
+		$('#text-container').css('left',pnt.x + rulerWidth ).css('top',pnt.y + rulerHeight+$('#text-container').height()).attr('data-x', endX).attr('data-y', endY);
+// $('#text-container').css('left', pnt.x + rulerWidth + 7).css('top', pnt.y + rulerHeight- 8).attr('data-x', endX).attr('data-y', endY);
 	$('#text-container').show();
 	$('#type-text-size').val(fontSize);
 	$('#type-text').val(text).focus();
@@ -2894,7 +2908,7 @@ function preloadAndCacheImages(imgArray) {
 }
 
 $(document).keydown(function (e) {
-	console.log("key down :" + e.keyCode);
+	// console.log("key down :" + e.keyCode);
 	if (e.keyCode == 17) {
 		isCtrlPressed = true;
 	}
@@ -2908,24 +2922,24 @@ $(document).keydown(function (e) {
 		if (e.keyCode == 71) { //g
 			isGridSnappingOn = !isGridSnappingOn;
 		}
-	} else if (e.keyCode == 69) { // 'e' for eraser
-		changeToolAction(ToolActionEnum.ERASE);
-	} else if (e.keyCode == 87) { // 'w' for walls
-		changeToolAction(ToolActionEnum.DRAW);
-	} else if (e.keyCode == 86) { // 'v' for Move
-		changeToolAction(ToolActionEnum.DRAG);
-	} else if (e.keyCode == 84) { // 't' for text
-		changeToolAction(ToolActionEnum.EDITTEXT);
-	} else if (e.keyCode == 84) { // 's' for scale
-		changeToolAction(ToolActionEnum.SCALE);
-	} else if (e.keyCode == 80) { // 'p' for pan
-		changeToolAction(ToolActionEnum.PAN);
-	} else if (e.keyCode == 90) { // 'z' for zoom in
-		zoomIn();
-		hideDialog();
-	} else if (e.keyCode == 88) { // 't' for zoom out
-		zoomOut();
-		hideDialog();
+	// } else if (e.keyCode == 69) { // 'e' for eraser
+	// 	changeToolAction(ToolActionEnum.ERASE);
+	// } else if (e.keyCode == 87) { // 'w' for walls
+	// 	changeToolAction(ToolActionEnum.DRAW);
+	// } else if (e.keyCode == 86) { // 'v' for Move
+	// 	changeToolAction(ToolActionEnum.DRAG);
+	// } else if (e.keyCode == 84) { // 't' for text
+	// 	changeToolAction(ToolActionEnum.EDITTEXT);
+	// } else if (e.keyCode == 84) { // 's' for scale
+	// 	changeToolAction(ToolActionEnum.SCALE);
+	// } else if (e.keyCode == 80) { // 'p' for pan
+	// 	changeToolAction(ToolActionEnum.PAN);
+	// } else if (e.keyCode == 90) { // 'z' for zoom in
+	// 	zoomIn();
+	// 	hideItemPopups();
+	// } else if (e.keyCode == 88) { // 'x' for zoom out
+	// 	zoomOut();
+	// 	hideItemPopups();
 	}
 });
 
@@ -2955,25 +2969,25 @@ function changeToolAction(action) {
 			$('#eraser').parent().addClass('active');
 			toolAction = ToolActionEnum.ERASE;
 			break;
-		case ToolActionEnum.DRAW:
+		case ToolActionEnum.DRAW:		     
     		drawObjectType = ObjectType.CONT_WALL;
 			toolAction = ToolActionEnum.DRAW;
-			$('#cwall').parent().addClass('active');
+			$('#cwall').parent().addClass('active');			
 			break;
-		case ToolActionEnum.DRAG:
+		case ToolActionEnum.DRAG:			
 			toolAction = ToolActionEnum.DRAG;
 			$('#drag').parent().addClass('active');
 			break;
 		case ToolActionEnum.TEXT:
-			drawObjectType = ObjectType.CONT_WALL;
+			drawObjectType = ObjectType.TEXT;
 			toolAction = ToolActionEnum.DRAW;
 			$('#add-text').parent().addClass('active');
 			break;
-		case ToolActionEnum.SCALE:
+		case ToolActionEnum.SCALE:			
 			toolAction = ToolActionEnum.SCALE;
 			$('#scale').parent().addClass('active');
 			break;
-		case ToolActionEnum.PAN:
+		case ToolActionEnum.PAN:			
 			toolAction = ToolActionEnum.PAN;
 			$('#pan').parent().addClass('active');
 			break;
@@ -3049,4 +3063,42 @@ function getReverseConvertedPoint(point) {
 	r_y = point.y / curZoom - rulerOffsetY;
 
 	return { x:r_x, y:r_y };
+}
+
+function getMaxWidth(words,targetContext){
+	var minWidth = 0;
+	for(var n = 0; n < words.length; n++) {
+        	// var word ='';
+        	// word = words[n] + '';
+			var metricsStart= targetContext.measureText(words[n]);
+			var valN = metricsStart.width;
+			if (minWidth < valN){
+					minWidth = valN;
+				}
+            
+    }
+	return minWidth;
+}
+
+function getLineCount(words ,ctx){
+	var line = '';
+    var lines = [];
+	var maxWidth = getMaxWidth(words,ctx);
+	     for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = ctx.measureText(testLine);
+          var testWidth = metrics.width;
+		  if (testWidth > maxWidth && n > 0)  {
+           	
+            lines.push(line);
+            line = words[n] + ' ';
+          }
+          else {
+            line = testLine;
+          }
+		  if (n == words.length -1) {
+            lines.push(line);
+		  }
+        }
+	return 	lines.length;
 }

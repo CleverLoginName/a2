@@ -23,6 +23,21 @@
 	{{ Html::style('canvas/css/product-popup.css') }}
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
+	{{ Html::style('canvas/css/bom-print.css') }}
+	<style>
+		@media print {
+			body * {
+				visibility: hidden;
+			}
+			#container, #containert * {
+				visibility: visible;
+			}
+			#container {
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+		}</style>
 
 
 
@@ -116,7 +131,7 @@
 				<div class="panel panel-default inner-class cat-1 hide-catelog" id="main-0">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="0">
+							<div id="0" class="catelog-name">
 
 							</div>
 
@@ -134,7 +149,7 @@
 				<div class="panel panel-default inner-class cat-2 hide-catelog" id="main-1">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
-							<div id="1">
+							<div id="1" class="catelog-name">
 
 							</div>
 						</div>
@@ -152,7 +167,7 @@
 				<div class="panel panel-default inner-class cat-3 hide-catelog" id="main-2">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
-							<div id="2">
+							<div id="2" class="catelog-name">
 
 							</div>
 						</div>
@@ -168,7 +183,7 @@
 				<div class="panel panel-default inner-class cat-4 hide-catelog" id="main-3">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="3">
+							<div id="3" class="catelog-name">
 
 							</div>
 
@@ -186,7 +201,7 @@
 				<div class="panel panel-default inner-class cat-5 hide-catelog" id="main-4">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="4">
+							<div id="4" class="catelog-name">
 
 							</div>
 
@@ -204,7 +219,7 @@
 				<div class="panel panel-default inner-class cat-6 hide-catelog" id="main-5">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="5">
+							<div id="5" class="catelog-name">
 
 							</div>
 
@@ -222,7 +237,7 @@
 				<div class="panel panel-default inner-class cat-7 hide-catelog" id="main-6">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="6">
+							<div id="6" class="catelog-name">
 
 							</div>
 
@@ -240,7 +255,7 @@
 				<div class="panel panel-default inner-class cat-8 hide-catelog" id="main-7">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="7">
+							<div id="7" class="catelog-name">
 
 							</div>
 
@@ -258,7 +273,7 @@
 				<div class="panel panel-default inner-class cat-9 hide-catelog" id="main-8">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="8">
+							<div id="8" class="catelog-name">
 
 							</div>
 
@@ -276,7 +291,7 @@
 				<div class="panel panel-default inner-class cat-10 hide-catelog" id="main-9">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="9">
+							<div id="9" class="catelog-name">
 
 							</div>
 
@@ -294,7 +309,7 @@
 				<div class="panel panel-default inner-class cat-11 hide-catelog" id="main-10">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="10">
+							<div id="10" class="catelog-name">
 
 							</div>
 
@@ -312,7 +327,7 @@
 				<div class="panel panel-default inner-class cat-12 hide-catelog" id="main-11">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="11">
+							<div id="11" class="catelog-name">
 
 							</div>
 
@@ -330,7 +345,7 @@
 				<div class="panel panel-default inner-class cat-13 hide-catelog" id="main-12">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="12">
+							<div id="12" class="catelog-name">
 
 							</div>
 
@@ -348,7 +363,7 @@
 				<div class="panel panel-default inner-class cat-14 hide-catelog" id="main-13">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
-							<div id="13">
+							<div id="13" class="catelog-name">
 
 							</div>
 
@@ -461,7 +476,7 @@
 		</div>
 		<div class="col-xs-10 col-sm-10 col-md-10 border-left-add">
 			<ul id="tool-items-ul">
-				<li class="tool-item">
+				<li class="tool-item top-menu-item">
 					<a href="{!! url('/projects') !!}" id="home-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/home.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/home.png') !!}">
@@ -469,7 +484,7 @@
 					<span class="tooltiptext">Home</span>
 				</li>
 
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="save-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/saveIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/saveIcon.png') !!}">
@@ -486,41 +501,41 @@
 				</li>
 
 
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="proj-comment-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/project_comment.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/project_comment.png') !!}">
 					</a>
-					<span class="tooltiptext">Project Comment</span>
+					<span class="tooltiptext" style="width: 120px">Project Comment</span>
 				</li>
 
-				<li>|</li>
+				<li class="top-menu-item" >|</li>
 
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="plans-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/plan.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/plan.png') !!}">
 					</a>
 					<span class="tooltiptext">Plans</span>
 				</li>
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="archived-plan-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/archived_plans.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/archived_plans.png') !!}">
 					</a>
-					<span class="tooltiptext">Archived Plans</span>
+					<span class="tooltiptext" style="width: 120px">Archived Plans</span>
 				</li>
 
-				<li>|</li>
+				<li class="top-menu-item">|</li>
 
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0);" id="undo">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/undo.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/undo.png') !!}">
 					</a>
 					<span class="tooltiptext">Undo</span>
 				</li>
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0);" id="redo">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/redo.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/redo.png') !!}">
@@ -528,26 +543,25 @@
 					<span class="tooltiptext">Redo</span>
 				</li>
 
-				<li> |</li>
+				<li class="top-menu-item" >|</li>
 
-
-				<li class="tool-item toggle-button">
+				<li class="tool-item toggle-button top-menu-item">
 					<a href="javascript:void(0);" id="drag">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/selectIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/selectIcon.png') !!}">
 					</a>
-					<span class="tooltiptext">Move</span>
+					<span class="tooltiptext">Select</span>
 				</li>
 
-				<li class="tool-item toggle-button">
+				<li class="tool-item toggle-button top-menu-item">
 					<a href="javascript:void(0);" id="cwall">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/NewWallIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/NewWallIcon.png') !!}">
 					</a>
-					<span class="tooltiptext">Draw walls</span>
+					<span class="tooltiptext" style="width: 100px">Draw wall</span>
 				</li>
 
-				<li class="tool-item toggle-button">
+				<li class="tool-item toggle-button top-menu-item" >
 					<a href="javascript:void(0);" id="eraser">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/eraser_icon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/eraser_icon.png') !!}">
@@ -555,23 +569,23 @@
 					<span class="tooltiptext">Eraser</span>
 				</li>
 
-				<li id="add-text" class="tool-item toggle-button">
+				<li id="add-text" class="tool-item toggle-button top-menu-item" >
 					<a href="javascript:void(0)">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/text.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/text.png') !!}">
 					</a>
-					<span class="tooltiptext">Add Text</span>
+					<span class="tooltiptext" style="width: 120px">Add Plan Note</span>
 				</li>
 
-				<li class="tool-item toggle-button">
+				<li class="tool-item toggle-button top-menu-item" >
 					<a href="javascript:void(0);" id="scale">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/scale.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/scale.png') !!}">
 					</a>
-					<span class="tooltiptext">Scale</span>
+					<span class="tooltiptext" style="width: 120px">Scale object</span>
 				</li>
 
-				<li class="tool-item toggle-button">
+				<li class="tool-item toggle-button top-menu-item" >
 					<a href="javascript:void(0);" id="pan">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/handIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/handIcon.png') !!}">
@@ -579,21 +593,21 @@
 					<span class="tooltiptext">Pan</span>
 				</li>
 
-				<li>|</li>
+				<li class="top-menu-item">|</li>
 
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0);" id="zoom-in" class="zoom-control" data-action="zoom-in">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/zoom_in.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/zoom_in.png') !!}">
 					</a>
-					<span class="tooltiptext">Zoom in</span>
+					<span class="tooltiptext" style="width: 100px">Zoom in</span>
 				</li>
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0);" id="zoom-out" class="zoom-control" data-action="zoom-out">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/zoom_out.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/zoom_out.png') !!}">
 					</a>
-					<span class="tooltiptext">Zoom out</span>
+					<span class="tooltiptext" style="width: 100px">Zoom out</span>
 				</li>
 			</ul>
 		</div>
@@ -606,7 +620,7 @@
 					</a>
 					<span class="tooltiptext">Help</span>
 				</li>
-				<li class="tool-item">
+				<li class="tool-item top-menu-item" >
 					<a href="{!! url('/logout') !!}" id="logout-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/logOffIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/logOffIcon.png') !!}">
@@ -661,125 +675,18 @@
 		<button id="text-cancel">Cancel</button>
 	</div>
 
-	<!--bulb pop up-->
-	<div class="bulb-pop" id="bulb-prop">
-		<div class="header">
-			<h4>Bulb property</h4>
-			<button class="btn-close" type="button" id="bulb-prop-close">X</button>
-		</div>
-		<div class="body">
-			<div class="input-container">
-				<div class="form-label">Name :</div>
-				<input type="text" id="b-name"/>
-			</div>
-
-			<div class="input-container">
-				<div class="form-label">X(m) :</div>
-				<input type="number" id="b-x"/>
-			</div>
-
-			<div class="input-container">
-				<div class="form-label">Y(m) :</div>
-				<input type="number" id="b-y"/>
-			</div>
-
-			<div class="input-container">
-				<div class="form-label">Elevation (m) :</div>
-				<input type="number" id="elevation"/>
-			</div>
-
-			<div class="input-container">
-				<div class="form-label">Angle (o) :</div>
-				<input type="number" id="angle"/>
-			</div>
-
-			<div class="input-container">
-				<div class="form-label">Light power (%) :</div>
-				<input type="number" id="power"/>
-			</div>
-
-
-		</div>
-		<div class="footer">
-			<div class="f-buttons">
-				<button type="button" id="bb-save" class="btn-info">Save</button>
-				<!-- <button type="button" id="bb-cancel" class="btn-error">Cancel</button> -->
-			</div>
-		</div>
 	</div>
-	<!--bulb pop up end-->
-
-
-	<!--switch pop up start-->
-	<div class="switch-pop" id="switch-prop">
-		<div class="header">
-			<h4>Switch property</h4>
-			<button class="btn-close" type="button" id="switch-prop-close">X</button>
-		</div>
-		<div class="body">
-
-			<div>
-				<div class="input-container">
-					<div class="form-label">Name :</div>
-					<input type="text" id="s-name"/>
-				</div>
-
-				<div class="input-container">
-					<div class="form-label">X(m) :</div>
-					<input type="number" id="s-x"/>
-				</div>
-
-				<div class="input-container">
-					<div class="form-label">Y(m) :</div>
-					<input type="number" id="s-y"/>
-				</div>
-
-				<div class="input-container">
-					<div class="form-label">Elevation (m) :</div>
-					<input type="number" id="s-elevation"/>
-				</div>
-
-				<div class="input-container">
-					<div class="form-label">Angle (o) :</div>
-					<input type="number" id="s-angle"/>
-				</div>
-
-				<fieldset>
-					<legend>Button and Lights</legend>
-					<div class="input-container">
-						<div class="form-label">Lights :</div>
-						<select id="switch-lig" data-root-obj-id="tel me something"></select>
-					</div>
-
-					<button type="button" id="add-s-buld" class="btn-info">Add</button>
-					<!--<button type="button" class="btn-error">Remove</button>-->
-				</fieldset>
-
-			</div>
-
-			<div class="one-half">
-
-			</div>
-		</div>
-		<div class="footer">
-			<div class="f-buttons">
-				<button type="button" id="b-save" class="btn-info">Save</button>
-				<!-- <button type="button" id="b-cancel" class="btn-error">Cancel</button> -->
-			</div>
-		</div>
-	</div>
-	</div>
-	<div id="item-popup" class="item-popup " title="Connect Lights">
+	<div id="item-popup-conW" class="item-popup " title="Connect Lights">
 		<img src="/img/DesignCanvassCreateSwitchWire.png" class="image-background">
 	</div>
-	<div id="item-popup1" class="item-popup " title="Product Information">
-		<img src="/img/DesignCanvassClose.png" class="image-background">
-	</div>
-	<div id="item-popup2" class="item-popup " title="Close">
+	<div id="item-popup-info" class="item-popup " title="Product Information">
 		<img src="/img/DesignCanvassProductInfo.png" class="image-background">
 	</div>
+	<div id="item-popup-close" class="item-popup " title="Close">
+		<img src="/img/DesignCanvassClose.png" class="image-background">
+	</div>
 
-	<div id="delete-item" class="item-popup " title="Remove Connection">
+	<div id="item-popup-remW" class="item-popup " title="Remove Connection">
 		<img src="/img/DesignCanvassRemoveSwitchWire.png" class="image-background">
 	</div>
 </div>

@@ -404,7 +404,7 @@ CWall.prototype.pointInsideObj = function(targetX, targetY){
  * keeps a text, fontSize, fontColor variables to hold the displaying text. */
 /////////////////////////////////////////////////////////////////////////////
 DrawText.prototype = new DrawingItem();
-DrawText.prototype.constructor = CWall;
+DrawText.prototype.constructor = DrawText;
 function DrawText(){
 
     this.drawText = "Sample Text";
