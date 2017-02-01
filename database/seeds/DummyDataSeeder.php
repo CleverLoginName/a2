@@ -16,14 +16,15 @@ class DummyDataSeeder extends Seeder
     {
 
         $faker = Faker::create();
-        if(\Illuminate\Support\Facades\App::environment('local'))
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        if(\Illuminate\Support\Facades\App::environment('local')) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        DB::table('permission_role')->truncate();
-        DB::table('role_user')->truncate();
-        DB::table('permissions')->truncate();
-        DB::table('roles')->truncate();
-        DB::table('users')->truncate();
+            DB::table('permission_role')->truncate();
+            DB::table('role_user')->truncate();
+            DB::table('permissions')->truncate();
+            DB::table('roles')->truncate();
+            DB::table('users')->truncate();
+        }
 
         // Creating User Roles
         $sa = new \App\Role();
