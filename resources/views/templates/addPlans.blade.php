@@ -3,18 +3,9 @@
 
 @section('main-content')
 
-        <?php
-        $catalogs = \App\ProductCatalog::all();
-        $levels = [
-                'Basement','Ground Floor','1st Floor','2nd Floor','3rd Floor','4th Floor','5th Floor'
-        ];
-        ?>
-
-
-    @if($empty_form)
-        @foreach($templatesPlans as $templatesPlan)
+        @foreach($templateFloorCatalogs as $templateFloorCatalog)
             @php
-                $model = "modal_".$templatesPlan->id;
+                $model = "modal_".$templateFloorCatalog->template_floor_catalog_id;
             @endphp
 
             <div class="modal fade" id="{!! $model !!}" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
@@ -26,19 +17,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <img id="image_{!! $templatesPlan->id !!}" src="{!! asset($templatesPlan->img) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <img id="image_{!! $templateFloorCatalog->template_floor_catalog_id !!}" src="{!! asset($templateFloorCatalog->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             </div>
                             <div style="padding-top: 15px">
-                               {!! Form::open(['url' => 'templates/create/add-plans/'.$templatesPlan->id.'/crop', 'method' => 'post']) !!}
-                                <input type="hidden" name="width" id="width_{!! $templatesPlan->id !!}" value="">
-                                <input type="hidden" name="height" id="height_{!! $templatesPlan->id !!}" value="">
-                                <input type="hidden" name="x" id="x_{!! $templatesPlan->id !!}" value="">
-                                <input type="hidden" name="y" id="y_{!! $templatesPlan->id !!}" value="">
-                                <input type="hidden" name="rotate" id="rotate_{!! $templatesPlan->id !!}" value="">
+                                {!! Form::open(['url' => 'templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/crop', 'method' => 'post']) !!}
+                                <input type="hidden" name="width" id="width_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
+                                <input type="hidden" name="height" id="height_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
+                                <input type="hidden" name="x" id="x_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
+                                <input type="hidden" name="y" id="y_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
+                                <input type="hidden" name="rotate" id="rotate_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
                                 {!! Form::submit('Save & Exit',['class'=>'btn_save']) !!}
                                 {!! Form::close() !!}
-                                <button class="btn_save" onclick="rotate_left_{!! $templatesPlan->id !!}()">Rotate Clockwise</button>
-                                <button class="btn_save" onclick="rotate_right_{!! $templatesPlan->id !!}()">Rotate Anti-clockwisw</button>
+                                <button class="btn_save" onclick="rotate_left_{!! $templateFloorCatalog->template_floor_catalog_id !!}()">Rotate Clockwise</button>
+                                <button class="btn_save" onclick="rotate_right_{!! $templateFloorCatalog->template_floor_catalog_id !!}()">Rotate Anti-clockwisw</button>
 
                                 <button type="button" class="btn_save" data-dismiss="modal">Close</button>
                             </div>
@@ -51,205 +42,135 @@
                 </div>
             </div>
         @endforeach
-    @endif
+
+
 
 
 
 
 
     <div class="content_area clearfix">
-    <div class="col-xs -12 col-sm-12 col-md-9 col-lg-12 content_left">
+        <div class="col-xs -12 col-sm-12 col-md-9 col-lg-12 content_left">
 
-        <div class="form_container clearfix">
-            {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word']) !!}
+            <div class="form_container clearfix">
+                {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word']) !!}
 
-            <div id="dropzonePreview" class="dz-default dz-message">
-                <div class="form-group">
-                    <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
-                    <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
-                    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="template_id" id="template_id" value="{!! session('template')->id !!}">
+                <div id="dropzonePreview" class="dz-default dz-message">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
+                        <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
+                        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="template_id" id="template_id" value="{!! session('template')->id !!}">
 
+                    </div>
                 </div>
-            </div>
 
 
-            {!! Form::close() !!}
+                {!! Form::close() !!}
 
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 model_search_results new_template_uploader consultant_results_bg clearfix">
-                <ul>
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 model_search_results new_template_uploader consultant_results_bg clearfix">
+                    <ul>
 
-                    @if($empty_form)
-                        @foreach($templatesPlans as $templatesPlan)
-                    <li>
-                        <div class="consultant_wrapper clearfix">
-                            <div class="col-md-4 img_consultant">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                    <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}">
-                                        <p>@if($templatesPlan->design){!! $templatesPlan->design !!}@else{!! \App\Template::find($templatesPlan->template_id)->name !!}@endif {!! '_'.$levels[($templatesPlan->level-1)].'_'.$catalogs[($templatesPlan->catalog_id-1)]->name !!}</p>
-                                        <img src="{!! asset($templatesPlan->img) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8"/>
-                                    </a>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                    @php
-                                        $model = "#modal_".$templatesPlan->id;
-                                    @endphp
-                                    <br/>
-
-
-                                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 "></div>
+                            @foreach($templateFloorCatalogs as $templateFloorCatalog)
+                                <li>
+                                    <div class="consultant_wrapper clearfix">
+                                        <div class="col-md-4 img_consultant">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+                                                <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/canvas') !!}">
+                                                    <p>@if($templateFloorCatalog->template_floor_catalog_design){!! $templateFloorCatalog->template_floor_catalog_design !!}@else{!! $templateFloorCatalog->template_name !!}@endif {!! $templateFloorCatalog->floor_name !!}</p>
+                                                    <img src="{!! asset($templateFloorCatalog->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8"/>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+                                                @php
+                                                    $model = "#modal_".$templateFloorCatalog->template_floor_catalog_id;
+                                                @endphp
+                                                <br/>
 
 
-<table>
-    <tr>
-        <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
-        </td>
-        <td width="15"></td>
-        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
-
-        </td>
-    </tr>
-</table>
-
-                                </div>
+                                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 "></div>
 
 
+                                                <table>
+                                                    <tr>
+                                                        <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
+                                                        </td>
+                                                        <td width="15"></td>
+                                                        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
 
-                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
 
-                            <div class="col-md-8 desc_plan">
-
-                                {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
-
-                                {{Form::hidden('id',$templatesPlan->id)}}
-                                <h5>House Design Template</h5>
-                                <p>{!! $templatesPlan->client_file_name !!} : (Not Available Yet)kbs </p>
-
-                                <div class="col-md-12 margin_top_20">
-                                    <div class="form-group">
-                                        <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Design</label>
-                                        <div class="col-md-12 col-lg-10">
-                                            @if($templatesPlan->design != '')
-                                                <input class="form-control required" id="design"
-                                                       name="design" aria-required="true" type="text" placeholder="" value="{!! $templatesPlan->design !!}">
-                                            @else
-                                                <input class="form-control required" id="design"
-                                                       name="design" aria-required="true" type="text" placeholder="" value="">
-                                            @endif
-                                        </div>
-
-                                        <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
-                                        <div class="col-md-12 col-lg-10">
-                                            <?php  $i = 0;$j = 0; ?>
-                                            <select class="form-control required"
-                                                    id="prod-frm-sub-cat" name="level" aria-required="true"
-                                                    aria-invalid="true">
-                                                @foreach($levels as $level)
-                                                    <?php ++$i; ?>
-
-                                                    @if($templatesPlan->level == $i)
-                                                        <option value="{!! $i !!}" selected="selected">{!! $level !!}</option>
-                                                    @else
-                                                        <option value="{!! $i !!}">{!! $level !!}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalogue  </label>
-                                        <div class="col-md-12 col-lg-10">
-                                            <select class="form-control required"
-                                                    id="catalog_id" name="catalog_id" aria-required="true"
-                                                    aria-invalid="true">
-                                                @foreach($catalogs as $catalog)
-                                                    <?php ++$j; ?>
-
-                                                    @if($templatesPlan->catalog_id == $j)
-                                                        <option value="{!! $catalog->id !!}" selected="selected">{!! $catalog->name !!}</option>
-                                                    @else
-                                                        <option value="{!! $catalog->id !!}">{!! $catalog->name !!}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                        <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
-                                    </div>
-                                </div>
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </li>
-                        @endforeach
-                    @else
-                        @foreach($templatesPlans as $templatesPlan)
-
-                            <li>
-                                <div class="consultant_wrapper clearfix">
-                                    <div class="col-md-4 img_consultant">
-                                        <p>@if($templatesPlan->design){!! $templatesPlan->design !!}@else{!! \App\Template::find($templatesPlan->template_id)->name !!}@endif {!! '_'.$levels[($templatesPlan->level-1)].'_'.$catalogs[($templatesPlan->catalog_id-1)]->name !!}</p>
-                                        <img src="{!! asset($templatesPlan->img_300x200) !!}" class="col-md-8"/>
-                                    <div class="col-md-8 desc_plan">
-                                        {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
-
-                                        {{Form::hidden('id',$templatesPlan->id)}}
-                                        <h5>House Design Template</h5>
-                                        <p>TheUploadedFile name.pdf : file size.kbs </p>
-
-                                        <div class="col-md-12 margin_top_20">
-                                            <div class="form-group">
-                                                <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Design</label>
-                                                <div class="col-md-12 col-lg-10">
-                                                    <input class="form-control required" id="design"
-                                                           name="design" aria-required="true" type="text" placeholder="" value="{!! $templatesPlan->design !!}">
-                                                </div>
-
-                                                <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
-                                                <div class="col-md-12 col-lg-10">
-                                                    <input class="form-control required" id="level"
-                                                           name="level" aria-required="true" type="text"
-                                                           placeholder="" value="{!! $templatesPlan->level !!}">
-                                                </div>
-
-                                                <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalogue  </label>
-                                                <div class="col-md-12 col-lg-10">
-                                                    <input class="form-control required" id="catalog_id"
-                                                           name="catalog_id" aria-required="true" type="text"
-                                                           placeholder="" value="{!! $templatesPlan->catalog_id !!}">
-                                                </div>
                                             </div>
 
-                                            <div class="col-md-12">
-                                                <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                <a href="{!! url('templates/create/add-plans/'.$templatesPlan->id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
 
-                                            </div>
+
                                         </div>
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                                </div>
-                            </li>
-                        @endforeach
 
-                    @endif
+                                        <div class="col-md-8 desc_plan">
+
+                                            {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
+
+                                            {{Form::hidden('id',$templateFloorCatalog->template_floor_catalog_id)}}
+                                            <h5>House Design Template</h5>
+                                            <p>{!! $templateFloorCatalog->image_name !!} : (Not Available Yet)kbs </p>
+
+                                            <div class="col-md-12 margin_top_20">
+                                                <div class="form-group">
+                                                    <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Design</label>
+                                                    <div class="col-md-12 col-lg-10">
+                                                        @if($templateFloorCatalog->template_floor_catalog_design != '')
+                                                            <input class="form-control required" id="design"
+                                                                   name="design" aria-required="true" type="text" placeholder="" value="{!! $templateFloorCatalog->template_floor_catalog_design !!}">
+                                                        @else
+                                                            <input class="form-control required" id="design"
+                                                                   name="design" aria-required="true" type="text" placeholder="" value="">
+                                                        @endif
+                                                    </div>
+
+                                                    <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
+                                                    <div class="col-md-12 col-lg-10">
+                                                        <?php  $i = 0;$j = 0; ?>
+                                                        {!! Form::select('level',$templateFloors,$templateFloorCatalog->template_floor_id) !!}
+
+                                                    </div>
+
+                                                    <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalogue  </label>
+                                                    <div class="col-md-12 col-lg-10">
+                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalog->template_floor_catalog_id) !!}
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
+                                                    <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                </div>
+                                            </div>
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        
                         <li>
 
 
-                </ul>
+                    </ul>
+                </div>
+                <section class="row box-footer" id="form-footer">
+                    <a id="prod-frm-reset" href="{!! url('/') !!}" class="btn_save" style="color: white">Done</a>
+                </section>
             </div>
-            <section class="row box-footer" id="form-footer">
-                <a id="prod-frm-reset" href="{!! url('/') !!}" class="btn_save" style="color: white">Done</a>
-            </section>
+
+
+
         </div>
-
-
-
     </div>
-    </div>
+    
+    
+
 
 @stop
 
@@ -343,59 +264,58 @@
 
 
     <script>
-                @if($empty_form)
-                @foreach($templatesPlans as $templatesPlan)
+             
+                @foreach($templateFloorCatalogs as $templateFloorCatalog)
 
-        var cropBoxData_{!! $templatesPlan->id !!};
-        var canvasData_{!! $templatesPlan->id !!};
-        var cropper_{!! $templatesPlan->id !!};
+        var cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!};
+        var canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!};
+        var cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!};
 
 
-        function rotate_left_{!! $templatesPlan->id !!}() {
-            cropper_{!! $templatesPlan->id !!}.rotate(45);
+        function rotate_left_{!! $templateFloorCatalog->template_floor_catalog_id !!}() {
+            cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.rotate(45);
         }
-        function rotate_right_{!! $templatesPlan->id !!}() {
-            cropper_{!! $templatesPlan->id !!}.rotate(-45);
+        function rotate_right_{!! $templateFloorCatalog->template_floor_catalog_id !!}() {
+            cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.rotate(-45);
         }
 
         @endforeach
-        @endif
+      
     window.addEventListener('DOMContentLoaded', function () {
 
-                    @if($empty_form)
-                    @foreach($templatesPlans as $templatesPlan)
+                 
+                    @foreach($templateFloorCatalogs as $templateFloorCatalog)
                     @php
-                        $model = "modal_".$templatesPlan->id;
+                        $model = "modal_".$templateFloorCatalog->template_floor_catalog_id;
                     @endphp
 
-            var image_{!! $templatesPlan->id !!} = document.getElementById('image_{!! $templatesPlan->id !!}');
-            $('#modal_{!! $templatesPlan->id !!}').on('shown.bs.modal', function () {
-                cropper_{!! $templatesPlan->id !!} = new Cropper(image_{!! $templatesPlan->id !!}, {
+            var image_{!! $templateFloorCatalog->template_floor_catalog_id !!} = document.getElementById('image_{!! $templateFloorCatalog->template_floor_catalog_id !!}');
+            $('#modal_{!! $templateFloorCatalog->template_floor_catalog_id !!}').on('shown.bs.modal', function () {
+                cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!} = new Cropper(image_{!! $templateFloorCatalog->template_floor_catalog_id !!}, {
                     autoCropArea: 0.5,
                     ready: function () {
 
                         // Strict mode: set crop box data first
-                        cropper_{!! $templatesPlan->id !!}.setCropBoxData(cropBoxData_{!! $templatesPlan->id !!}).setCanvasData(canvasData_{!! $templatesPlan->id !!});
+                        cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.setCropBoxData(cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!}).setCanvasData(canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!});
                     },
                     crop: function(e) {
 
-                        $('#x_{!! $templatesPlan->id !!}').val(e.detail.x);
-                        $('#y_{!! $templatesPlan->id !!}').val(e.detail.y);
-                        $('#width_{!! $templatesPlan->id !!}').val(e.detail.width);
-                        $('#height_{!! $templatesPlan->id !!}').val(e.detail.height);
-                        $('#rotate_{!! $templatesPlan->id !!}').val(e.detail.rotate);
+                        $('#x_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.x);
+                        $('#y_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.y);
+                        $('#width_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.width);
+                        $('#height_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.height);
+                        $('#rotate_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.rotate);
 
                     }
                 });
             }).on('hidden.bs.modal', function () {
-                cropBoxData_{!! $templatesPlan->id !!} = cropper_{!! $templatesPlan->id !!}.getCropBoxData();
-                canvasData_{!! $templatesPlan->id !!} = cropper_{!! $templatesPlan->id !!}.getCanvasData();
-                cropper_{!! $templatesPlan->id !!}.destroy();
+                cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!} = cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.getCropBoxData();
+                canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!} = cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.getCanvasData();
+                cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.destroy();
             });
 
 
             @endforeach
-            @endif
 
         });
     </script>

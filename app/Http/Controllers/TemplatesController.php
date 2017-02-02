@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Floor;
+use App\ProductCatalog;
 use App\Template;
+use App\TemplateFloor;
+use App\TemplateFloorCatalog;
+use App\TemplateImage;
 use App\TemplatePlan;
 use Illuminate\Http\Request;
 
@@ -57,6 +62,9 @@ class TemplatesController extends Controller
             'house_watts_per_sqm'    => 'required',
             'garage_watts_per_sqm'    => 'required',
             'porch_watts_per_sqm'    => 'required',
+            'terrace_watts_per_sqm'    => 'required',
+            'balcony_watts_per_sqm'    => 'required',
+            'alfresco_watts_per_sqm'    => 'required',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -74,31 +82,53 @@ class TemplatesController extends Controller
         $template->sqm_terrace = $request->get('terrace_watts_per_sqm');
         $template->sqm_balcony = $request->get('balcony_watts_per_sqm');
         $template->sqm_porch = $request->get('porch_watts_per_sqm');
+        $template->canvas_data = '';
         $template->save();
 
         Flash::success('Template Added', 'Template has been added successfully.');
         session(['template' => $template]);
-        session(['is_first' => true]);
         return Redirect::to('/templates/create/add-plans');
 
     }
 
     public function addPlan(Request $request){
-        $templatesPlans = TemplatePlan::where('template_id','=',session('template')->id)->get();
-        if(session('is_first')){
-            session(['is_first' => false]);
+        //$templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
+        //$tempalateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id')
+
+        $templateCatalogs = ProductCatalog::lists('name','id');
+        $templateFloors = Floor::lists('name','id');
+        $templateFloorCatalogs = DB::table('template_floor_catalogs')
+            ->join('template_floors','template_floors.id','=','template_floor_catalogs.template_floor_id')
+            ->join('templates','templates.id','=','template_floors.template_id')
+            ->join('template_images','template_floors.template_image_id','=','template_images.id')
+            ->join('floors','template_floors.floor_id','=','floors.id')
+            ->join('product_catalogs','template_floor_catalogs.catalog_id','=','product_catalogs.id')
+            ->select([
+                'template_images.path as image_path',
+                'template_images.name as image_name',
+                'floors.name as floor_name',
+                'template_floors.id as template_floor_id',
+                'template_floor_catalogs.id as template_floor_catalog_id',
+                'template_floor_catalogs.design as template_floor_catalog_design',
+                'product_catalogs.name as catalog_name',
+                'product_catalogs.id as catalog_id',
+                'templates.name as template_name'
+            ])
+            ->where('template_floor_catalogs.is_active', '=', true)
+            ->where('templates.id', '=', session('template')->id)
+            ->get();
+         if($templateFloorCatalogs)
             return  view('templates.addPlans')
                 ->with('template',session('template'))
-                ->with('templatesPlans',$templatesPlans)
-                ->with('empty_form',false);
-        }else{
-
+                ->with('templateCatalogs',$templateCatalogs)
+                ->with('templateFloors',$templateFloors)
+                ->with('templateFloorCatalogs',$templateFloorCatalogs);
 
             return  view('templates.addPlans')
                 ->with('template',session('template'))
-                ->with('templatesPlans',$templatesPlans)
-                ->with('empty_form',true);
-        }
+                ->with('templateCatalogs',$templateCatalogs)
+                ->with('templateFloors',$templateFloors)
+                ->with('templateFloorCatalogs',$templateFloorCatalogs);
 
     }
 
@@ -160,35 +190,55 @@ class TemplatesController extends Controller
             $file->move($destinationPath,$randFileName);
         }
 
+        $templateImage = new TemplateImage();
+        $templateImage->name = $file->getClientOriginalName();
+        $templateImage->path = $destinationPath.$randFileName;
+        $templateImage->save();
+
+        $templateFloor = new TemplateFloor();
+        $templateFloor->template_image_id = $templateImage->id;
+        $templateFloor->floor_id = 1;
+        $templateFloor->canvas_data = '';
+        $templateFloor->template_id = session('template')->id;
+        $templateFloor->save();
+
+        $templateFloorCatalog = new TemplateFloorCatalog();
+        $templateFloorCatalog->canvas_data = '';
+        $templateFloorCatalog->template_floor_id = $templateFloor->id;
+        $templateFloorCatalog->catalog_id = 1;
+        $templateFloorCatalog->is_active = true;
+        $templateFloorCatalog->save();
 
 
-        //if($request->get('save_plan')=='Y'){
-            $templatePlan = new TemplatePlan();
-            $templatePlan->design = '';
-            $templatePlan->level = 1;
-            $templatePlan->catalog_id =  1;
-            $templatePlan->template_data =  1;
-            $templatePlan->img = $destinationPath.$randFileName;
-            $templatePlan->img_300x200 = $destinationPath.$randFileName;
-            $templatePlan->template_id = session('template')->id;
-            $templatePlan->client_file_name = $file->getClientOriginalName();
-            $templatePlan->client_file_size = 0;
-           // $templatePlan->client_file_size = $file->getSize();
-            $templatePlan->save();
-        //}
+//        //if($request->get('save_plan')=='Y'){
+//            $templatePlan = new TemplatePlan();
+//            $templatePlan->design = '';
+//            $templatePlan->level = 1;
+//            $templatePlan->catalog_id =  1;
+//            $templatePlan->template_data =  1;
+//            $templatePlan->img = $destinationPath.$randFileName;
+//            $templatePlan->img_300x200 = $destinationPath.$randFileName;
+//            $templatePlan->template_id = session('template')->id;
+//            $templatePlan->client_file_name = $file->getClientOriginalName();
+//            $templatePlan->client_file_size = 0;
+//           // $templatePlan->client_file_size = $file->getSize();
+//            $templatePlan->save();
+//        //}
 
-        $img = Image::make($templatePlan->img);
-        $img->resize(300, 200);
-        $img->save($destinationPathThumb.$randFileName, 75);
+//        $img = Image::make($templatePlan->img);
+//        $img->resize(300, 200);
+//        $img->save($destinationPathThumb.$randFileName, 75);
 /*
         return  view('templates.addPlans')
             ->with('template',session('template'))
             ->with('empty_form',true);*/
         Flash::success('Image Added', 'Image has been added successfully.');
+
+
     }
 
 
-    public function addTemplatePlansData(Request $request){
+    public function addTemplatePlansData(Request $request){dd($request->all());
         $templatePlan = TemplatePlan::find($request->get('id'));
         $templatePlan->design = $request->get('design');
         $templatePlan->level = $request->get('level');
@@ -196,13 +246,13 @@ class TemplatesController extends Controller
         $templatePlan->catalog_id = $request->get('catalog_id');
         $templatePlan->save();
 
-        $templatesPlans = TemplatePlan::where('template_id','=',session('template')->id)->get();
+        $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
 
         Flash::success('Updated successfully', 'Updated successfully.');
         return Redirect::to('/templates/create/add-plans');
         return  view('templates.addPlans')
             ->with('template',session('template'))
-            ->with('templatesPlans',$templatesPlans)
+            ->with('templatesFloors',$templatesFloors)
             ->with('empty_form',false);
 
     }
@@ -306,11 +356,11 @@ class TemplatesController extends Controller
 
         Flash::success('Template Updated', 'Template has been updated successfully.');
 
-        $templatesPlans = TemplatePlan::where('template_id','=',$id)->get();
+        $templatesFloors = TemplatePlan::where('template_id','=',$id)->get();
 
             return  view('templates.addPlans')
                 ->with('template',$template)
-                ->with('templatesPlans',$templatesPlans)
+                ->with('templatesFloors',$templatesFloors)
                 ->with('empty_form',true);
         return view('templates.edit')
             ->with('template', $template);
@@ -347,13 +397,13 @@ class TemplatesController extends Controller
             $img->save($img_path);
 
 
-            $templatesPlans = TemplatePlan::where('template_id','=',session('template')->id)->get();
+            $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
 
             Flash::success('Updated Successfully', 'Updated Successfully');
             return Redirect::to('/templates/create/add-plans');
             return  view('templates.addPlans')
                 ->with('template',session('template'))
-                ->with('templatesPlans',$templatesPlans)
+                ->with('templatesFloors',$templatesFloors)
                 ->with('empty_form',false);
         }
     }

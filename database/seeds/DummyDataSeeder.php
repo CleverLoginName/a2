@@ -774,5 +774,18 @@ class DummyDataSeeder extends Seeder
             ['name' => 'text'],
             ['name' => 'textarea']
         ]);
+
+
+        /***************************************************************************************************/
+
+
+
+        DB::table('floors')->insert(['name' =>' Basement']);
+        DB::table('floors')->insert(['name' =>' Ground Floor']);
+        DB::table('floors')->insert(['name' =>' 1st Floor']);
+        DB::table('floors')->insert(['name' =>' 2nd Floor']);
+        DB::table('floors')->insert(['name' =>' 3rd Floor']);
+        DB::table('floors')->insert(['name' =>' 4th Floor']);
+        DB::table('floors')->insert(['name' =>' 5th Floor']);
     }
 }

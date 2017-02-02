@@ -23,6 +23,7 @@ class CreateTemplatesTable extends Migration
             $table->integer('sqm_terrace');
             $table->integer('sqm_balcony');
             $table->integer('sqm_alfresco');
+            $table->text('canvas_data');
             $table->softDeletes();
             $table->timestamps();
         });
