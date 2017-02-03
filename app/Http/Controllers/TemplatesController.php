@@ -238,28 +238,42 @@ class TemplatesController extends Controller
     }
 
 
-    public function addTemplatePlansData(Request $request){dd($request->all());
-        $templatePlan = TemplatePlan::find($request->get('id'));
-        $templatePlan->design = $request->get('design');
-        $templatePlan->level = $request->get('level');
-        //$templatePlan->template_data =   0;
-        $templatePlan->catalog_id = $request->get('catalog_id');
-        $templatePlan->save();
+    public function addTemplatePlansData(Request $request){
+
+/*
+ * array:6 [▼
+  "_token" => "68kaUdMOTcisRn3SDzNmJ0176qMZpqM665t900gj"
+  "id" => "4"
+  "design" => "CSSC"
+  "level" => "4"
+  "catalog_id" => "4"
+  "Save" => "Save"
+]
+ */
+
+        //dd($request->all());
+
+        $templateFloorCatalog = TemplateFloorCatalog::find($request->get('id'));
+        $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
+        $template = Template::find($templateFloor->template_id);
+
+        $templateFloorCatalog->catalog_id = $request->get('catalog_id');
+        $templateFloorCatalog->design = $request->get('design');
+        $templateFloorCatalog->save();
+
+        $templateFloor->floor_id = $request->get('level');
+        $templateFloor->save();
 
         $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
 
         Flash::success('Updated successfully', 'Updated successfully.');
         return Redirect::to('/templates/create/add-plans');
-        return  view('templates.addPlans')
-            ->with('template',session('template'))
-            ->with('templatesFloors',$templatesFloors)
-            ->with('empty_form',false);
 
     }
 
     public function deletePlanInCanvas($id){
-        $templatePlan = TemplatePlan::find($id);
-        $templatePlan->delete();
+        $templateFloorCatalog = TemplateFloorCatalog::find($id);
+        $templateFloorCatalog->delete();
         Flash::success('Plan Deleted', 'Plan has been deleted successfully.');
         return Redirect::to('/templates/create/add-plans');
     }
@@ -302,21 +316,29 @@ class TemplatesController extends Controller
 
     public function updatePlanDataInCanvas(Request $request)
     {
+        $fileData = $request->get('file_data') ;
+        //dd($fileData);
+        $templateFloorCatalog = TemplateFloorCatalog::find(session('plan_id'));
+        $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
+        $template = Template::find($templateFloor->template_id);
 
-        $templatePlan = TemplatePlan::find(session('plan_id'));
-        $templatePlan->template_data = $request->get('file_data') ;
-        $templatePlan->save();
+        $templateFloorCatalog->canvas_data = $fileData['products'];
+        $templateFloorCatalog->save();
+
+        $templateFloor->canvas_data = $fileData['floorplan'];
+        $templateFloor->save();
+
+        $template->canvas_data = $fileData['project'];
+        $template->save();
+
         //return view('canvas.index_new');
-
     }
 
     public function loadPlanDataInCanvas()
     {
-
         $templatePlan = TemplatePlan::find(session('plan_id'));
         return $templatePlan->template_data;
         //return view('canvas.index_new');
-
     }
 
     /**
@@ -379,6 +401,7 @@ class TemplatesController extends Controller
         Flash::error('Template Deleted', 'Template has been deleted successfully.');
         return redirect()->action('TemplatesController@index');
     }
+
     public function cropPlanImage($id)
     {
         $templatePlan = TemplatePlan::find($id);
