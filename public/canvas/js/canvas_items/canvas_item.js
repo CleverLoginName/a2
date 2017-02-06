@@ -10,7 +10,8 @@ var ObjectType = {
     CHANGE:8,
     PRODUCT:9,
     ERASER:10,
-    PACK:11
+    PACK:11,
+    CONNECT:12
 }
 
 /* Directions associated with objects. Used in scale operations, etc... */
@@ -62,7 +63,7 @@ function ChangeObject(obj){
     this.drawElementIndex = null;
 };
 
-CanvasItem.prototype.getUniqueItemID = function(){
+ChangeObject.prototype.getUniqueItemID = function(){
     return null;
 }
 

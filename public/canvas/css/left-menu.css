@@ -883,6 +883,55 @@ tbody {
     /*padding: 5px !important;*/
    }
 
+
+.body-main::-webkit-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+.body-main::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+.body-main::-webkit-scrollbar {
+    width: 13px;
+}
+
+
+#display_notes::-webkit-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+#display_notes::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+#display_notes::-webkit-scrollbar {
+    width: 13px;
+}
+
+.no-margin{
+    margin: 0px !important;
+}
+
+
+.modal-backdrop{
+    opacity:0 !important;
+}
+
+input::-webkit-calendar-picker-indicator {
+    opacity: 100;
+    /*background: url(../img/arrow_carrot-down.png) no-repeat;*/
+    background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
@@ -922,7 +971,6 @@ tbody {
 
 
 .lobipanel>.panel-heading .dropdown {
-    /*position: absolute !important;*/
     right: 0px;
 }
 
@@ -941,8 +989,4 @@ tbody {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-}
-
-.dropdown-menu {
-    /*top: 0% !important;*/
 }

@@ -72,6 +72,9 @@
                     <ul>
 
                             @foreach($templateFloorCatalogs as $templateFloorCatalog)
+                                @php
+                                    $templateFloor = \App\TemplateFloor::find($templateFloorCatalog->template_floor_id);
+                                @endphp
                                 <li>
                                     <div class="consultant_wrapper clearfix">
                                         <div class="col-md-4 img_consultant">
@@ -132,13 +135,13 @@
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
                                                     <div class="col-md-12 col-lg-10">
                                                         <?php  $i = 0;$j = 0; ?>
-                                                        {!! Form::select('level',$templateFloors,$templateFloorCatalog->template_floor_id) !!}
+                                                        {!! Form::select('level',$templateFloors,$templateFloor->floor_id,['class' => 'form-control']) !!}
 
                                                     </div>
 
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalogue  </label>
                                                     <div class="col-md-12 col-lg-10">
-                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalog->template_floor_catalog_id) !!}
+                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalog->catalog_id,['class' => 'form-control']) !!}
 
                                                     </div>
                                                 </div>

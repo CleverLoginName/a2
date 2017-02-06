@@ -287,42 +287,40 @@
 
                 $(".product-container").on("click", ".single-item", function (e) {
                     //alert('call click event');
-                     var   image_pathwww = this.getAttribute("data-name");
+                    //  var   image_pathwww = this.getAttribute("data-name");
                    
-                    var imageValue = document.getElementById('smname').value;
+                    // var imageValue = document.getElementById('smname').value;
                      
-                   document.getElementById('smname').value = image_pathwww;
-                   document.getElementById('productDescription').value = this.getAttribute("data-pdescription");
+                   document.getElementById('left_popup_productName').innerHTML = this.getAttribute("data-name");
+                   document.getElementById('left_popup_productDescription').innerHTML = this.getAttribute("data-pdescription");
                    var supplier = this.getAttribute("data-productsupplier");
                    if(supplier == null){
                        supplier = 'NA';
                    }
                    
-                   document.getElementById('suppName').value = supplier;
-                   document.getElementById('productType').value=this.getAttribute("data-category-type");
-                   document.getElementById('productWatt').value=this.getAttribute("data-productwatts");
-                   document.getElementById('productStyle').value=this.getAttribute("data-productStyle");
-                   document.getElementById('builderproductPrice').value=this.getAttribute("data-builder_price");
-                   var lngth = document.getElementById('builderproductPrice').value.length;
-                   document.getElementById('builderproductPrice').size = lngth;
+                   document.getElementById('left_popup_suppName').innerHTML = supplier;
+                   document.getElementById('left_popup_productType').innerHTML=this.getAttribute("data-category-type");
+                   document.getElementById('left_popup_productWatt').innerHTML=this.getAttribute("data-productwatts");
+                   document.getElementById('left_popup_productStyle').innerHTML=this.getAttribute("data-productStyle");
+                   document.getElementById('left_popup_builderproductPrice').innerHTML=this.getAttribute("data-builder_price");
+                   document.getElementById('left_popup_wasprice').innerHTML="N/A"
+                   document.getElementById('left_popup_saveprice').innerHTML="N/A"
+                   
+                //    var lngth = document.getElementById('left_popup_builderproductPrice').value.length;
+                //    document.getElementById('left_popup_builderproductPrice').size = lngth;
                    
                 //    var imgURL = this.getAttribute("data-imgurl");
                    var imgPath = this.getAttribute("data-image_path");
-                   document.getElementById("imgProduct").src=imgPath;
+                   document.getElementById("left_popup_imgProduct").src=imgPath;
+                   
+                   
+                      var modal = document.getElementById("myModal");
+
+                $('#myModal').modal({
+                    show: true
+                });
                    
                   
-                   
-                   
-                //    console.log(imgURL+imgPath);
-                   
-                    var modal = document.getElementById('myModal');
-                    modal.style.display = "block";
-                   
-                    
-             
-                    
-                    
-                    
                     var span = document.getElementsByClassName("close")[0];
                 span.onclick = function () {
                     modal.style.display = "none";

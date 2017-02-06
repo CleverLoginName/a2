@@ -263,8 +263,6 @@ function printCanvas() {
     // printWin.close();
 }
 
-
-
 $(function () {
     $('#print').click(function () {
         window.print();
@@ -277,7 +275,9 @@ $(function () {
 
         var saveData = {
             metaData: {scaleFactor: scaleFactor},
-            objectData: drawElements
+            products: { data: productDataArray, isChanged: isProductDataChanged},
+            floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged},
+            project:  { data: projectDataArray, isChanged: isProjectDataChanged}
         }
 
         var fileName = "drawtool.dtf";
@@ -398,11 +398,14 @@ function loadSavedFile(fileName) {
 
             var metaData = fileDetails.metaData;
             scaleFactor = metaData.scaleFactor;
-            var objectData = fileDetails.objectData;
 
-            $(objectData).each(function (i, e) {
-                generateAndLoadObjectFromParams(e);
-            });
+            var productData = fileDetails.products.data;
+            var floorplanData = fileDetails.floorplan.data;
+            var projectData = fileDetails.project.data;
+
+            productData.forEach( generateAndLoadObjectFromParams );
+            floorplanData.forEach( generateAndLoadObjectFromParams );
+            projectData.forEach( generateAndLoadObjectFromParams );
             rePopulateConnectedBulbs();
             drawAllObjects();
         }
@@ -420,11 +423,13 @@ $('#load').click(function () {
 
             var metaData = fileDetails.metaData;
             scaleFactor = metaData.scaleFactor;
-            var objectData = fileDetails.objectData;
+            var productData = fileDetails.products.data;
+            var floorplanData = fileDetails.floorplan.data;
+            var projectData = fileDetails.project.data;
 
-            $(objectData).each(function (i, e) {
-                generateAndLoadObjectFromParams(e);
-            });
+            productData.forEach( generateAndLoadObjectFromParams );
+            floorplanData.forEach( generateAndLoadObjectFromParams );
+            projectData.forEach( generateAndLoadObjectFromParams );
             rePopulateConnectedBulbs();
             drawAllObjects();
         }

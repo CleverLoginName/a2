@@ -5,34 +5,34 @@
 
 
 .headerDiv {
-    float: left;
-    /*width: 33%;*/
-    text-align: center;
-    color: white;
-    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-    line-height: 30px;
-    background:rgba(101, 92, 92, 0.7);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-left: 5px;
+  float: left;
+  /*width: 33%;*/
+  text-align: center;
+  color: white;
+  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 18px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bold;
+	line-height: 30px;
+  background:rgba(101, 92, 92, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 5px;
 }
 
 .headerDiv.first {
-    text-align: center;
-    width: 20%;
+  text-align: center;
+  width: 20%;
 }
 
 .headerDiv.second {
-    width: 65%;
+  width: 65%;
 }
 
 .headerDiv.third {
-    width: 15%;
-    text-align: center;
-    height:auto;
+  width: 15%;
+  text-align: center;
+  height:auto;
 }

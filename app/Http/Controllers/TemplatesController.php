@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -240,18 +241,6 @@ class TemplatesController extends Controller
 
     public function addTemplatePlansData(Request $request){
 
-/*
- * array:6 [▼
-  "_token" => "68kaUdMOTcisRn3SDzNmJ0176qMZpqM665t900gj"
-  "id" => "4"
-  "design" => "CSSC"
-  "level" => "4"
-  "catalog_id" => "4"
-  "Save" => "Save"
-]
- */
-
-        //dd($request->all());
 
         $templateFloorCatalog = TemplateFloorCatalog::find($request->get('id'));
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
@@ -281,10 +270,10 @@ class TemplatesController extends Controller
     public function show($id)
     {
         $template = Template::find($id);
-        $plans = TemplatePlan::where('template_id','=',$id)->get();
+        $templateFloors = TemplateFloor::where('template_id','=',$id)->get();
         session(['template' => $template]);
         return view('templates.show')
-            ->with('plans', $plans)
+            ->with('templateFloors', $templateFloors)
             ->with('template', $template);
     }
 
@@ -304,40 +293,61 @@ class TemplatesController extends Controller
 
     public function editPlanInCanvas($id)
     {
-        $template = DB::table('template_plans')->where('id','=',$id)->first();
-        $allPlans = DB::table('template_plans')->where('template_id','=',$template->template_id)->get();
+        //$template = DB::table('template_plans')->where('id','=',$id)->first();
+        //$allPlans = DB::table('template_plans')->where('template_id','=',$template->template_id)->get();
+
+        $templateFloorCatalog  = DB::table('template_floor_catalogs')->where('id','=',$id)->first();
+        $templateFloor  = DB::table('template_floors')->where('id','=',$templateFloorCatalog->template_floor_id)->first();
+        $template  = DB::table('templates')->where('id','=',$templateFloor->template_id)->first();
+        $templateFloors  = DB::table('template_floors')->where('template_id','=',$template->id)->get();
+        $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
         session(['template_id' => $template->id ]);
-        session(['plan_id' => $id ]);
+        session(['template_floor_catalog_id' => $id ]);
         return view('canvas.index_new')
-            ->with('bgImg', $template->img)
-            ->with('plans', $allPlans);
+            ->with('bgImg', $templateImage->path)
+            ->with('templateFloors', $templateFloors);
     }
 
 
     public function updatePlanDataInCanvas(Request $request)
     {
-        $fileData = $request->get('file_data') ;
-        //dd($fileData);
-        $templateFloorCatalog = TemplateFloorCatalog::find(session('plan_id'));
+        $fileData = $request->get('file_data');
+        $fileData = (array)json_decode($fileData,true);
+        //dd($fileData['products']);
+        $templateFloorCatalog = TemplateFloorCatalog::find(session('template_floor_catalog_id'));
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
         $template = Template::find($templateFloor->template_id);
+        if (array_key_exists("products",$fileData))
+        {
+            $templateFloorCatalog->canvas_data = json_encode($fileData['products']['data']);
+            $templateFloorCatalog->save();
+        }
 
-        $templateFloorCatalog->canvas_data = $fileData['products'];
-        $templateFloorCatalog->save();
-
-        $templateFloor->canvas_data = $fileData['floorplan'];
-        $templateFloor->save();
-
-        $template->canvas_data = $fileData['project'];
-        $template->save();
+        if (array_key_exists("floorplan",$fileData)) {
+            $templateFloor->canvas_data = json_encode($fileData['floorplan']['data']);
+            $templateFloor->save();
+        }
+        if (array_key_exists("project",$fileData)) {
+            $template->canvas_data = json_encode($fileData['project']['data']);
+            $template->save();
+        }
 
         //return view('canvas.index_new');
     }
 
     public function loadPlanDataInCanvas()
     {
-        $templatePlan = TemplatePlan::find(session('plan_id'));
-        return $templatePlan->template_data;
+        $templateFloorCatalog  = DB::table('template_floor_catalogs')->where('id','=',session('template_floor_catalog_id'))->first();
+        $templateFloor  = DB::table('template_floors')->where('id','=',$templateFloorCatalog->template_floor_id)->first();
+        $template  = DB::table('templates')->where('id','=',$templateFloor->template_id)->first();
+
+        $response = [
+            'products'=>['data'=>$templateFloorCatalog->canvas_data],
+            'floorplan'=>['data'=>$templateFloor->canvas_data],
+            'project'=>['data'=>$template->canvas_data],
+        ];
+
+        return $response;
         //return view('canvas.index_new');
     }
 
@@ -357,6 +367,9 @@ class TemplatesController extends Controller
             'house_watts_per_sqm'    => 'required',
             'garage_watts_per_sqm'    => 'required',
             'porch_watts_per_sqm'    => 'required',
+            'terrace_watts_per_sqm'    => 'required',
+            'balcony_watts_per_sqm'    => 'required',
+            'alfresco_watts_per_sqm'    => 'required',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -373,17 +386,17 @@ class TemplatesController extends Controller
         $template->sqm_garage = $request->get('garage_watts_per_sqm');
         $template->sqm_terrace = $request->get('terrace_watts_per_sqm');
         $template->sqm_balcony = $request->get('balcony_watts_per_sqm');
-        $template->sqm_porch = $request->get('porch_watts_per_sqm');
+        $template->sqm_alfresco = $request->get('porch_watts_per_sqm');
         $template->save();
 
         Flash::success('Template Updated', 'Template has been updated successfully.');
 
         $templatesFloors = TemplatePlan::where('template_id','=',$id)->get();
 
-            return  view('templates.addPlans')
+           /* return  view('templates.addPlans')
                 ->with('template',$template)
                 ->with('templatesFloors',$templatesFloors)
-                ->with('empty_form',true);
+                ->with('empty_form',true);*/
         return view('templates.edit')
             ->with('template', $template);
     }
@@ -404,9 +417,10 @@ class TemplatesController extends Controller
 
     public function cropPlanImage($id)
     {
-        $templatePlan = TemplatePlan::find($id);
-        if($templatePlan){
-            $img_path = $templatePlan->img;
+        $templateFloor= TemplateFloor::find($id);
+        if($templateFloor){
+            $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
+            $img_path = $templateImage->path;
             $img = Image::make($img_path);
             $width = number_format(Input::get('width'), 0, '.', '');
             $height = number_format(Input::get('height'), 0, '.', '');
@@ -420,7 +434,7 @@ class TemplatesController extends Controller
             $img->save($img_path);
 
 
-            $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
+            $templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
 
             Flash::success('Updated Successfully', 'Updated Successfully');
             return Redirect::to('/templates/create/add-plans');
@@ -429,5 +443,11 @@ class TemplatesController extends Controller
                 ->with('templatesFloors',$templatesFloors)
                 ->with('empty_form',false);
         }
+    }
+    
+    public function editPlansInTemplate($template_id){
+        $template = Template::find($template_id);
+        session(['template' => $template]);
+        return Redirect::to('templates/create/add-plans');
     }
 }

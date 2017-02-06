@@ -353,44 +353,59 @@
 	</div>
         
         <!--Popup -->
+                <div class="modal fade common_popup new_Project_popup" id="myModal" role="dialog">
 
-        <div id="myModal" class="modal">
+                    <div class="modal-dialog custom_popupModel">
+                        <!-- Modal content-->
 
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <br><br><br>
-                <div class="popcontainer">
-                    <header>
-                        <img id="imgProduct"  style="height: 250px;width:250px;"/>
-                    </header>
-                    <nav>
-                        <input type="text" name="smname" id="smname"  value="tttt" style="width: 300px;color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" width="100%"/>
-                        <br>
-                        Product Description : <input type="text" name="productDescription" id="productDescription"  value="tttt" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                    </nav>
-                    <article>
+                        <div class="popup_con clearfix" >
+                            <div class="pd_popup_header">
 
-                        Supplier Name :<input type="text" name="suppName" id="suppName"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Colour(s) :
-                        <br>
-                        Style(s) :<input type="text" name="productStyle" id="productStyle"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Type :<input type="text" name="productType" id="productType"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Energy Rating or Watts :<input type="text" name="productWatt" id="productWatt"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Size:
-                    </article>
-                    <footer>
-                        $<input type="text" name="builderproductPrice" id="builderproductPrice"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" size=""/>*(inc GST)
-                        <span id="builderproductPrice" v/>
-                    </footer>
+                                <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+
+                                <div class="image_div" align="center">
+                                    <img class="pd_img img-responsive"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
+                                </div>
+                            </div>
+                            <div class="pd_details_con">
+                                <div class="col-md-7 padding_L">
+                                    <h2 name="smname" id="left_popup_productName">LED SS - 25mm Chrome</h2>
+                                    <p >Product Description.</p><p id="left_popup_productDescription" >Product Description. This is where the product description placed. This is a small descriptionn about the product focuses on selling the product like why the product is good for the house they use and want to own. No more than words.</p>
+                                </div>
+
+                                <div class="col-md-5 padding_R padding_L margin_top_20">
+
+                                    <p><strong>Supplier :</strong><span id="left_popup_suppName"> Clipsal</span></p>
+                                    <p><strong>Colour :</strong><span id="left_popup_productStyle">White, Chrome</span></p>
+                                    <p><strong>Style :</strong><span id="left_popup_productType">  LED</span></p>
+                                    <p><strong>Watts :</strong><span id="left_popup_productWatt">10 w</span></p>
+                                    <p><strong>Rating</strong>:N/A</p>
+                                    <p><strong>Size</strong>:N/A</p>
+
+                                </div>
+                                <div class="price_holder clearfix">
+                                    <div class="col-md-5 padding_L padding_R margin_top_40">
+                                        <strong><span class="pd_price" name="builderproductPrice" id="left_popup_builderproductPrice"></span>
+                                        <span class="pd_price_txt">(inc GST)</span></strong>
+                                    </div>
+
+                                    <div class="col-md-4 padding_L padding_R margin_top_20">
+                                        <span class="pd_price_txt lbl_red">WAS<br>
+                                            <strong ><span class="pd_price" id="left_popup_wasprice"></span></strong>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 padding_L padding_R margin_top_20">
+                                        <span class="pd_price_txt lbl_green">SAVE<br>
+                                            <strong ><span class="pd_price" id="left_popup_saveprice"></span></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        </div>
         <!-- -->
 
 	<div  style="vertical-align: bottom;" class="clearfix ">
@@ -410,13 +425,6 @@
 								<th>Quantity</th>
 								<th>Total Price ($)</th>
 							</tr>
-							<!--<tr>
-								<td><b>Name</b></td>
-								<td><b>Price</b></td>
-								<td><b>Discount</b></td>
-								<td><b>Energy(W)</b></td>
-								<td><b>Visible</b></td>
-							</tr>-->
 						</table>
 					</div>
 				</div>
@@ -429,10 +437,14 @@
 
     <div id="address-bar" class="clearfix">
         <div class="headerDiv first border-left-add">
-                Job #: PID0001
+                @php
+					$template = \Illuminate\Support\Facades\DB::table('templates')->where('id','=',session('template_id'))->first();
+				@endphp
+			{!! $template->name !!}
+
         </div>
         <div class="headerDiv second">
-                Project: Street Adress/Lot No, Postcode, Sturb, State.
+                Template Floor - Template Catalog
         </div>
         <div class="headerDiv third">
                 <img src="/img/adopto.png" width="90"/>
@@ -461,7 +473,7 @@
 					<span class="tooltiptext">Save</span>
 				</li>
 
-				<li class="tool-item" id="print-btn">
+				<li class="tool-item top-menu-item" id="print-btn" >
 					<a href="javascript:void(0)">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/printIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/printIcon.png') !!}">
@@ -664,43 +676,56 @@
 	<div id="item-popup-remW" class="item-popup " title="Remove Connection">
 		<img src="/img/DesignCanvassRemoveSwitchWire.png" class="image-background">
 	</div>
+
+	<div id="item-popup-connections" class="item-popup " title="Rearrange Connection">
+		<img src="/img/re_arrange.png" class="image-background">
+	</div>
 </div>
 
-<span class="canvas-tooltip-span" id="span-tooltip-can">
-	<table class="noborder">
-		<tbody>
-			<tr>
-				<th id="can-tool-title"></th>
-				<td rowspan="2" class="noborder">
-					<img id="can-tool-image" alt="" src=""/>
-				</td>
-			</tr>
-			<tr>
-				<td id="can-tool-product-code" class="noborder"></td>
-			</tr>
-			<tr>
-				<td class="noborder">Fit-Off Dimensions:
-					<ul>
-						<li id="can-tool-product-elevation"></li>
-						<li id="can-tool-product-location"></li>
-					</ul>
-				</td>
-				<td align="center" class="noborder"><h4 id="can-tool-product-power"></h4><h5>watts</h5></td>
-			</tr>
-			<tr>
-				<td colspan="2" class="noborder">
-					<input type="text" id="can-tool-product-note" style="color:black; width:100%;" placeholder="Notes"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right" class="noborder">
-					<!--<button type="button" id="can-tool-btn-cancel" class="btn btn-primary">Edit</button>-->
-					<button type="button" id="can-tool-btn-save" class="btn btn-primary">Save</button>
-				</td>
-			</tr>
-		</tbody>			
-	</table>
-</span>
+<!--PRODUCT ICON POP UP -->
+
+        <div class="modal fade common_popup new_Project_popup" id="productIconModal" role="dialog">
+            <div class="modal-dialog custom_popupModel ">
+
+                <!-- Modal content-->
+                <!--<div class="modal-content clearfix">-->
+                <div class="popup_con">
+                    <div class="pd_popup_header" align="center">
+
+                        <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+                        <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
+						<!--this popup is not responsive , for best viewing exprince-->
+                        <img class="pd_img " src="images/pd_1.png" id="popupImage" />
+                        <div class="ico_cw" style="border-style: solid;border-width: 1px;border-color:gray"><img style="width:50px;height:50px;" src="images/ico_cw.jpg" id="popupImageIcon"/></div>
+                    </div>
+                    <div class="pd_details_con">
+                        <h2 id="canvas_popup_productName" class="no-margin" style="max-width:100%;  overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">LED SS - 25mm Chrome</h2>
+                        <p class="no-margin"><strong>Color:</strong> <span id="canvas_popup_productColor">xx</span></p>
+                        <p class="no-margin"><strong>Style:</strong> <span id="canvas_popup_productStyle"></span></p>
+                        <p class="no-margin"><strong>Watts:</strong> <span id="canvas_popup_productWatt"></span></p>
+
+                        <div class="col-md-6 padding_L no-margin"><strong>SIV Code:</strong> <span id="canvas_popup_SIVcode"></span></div>
+
+                        <div class="col-md-6 margin_top-20 text-right padding_R">
+                            <span class="pd_price"><strong>$<span id="canvas_popup_productPrice">00</span></strong></span>
+                            <span class="pd_price_txt">(inc GST)</span>
+                        </div>
+
+
+                        <div class="pd_commentbox">
+                            <input  type="text" list="comments" id="displayvalues" style="color: black; width: 100%;" width="50" placeholder="Add Comment Here" />
+                            <datalist id="comments" style="color: black; width: 100%;"></datalist>
+                        </div>
+
+                        <input id="savevalues" name="save_btn" type="button" class="pd_btn_save" value="SAVE">
+                        <textarea id="display_notes" rows="3" cols="50" style="color: black;background-color:#52748d;border: 0px;color: #fff; width: 100%;resize: none;" readonly></textarea>
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--PRODUCT ICON POP UP END-->
 
 
 {{ Html::script('lib/jquery-3.1.1.js') }}
@@ -708,6 +733,7 @@
 {{ Html::script('canvas/js/canvas_items/canvas_item.js') }}
 {{ Html::script('canvas/js/canvas_items/drawing_item.js') }}
 {{ Html::script('canvas/js/canvas_items/product_item.js') }}
+{{ Html::script('canvas/js/ntc.js') }}
 {{ Html::script('canvas/js/draw-tool.js') }}
 {{ Html::script('canvas/js/bom.js') }}
 {{ Html::script('canvas/js/controllers_template.js') }}
@@ -747,13 +773,10 @@
 </script>
 
 
-
-
-
 <!-- ========================= MODEL POPUP STARTS ============================ -->
 
 <!-- Modal -->
-<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog">
+<div class="modal fade common_popup new_Project_popup template_modal" id="myModal_" role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
@@ -773,16 +796,24 @@
 									<section class="row form-group">
 										<section class="col-md-12" style="margin-left: 100px">
 											<ul>
-												@foreach($plans as $plan)
-<div class="row">
-	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan->img) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+												@foreach($templateFloors as $templateFloor)
+													@php
+														$templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('id','=',$templateFloor->id)->get();
+														$templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
+													@endphp
 
-	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/add-plans/'.$plan->id.'/canvas') !!}">Open</a></div>
+													@foreach($templateFloorCatalogs as $templateFloorCatalog)
+<div class="row">
+	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+
+	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->id.'/canvas') !!}">Open</a></div>
 </div>
 
 
 
 
+
+												@endforeach
 												@endforeach
 											</ul>
 										</section>

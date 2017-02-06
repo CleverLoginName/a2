@@ -635,3 +635,99 @@ Eraser.prototype.setVertices = function(pointsArrIncoming){
         tmpObjVerticesArr.push({x:e.x, y:e.y});
     });
 }
+
+/////////////////////////////////////////////////////////////////////////////
+/* Connection object inherit from Draw object.  */
+/////////////////////////////////////////////////////////////////////////////
+
+Connection.prototype = new DrawingItem();
+Connection.prototype.constructor = Connection;
+function Connection(){    
+    this.sourseId;
+    this.objType = ObjectType.CONNECT;
+    this.destinationId;
+    this.curvePointX;
+    this.curvePointY;
+    this.isActive = false;
+    this.tolerance = 5;  
+}
+
+Connection.prototype.getcurvePointX = function(){
+    return this.curvePointX;
+}
+
+Connection.prototype.setcurvePointX = function(curvePointX){    
+    this.curvePointX = curvePointX ;
+} 
+
+Connection.prototype.getcurvePointY = function(){
+    return this.curvePointY;
+}
+
+Connection.prototype.setcurvePointY = function(curvePointY){    
+    this.curvePointY = curvePointY ;
+} 
+
+Connection.prototype.getIsActive = function(){
+    return this.isActive;
+}
+
+Connection.prototype.setIsActive = function(isActive){    
+    this.isActive = isActive ;
+} 
+
+Connection.prototype.getsourseId = function(){
+    return this.sourseId;
+}
+
+Connection.prototype.setsourseId = function(sourseId){    
+    this.sourseId = sourseId ;
+}   
+
+Connection.prototype.getsdestinationId = function(){
+    return this.destinationId;
+}
+
+Connection.prototype.setdestinationId = function(destinationId){    
+    this.destinationId = destinationId ;
+}   
+
+Connection.prototype.getcontrollerPointX = function(startX,endX){
+    return this.curvePointX * 2 - (startX+endX)/2;
+}
+
+// Connection.prototype.setcontrollerPointX = function(controllerPointX){    
+//     this.controllerPointX = controllerPointX ;
+// }  
+
+Connection.prototype.getcontrollerPointY = function(startY,endY){
+    return this.curvePointY * 2 - (startY+endY)/2;
+}
+
+// Connection.prototype.setcontrollerPointY = function(controllerPointY){    
+//     this.controllerPointY = controllerPointY ;
+// }  
+
+Connection.prototype.getTolarence = function(){
+    return this.tolerance;
+}
+
+Connection.prototype.isInControlPoint = function(targetX, targetY){
+    //getReverseConvertedPoint
+    var controlPointTar =  getReverseConvertedPoint({x:targetX,y:targetY});
+    if(controlPointTar.x>(this.getcurvePointX()-this.getTolarence()) && (this.getcurvePointX()+this.getTolarence()) >controlPointTar.x && controlPointTar.y > (this.getcurvePointY()-this.getTolarence()) && (this.getcurvePointY()+this.getTolarence())>controlPointTar.y){
+		return true;
+	}
+	return false;
+
+}
+
+
+
+
+// function isInControlPoint(x,y,obj){
+// 	if(x>(obj.getcontrollerPointX()-5) && (obj.getcontrollerPointX()+5) >x && y > (obj.getcontrollerPointY()-5) && (obj.getcontrollerPointY()+5)>y){
+// 		return true;
+// 	}
+// 	return false;
+// }

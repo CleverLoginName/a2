@@ -120,11 +120,12 @@
                 </section>
                 <section class="row box-footer" id="form-footer">
                     <button type="submit"
-                            class="btn add-item-btn">Edit Plans<img src="resources/images/spinning-circles.svg"
+                            class="btn add-item-btn">Save<img src="resources/images/spinning-circles.svg"
                                                               class="loading-img-btn" style="display:none;"
                                                               id="1bf1a6a6-757b-921f-0a96-f95ffc63c6bc-new-product-loading">
                     </button>
                     <a id="prod-frm-reset" href="{!! url()->current() !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
+                    <a id="prod-frm-reset" href="{!! url('templates/create/'.$template->id.'/add-plans') !!}" class="btn add-item-btn" style="margin-right:10px;">Edit Plans</a>
 
                 </section>
             </form>

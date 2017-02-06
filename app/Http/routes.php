@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('projects', 'ProjectsController');
     Route::get('projects/{id}/delete', 'ProjectsController@destroy');
+    Route::get('templates/create/{id}/add-plans', 'TemplatesController@editPlansInTemplate');
     Route::post('projects/{id}/edit', 'ProjectsController@update');
 
     Route::get('canvas/templates/load-latest', 'ProjectsController@showPlanInCanvas');

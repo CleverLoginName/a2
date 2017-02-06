@@ -133,10 +133,14 @@ function ProductItem(){
     this.watts = 0;
     this.isInsidePack = false;
     this.parentPackId = null; //only valid for pack items 
-
+    this.selectionColour ;
+     this.conectingMood =false;
     // this.scalerSize = 10;
     this.width = 40;
     this.height = 40;
+}
+ProductItem.prototype.getNotes = function(){
+    return this.notes;
 }
 
 ProductItem.prototype.getWatts = function(){
@@ -149,6 +153,27 @@ ProductItem.prototype.setWatts = function(watts){
         this.watts = watts_checked;
     } 
 }
+
+
+ProductItem.prototype.setSelectionColour = function (type) {
+    this.selectionColour = type;
+}
+
+/* Get image path */
+ProductItem.prototype.getSelectionColour = function () {
+    return this.selectionColour;
+}
+
+ProductItem.prototype.setConectingMood = function (type) {
+    this.conectingMood = type;
+}
+
+/* Get image path */
+ProductItem.prototype.getConectingMood = function () {
+    return this.conectingMood;
+}
+
+
 
 /* Sets the name*/
 ProductItem.prototype.setName = function(name){
@@ -276,7 +301,7 @@ function LightBulb(){
 
     this.connections = [];
     this.label = "Anonymous";
-    this.selectionColour ;
+    
     //Set to Zero to stop the raycasting
     this.rayLength = 0;
 }
@@ -295,23 +320,7 @@ LightBulb.prototype.scale = function (oldScaleFactor, newScaleFactor){
 //     return this.productInfo;
 // }
 
-LightBulb.prototype.setSelectionColour = function (type) {
-    this.selectionColour = type;
-}
 
-/* Get image path */
-LightBulb.prototype.getSelectionColour = function () {
-    return this.selectionColour;
-}
-
-LightBulb.prototype.setConectingMood = function (type) {
-    this.conectingMood = type;
-}
-
-/* Get image path */
-LightBulb.prototype.getConectingMood = function () {
-    return this.conectingMood;
-}
 
 /* Sets the label of a Bulb */
 LightBulb.prototype.setLabel = function(lab){
