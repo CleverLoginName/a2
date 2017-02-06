@@ -34,7 +34,7 @@
                         </select></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"><label>SQM</label></section>
+                    <section class="col-md-2"><label>Watt Area Per SQM</label></section>
                     <section class="col-md-8">
                         <section class="col-md-12">
                             <section class="row form-group">
@@ -50,7 +50,7 @@
                                 </section>
                                 <section class="col-md-4">
                                     <input class="form-control required" id="terrace_watts_per_sqm"
-                                           name="terrace_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
+                                           name="terrace_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -66,7 +66,7 @@
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="balcony_watts_per_sqm"
-                                       name="balcony_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
+                                       name="balcony_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
                             </section>
                             </section>
                             <section class="row form-group" style="text-align: right">

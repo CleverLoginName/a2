@@ -53,7 +53,7 @@
                                     Garage
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('garage_watts_per_sqm',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'garage_watts_per_sqm']) !!}
+                                    {!! Form::text('garage_watts_per_sqm',$template->sqm_garage,['class'=>'form-control required','placeholder'=>"3w Per SQM",'id'=>'garage_watts_per_sqm']) !!}
                                 </section>
                                 <section class="col-md-2">
                                     Balcony
@@ -67,7 +67,7 @@
                                     Porch
                                 </section>
                                 <section class="col-md-4">
-                                    {!! Form::text('porch_watts_per_sqm',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"3w Per SQM",'id'=>'porch_watts_per_sqm']) !!}
+                                    {!! Form::text('porch_watts_per_sqm',$template->sqm_porch,['class'=>'form-control required','placeholder'=>"4w Per SQM",'id'=>'porch_watts_per_sqm']) !!}
                                 </section>
                                 <section class="col-md-2">
                                     Alfresco

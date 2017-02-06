@@ -719,8 +719,8 @@ tbody {
    align-items: center;
     color: #FFF;
     /*background-color: rgba(255, 254, 254, 0.37);*/
-    margin left: 2px;
-    margin right: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
    /* height: 100px;*/
 }
 
@@ -919,11 +919,6 @@ tbody {
 
 .no-margin{
     margin: 0px !important;
-}
-
-
-.modal-backdrop{
-    opacity:0 !important;
 }
 
 input::-webkit-calendar-picker-indicator {

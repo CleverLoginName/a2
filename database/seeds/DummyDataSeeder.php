@@ -780,6 +780,7 @@ class DummyDataSeeder extends Seeder
 
 
 
+        DB::table('floors')->insert(['name' =>' Please Select a Level']);
         DB::table('floors')->insert(['name' =>' Basement']);
         DB::table('floors')->insert(['name' =>' Ground Floor']);
         DB::table('floors')->insert(['name' =>' 1st Floor']);
@@ -787,5 +788,7 @@ class DummyDataSeeder extends Seeder
         DB::table('floors')->insert(['name' =>' 3rd Floor']);
         DB::table('floors')->insert(['name' =>' 4th Floor']);
         DB::table('floors')->insert(['name' =>' 5th Floor']);
+
+        DB::table('product_catalogs')->insert(['name' => 'Please Select a Catalog','description' => '']);
     }
 }

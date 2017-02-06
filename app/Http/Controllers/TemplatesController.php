@@ -142,6 +142,33 @@ class TemplatesController extends Controller
     public function addTemplatePlansImage(Request $request)
     {//dd($request->all());
         $file = $request->file('file');
+
+        /**************************************************************************************************************/
+        $exists = DB::table('template_floor_catalogs')
+            ->join('template_floors', 'template_floors.id', '=', 'template_floor_catalogs.template_floor_id')
+            ->where('template_floors.floor_id', '=', 1)
+            ->where('template_floor_catalogs.catalog_id', '=',  1)
+            ->select('template_floors.id')
+            ->get();
+//dd($exists);
+
+        $rules = array(
+            'street_name'   => 'required'
+        );
+
+        if($exists){
+            $validator = Validator::make($request->all(), $rules);
+
+            $validator->after(function($validator) {
+                $validator->errors()->add('empty_exists', 'Please Select Floor and Catalog for existing Design Plans');
+            });
+            Flash::error('Error', 'Please Select Floor and Catalog for existing Design Plans');
+            return 0;
+        }
+
+
+        /**************************************************************************************************************/
+
 /*
         //Display File Name
         echo 'File Name: '.$file->getClientOriginalName();
@@ -190,6 +217,7 @@ class TemplatesController extends Controller
         }else{
             $file->move($destinationPath,$randFileName);
         }
+
 
         $templateImage = new TemplateImage();
         $templateImage->name = $file->getClientOriginalName();
@@ -241,6 +269,31 @@ class TemplatesController extends Controller
 
     public function addTemplatePlansData(Request $request){
 
+        /**************************************************************************************************************/
+         $exists = DB::table('template_floor_catalogs')
+            ->join('template_floors', 'template_floors.id', '=', 'template_floor_catalogs.template_floor_id')
+             ->where('template_floors.floor_id', '=', $request->get('level'))
+             ->where('template_floor_catalogs.catalog_id', '=',  $request->get('catalog_id'))
+            ->select('template_floors.id')
+            ->get();
+
+
+        $rules = array(
+            'street_name'   => 'required'
+        );
+
+        if($exists){
+            $validator = Validator::make($request->all(), $rules);
+
+            $validator->after(function($validator) {
+                    $validator->errors()->add('exists', 'Floor & Catalog Already Exists');
+            });
+            return Redirect::to('/templates/create/add-plans')
+                ->withErrors($validator);
+        }
+
+
+        /**************************************************************************************************************/
 
         $templateFloorCatalog = TemplateFloorCatalog::find($request->get('id'));
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
@@ -251,7 +304,26 @@ class TemplatesController extends Controller
         $templateFloorCatalog->save();
 
         $templateFloor->floor_id = $request->get('level');
+        $img_parent = $templateFloor->template_image_id;
         $templateFloor->save();
+
+
+        /**************************************************************************************************************/
+
+        $tfloors = TemplateFloor::where('template_id', '=',$template->id)->
+                    where('floor_id', '=',$templateFloor->floor_id)->
+                    get();
+                  //  dd($tfloors);
+        foreach ($tfloors as $tfloor){
+            $t = TemplateFloor::find($tfloor->id);
+            $t->template_image_id = $img_parent;
+            $t->save();
+        }
+
+
+
+
+        /**************************************************************************************************************/
 
         $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
 

@@ -50,10 +50,10 @@
 
 
     <div class="content_area clearfix">
-        <div class="col-xs -12 col-sm-12 col-md-9 col-lg-12 content_left">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-12 content_left">
 
             <div class="form_container clearfix">
-                {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-2 col-lg-2 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word']) !!}
+                {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-3 col-lg-3 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word;height:275px']) !!}
 
                 <div id="dropzonePreview" class="dz-default dz-message">
                     <div class="form-group">
@@ -68,7 +68,10 @@
 
                 {!! Form::close() !!}
 
-                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 model_search_results new_template_uploader consultant_results_bg clearfix">
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 model_search_results new_template_uploader consultant_results_bg clearfix">
+
+                    @if ($errors->has('exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
+                    @if ($errors->has('empty_exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
                     <ul>
 
                             @foreach($templateFloorCatalogs as $templateFloorCatalog)
@@ -81,7 +84,7 @@
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/canvas') !!}">
                                                     <p>@if($templateFloorCatalog->template_floor_catalog_design){!! $templateFloorCatalog->template_floor_catalog_design !!}@else{!! $templateFloorCatalog->template_name !!}@endif {!! $templateFloorCatalog->floor_name !!}</p>
-                                                    <img src="{!! asset($templateFloorCatalog->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8"/>
+                                                    <img src="{!! asset($templateFloorCatalog->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
                                                 </a>
                                             </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
@@ -131,6 +134,9 @@
                                                                    name="design" aria-required="true" type="text" placeholder="" value="">
                                                         @endif
                                                     </div>
+                                                    @php
+
+                                                     @endphp
 
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
                                                     <div class="col-md-12 col-lg-10">
@@ -139,7 +145,7 @@
 
                                                     </div>
 
-                                                    <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalogue  </label>
+                                                    <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalog</label>
                                                     <div class="col-md-12 col-lg-10">
                                                         {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalog->catalog_id,['class' => 'form-control']) !!}
 
@@ -254,7 +260,23 @@
         });
 
         myDropzone.on("success", function (file, resp) {
+            /*if(resp == 0){
+                new PNotify({
+                    title: 'Error',
+                    title_escape: false,
+                    text: 'Please Select Floor and Catalog for existing Design Plans',
+                    text_escape: false,
+                    styling: "bootstrap3",
+                    type: "error",
+                    icon: true,
+                    addclass: "stack-bottomright",
+                    delay:1500
+                });
+            }else{
+
+            }*/
             window.location.href = '{!! url('templates/create/add-plans') !!}';
+
 //console.log('test');
         });
         myDropzone.on("addedfile", function(file) {
