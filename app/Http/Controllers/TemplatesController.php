@@ -305,6 +305,7 @@ class TemplatesController extends Controller
 
         $templateFloor->floor_id = $request->get('level');
         $img_parent = $templateFloor->template_image_id;
+        $canvas_data_parent = $templateFloor->canvas_data;
         $templateFloor->save();
 
 
@@ -317,6 +318,7 @@ class TemplatesController extends Controller
         foreach ($tfloors as $tfloor){
             $t = TemplateFloor::find($tfloor->id);
             $t->template_image_id = $img_parent;
+            $t->canvas_data = $canvas_data_parent;
             $t->save();
         }
 
