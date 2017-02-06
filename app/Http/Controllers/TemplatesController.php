@@ -400,6 +400,25 @@ class TemplatesController extends Controller
         if (array_key_exists("floorplan",$fileData)) {
             $templateFloor->canvas_data = json_encode($fileData['floorplan']['data']);
             $templateFloor->save();
+
+            /**************************************************************************************************************/
+
+            $tfloors = TemplateFloor::where('template_id', '=',$template->id)->
+            where('floor_id', '=',$templateFloor->floor_id)->
+            get();
+            //  dd($tfloors);
+            foreach ($tfloors as $tfloor){
+                $t = TemplateFloor::find($tfloor->id);
+                $t->canvas_data = json_encode($fileData['floorplan']['data']);
+                $t->save();
+            }
+
+
+
+
+            /**************************************************************************************************************/
+
+
         }
         if (array_key_exists("project",$fileData)) {
             $template->canvas_data = json_encode($fileData['project']['data']);
