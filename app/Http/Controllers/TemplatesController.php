@@ -144,7 +144,7 @@ class TemplatesController extends Controller
         $file = $request->file('file');
 
         /**************************************************************************************************************/
-        $exists = DB::table('template_floor_catalogs')
+       /* $exists = DB::table('template_floor_catalogs')
             ->join('template_floors', 'template_floors.id', '=', 'template_floor_catalogs.template_floor_id')
             ->where('template_floors.floor_id', '=', 1)
             ->where('template_floor_catalogs.catalog_id', '=',  1)
@@ -164,7 +164,7 @@ class TemplatesController extends Controller
             });
             Flash::error('Error', 'Please Select Floor and Catalog for existing Design Plans');
             return 0;
-        }
+        }*/
 
 
         /**************************************************************************************************************/

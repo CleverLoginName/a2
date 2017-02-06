@@ -260,22 +260,28 @@
         });
 
         myDropzone.on("success", function (file, resp) {
-            /*if(resp == 0){
+           /* if(resp == 0){
+                setTimeout(function(){
                 new PNotify({
-                    title: 'Error',
-                    title_escape: false,
-                    text: 'Please Select Floor and Catalog for existing Design Plans',
-                    text_escape: false,
-                    styling: "bootstrap3",
-                    type: "error",
-                    icon: true,
-                    addclass: "stack-bottomright",
-                    delay:1500
+                        title: 'Error',
+                        title_escape: false,
+                        text: 'Please Select Floor and Catalog for existing Design Plans',
+                        text_escape: false,
+                        styling: "bootstrap3",
+                        type: "error",
+                        icon: true,
+                        addclass: "stack-bottomright",
+                        delay:1500
                 });
+                    window.location.href = '{!! url('templates/create/add-plans') !!}';
+                }, 2000);
+
+
             }else{
 
             }*/
             window.location.href = '{!! url('templates/create/add-plans') !!}';
+           //
 
 //console.log('test');
         });
