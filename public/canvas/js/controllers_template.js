@@ -273,12 +273,14 @@ $(function () {
     /* Saves the current drawing to the file specified */
     $('#save-button').click(function () {
 
+        var print_dataUrl = getFullCanvas().toDataURL("image/png");
         var saveData = {
-            metaData: {scaleFactor: scaleFactor},
-            products: { data: productDataArray, isChanged: isProductDataChanged},
-            floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged},
-            project:  { data: projectDataArray, isChanged: isProjectDataChanged}
+            // metaData: { scaleFactor: scaleFactor },
+            products: { data: productDataArray, isChanged: isProductDataChanged },
+            floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
+            project: { data: projectDataArray, isChanged: isProjectDataChanged }
         }
+
 
         var fileName = "drawtool.dtf";
 

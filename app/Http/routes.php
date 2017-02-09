@@ -140,8 +140,12 @@ Route::group(['prefix' => 'advanced'], function () {
         return Redirect::to('/advanced/data-import/products');
     });
 
-    
+
 });
+
+Route::get('/print', 'PrintController@test');
+Route::get('/print1', 'PrintController@test1');
+Route::get('/print2', 'PrintController@test2');
 
 Route::group(['prefix' => 'rest/api'], function () {
     Route::group(['prefix' => 'projects'], function () {

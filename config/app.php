@@ -172,6 +172,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         SocialEngine\SnifferRules\ServiceProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -229,6 +231,8 @@ return [
 
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
 
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        
 
     ],
 
