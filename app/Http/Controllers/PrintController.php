@@ -15,23 +15,26 @@ use App\Http\Requests;
 class PrintController extends Controller
 {
     public function  test(){
-        $this->getAllProducts(2);
+        //$this->getAllProducts(2);
         $m = new Merger();
 
         $data = $this->getAllProducts(2);
         $pdf = \PDF::loadView('print.test', compact('data'));
-        $pdf = $pdf->setPaper('a4', 'portrait')
-            ->setWarnings(false);
+        $pdf = $pdf
+            //->setPaper('A4', 'portrait')
+            ->setPaper(array(0, 0, 594, 1520), 'portrait')
+            ->setOptions(['dpi' => 150,'isRemoteEnabled'=>true]);
+            //->setWarnings(false);
         //$pdf->render();
         $m->addRaw($pdf->output());
-
+/*
         $pdf = \PDF::loadView('print.test2', $data);
         $pdf = $pdf->setPaper('a4', 'portrait')
             ->setOptions(['dpi' => 300])
             ->setWarnings(false);
         //$pdf->render();
         $m->addRaw($pdf->output());
-
+*/
         return file_put_contents('combined.pdf', $m->merge());
     }
 
