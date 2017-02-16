@@ -2109,12 +2109,6 @@ Component: timeline
     border-color: #5b5d5c;
 }
 
-.btn.btn-primary:hover,
-.btn.btn-primary:active,
-.btn.btn-primary.hover {
-    background-color: #;
-}
-
 .btn.btn-success {
     background-color: #00a65a;
     border-color: #008d4c;

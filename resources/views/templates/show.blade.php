@@ -76,9 +76,15 @@
                 @php
                     $templateImage  = \Illuminate\Support\Facades\DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
                     $templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('template_floor_id','=',$templateFloor->id)->get();
-                @endphp.
+                @endphp
                 @foreach($templateFloorCatalogs as $templateFloorCatalog)
-            <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
+
+                    @php
+                        $templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
+                    @endphp
+                    @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+
+                    <div class="col-xs-12 colsm-12 cim-md-4 col-lg-3">
                 <div class="product">
                     <img src="/{!! $templateImage->path !!}" class="img-responsive col-md-9 col-lg-9"/>
                     <div class="form-group clearfix">
@@ -91,13 +97,14 @@
                         </div>
                         <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label"></label>
                         <div class="col-md-8 col-lg-8">
-                            <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->id.'/canvas') !!}">Load in Canvas</a>
+                            <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Load in Canvas</a>
                         </div>
                     </div>
 
 
                 </div>
             </div>
+                @endforeach
                 @endforeach
                 @endforeach
 

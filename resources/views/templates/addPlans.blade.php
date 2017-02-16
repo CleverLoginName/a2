@@ -3,9 +3,9 @@
 
 @section('main-content')
 
-        @foreach($templateFloorCatalogs as $templateFloorCatalog)
+        @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
             @php
-                $model = "modal_".$templateFloorCatalog->template_floor_catalog_id;
+                $model = "modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
             @endphp
 
             <div class="modal fade" id="{!! $model !!}" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
@@ -17,19 +17,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <img id="image_{!! $templateFloorCatalog->template_floor_catalog_id !!}" src="{!! asset($templateFloorCatalog->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <img id="image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" src="{!! asset($templateFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             </div>
                             <div style="padding-top: 15px">
-                                {!! Form::open(['url' => 'templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/crop', 'method' => 'post']) !!}
-                                <input type="hidden" name="width" id="width_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
-                                <input type="hidden" name="height" id="height_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
-                                <input type="hidden" name="x" id="x_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
-                                <input type="hidden" name="y" id="y_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
-                                <input type="hidden" name="rotate" id="rotate_{!! $templateFloorCatalog->template_floor_catalog_id !!}" value="">
+                                {!! Form::open(['url' => 'templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
+                                <input type="hidden" name="width" id="width_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="height" id="height_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="x" id="x_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="y" id="y_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="rotate" id="rotate_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
                                 {!! Form::submit('Save & Exit',['class'=>'btn_save']) !!}
                                 {!! Form::close() !!}
-                                <button class="btn_save" onclick="rotate_left_{!! $templateFloorCatalog->template_floor_catalog_id !!}()">Rotate Clockwise</button>
-                                <button class="btn_save" onclick="rotate_right_{!! $templateFloorCatalog->template_floor_catalog_id !!}()">Rotate Anti-clockwisw</button>
+                                <button class="btn_save" onclick="rotate_left_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}()">Rotate Clockwise</button>
+                                <button class="btn_save" onclick="rotate_right_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}()">Rotate Anti-clockwisw</button>
 
                                 <button type="button" class="btn_save" data-dismiss="modal">Close</button>
                             </div>
@@ -74,22 +74,22 @@
                     @if ($errors->has('empty_exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
                     <ul>
 
-                            @foreach($templateFloorCatalogs as $templateFloorCatalog)
+                            @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
                                 @php
-                                    $templateFloor = \App\TemplateFloor::find($templateFloorCatalog->template_floor_id);
+                                    $templateFloor = \App\TemplateFloor::find($templateFloorCatalogDesign->template_floor_id);
                                 @endphp
                                 <li>
                                     <div class="consultant_wrapper clearfix">
                                         <div class="col-md-4 img_consultant">
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                                <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/canvas') !!}">
-                                                    <p>@if($templateFloorCatalog->template_floor_catalog_design){!! $templateFloorCatalog->template_floor_catalog_design !!}@else{!! $templateFloorCatalog->template_name !!}@endif {!! $templateFloorCatalog->floor_name !!}</p>
-                                                    <img src="{!! asset($templateFloorCatalog->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
+                                                <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}">
+                                                    <p>@if($templateFloorCatalogDesign->template_floor_catalog_design){!! $templateFloorCatalogDesign->template_floor_catalog_design !!}@else{!! $templateFloorCatalogDesign->template_name !!}@endif {!! $templateFloorCatalogDesign->floor_name !!}</p>
+                                                    <img src="{!! asset($templateFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
                                                 </a>
                                             </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 @php
-                                                    $model = "#modal_".$templateFloorCatalog->template_floor_catalog_id;
+                                                    $model = "#modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
                                                 @endphp
                                                 <br/>
 
@@ -102,7 +102,7 @@
                                                         <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
                                                         </td>
                                                         <td width="15"></td>
-                                                        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
+                                                        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
 
                                                         </td>
                                                     </tr>
@@ -118,17 +118,17 @@
 
                                             {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
 
-                                            {{Form::hidden('id',$templateFloorCatalog->template_floor_catalog_id)}}
+                                            {{Form::hidden('id',$templateFloorCatalogDesign->template_floor_catalog_design_id)}}
                                             <h5>House Design Template</h5>
-                                            <p>{!! $templateFloorCatalog->image_name !!} : (Not Available Yet)kbs </p>
+                                            <p>{!! $templateFloorCatalogDesign->image_name !!} : (Not Available Yet)kbs </p>
 
                                             <div class="col-md-12 margin_top_20">
                                                 <div class="form-group">
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Design</label>
                                                     <div class="col-md-12 col-lg-10">
-                                                        @if($templateFloorCatalog->template_floor_catalog_design != '')
+                                                        @if($templateFloorCatalogDesign->template_floor_catalog_design != '')
                                                             <input class="form-control required" id="design"
-                                                                   name="design" aria-required="true" type="text" placeholder="" value="{!! $templateFloorCatalog->template_floor_catalog_design !!}">
+                                                                   name="design" aria-required="true" type="text" placeholder="" value="{!! $templateFloorCatalogDesign->template_floor_catalog_design !!}">
                                                         @else
                                                             <input class="form-control required" id="design"
                                                                    name="design" aria-required="true" type="text" placeholder="" value="">
@@ -147,14 +147,14 @@
 
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalog</label>
                                                     <div class="col-md-12 col-lg-10">
-                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalog->catalog_id,['class' => 'form-control']) !!}
+                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalogDesign->catalog_id,['class' => 'form-control']) !!}
 
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                    <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->template_floor_catalog_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                    <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -162,7 +162,7 @@
                                     </div>
                                 </li>
                             @endforeach
-                        
+
                         <li>
 
 
@@ -177,8 +177,8 @@
 
         </div>
     </div>
-    
-    
+
+
 
 
 @stop
@@ -295,54 +295,54 @@
 
 
     <script>
-             
-                @foreach($templateFloorCatalogs as $templateFloorCatalog)
 
-        var cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!};
-        var canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!};
-        var cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!};
+                @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+
+        var cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
+        var canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
+        var cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
 
 
-        function rotate_left_{!! $templateFloorCatalog->template_floor_catalog_id !!}() {
-            cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.rotate(45);
+        function rotate_left_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}() {
+            cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.rotate(45);
         }
-        function rotate_right_{!! $templateFloorCatalog->template_floor_catalog_id !!}() {
-            cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.rotate(-45);
+        function rotate_right_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}() {
+            cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.rotate(-45);
         }
 
         @endforeach
-      
+
     window.addEventListener('DOMContentLoaded', function () {
 
-                 
-                    @foreach($templateFloorCatalogs as $templateFloorCatalog)
+
+                    @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
                     @php
-                        $model = "modal_".$templateFloorCatalog->template_floor_catalog_id;
+                        $model = "modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
                     @endphp
 
-            var image_{!! $templateFloorCatalog->template_floor_catalog_id !!} = document.getElementById('image_{!! $templateFloorCatalog->template_floor_catalog_id !!}');
-            $('#modal_{!! $templateFloorCatalog->template_floor_catalog_id !!}').on('shown.bs.modal', function () {
-                cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!} = new Cropper(image_{!! $templateFloorCatalog->template_floor_catalog_id !!}, {
+            var image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = document.getElementById('image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}');
+            $('#modal_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').on('shown.bs.modal', function () {
+                cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = new Cropper(image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}, {
                     autoCropArea: 0.5,
                     ready: function () {
 
                         // Strict mode: set crop box data first
-                        cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.setCropBoxData(cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!}).setCanvasData(canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!});
+                        cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.setCropBoxData(cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}).setCanvasData(canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!});
                     },
                     crop: function(e) {
 
-                        $('#x_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.x);
-                        $('#y_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.y);
-                        $('#width_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.width);
-                        $('#height_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.height);
-                        $('#rotate_{!! $templateFloorCatalog->template_floor_catalog_id !!}').val(e.detail.rotate);
+                        $('#x_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.x);
+                        $('#y_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.y);
+                        $('#width_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.width);
+                        $('#height_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.height);
+                        $('#rotate_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.rotate);
 
                     }
                 });
             }).on('hidden.bs.modal', function () {
-                cropBoxData_{!! $templateFloorCatalog->template_floor_catalog_id !!} = cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.getCropBoxData();
-                canvasData_{!! $templateFloorCatalog->template_floor_catalog_id !!} = cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.getCanvasData();
-                cropper_{!! $templateFloorCatalog->template_floor_catalog_id !!}.destroy();
+                cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.getCropBoxData();
+                canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.getCanvasData();
+                cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.destroy();
             });
 
 

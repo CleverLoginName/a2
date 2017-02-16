@@ -22,7 +22,7 @@ class PrintController extends Controller
         $pdf = \PDF::loadView('print.test', compact('data'));
         $pdf = $pdf
             //->setPaper('A4', 'portrait')
-            ->setPaper(array(0, 0, 594, 1520), 'portrait')
+           // ->setPaper(array(0, 0, 594, 1520), 'portrait')
             ->setOptions(['dpi' => 150,'isRemoteEnabled'=>true]);
             //->setWarnings(false);
         //$pdf->render();
