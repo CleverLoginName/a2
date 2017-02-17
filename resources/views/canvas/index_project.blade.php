@@ -836,9 +836,9 @@
 									<ul>
 										@foreach($plans as $plan)
 											<div class="row">
-												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan->img) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
 
-												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$plan->id.'/canvas') !!}">Open</a></div>
+												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$plan['id'].'/canvas') !!}">Open</a></div>
 											</div>
 
 

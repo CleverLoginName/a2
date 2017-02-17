@@ -6,8 +6,16 @@ use App\Address;
 use App\Product;
 use App\Project;
 use App\ProjectCanvasData;
+use App\ProjectFloor;
+use App\ProjectFloorCatalog;
+use App\ProjectFloorCatalogDesign;
+use App\ProjectImage;
 use App\ProjectPlan;
 use App\Template;
+use App\TemplateFloor;
+use App\TemplateFloorCatalog;
+use App\TemplateFloorCatalogDesign;
+use App\TemplateImage;
 use App\TemplatePlan;
 use App\User;
 use Illuminate\Http\Request;
@@ -170,25 +178,48 @@ class ProjectsController extends Controller
         $project_canvas_data->project_id = $project->id;
         $project_canvas_data->save();
 
-        $templatePlans = TemplatePlan::where('template_id', '=', $project->template_id)->get();
-        foreach ($templatePlans as $templatePlan){
-            $projectPlan = new ProjectPlan();
-            $projectPlan->design = $templatePlan->design;
-            $projectPlan->level = $templatePlan->level;
-            $projectPlan->img = $templatePlan->img;
-            $projectPlan->img_300x200 = $templatePlan->img_300x200;
-            $projectPlan->project_id = $project->id;
-            $projectPlan->catalog_id = $templatePlan->catalog_id;
-            $projectPlan->template_data = $templatePlan->template_data;
-            $projectPlan->save();
-        };
+        $templateFloors = TemplateFloor::where('template_id', '=', $project->template_id)->get();
+        $projectPlans = [];
+        foreach ($templateFloors as $templateFloor){
+            $projectFloor = new ProjectFloor();
+            $projectFloor->project_image_id = $templateFloor->template_image_id;
+            $projectFloor->floor_id = $templateFloor->floor_id;
+            $projectFloor->canvas_data = $templateFloor->canvas_data;
+            $projectFloor->project_id = $project->id;
+            $projectFloor->save();
+            
+            $templateImage = TemplateImage::find($templateFloor->template_image_id);
+            $projectImage = new ProjectImage();
+            $projectImage->name = $templateImage->name;
+            $projectImage->path = $templateImage->path;
+            $projectImage->save();
+            
 
-        $projectPlans = ProjectPlan::where('project_id','=',$project->id)->get();
-        $projectPlansCount = ProjectPlan::where('project_id','=',$project->id)->count();
-        if($projectPlansCount > 0){
-            session(['project_id' => $project->id ]);
-            session(['project_plan_id' => $projectPlans[0]->id ]);
+            $templateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id', '=', $templateFloor->id)->get();
+            foreach ($templateFloorCatalogs as $templateFloorCatalog){
+
+                $projectFloorCatalog = new ProjectFloorCatalog();
+                $projectFloorCatalog->project_floor_id = $projectFloor->id;
+                $projectFloorCatalog->catalog_id = $templateFloorCatalog->catalog_id;
+                $projectFloorCatalog->save();
+
+                $templateFloorCatalogDesigns = TemplateFloorCatalogDesign::where('template_floor_catalog_id', '=', $templateFloorCatalog->id)->get();
+                foreach ($templateFloorCatalogDesigns as $templateFloorCatalogDesign){
+
+                    $projectFloorCatalogDesign = new ProjectFloorCatalogDesign();
+                    $projectFloorCatalogDesign->canvas_data = $templateFloorCatalogDesign->canvas_data;
+                    $projectFloorCatalogDesign->name = $templateFloorCatalogDesign->name;
+                    $projectFloorCatalogDesign->project_floor_catalog_id = $projectFloorCatalog->id;
+                    $projectFloorCatalogDesign->is_active = $projectFloorCatalog->is_active;
+                    $projectFloorCatalogDesign->save();
+                    $projectPlans[] = ['id'=>$projectFloorCatalogDesign->id,'img'=>$projectImage->path];
+
+                    //$templateFloorCatalogDesigns = TemplateFloorCatalogDesign::where('template_floor_catalog_id', '=', $templateFloorCatalog->id)->get();
+                }
+            }
         }
+
+       // $projectPlans = ProjectFloorCatalogDesign::where('template_floor_catalog_id','=',$projectFloorCatalog->id)->get();
 
         Flash::success('Project Added', 'Project has been added successfully.');
 /*

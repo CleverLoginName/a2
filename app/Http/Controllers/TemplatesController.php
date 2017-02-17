@@ -88,13 +88,14 @@ class TemplatesController extends Controller
         $template->save();
 
         Flash::success('Template Added', 'Template has been added successfully.');
+        session(['template' => $template]);
         return Redirect::to('/templates/create/add-plans')
             ->with('template', $template);
             
 
     }
 
-    public function addPlan(Request $request){
+    public function addPlan(Request $request){//dd(session('template'));
         //$templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
         //$tempalateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id')
 
@@ -231,7 +232,7 @@ class TemplatesController extends Controller
         $templateFloor->template_image_id = $templateImage->id;
         $templateFloor->floor_id = 1;
         $templateFloor->canvas_data = '[]';
-        $templateFloor->template_id = session('template')->id;
+        $templateFloor->template_id = $request->get('template_id');
         $templateFloor->save();
 
         $templateFloorCatalog = new TemplateFloorCatalog();
