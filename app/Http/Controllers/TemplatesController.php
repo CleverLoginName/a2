@@ -88,8 +88,9 @@ class TemplatesController extends Controller
         $template->save();
 
         Flash::success('Template Added', 'Template has been added successfully.');
-        session(['template' => $template]);
-        return Redirect::to('/templates/create/add-plans');
+        return Redirect::to('/templates/create/add-plans')
+            ->with('template', $template);
+            
 
     }
 
@@ -229,7 +230,7 @@ class TemplatesController extends Controller
         $templateFloor = new TemplateFloor();
         $templateFloor->template_image_id = $templateImage->id;
         $templateFloor->floor_id = 1;
-        $templateFloor->canvas_data = '';
+        $templateFloor->canvas_data = '[]';
         $templateFloor->template_id = session('template')->id;
         $templateFloor->save();
 
@@ -242,7 +243,7 @@ class TemplatesController extends Controller
 
 
         $templateFloorCatalogDesign = new TemplateFloorCatalogDesign();
-        $templateFloorCatalogDesign->canvas_data = '';
+        $templateFloorCatalogDesign->canvas_data = '[]';
         $templateFloorCatalogDesign->template_floor_catalog_id = $templateFloorCatalog->id;
         $templateFloorCatalogDesign->name = '';
         $templateFloorCatalogDesign->is_active = true;
@@ -287,6 +288,8 @@ class TemplatesController extends Controller
              ->where('template_floors.floor_id', '=', $request->get('level'))
              ->where('template_floor_catalogs.catalog_id', '=',  $request->get('catalog_id'))
              ->where('template_floor_catalog_designs.name', '=',  $request->get('design'))
+             ->where('template_floor_catalog_designs.id', '!=' , $request->get('id'))
+             ->orWhereNull('template_floor_catalog_designs.id')
             ->select('template_floors.id')
             ->get();
 
@@ -320,25 +323,27 @@ class TemplatesController extends Controller
 
         $templateFloor->floor_id = $request->get('level');
        // $img_parent = $templateFloor->template_image_id;
-       // $canvas_data_parent = $templateFloor->canvas_data;
-        $templateFloor->save();
+        //$canvas_data_parent = $templateFloor->canvas_data;
+
 
 
         /**************************************************************************************************************/
-/*
+
         $tfloors = TemplateFloor::where('template_id', '=',$template->id)->
                     where('floor_id', '=',$templateFloor->floor_id)->
                     get();
                   //  dd($tfloors);
-        foreach ($tfloors as $tfloor){
-            $t = TemplateFloor::find($tfloor->id);
-            $t->template_image_id = $img_parent;
-            $t->canvas_data = $canvas_data_parent;
-            $t->save();
+       // foreach ($tfloors as $tfloor){
+            if(($tfloors)&&(count($tfloors)>1)){
+            $t = TemplateFloor::find($tfloors[0]->id);
+            //$t->template_image_id = $img_parent;
+            $templateFloor->canvas_data= $t->canvas_data;
         }
+             //$t->save();
+        //}
 
 
-*/
+        $templateFloor->save();
 
         /**************************************************************************************************************/
 
@@ -392,9 +397,9 @@ class TemplatesController extends Controller
         $templateFloors  = DB::table('template_floors')->where('template_id','=',$template->id)->get();
         $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
         session(['template_id' => $template->id ]);
-        session(['template_floor_catalog_design_id' => $id ]);
         return view('canvas.index_new')
             ->with('bgImg', $templateImage->path)
+            ->with('template_floor_catalog_design_id', $id)
             ->with('templateFloors', $templateFloors);
     }
 
@@ -404,7 +409,7 @@ class TemplatesController extends Controller
         $fileData = $request->get('file_data');
         $fileData = (array)json_decode($fileData,true);
         //dd($fileData['products']);
-        $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find(session('template_floor_catalog_design_id'));
+        $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($fileData['template_floor_catalog_design_id']);
         $templateFloorCatalog = TemplateFloorCatalog::find($templateFloorCatalogDesign->template_floor_catalog_id);
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
         $template = Template::find($templateFloor->template_id);
@@ -445,10 +450,10 @@ class TemplatesController extends Controller
         //return view('canvas.index_new');
     }
 
-    public function loadPlanDataInCanvas()
+    public function loadPlanDataInCanvas(Request $request)
     {
 
-        $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find(session('template_floor_catalog_design_id'));
+        $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($request->get('template_floor_catalog_design_id'));
         $templateFloorCatalog = TemplateFloorCatalog::find($templateFloorCatalogDesign->template_floor_catalog_id);
         $templateFloor  = DB::table('template_floors')->where('id','=',$templateFloorCatalog->template_floor_id)->first();
         $template  = DB::table('templates')->where('id','=',$templateFloor->template_id)->first();

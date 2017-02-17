@@ -726,7 +726,9 @@
         </div>
 
 <!--PRODUCT ICON POP UP END-->
-
+<script>
+	var template_floor_catalog_design_id = '{!! $template_floor_catalog_design_id !!}';
+</script>
 
 {{ Html::script('lib/jquery-3.1.1.js') }}
 {{ Html::script('lib/jquery-ui.js') }}

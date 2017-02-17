@@ -278,7 +278,8 @@ $(function () {
             // metaData: { scaleFactor: scaleFactor },
             products: { data: productDataArray, isChanged: isProductDataChanged },
             floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
-            project: { data: projectDataArray, isChanged: isProjectDataChanged }
+            project: { data: projectDataArray, isChanged: isProjectDataChanged },
+            template_floor_catalog_design_id:template_floor_catalog_design_id
         }
 
 
@@ -428,6 +429,7 @@ $(function () {
     $.ajax({
         type: 'GET',
         url: 'canvas/templates/load-latest',
+        data: 'template_floor_catalog_design_id=' + template_floor_catalog_design_id,
         success: function (msg) {
             var fileDetails =  msg;
             clearDrawElements();
