@@ -438,7 +438,7 @@
     <div id="address-bar" class="clearfix">
         <div class="headerDiv first border-left-add">
                 @php
-					$template = \Illuminate\Support\Facades\DB::table('templates')->where('id','=',session('template_id'))->first();
+					$template = \Illuminate\Support\Facades\DB::table('templates')->where('id','=',$template->id)->first();
 				@endphp
 			{!! $template->name !!}
 
@@ -458,7 +458,7 @@
 		<div class="col-xs-10 col-sm-10 col-md-10 border-left-add">
 			<ul id="tool-items-ul">
 				<li class="tool-item top-menu-item">
-					<a href="{!! url('templates/create/add-plans') !!}" id="home-button">
+					<a href="{!! url('templates/create/'.$template->id.'/add-plans') !!}" id="home-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/home.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/home.png') !!}">
 					</a>

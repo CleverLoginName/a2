@@ -84,20 +84,21 @@ class TemplatesController extends Controller
         $template->sqm_terrace = $request->get('terrace_watts_per_sqm');
         $template->sqm_balcony = $request->get('balcony_watts_per_sqm');
         $template->sqm_porch = $request->get('porch_watts_per_sqm');
-        $template->canvas_data = '';
+        $template->canvas_data = '[]';
         $template->save();
 
         Flash::success('Template Added', 'Template has been added successfully.');
-        session(['template' => $template]);
-        return Redirect::to('/templates/create/add-plans')
+        //session(['template' => $template]);
+        return Redirect::to('/templates/create/'.$template->id.'/add-plans')
             ->with('template', $template);
             
 
     }
 
-    public function addPlan(Request $request){//dd(session('template'));
+    public function addPlan(Template $template, Request $request){//dd(session('template'));
         //$templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
         //$tempalateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id')
+        //dd($template);
 
         $templateCatalogs = ProductCatalog::lists('name','id');
         $templateFloors = Floor::lists('name','id');
@@ -120,17 +121,17 @@ class TemplatesController extends Controller
                 'templates.name as template_name'
             ])
             ->where('template_floor_catalog_designs.is_active', '=', true)
-            ->where('templates.id', '=', session('template')->id)
+            ->where('templates.id', '=',$template->id)
             ->get();
          if($template_floor_catalog_designs)
             return  view('templates.addPlans')
-                ->with('template',session('template'))
+                ->with('template',$template)
                 ->with('templateCatalogs',$templateCatalogs)
                 ->with('templateFloors',$templateFloors)
                 ->with('templateFloorCatalogDesigns',$template_floor_catalog_designs);
 
             return  view('templates.addPlans')
-                ->with('template',session('template'))
+                ->with('template',$template)
                 ->with('templateCatalogs',$templateCatalogs)
                 ->with('templateFloors',$templateFloors)
                 ->with('templateFloorCatalogDesigns',$template_floor_catalog_designs);
@@ -143,7 +144,7 @@ class TemplatesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function addTemplatePlansImage(Request $request)
+    public function addTemplatePlansImage(Template $template,Request $request)
     {//dd($request->all());
         $file = $request->file('file');
 
@@ -246,7 +247,7 @@ class TemplatesController extends Controller
         $templateFloorCatalogDesign = new TemplateFloorCatalogDesign();
         $templateFloorCatalogDesign->canvas_data = '[]';
         $templateFloorCatalogDesign->template_floor_catalog_id = $templateFloorCatalog->id;
-        $templateFloorCatalogDesign->name = '';
+        $templateFloorCatalogDesign->name = $template->name;
         $templateFloorCatalogDesign->is_active = true;
         $templateFloorCatalogDesign->save();
 
@@ -279,7 +280,7 @@ class TemplatesController extends Controller
     }
 
 
-    public function addTemplatePlansData(Request $request){
+    public function addTemplatePlansData(Template $template,Request $request){
      //   dd($request->all());
 
         /**************************************************************************************************************/
@@ -305,7 +306,7 @@ class TemplatesController extends Controller
             $validator->after(function($validator) {
                     $validator->errors()->add('exists', 'Floor & Catalog Already Exists');
             });
-            return Redirect::to('/templates/create/add-plans')
+            return Redirect::to('/templates/create/'.$template->id.'/add-plans')
                 ->withErrors($validator);
         }
 
@@ -348,25 +349,25 @@ class TemplatesController extends Controller
 
         /**************************************************************************************************************/
 
-        $templatesFloors = TemplatePlan::where('template_id','=',session('template')->id)->get();
+        $templatesFloors = TemplatePlan::where('template_id','=',$template->id)->get();
 
         Flash::success('Updated successfully', 'Updated successfully.');
-        return Redirect::to('/templates/create/add-plans');
+        return Redirect::to('/templates/create/'.$template->id.'/add-plans');
 
     }
 
-    public function deletePlanInCanvas($id){
+    public function deletePlanInCanvas(Template $template, $id){
         $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($id);
         $templateFloorCatalogDesign->delete();
         Flash::success('Plan Deleted', 'Plan has been deleted successfully.');
-        return Redirect::to('/templates/create/add-plans');
+        return Redirect::to('/templates/create/'.$template->id.'/add-plans');
     }
 
     public function show($id)
     {
         $template = Template::find($id);
         $templateFloors = TemplateFloor::where('template_id','=',$id)->get();
-        session(['template' => $template]);
+        //session(['template' => $template]);
         return view('templates.show')
             ->with('templateFloors', $templateFloors)
             ->with('template', $template);
@@ -381,12 +382,11 @@ class TemplatesController extends Controller
     public function edit($id)
     {
         $template = Template::find($id);
-        session(['template' => $template]);
         return view('templates.edit')
             ->with('template', $template);
     }
 
-    public function editPlanInCanvas($id)
+    public function editPlanInCanvas(Template $template, $id)
     {
         //$template = DB::table('template_plans')->where('id','=',$id)->first();
         //$allPlans = DB::table('template_plans')->where('template_id','=',$template->template_id)->get();
@@ -397,8 +397,9 @@ class TemplatesController extends Controller
         $template  = DB::table('templates')->where('id','=',$templateFloor->template_id)->first();
         $templateFloors  = DB::table('template_floors')->where('template_id','=',$template->id)->get();
         $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
-        session(['template_id' => $template->id ]);
+        //session(['template_id' => $template->id ]);
         return view('canvas.index_new')
+            ->with('template', $template)
             ->with('bgImg', $templateImage->path)
             ->with('template_floor_catalog_design_id', $id)
             ->with('templateFloors', $templateFloors);
@@ -533,9 +534,11 @@ class TemplatesController extends Controller
         return redirect()->action('TemplatesController@index');
     }
 
-    public function cropPlanImage($id)
-    {
-        $templateFloor= TemplateFloor::find($id);
+    public function cropPlanImage(Template $template, $id)
+    {   $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($id);
+        $templateFloorCatalog = TemplateFloorCatalog::find($templateFloorCatalogDesign->template_floor_catalog_id);
+
+        $templateFloor= TemplateFloor::find($templateFloorCatalog->template_floor_id);
         if($templateFloor){
             $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
             $img_path = $templateImage->path;
@@ -552,12 +555,12 @@ class TemplatesController extends Controller
             $img->save($img_path);
 
 
-            $templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
+            $templatesFloors = TemplateFloor::where('template_id','=',$template->id)->get();
 
             Flash::success('Updated Successfully', 'Updated Successfully');
-            return Redirect::to('/templates/create/add-plans');
+            return Redirect::to('/templates/create/'.$template->id.'/add-plans');
             return  view('templates.addPlans')
-                ->with('template',session('template'))
+                ->with('template',$template)
                 ->with('templatesFloors',$templatesFloors)
                 ->with('empty_form',false);
         }
@@ -565,7 +568,7 @@ class TemplatesController extends Controller
     
     public function editPlansInTemplate($template_id){
         $template = Template::find($template_id);
-        session(['template' => $template]);
-        return Redirect::to('templates/create/add-plans');
+        //session(['template' => $template]);
+        return Redirect::to('templates/create/'.$template->id.'/add-plans');
     }
 }

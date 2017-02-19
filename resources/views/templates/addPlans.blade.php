@@ -20,7 +20,7 @@
                                 <img id="image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" src="{!! asset($templateFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             </div>
                             <div style="padding-top: 15px">
-                                {!! Form::open(['url' => 'templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
+                                {!! Form::open(['url' => 'templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
                                 <input type="hidden" name="width" id="width_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
                                 <input type="hidden" name="height" id="height_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
                                 <input type="hidden" name="x" id="x_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
@@ -60,7 +60,7 @@
                         <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
                         <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
                         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="template_id" id="template_id" value="{!! session('template')->id !!}">
+                        <input type="hidden" name="template_id" id="template_id" value="{!! $template->id !!}">
 
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                                     <div class="consultant_wrapper clearfix">
                                         <div class="col-md-4 img_consultant">
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                                <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}">
+                                                <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}">
                                                     <p>@if($templateFloorCatalogDesign->template_floor_catalog_design){!! $templateFloorCatalogDesign->template_floor_catalog_design !!}@else{!! $templateFloorCatalogDesign->template_name !!}@endif {!! $templateFloorCatalogDesign->floor_name !!}</p>
                                                     <img src="{!! asset($templateFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
                                                 </a>
@@ -102,7 +102,7 @@
                                                         <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
                                                         </td>
                                                         <td width="15"></td>
-                                                        <td class="col-md-4"> <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
+                                                        <td class="col-md-4"> <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
 
                                                         </td>
                                                     </tr>
@@ -116,7 +116,7 @@
 
                                         <div class="col-md-8 desc_plan">
 
-                                            {!! Form::open(['url' => 'templates/create/plan-data','method'=>'POST']) !!}
+                                            {!! Form::open(['url' => 'templates/create/'.$template->id.'/plan-data','method'=>'POST']) !!}
 
                                             {{Form::hidden('id',$templateFloorCatalogDesign->template_floor_catalog_design_id)}}
                                             <h5>House Design Template</h5>
@@ -212,7 +212,7 @@
                 class="breadcrumb-text">New</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">{!! session('template')->name !!}</span></button>
+                class="breadcrumb-text">{!! $template->name !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
 @stop
 
@@ -255,7 +255,7 @@
                 formData.append('_token', $('#token').val()),
                         formData.append('template_id', $('#template_id').val())
             },
-            url: "{!! url('templates/create/plan-image') !!}",
+            url: "{!! url('templates/create/'.$template->id.'/plan-image') !!}",
             acceptedFiles: '.jpg, .jpeg, .png, .svg, .pdf'
         });
 
@@ -273,14 +273,14 @@
                         addclass: "stack-bottomright",
                         delay:1500
                 });
-                    window.location.href = '{!! url('templates/create/add-plans') !!}';
+                    window.location.href = '{!! url('templates/create/'.$template->id.'/add-plans') !!}';
                 }, 2000);
 
 
             }else{
 
             }*/
-            window.location.href = '{!! url('templates/create/add-plans') !!}';
+            window.location.href = '{!! url('templates/create/'.$template->id.'/add-plans') !!}';
            //
 
 //console.log('test');

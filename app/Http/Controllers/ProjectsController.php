@@ -123,7 +123,7 @@ class ProjectsController extends Controller
                 ->withErrors($validator)
                 ->withInput();
                // ->with('data',$request->all());
-
+       // DB::transaction(function ($request) {
         $address = new Address();
         $address->no = $request->get('no_unit');
         $address->street_name = $request->get('street_name');
@@ -210,7 +210,7 @@ class ProjectsController extends Controller
                     $projectFloorCatalogDesign->canvas_data = $templateFloorCatalogDesign->canvas_data;
                     $projectFloorCatalogDesign->name = $templateFloorCatalogDesign->name;
                     $projectFloorCatalogDesign->project_floor_catalog_id = $projectFloorCatalog->id;
-                    $projectFloorCatalogDesign->is_active = $projectFloorCatalog->is_active;
+                    $projectFloorCatalogDesign->is_active = $templateFloorCatalogDesign->is_active;
                     $projectFloorCatalogDesign->save();
                     $projectPlans[] = ['id'=>$projectFloorCatalogDesign->id,'img'=>$projectImage->path];
 
@@ -231,7 +231,7 @@ class ProjectsController extends Controller
             ->with('showPop', true)
             ->with('bgImg', '')
             ->with('plans', $projectPlans);
-
+      //  });
     }
 
 
