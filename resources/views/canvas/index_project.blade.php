@@ -46,13 +46,7 @@
 <body>
 <!--Tool bar started-->
 @php
-	$levels = [
-                 'Basement','Ground Floor','1st Floor','2nd Floor','3rd Floor','4th Floor','5th Floor'
-           ];
-       $project_id = session('project_id');
-       $project_plan_id = session('project_plan_id');
-   $project = \App\Project::where('id','=',$project_id)->first();
-   $project_plan = \App\ProjectPlan::where('id','=',$project_plan_id)->first();
+
    if($project){
    $address = \App\Address::where('id','=',$project->address_id)->first();
    $template = \App\Template::where('id','=',$project->template_id)->first();
@@ -87,7 +81,9 @@
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
 							</div>
-							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">{!! $levels[$project_plan->level] !!}:{!! \App\ProductCatalog::find($project_plan->catalog_id)->name !!}</div>
+							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"
+								 id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical"
+								 style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find() !!}:{!! \App\ProductCatalog::find($project_plan->catalog_id)->name !!}</div>
 							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">@if($template){!! '1 : '.$template->scale !!} @endif</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
@@ -838,7 +834,7 @@
 											<div class="row">
 												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
 
-												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$plan['id'].'/canvas') !!}">Open</a></div>
+												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}">Open</a></div>
 											</div>
 
 

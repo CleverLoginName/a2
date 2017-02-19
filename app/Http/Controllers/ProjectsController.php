@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\Floor;
 use App\Product;
 use App\Project;
 use App\ProjectCanvasData;
@@ -227,22 +228,36 @@ class ProjectsController extends Controller
             'ProjectsController@editPlanInCanvas', ['id' => $projectPlans[0]->id]
         );
 */
+        $levels = Floor::lists('name','id');
+
+
+    return Redirect::to('/projects/'.$project->id.'/plans/0/canvas');
         return view('canvas.index_project')
             ->with('showPop', true)
             ->with('bgImg', '')
+            ->with('project', $project)
+            ->with('levels', $levels)
             ->with('plans', $projectPlans);
       //  });
     }
 
 
-    public function editPlanInCanvas($id)
+    public function editPlanInCanvas(Project $project, $id)
     {
+
+        $projectFloors = DB::table('project_floors')->where('project_id','=',$project->id)->get();
+        foreach ($projectFloors as $projectFloor){
+            $projectFloorCatalogs = DB::table('project_floor_catalogs')->where('project_floor_id','=',$projectFloor->id)->get();
+            foreach ($projectFloorCatalogs as $projectFloorCatalog){
+                $projectFloorCatalogDesigns = DB::table('project_floor_catalog_designs')->where('project_floor_catalog_id','=',$projectFloorCatalog->id)->get();
+                foreach ($projectFloorCatalogDesigns as $projectFloorCatalogDesign){
+                    
+                }
+            }
+        }
         $projectPlan = DB::table('project_plans')->where('id','=',$id)->first();
         if($projectPlan){
             $allPlans = DB::table('project_plans')->where('project_id','=',$projectPlan->project_id)->get();
-            session(['project_plan_id' => $projectPlan->id ]);
-            session(['plan_id' => $id ]);
-            session(['project_id' => $projectPlan->project_id ]);
             return view('canvas.index_project')
                 ->with('bgImg', $projectPlan->img)
                 ->with('showPop', false)

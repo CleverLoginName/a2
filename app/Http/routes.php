@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('projects/{id}/edit', 'ProjectsController@update');
 
     Route::get('canvas/templates/load-latest', 'ProjectsController@showPlanInCanvas');
-    Route::get('projects/{id}/canvas', 'ProjectsController@editPlanInCanvas');
+    Route::get('projects/{project}/plans/{id}/canvas', 'ProjectsController@editPlanInCanvas');
     Route::post('projects/{id}/canvas/templates/updates', 'ProjectsController@updatePlanDataInCanvas');
     Route::get('projects/{id}/canvas/templates/load-latest', 'ProjectsController@loadPlanDataInCanvas');
 });
