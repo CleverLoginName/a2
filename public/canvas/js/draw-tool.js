@@ -8,7 +8,7 @@ var backgroundImage;
 var showSelectedObjects =false;
 var drawelementListChanged =false;
 var lastConectedObj;
-var selectedSwitchObject;
+var firstSelectedObject;
 var eraserSeg = null;
 var curEraserSize = 15;
 
@@ -55,8 +55,6 @@ var DataLevel = {
 }
 
 //------------------------------
-var isTemplate = true;
-var planID = -1;
 var project_pack_list = []; //array of packs in the project
 var project_bom_dict = {}; 
 var project_bom_dict_std_inc = {}; 
@@ -67,15 +65,16 @@ var mouseDownEvent = false;
 var selectedConnection = 0;
 // ......................
 
+var canvasHelper = null;
+
 var lightBulbArr = []; /* Holds the light bulbs */
 var connectedLightBulbLabels = []; /* Holds the connected light bulb labels to avoid re-adding */
 var switchConnectedBulbLabelsInCurrentTimeState = []; /* This is useful in undo / redo. We keep track which bulbs are connected to switches in the current status */
 var mouseAction = MouseActionEnum.NONE;
 var memObject = null;
-var canToolTip = true;
 
 /* curZoom holds the current zoom ratio. Originally it is 1 and has increments/decrements of 0.05 */
-var zoom = 1;
+// var zoom = 1;
 var minZoom = 0.25;
 
 var mouseStatus = MouseStatusEnum.UP;
@@ -90,6 +89,8 @@ var projectDataArray = [];
 var isProductDataChanged = false;
 var isFloorplanDataChanged = false;
 var isProjectDataChanged = false;
+
+var productCommentIndex = 0;
 ///////////////////////////
 
 var drawElements = [];
@@ -129,11 +130,8 @@ var wallPointsCount = 0;
 	var rulerHeight = 0 ;
 	var rulerWidth = 0;
 	
-	var rulerOrigOffsetX = 0; /* Not mandatory to keep these two vars */
-	var rulerOrigOffsetY = 0;
-	
-	var rulerOffsetX = 0;
-	var rulerOffsetY = 0;
+	var origOffsetX = 0; /* Not mandatory to keep these two vars */
+	var origOffsetY = 0;
 	
 	var mmLineWidth = 1;
 	var mmLineColor = 'rgba(206, 206, 206, 0.3)';
@@ -165,6 +163,9 @@ function init(){
 	bg_Canvas = document.getElementById("bg-canvas");
     era_canvas = document.getElementById("era-canvas");
 	
+	//init canvas properties (zoom, pan etc..)
+	canvasHelper = new CanvasHelper(); 
+
 	adjustDesignArea();
 	$("#draw-tool-canvas").removeClass("hide-canvas");
 
@@ -178,7 +179,6 @@ function init(){
 
 	canvas.addEventListener("mouseup", function (e) {
 		mouseUp(e);
-		canToolTip = true;
 	}, false);
 
 	canvas.addEventListener("mousemove", function (e) {
@@ -214,7 +214,7 @@ $("body").on("contextmenu", "canvas", function(e) {
 /* Handles what happens on a right click */
 function contextMenu(e){
 	hideItemPopups();
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	startX = getX(e);
 	startY = getY(e);
 	
@@ -275,14 +275,14 @@ function mouseDown(e){
 	fixWhich(e);
 	if (e.which != 1) return false;
 	$('#mouse-action-container').hide();
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	mouseStatus = MouseStatusEnum.DOWN;
 	
 	startX = getX(e);
 	startY = getY(e);
 	
 	if (toolAction == ToolActionEnum.ERASE){		
-		var erPnt = getReverseConvertedPoint({x:startX, y:startY});
+		var erPnt = canvasHelper.convertViewportXyToCanvasXy({x:startX, y:startY});
 		eraserSeg = new Eraser();
 		eraserSeg.setErasePoints(erPnt.x, erPnt.y);	
 	}
@@ -291,7 +291,7 @@ function mouseDown(e){
 		if (drawObjectType == ObjectType.CONT_WALL){
 			mouseStatus = MouseStatusEnum.CONT_DRAW;
 			console.log("MS "+mouseStatus, "SX=",startX, "SY=",startY);
-			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			var pnt = canvasHelper.convertViewportXyToCanvasXy({x:startX, y:startY});
 			var startX_fixed = pnt.x;
 			var startY_fixed = pnt.y;
 			wallPointsCount = wallPointsCount + 1;
@@ -318,7 +318,6 @@ function mouseDown(e){
 		}
 		
 	} else if (toolAction == ToolActionEnum.DRAG){
-		canToolTip = false;
 		/* Need to find out the object user is trying to move */
 		selObj = getSelObject(startX, startY);
 		showSelectedObjects = true;
@@ -343,8 +342,8 @@ function mouseDown(e){
 		clickY = startY / curZoom;
 		
 		/* Set ruler offset */
-		rulerOrigOffsetX = rulerOffsetX;
-		rulerOrigOffsetY = rulerOffsetY;
+		origOffsetX = canvasHelper.panX;
+		origOffsetY = canvasHelper.panY;
 		
 	} else if (toolAction == ToolActionEnum.SCALE){
 		var tmpGotSelObj = false;
@@ -356,7 +355,7 @@ function mouseDown(e){
 		} 
 		scaleObj = getScalingObject();
 		if ((scaleObj != null)){
-			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			var pnt = canvasHelper.convertViewportXyToCanvasXy({x:startX, y:startY});
 			scaleDirection = scaleObj.getScaleDirection(pnt.x, pnt.y);
 			if (scaleDirection != null){
 				changeObj = new ChangeObject(scaleObj); /* Scaling of object, so record the change */
@@ -388,7 +387,6 @@ function mouseDown(e){
 		drawAllObjects();
 
 	} else if (toolAction == ToolActionEnum.ROTATE){
-		canToolTip = false;
 		var tmpGotSelObj = false;
 		selObj = getSelObject(startX, startY);
 		
@@ -432,32 +430,16 @@ function mouseDown(e){
  * 
  *  */
 function mouseMove(e){
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	
 	endX = getX(e);
 	endY = getY(e);
-	
-	if (canToolTip) {
-        selObj = getSelObject(endX, endY);
-    } else {
-		//hideCanvasProductTooltip();
-    }
-
-    if (selObj != null && selObj.tooltip != null) {
-        // if (selObjStat == true) {
-        //     selObjStat = false;
-			// showCanvasProductTooltip(e);
-        // }
-    } else {
-        selObjStat = true;
-		//hideCanvasProductTooltip();
-    }
 
 	var w,h;
 
 	if (toolAction == ToolActionEnum.ERASE){		
 		if (mouseStatus == MouseStatusEnum.DOWN) {
-			var erPnt = getReverseConvertedPoint({x:endX, y:endY});
+			var erPnt = canvasHelper.convertViewportXyToCanvasXy({x:endX, y:endY});
 			eraserSeg.setErasePoints(erPnt.x, erPnt.y);
 		}		
 	}
@@ -475,28 +457,17 @@ function mouseMove(e){
 		}
 	} else if (mouseStatus == MouseStatusEnum.DRAG){
 		/* When zoom is in effect, we need to move obj to zoomed pane */
-		canToolTip = false;
 		selObj.moveObjTo( (endX/curZoom + offsetX), (endY/curZoom+offsetY));
 		
-		
-	}else if (toolAction == ToolActionEnum.CONNECTION){
+	} else if (toolAction == ToolActionEnum.CONNECTION){
 		if(mouseDownEvent){
 		  dragControlPoint(e,contextOrig,selectedConnection);
 		}
-		
-
 	} else if (mouseStatus == MouseStatusEnum.PAN){
 		var tmpOffsetX, tmpOffsetY;
 		
-		// for (var i=0; i< panObjectOffsets.length; i++){
-		// 	selObj = drawElements[panObjectOffsets[i].id];
-		// 	tmpOffsetX = panObjectOffsets[i].offsetX;
-		// 	tmpOffsetY = panObjectOffsets[i].offsetY;
-		// 	selObj.moveObjTo( (endX/curZoom + tmpOffsetX), (endY/curZoom+tmpOffsetY));
-		// }
-		
-		rulerOffsetX = rulerOrigOffsetX+ (endX / curZoom - clickX);
-		rulerOffsetY = rulerOrigOffsetY+ (endY / curZoom - clickY);	
+		canvasHelper.panX = origOffsetX+ (endX / curZoom - clickX);
+		canvasHelper.panY = origOffsetY+ (endY / curZoom - clickY);	
 
 		var minOffsetX = -1;
 		var minOffsetY = -1;
@@ -507,24 +478,23 @@ function mouseMove(e){
 		minOffsetX = (minOffsetX < 0) ? 0 : -minOffsetX;
 		minOffsetY = (minOffsetY < 0) ? 0 : -minOffsetY;
 
-		if (rulerOffsetX > 0) {
-			rulerOffsetX = 0;
-		} else if (rulerOffsetX < minOffsetX) {
-			rulerOffsetX = minOffsetX;
+		if (canvasHelper.panX > 0) {
+			canvasHelper.panX = 0;
+		} else if (canvasHelper.panX < minOffsetX) {
+			canvasHelper.panX = minOffsetX;
 		}
 
-		if (rulerOffsetY > 0) {
-			rulerOffsetY = 0;
-		} else if (rulerOffsetY < minOffsetY) {
-			rulerOffsetY = minOffsetY;
+		if (canvasHelper.panY > 0) {
+			canvasHelper.panY = 0;
+		} else if (canvasHelper.panY < minOffsetY) {
+			canvasHelper.panY = minOffsetY;
 		}
 
 		drawBackgroundImage();
 	} else if (mouseStatus == MouseStatusEnum.SCALE){
-		var r_pnt = getReverseConvertedPoint({x:endX, y:endY})
+		var r_pnt = canvasHelper.convertViewportXyToCanvasXy({x:endX, y:endY})
 		scaleObj.resize(this.scaleDirection, r_pnt.x, r_pnt.y, offsetX, offsetY);
 	} else if (mouseStatus == MouseStatusEnum.ROTATE){
-		canToolTip = false;
 		switch (rotateObj.getType()){
 			case ObjectType.LIGHT_BULB:
 			case ObjectType.LIGHT_SWITCH:
@@ -557,7 +527,7 @@ function mouseUp(e){
 	endX = this.getX(e);
 	endY = this.getY(e);
 	
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 
 	if (toolAction == ToolActionEnum.ERASE){
 		eraserSeg.eraserColor = "#ffffff";
@@ -571,10 +541,10 @@ function mouseUp(e){
 
 	if (toolAction == ToolActionEnum.DRAW){
 		if ((mouseStatus == MouseStatusEnum.DRAW) || (mouseStatus == MouseStatusEnum.DOWN) || (mouseStatus == MouseStatusEnum.CONT_DRAW)){
-			var pnt = getReverseConvertedPoint({x:startX, y:startY});
+			var pnt = canvasHelper.convertViewportXyToCanvasXy({x:startX, y:startY});
 			var startX_fixed = pnt.x;
 			var startY_fixed = pnt.y;
-			pnt = getReverseConvertedPoint({x:endX, y:endY});
+			pnt = canvasHelper.convertViewportXyToCanvasXy({x:endX, y:endY});
 			var endX_fixed = pnt.x;
 			var endY_fixed = pnt.y;
 			
@@ -594,43 +564,29 @@ function mouseUp(e){
 				currentObj.setWallThickness(wallThickness);
 			} else if (drawObjectType == ObjectType.CONT_WALL){
 				//Wall drawing code moved to mouseup
-				
-			} else if (drawObjectType == ObjectType.LIGHT_BULB){
-				/*	currentObj = new LightBulb();
-					currentObj.setCoordinates(endX_fixed,endY_fixed);
-					var lightBulbIndex = lightBulbArr.length +1;
-					currentObj.setLabel(lightBulbIndex);
-					pushElementToDrawElement(currentObj);
-					lightBulbArr.push(currentObj);
-					addToTable(currentObj);
-					populateLightBulbMenu();*/
-			} else if (drawObjectType == ObjectType.LIGHT_SWITCH){
-					// currentObj = new LightSwitch();
-					// currentObj.setCoordinates(endX_fixed, endY_fixed);
-					// addToSwitchTable(currentObj);
-					// pushElementToDrawElement(currentObj);
-			}else if (drawObjectType == ObjectType.TEXT){
+			
+			} else if (drawObjectType == ObjectType.TEXT){
 				/* Checks if user double clicks */
-				if (checkDoubleClick == false){
-					checkDoubleClick = true;
-					setTimeout(function(){
-						checkDoubleClick = false;
-						if ($('#text-container').css('display') == 'none'){
-							showTextEdit(startX_fixed, startY_fixed);
-						}
-					},200);
-				} else {
-					var tmpObjIndex = getSelObjectIndex(endX, endY);
-					if (tmpObjIndex != null && !isNaN(tmpObjIndex)){
-						var tmpObj = drawElements[tmpObjIndex];
-						if (tmpObj.getType() == ObjectType.TEXT){
-							toolAction = ToolActionEnum.EDITTEXT;
-							currentObj = tmpObj;
-							changeObj = new ChangeObject(currentObj);
-							showTextEdit(tmpObj.getObjStartX(), tmpObj.getObjStartY(), tmpObj.getDrawText(), tmpObj.getFontSize());
-						}
-					}
-				}
+				// if (checkDoubleClick == false){
+				// 	checkDoubleClick = true;
+				// 	setTimeout(function(){
+				// 		checkDoubleClick = false;
+				// 		if ($('#text-container').css('display') == 'none'){
+				// 			showTextEdit(startX_fixed, startY_fixed);
+				// 		}
+				// 	},200);
+				// } else {
+				// 	var tmpObjIndex = getSelObjectIndex(endX, endY);
+				// 	if (tmpObjIndex != null && !isNaN(tmpObjIndex)){
+				// 		var tmpObj = drawElements[tmpObjIndex];
+				// 		if (tmpObj.getType() == ObjectType.TEXT){
+				// 			toolAction = ToolActionEnum.EDITTEXT;
+				// 			currentObj = tmpObj;
+				// 			changeObj = new ChangeObject(currentObj);
+				// 			showTextEdit(tmpObj.getObjStartX(), tmpObj.getObjStartY(), tmpObj.getDrawText(), tmpObj.getFontSize());
+				// 		}
+				// 	}
+				// }
 			}
 
 			switch (drawObjectType){
@@ -661,28 +617,13 @@ function mouseUp(e){
         selObj = getSelObject(startX, startY);
         if (selObj != null){
 			getCelectedConection(lastConectedObj,selObj);
-            // if(lightBulbConnected(selObj.getLabel())){
-			// 	for (var i =0;i<temp_selected_obj.getConnections().length;i++){
-            //        if(selObj.getLabel() == temp_selected_obj.getConnections()[i].getLabel()){
-            //            temp_selected_obj.getConnections().splice(i, 1);
-			// 	   }
-			// 	}
-            //     for (var i =0;i<connectedLightBulbLabels.length;i++){
-            //         if(selObj.getLabel() == connectedLightBulbLabels[i]){
-            //             connectedLightBulbLabels.splice(i, 1);
-            //         }
-            //     }
-            //     drawAllObjects();
-            //     //updateSwitchConnectedBulbLabelsInCurrentTimeState(selObj);
-
-			// }
 		}else{
 			hideItemPopups();
 			changeToolAction(ToolActionEnum.DRAG);
 		}
         drawAllObjects();
 	}else if (toolAction == ToolActionEnum.CONNECT){
-        //populateDialog(e,selectedSwitchObject);
+        //populateDialog(e,firstSelectedObject);
         selObj = getSelObject(startX, startY);
         if (selObj != null){
             if(selObj.getType()== ObjectType.LIGHT_BULB || selObj.getType()== ObjectType.PRODUCT){
@@ -693,11 +634,7 @@ function mouseUp(e){
 					bulb_connection.setUniqueItemID( generateUID() );
 					calControllPoint(lastConectedObj,selObj,bulb_connection);
 					pushElementToDrawElement(bulb_connection);
-						new PNotify({
-							title: 'Success',
-							text: 'Item is conected',
-							type: 'success'
-						});
+					populateDialog(e,firstSelectedObject);
 				}else {
                    new PNotify({
 					title: 'Cannot connect',
@@ -726,86 +663,19 @@ function mouseUp(e){
 				changeObj = null;
 			}
 		} else {
-            //todo ish
             selObj = getSelObject(startX, startY);
             if (selObj != null){
                 temp_selected_obj =selObj;
                 //ishara
-                if(temp_selected_obj.getType()==ObjectType.LIGHT_SWITCH){
-                    selectedSwitchObject = selObj;
-                    lastConectedObj = selectedSwitchObject;
-					populateDialog(e,selObj);
-                } else if(temp_selected_obj.getType()==ObjectType.LIGHT_BULB){
-					lastConectedObj = selectedSwitchObject;
-					populateDialog(e,selObj);
-				}else if(temp_selected_obj.getType()==ObjectType.PRODUCT){
-					lastConectedObj = selectedSwitchObject;
-					populateDialog(e,selObj);
+				if (temp_selected_obj.getType() == ObjectType.LIGHT_SWITCH ||
+					temp_selected_obj.getType() == ObjectType.LIGHT_BULB ||
+					temp_selected_obj.getType() == ObjectType.PRODUCT) {
+					firstSelectedObject = selObj;
+					lastConectedObj = selObj;
+					populateDialog(e, selObj);
 				}
-                //ishara
-                
             }
-
         }
-		
-		selObj = null;
-
-		if (checkDoubleClick == false) {
-			checkDoubleClick = true;
-			setTimeout(function () {
-				checkDoubleClick = false;
-			}, 200);
-		} else {
-			var curZoom = this.zoom;
-			startX = getX(e);
-			startY = getY(e);
-			selObj = getSelObject(startX, startY);
-			if (selObj != null) {
-				// if (selObj.objType == ObjectType.LIGHT_BULB) {
-				// 	document.getElementById('b-name').value = selObj.name;
-				// 	document.getElementById('b-x').value = selObj.objStartX;
-				// 	document.getElementById('b-y').value = selObj.objStartY;
-				// 	document.getElementById('elevation').value = selObj.elevation;
-				// 	document.getElementById('angle').value = selObj.angle;
-				// 	document.getElementById('power').value = selObj.lightpower;
-                //
-				// 	document.getElementById('bulb-prop').style.display = "block";
-				// } else if (selObj.objType == ObjectType.LIGHT_SWITCH) {
-				// 	var tmpObjIndex = getSelObjectIndex(endX * curZoom, endY * curZoom);
-				// 	if (!isNaN(tmpObjIndex)) {
-				// 		var tmpObj = drawElements[tmpObjIndex];
-				// 		if (tmpObj.getType() == ObjectType.LIGHT_SWITCH) {
-				// 			$('#switch-lig').attr('data-root-obj-id', tmpObjIndex);
-				// 		}
-				// 	}
-                //
-				// 	document.getElementById("switch-lig").innerHTML = "";
-                //
-				// 	document.getElementById('s-name').value = selObj.name;
-				// 	document.getElementById('s-x').value = selObj.objStartX;
-				// 	document.getElementById('s-y').value = selObj.objStartY;
-				// 	document.getElementById('s-elevation').value = selObj.s_elevation;
-				// 	document.getElementById('s-angle').value = selObj.s_angle;
-                //
-				// 	document.getElementById('switch-prop').style.display = "block";
-                //
-				// 	var x = document.getElementById("switch-b");
-				// 	var option = document.createElement("option");
-				// 	option.text = selObj.name;
-				// 	option.value = "x_pos=" + selObj.objStartX + ",y_pos=" + selObj.objStartY;
-                //
-				// 	for (var i = drawElements.length - 1; i >= 0; i--) {
-				// 		if (drawElements[i].objType == ObjectType.LIGHT_BULB) {
-				// 			var sx = document.getElementById("switch-lig");
-				// 			var optionTwo = document.createElement("option");
-				// 			optionTwo.text = drawElements[i].name;
-				// 			optionTwo.value = parseInt(drawElements[i].label) - 1;
-				// 			sx.add(optionTwo);
-				// 		}
-				// 	}
-				// }
-			}
-		}
 		
 	} else if (toolAction == ToolActionEnum.PAN){
 		mouseStatus = MouseStatusEnum.UP;
@@ -857,10 +727,10 @@ function showCanvasProductTooltip(mouse_event) {
 	$('#canvas_popup_productName').attr('title',selObj.name);
 
 	var colorname = "N/A";
-	if (selObj.color != undefined) {
-		var match = ntc.name(selObj.color);
-		colorname    = match[1];
-	}
+	// if (selObj.color != undefined) {
+	// 	var match = ntc.name(selObj.color);
+	// 	colorname    = match[1];
+	// }
 
     document.getElementById('canvas_popup_productColor').innerHTML = colorname;
     document.getElementById('canvas_popup_productWatt').innerHTML = (selObj.watts != undefined) ? selObj.watts : "N/A";
@@ -876,12 +746,6 @@ function showCanvasProductTooltip(mouse_event) {
 	// getTopPosition();
 }	
 
-
-function addNoteToSelectedProduct(note) {
-	if (selObj != null) {
-		selObj.notes = note;
-	}
-}
 
 function getDataLevel(obj){
 	switch (obj.getType()) {
@@ -1026,43 +890,33 @@ function getPolarFilteredCoords(dx, dy){
 
 /* Calls draw functions to draw the dynamic object in to the canvas. */
 function drawCurrentObj(){
-	var curZoom = this.zoom;
-	var tmpCWallPoints = new Array();
+	var curZoom = canvasHelper.zoom;
+	
 	context.clearRect(0,0,canvas.width, canvas.height);
 	var sX, sY,eX,eY,rulerWidth, rulerHeight,tmpX, tmpY;
 	
-	rulerWidth  = this.rulerWidth;
-	rulerHeight = this.rulerHeight;
+	// rulerWidth  = this.rulerWidth;
+	// rulerHeight = this.rulerHeight;
 	
 	sX = startX;
 	sY = startY;
 	eX = endX;
 	eY = endY ;
 	
-	if (drawObjectType == ObjectType.SQUARE){
-		drawSquare(sX , sY , eX, eY, context);
-	} else if (drawObjectType == ObjectType.CIRCLE){
-		drawCircle(sX, sY, eX, eY, context);
-	} else if (drawObjectType == ObjectType.WALL){
-		drawWall(sX, sY, eX, eY, wallThickness * curZoom, context);;
-	} else if (drawObjectType == ObjectType.CONT_WALL){
+	if (mouseStatus == MouseStatusEnum.CONT_DRAW && drawObjectType == ObjectType.CONT_WALL){
 		var pnt;
+		var tmpCWallPoints = new Array();
 		$(currentCWallPoints).each(function(i,e){
-			pnt = getConvertedPoint(e);
+			pnt = canvasHelper.convertCanvasXyToViewportXy(e);
 			tmpCWallPoints.push ({x: pnt.x, y: pnt.y});
 		});
 		// drawContWall(tmpCWallPoints,context, eX, eY);
 		var filtered_pnt = getFilteredCoordinates(tmpCWallPoints, eX, eY);
 		drawContWall(tmpCWallPoints,context, filtered_pnt.x, filtered_pnt.y);
 	}
-}
-
-/* Draws rectangle
- *  */
-function drawSquare(sX, sY, eX, eY, targetContext){
-	targetContext.lineWidth=1;
-	targetContext.strokeStyle = '#000000';
-	targetContext.strokeRect(sX, sY , (eX-sX), (eY-sY));
+	else if (eraserSeg != null) {
+		eraserSeg.draw(era_canvas.getContext('2d'), canvasHelper);
+	}
 }
 
 /* Draws Filled Circles on given points */
@@ -1075,42 +929,6 @@ function drawFillCircles(points, r, targetContext, fillColor){
 	});
 }
 
-
-/* Draws circle */
-function drawCircle(sX, sY, eX, eY, targetContext){
-	var tmpX, tmpY, tmpR;
-	targetContext.lineWidth=1;
-	targetContext.strokeStyle = '#000000';
-	
-	tmpX = ((eX + sX)/2);
-	tmpY = ((eY + sY)/2);
-	tmpR = ((Math.min(Math.abs(eX - sX), Math.abs(eY-sY))/2));
-	
-	targetContext.beginPath();
-	targetContext.arc(tmpX,tmpY,tmpR,0,2*Math.PI);
-	targetContext.stroke();
-}
-
-/* Draws wall */
-function drawWall(sX, sY, eX, eY, wT, targetContext){
-	var tmpX, tmpY, tmpR;
-	var w,h;
-	
-	targetContext.lineWidth=1;
-	targetContext.strokeStyle = '#000000';
-	
-	w = (Math.abs(eX-sX));
-	h = (Math.abs(eY-sY));
-	
-	targetContext.fillStyle = "#0000FF";
-	if (w>h){
-		targetContext.fillRect(sX,sY,(eX-sX),wT);
-	} else {
-		targetContext.fillRect(sX,sY,wT,(eY-sY));
-	}
-	targetContext.fillStyle = "#000000";
-}
-
 /* Draws continuous wall */
 function drawContWall(pointsArr, targetContext, curX, curY){
 	var first = true;
@@ -1119,31 +937,13 @@ function drawContWall(pointsArr, targetContext, curX, curY){
 	targetContext.lineWidth=5;
 	targetContext.strokeStyle = '#000000';
 	
-	$(pointsArr).each(function(i,e){
-		if (first == true){
-			eX = e.x;
-			eY = e.y;
-			sX = eX;
-			sY = eY;
-			first = false;
-		} else {
-			
-			targetContext.beginPath();
-			sX = eX;
-			sY = eY;
-			eX = e.x;
-			eY = e.y;
-			targetContext.moveTo(sX,sY);
-			targetContext.lineTo(eX,eY);
-			targetContext.stroke();
-		}
-	});
+	var last_pnt = pointsArr[pointsArr.length - 1];
 	
 	if (mouseStatus == MouseStatusEnum.CONT_DRAW){
 		/* Dynamic line following the mouse movement */
 		targetContext.strokeStyle = '#FF0000';
 		targetContext.beginPath();
-		targetContext.moveTo(eX,eY);
+		targetContext.moveTo(last_pnt.x, last_pnt.y);
 		targetContext.lineTo(curX,curY);		
 		targetContext.stroke();
 		
@@ -1189,213 +989,11 @@ function drawContWall(pointsArr, targetContext, curX, curY){
 			} else if (m1>=0){
 				
 			}
-				
 			targetContext.lineWidth=1;
 			targetContext.stroke();
 		}
 	}
-	
 }
-
-/* Draws light bulb */
-function drawLightBulb(x,y,r,targetContext, w,h,path,conMood,colour){
-	var curZoom = this.zoom;
-    var imageObj = new Image();
-    imageObj.src = path;
-    if(conMood){
-        targetContext.shadowColor = colour;
-        targetContext.shadowBlur = 10;
-        targetContext.shadowOffsetX = 0;
-        targetContext.shadowOffsetY = 0;
-        //targetContext.fill();
-    }
-    targetContext.strokeStyle = '#000000';
-    targetContext.drawImage(imageObj, x, y, w, h);
-}
-
-/* Draws light switch */
-function drawLightSwitch(x,y,r,targetContext,w,h,path,conMood,colour){
-    var img = document.createElement('img');
-    img.src = path;
-		   if(conMood){
-        targetContext.shadowColor = colour;
-        targetContext.shadowBlur = 10;
-        targetContext.shadowOffsetX = 0;
-        targetContext.shadowOffsetY = 0;
-        //targetContext.fill();
-    }
-    targetContext.strokeStyle = '#000000';
-    targetContext.drawImage(img, x, y, w, h);
-}
-
-
-function drawProduct(x,y,r,targetContext,w,h,path,conMood,colour){
-    var img = document.createElement('img');
-    img.src = path;
-	   if(conMood){
-        targetContext.shadowColor = colour;
-        targetContext.shadowBlur = 10;
-        targetContext.shadowOffsetX = 0;
-        targetContext.shadowOffsetY = 0;
-        //targetContext.fill();
-    }
-    targetContext.strokeStyle = '#000000';
-    targetContext.drawImage(img, x, y, w, h);
-}
-
-/* Draws light bulb connections from a switch */
-function drawWiresFromSwitchOrBulbToConnectedLightBulbs(rootObj, targetContext){
-	// var curZoom = this.zoom;
-	// var lightBulbs = rootObj.getConnections();
-	// var tmpLightBulb;
-	// var rootCoordinates = rootObj.getCoordinates();
-	// var sX, sY, bX,bY;
-	//
-	// sX = rootCoordinates.x + rootObj.getObjWidth()/2;
-	// sY = rootCoordinates.y + rootObj.getObjHeight()/2;
-	//
-	// var bulbCoordinates;
-	// var tmpOffsetCenterPoint = {x:0, y:0};
-	//
-	// targetContext.lineWidth = 1;
-	// targetContext.strokeStyle = '#000000';
-	//
-	// for (var i=0; i<lightBulbs.length; i++){
-	// 	tmpLightBulb = lightBulbs[i];
-	// 	if (tmpLightBulb != undefined){
-	// 		if (getWhetherLightBulbOnCanvas(tmpLightBulb.label)){
-	// 			if (isBulbLabelInSwitchConnectedBulbLabelsInCurrentTimeState(tmpLightBulb.label)) {
-	//
-	// 				bulbCoordinates = tmpLightBulb.getCoordinates();
-	// 				bX = bulbCoordinates.x + tmpLightBulb.getObjWidth()/2;
-	// 				bY = bulbCoordinates.y + tmpLightBulb.getObjHeight()/2;
-	//
-	// 				targetContext.beginPath();
-	// 				targetContext.moveTo(sX * curZoom, sY * curZoom);
-	// 				tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinates.x, rootCoordinates.y,bulbCoordinates.x,bulbCoordinates.y);
-	// 				targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x * curZoom ,tmpOffsetCenterPoint.y * curZoom, bX * curZoom, bY * curZoom);
-	// 				targetContext.stroke();
-	// 			}
-	// 		}
-	// 	}
-	// }
-}
-
-
-function drawText(obj, targetContext, sX, sY, eX, eY){
-	
-	// var fontSize = obj.getFontSize();
-	// var fontColor = obj.getFontColor();
-	// var drawText = obj.getDrawText();
-	// var fontFamily = obj.getFontFamily();
-	// targetContext.fillStyle = obj.getFontColor();
-	// targetContext.font=fontSize+ 'px '+ fontFamily;
-	// targetContext.fillText(drawText,sX,eY);
-	var width = 140;
-	var fontSize = obj.getFontSize();
-	var fontColor = obj.getFontColor();
-	var drawText = obj.getDrawText();
-	var fontFamily = obj.getFontFamily();
-    targetContext.backgroundColor = "#0000ff";
-	targetContext.fillStyle = obj.getFontColor();
-	targetContext.font=fontSize*zoom+ 'px '+ fontFamily;
-	 var words = drawText.split(' ');
-	 var minWidth = getMaxWidth(words,targetContext);
-	// for(var n = 0; n < words.length; n++) {
-    //     	// var word ='';
-    //     	// word = words[n] + '';
-	// 		var metricsStart= targetContext.measureText(words[n]);
-	// 		var valN = metricsStart.width;
-	// 		if (minWidth < valN){
-	// 				minWidth = valN;
-	// 			}
-            
-    // }
-	obj.setMinWidth(minWidth);
-	wrapText(targetContext,drawText,sX, sY,eX-sX,parseInt(fontSize)*zoom,-parseInt(fontSize)*zoom-5*zoom,obj);
-}
-
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight,boxHight,obj) {
-        var words = text.split(' ');
-        var line = '';
-        var lines = [];
-        var tempLine = '';
-		for(var n = 0; n < words.length; n++) {
-        	// var word ='';
-        	// word = words[n] + '';
-            var metrics = ctx.measureText(words[n]);
-          	var testWidth = metrics.width;
-            if (testWidth > maxWidth){
-            	maxWidth = testWidth;
-            }
-        }
-			//obj.setMinWidth(maxWidth);
-        for(var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + ' ';
-          var metrics = ctx.measureText(testLine);
-          var testWidth = metrics.width;
-		  if (testWidth > maxWidth && n > 0)  {
-           	
-            lines.push(line);
-            line = words[n] + ' ';
-          }
-          else {
-            line = testLine;
-          }
-		  if (n == words.length -1) {
-            lines.push(line);
-		  }
-        }
-		obj.setMaxHeight(parseInt(obj.getFontSize())*lines.length);
-        //ctx.fillRect(x-5, y-lineHeight, maxWidth+maxWidth, lineHeight*lines.length);
-
-		// if(obj.getType() == ObjectType.TEXT){
-		// 	currentObj = new DrawText();
-		// 	currentObj.setPoints(parseInt(sX),sY, maxWidth+maxWidth,parseInt(eY-sY));
-		// 	pushElementToDrawElement(currentObj);
-    	// }
-		var sX = x;
-		var sY = y;
-		var eX = sX + maxWidth;
-		var eY = sY + lineHeight*lines.length;
-
-		//obj.setPoints(sX,sY,eX,eY);
-		//obj.setEndY(eY);
-		// ctx.rect(sX, sY, maxWidth, lineHeight*lines.length);
-		// ctx.fillStyle = 'yellow';
-		// ctx.fill();
-		// ctx.lineWidth = 1;
-		// ctx.strokeStyle = 'black';
-		// ctx.stroke();
-		// drawBorder(ctx,sX, sY, maxWidth, lineHeight*lines.length);
-		ctx.fillStyle = 'yellow';
-		ctx.fillRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = 'red';
-		ctx.strokeRect(sX-1, sY+2, maxWidth, lineHeight*lines.length);
-		
-
-		y += lineHeight;
-        ctx.fillStyle = "black";
-        for (var index = 0; index < lines.length; index++) {
-          var line = lines[index];
-          ctx.fillText(line, x, y+lineHeight*index);
-    
-        }
-        
-      }
-
-
-/*
-function drawBorder(ctx,xPos, yPos, width, height, thickness = 1){
-  ctx.fillStyle='#000';
-  ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
-}
-*/
-
-
-
 
 /* Gets the offset center point to construct the quadraticCurve */
 function getOffsetCenterPoint(x1,y1,x2,y2){
@@ -1435,33 +1033,24 @@ function clearCanvasContexts() {
 function drawAllObjects(){
 	clearCanvasContexts();
 	drawRuler();
-	
-	if (mouseStatus == MouseStatusEnum.DRAW || mouseStatus == MouseStatusEnum.CONT_DRAW){
-		drawCurrentObj();
-	}
 
 	for (var i = 0; i < floorplanDataArray.length; i++) {
 		var element = floorplanDataArray[i];
-		drawConnections(element, contextOrig);
-		drawObjectOnCanvas(element);
-		drawEraserObj(element);
+		var targetContext = (element.getType() == ObjectType.ERASER) ? era_canvas.getContext('2d') : contextOrig;
+		element.draw(targetContext, canvasHelper);
 	}
 
 	for (var i = 0; i < productDataArray.length; i++) {
 		var element = productDataArray[i];
-		drawConnections(element, contextOrig);
-		drawObjectOnCanvas(element);
-		drawEraserObj(element);
+		element.draw(contextOrig, canvasHelper);
 	}
 
 	//TODO projectDataArray loop
-
 	// for (var i =0; i<this.drawElements.length; i++){
-	// 	//drawLightsOnCanvas(this.drawElements[i]);
-    //     drawConnections(this.drawElements[i], contextOrig);
-	// 	drawObjectOnCanvas(this.drawElements[i]);
-	// 	drawEraserObj(this.drawElements[i]);
 	// }
+
+	drawCurrentObj();
+
 	if(drawelementListChanged)
 	{
 		drawelementListChanged = false;
@@ -1472,33 +1061,8 @@ function drawAllObjects(){
 		highlightObject(selObj)
 	}
 
-	if (eraserSeg != null) {
-		drawEraserObj(eraserSeg);		
-	}
-
-	drawScaleFactorDetails();
-	drawZoomFactorDetails();	
-}
-
-function drawEraserObj(obj){
-	if (obj.getType() == ObjectType.ERASER){
-		var ectx = era_canvas.getContext('2d');	
-		var curZoom = this.zoom;
-		ectx.beginPath();
-		ectx.lineWidth = obj.eraserSize * curZoom;		
-		ectx.strokeStyle = obj.eraserColor;
-		ectx.lineJoin = ectx.lineCap = obj.eraserType;
-		var erPnt;
-		for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
-			erPnt = getConvertedPoint(obj.eraserPointsArr[iy]);
-			if ( iy == 0){				
-				ectx.moveTo(erPnt.x, erPnt.y);
-			} else {	
-				ectx.lineTo(erPnt.x, erPnt.y);
-			}
-		}
-		ectx.stroke();	
-	}
+	// drawScaleFactorDetails();
+	// drawZoomFactorDetails();	
 }
 
 function setBackgroundImage(img_src)
@@ -1515,8 +1079,9 @@ function drawBackgroundImage() {
 		var ctx = bg_Canvas.getContext("2d");
 		ctx.clearRect(0, 0, bg_Canvas.width, bg_Canvas.height);		
 		//ctx.beginPath();
-		var curZoom = this.zoom;
-		ctx.drawImage(backgroundImage, rulerOffsetX * curZoom, rulerOffsetY * curZoom, backgroundImage.width * curZoom, backgroundImage.height * curZoom);
+		var curZoom = canvasHelper.zoom;
+		var offset_pnt = canvasHelper.convertCanvasXyToViewportXy({x: 0, y: 0});
+		ctx.drawImage(backgroundImage, offset_pnt.x, offset_pnt.y, backgroundImage.width * curZoom, backgroundImage.height * curZoom);
 	}
 }
 
@@ -1531,7 +1096,7 @@ function getDrawElementIndexByObject(obj){
 function drawDrawerDetails() {
 	var left_X = endX; //endX = mouseX
 	var top_Y = endY;
-	var mPnt = getReverseConvertedPoint({x:endX, y:endY});
+	var mPnt = canvasHelper.convertViewportXyToCanvasXy({x:endX, y:endY});
 
 	context.fillText("( " + (mPnt.x).toFixed(0) + ", " + (mPnt.y).toFixed(0) + " )", left_X + 20, top_Y + 30);
 }
@@ -1541,7 +1106,7 @@ function drawEraserPointer() {
 	if (toolAction != ToolActionEnum.ERASE){
 		return;
 	}
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	context.beginPath();
 	context.lineWidth = 1;
 	context.strokeStyle = '#000000';
@@ -1557,139 +1122,8 @@ function drawScaleFactorDetails(){
 
 /* Draws the current zoom factor details */
 function drawZoomFactorDetails(){
-	$('#zoom-ratio-display').html(this.zoom + "X ");
+	$('#zoom-ratio-display').html(canvasHelper.zoom + "X ");
 }
-
-/* Call draw functions to draw a single object. Different parameters are set and send to the functions here */
-function drawObjectOnCanvas(obj){
-	
-	if( obj.hasOwnProperty("visibility") && !obj.getVisibility()){
-		return;
-	}
-	var x,y,w,h;
-	var pointsArr, borderArr;
-	var curZoom = this.zoom;
-	var tmpPointsArr = new Array();
-	var tmpBorderPointsArr = new Array();
-	var tmpCenter, tmpRotation;
-	var sX, sY, eX, eY;
-	
-	if (!(obj instanceof CanvasItem)) return;
-	
-	tmpCenter = obj.getCenter();
-	tmpRotation = obj.getRotation();
-	contextOrig.save();
-	contextOrig.translate(tmpCenter.x * curZoom, tmpCenter.y * curZoom);
-	contextOrig.rotate(tmpRotation);
-	contextOrig.translate(-tmpCenter.x * curZoom, -tmpCenter.y * curZoom);
-	
-	var pnt;
-	if (obj.getType() == ObjectType.CONT_WALL){
-		pointsArr = obj.getVerticesArr();
-		$(pointsArr).each(function(i,e){
-			pnt = getConvertedPoint(e);
-			tmpPointsArr.push({x:pnt.x, y: pnt.y});
-		});
-		var tmpPolygon = obj.getPolygon();
-		for (var i=0; i< (tmpPolygon.length-1); i = i + 2){
-			pnt = getConvertedPoint(tmpPolygon[i]);
-			tmpBorderPointsArr.push({x:pnt.x, y: pnt.y});
-		}
-	} else {
-		pnt = getConvertedPoint( {x:obj.getObjStartX(), y:obj.getObjStartY()} );
-		sX = pnt.x;
-		sY = pnt.y;
-
-		pnt = getConvertedPoint( {x:obj.getObjEndX(), y:obj.getObjEndY() });
-		eX = pnt.x;
-		eY = pnt.y;
-	}
-	
-	if (toolAction == ToolActionEnum.SCALE || toolAction == ToolActionEnum.DRAG){
-		drawOutlinesOnCanvas(obj);
-	}
-	
-	if (obj.getType() == ObjectType.SQUARE){
-		drawSquare(sX , sY , eX , eY , contextOrig);
-	} else if(obj.getType() == ObjectType.CIRCLE){
-		drawCircle(sX , sY , eX , eY , contextOrig);
-	} else if (obj.getType() == ObjectType.WALL){
-		drawWall(sX , sY , eX , eY , obj.getWallThickness() * curZoom,contextOrig);
-	} else if (obj.getType() == ObjectType.CONT_WALL){
-		
-		drawContWall(tmpPointsArr, contextOrig);
-	} else if (obj.getType() == ObjectType.LIGHT_BULB){
-		var coor = obj.getCoordinates();
-		var rad = obj.getRadius();
-        drawLightBulb(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
-    } else if (obj.getType() == ObjectType.LIGHT_SWITCH){
-		var coor = obj.getCoordinates();
-		var rad = obj.getRadius();
-        drawLightSwitch(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
-    } else if (obj.getType() == ObjectType.TEXT){
-		drawText(obj,contextOrig,sX,sY,eX,eY);		
-	}else if(obj.getType() == ObjectType.PRODUCT){
-		drawProduct(sX, sY, rad * curZoom, contextOrig, obj.getObjWidth() * curZoom, obj.getObjHeight() * curZoom,obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
-	}
-	
-	contextOrig.restore();
-		
-	obj.updateBorder();
-	
-	if (obj.getStatus() == ObjectStatus.SCALE){
-		drawObjectScalerOnCanvas(obj);
-	} else if (obj.getStatus() == ObjectStatus.ROTATE){
-		drawObjectRotateIndicatorsOnCanvas(obj);
-	}
-}
-
-
-//~ function drawCornerCirclesCanDeleteThis(obj){
-	  //~ contextOrig.lineWidth = 3;
-	  //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objBorderStartX, obj.objBorderStartY, 10, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'green';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objBorderEndX, obj.objBorderStartY, 10, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'blue';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objBorderEndX, obj.objBorderEndY, 10, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'red';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objBorderStartX, obj.objBorderEndY, 10, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'orange';
-      //~ contextOrig.stroke();
-//~ }
-
-//~ function drawCornerCirclesOfOrig(obj){
-	  //~ contextOrig.lineWidth = 3;
-	  
-	  //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objStartX, obj.objStartY, 5, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'green';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objEndX, obj.objStartY, 5, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'blue';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objEndX, obj.objEndY, 5, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'red';
-      //~ contextOrig.stroke();
-      
-      //~ contextOrig.beginPath();
-      //~ contextOrig.arc(obj.objStartX, obj.objEndY, 5, 0, 2 * Math.PI, false);
-      //~ contextOrig.strokeStyle = 'orange';
-      //~ contextOrig.stroke();
-//~ }
 
 /* Call draw functions to draw light of a bulb */
 function drawLightsOnCanvas(obj){
@@ -1700,7 +1134,7 @@ function drawLightsOnCanvas(obj){
 	}
 	var x,y,w,h;
 	var pointsArr;
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	var tmpPointsArr = new Array();
 	
 	if (obj.getType() == ObjectType.LIGHT_BULB){
@@ -1712,53 +1146,9 @@ function drawLightsOnCanvas(obj){
 	} 
 }
 
-
-/* Call draw functions to draw wires */
-function drawWiresOnCanvas(obj){
-	var x,y,w,h;
-	var pointsArr;
-	var curZoom = this.zoom;
-	var tmpPointsArr = new Array();
-	switch (obj.getType()){
-		case ObjectType.LIGHT_BULB:
-		case ObjectType.LIGHT_SWITCH:
-			drawWiresFromSwitchOrBulbToConnectedLightBulbs(obj, contextOrig);
-		break;
-	}
-}
-
 function drawConnections(rootObj, targetContext) {
-    if(rootObj.getType() == ObjectType.LIGHT_SWITCH ||rootObj.getType() == ObjectType.LIGHT_BULB){
-//         var curZoom = this.zoom;
-//         var lightBulbs = rootObj.getConnections();
-// 		var rootCoordinate = getConvertedPoint(rootObj.getCenter());
-//         var bulbCoordinates;
-//         var tmpOffsetCenterPoint = {x:0, y:0};
-// 		targetContext.save();
-//         targetContext.lineWidth = 1;
-//         targetContext.strokeStyle = '#000000';
-//         for (var i=0; i<lightBulbs.length; i++){
-//             tmpLightBulb = lightBulbs[i];
-//             bulbCoordinates = getConvertedPoint(tmpLightBulb.getCenter());
-
-//             targetContext.beginPath();
-//             targetContext.moveTo(rootCoordinate.x, rootCoordinate.y);
-//             tmpOffsetCenterPoint = getOffsetCenterPoint(rootCoordinate.x, rootCoordinate.y,bulbCoordinates.x,bulbCoordinates.y);
-
-// 			// S like curve ----start
-// // 			var offset = Math.sqrt( (EndX - rootX)*(EndX - rootX) +  (EndY - rootY)*(EndY - rootY)) * curZoom;	
-// // 			offset /= 2;
-// //			targetContext.bezierCurveTo(rootX-offset, rootY-offset, EndX+offset ,EndY+offset, EndX, EndY);
-// 			// S like curve ----end
-
-//             targetContext.quadraticCurveTo(tmpOffsetCenterPoint.x ,tmpOffsetCenterPoint.y, bulbCoordinates.x, bulbCoordinates.y);
-// 			targetContext.setLineDash([5]);
-// 			targetContext.strokeStyle ='#FF0000';
-//             targetContext.stroke();
-//         }
-// 		targetContext.restore();
-    } else if(rootObj.getType() == ObjectType.CONNECT){
-		   var curZoom = this.zoom;
+    if(rootObj.getType() == ObjectType.CONNECT){
+		var curZoom = canvasHelper.zoom;
 		var beginPath = getObjectFromId(rootObj.getsourseId()).getCenter();
 		var endPath = getObjectFromId(rootObj.getsdestinationId()).getCenter();
 		var endx = endPath.x;
@@ -1768,77 +1158,43 @@ function drawConnections(rootObj, targetContext) {
         targetContext.setLineDash([5]);
 		targetContext.strokeStyle ='#FF0000';
 		targetContext.beginPath();
-		var convertedPointstart = getConvertedPoint(beginPath);
+		var convertedPointstart = canvasHelper.convertCanvasXyToViewportXy(beginPath);
 		targetContext.moveTo(convertedPointstart.x ,convertedPointstart.y);
-		// tmpOffsetCenterPoint = getOffsetCenterPoint(startX ,starty, endx, endy);
-		// rootObj.setcontrollerPointX(tmpOffsetCenterPoint.x);
-		// rootObj.setcontrollerPointY(tmpOffsetCenterPoint.y);
-		//getConvertedPoint
-		// targetContext.quadraticCurveTo(rootObj.getcontrollerPointX(startX,endx) ,rootObj.getcontrollerPointY(starty,endy), endx, endy);
 		
 		var cpx = rootObj.getcontrollerPointX(beginPath.x,endPath.x);
 		var cpy = rootObj.getcontrollerPointY(beginPath.y,endPath.y);
 		
-		var convertedPointsCon = getConvertedPoint({x:cpx,y:cpy});
-		var convertedPointEnd =getConvertedPoint(endPath);
-		console.log(convertedPointsCon.x+": 1");
-		console.log(convertedPointsCon.y+": 1");
-		// console.log(convertedPointsCon.x+": 1");
-		// console.log(convertedPointsCon.y+": 1");
+		var convertedPointsCon = canvasHelper.convertCanvasXyToViewportXy({x:cpx,y:cpy});
+		var convertedPointEnd =canvasHelper.convertCanvasXyToViewportXy(endPath);
+
 		targetContext.quadraticCurveTo(convertedPointsCon.x,convertedPointsCon.y,convertedPointEnd.x,convertedPointEnd.y);
 		targetContext.stroke();
 		targetContext.restore();
 
 		if(rootObj.getIsActive()){
 			var boxWidth = rootObj.getTolarence()*2*curZoom;
-			var boxCenter = getConvertedPoint({x:rootObj.getcurvePointX(), y:rootObj.getcurvePointY()});
+			var boxCenter = canvasHelper.convertCanvasXyToViewportXy({x:rootObj.getcurvePointX(), y:rootObj.getcurvePointY()});
 			contextOrig.fillStyle = "#FF0000";
 			contextOrig.fillRect(boxCenter.x - boxWidth/2, boxCenter.y - boxWidth/2, boxWidth, boxWidth);
 		}
 	}
 }
 
-
-/* Draws the outline of an object */
-function drawOutlinesOnCanvas(obj){
-	var sX,sY,eX,sY;
-	var curZoom = this.zoom;
-	var center = obj.getCenter();
-	var pnt = getConvertedPoint({x:obj.objBorderStartX, y:obj.objBorderStartY});
-	sX = pnt.x;
-	sY = pnt.y;
-	pnt = getConvertedPoint({x:obj.objBorderEndX, y:obj.objBorderEndY});
-	eX = pnt.x;
-	eY = pnt.y;
-	
-	contextOrig.beginPath();
-	contextOrig.moveTo(sX,sY);
-	contextOrig.lineTo(eX,sY);
-	contextOrig.lineTo(eX,eY);
-	contextOrig.lineTo(sX,eY);
-	contextOrig.lineTo(sX,sY);
-	contextOrig.lineWidth=1;
-	contextOrig.strokeStyle = '#BDBDBD';
-	contextOrig.strokeStyle = '#FF0000';
-	contextOrig.stroke();
-	
-}
-
 /* Draws object scaler boxes of an object */
 function highlightObject(obj) {
     var coor = obj.getResizeCornerCoordinates();
-    var curZoom = this.zoom;
+    var curZoom = canvasHelper.zoom;
     objType = obj.getType();
 	var r = 5;
 	points = [];
 	var pnt;
     if (objType == ObjectType.CONT_WALL) {
         objVertices = obj.getVerticesArr();
-		pnt = getConvertedPoint(objVertices[0]);
+		pnt = canvasHelper.convertCanvasXyToViewportXy(objVertices[0]);
         x1 = pnt.x;
         y1 = pnt.y;
 
-		pnt = getConvertedPoint(objVertices[1]);
+		pnt = canvasHelper.convertCanvasXyToViewportXy(objVertices[1]);
         x2 = pnt.x;
         y2 = pnt.y;
 
@@ -1846,11 +1202,11 @@ function highlightObject(obj) {
 		points.push({x:x2, y:y2});
 
     } else {
-		pnt = getConvertedPoint( {x:obj.getObjStartX(), y:obj.getObjStartY()} );
+		pnt = canvasHelper.convertCanvasXyToViewportXy( {x:obj.getObjStartX(), y:obj.getObjStartY()} );
 		sX = pnt.x;
 		sY = pnt.y;
 
-		pnt = getConvertedPoint( {x:obj.getObjEndX(), y:obj.getObjEndY() });
+		pnt = canvasHelper.convertCanvasXyToViewportXy( {x:obj.getObjEndX(), y:obj.getObjEndY() });
 		eX = pnt.x;
 		eY = pnt.y;
 
@@ -1862,98 +1218,11 @@ function highlightObject(obj) {
 	drawFillCircles(points, r, contextOrig, "#e74c3c");
 }
 
-
-/* Draws object scaler boxes of an object */
-function drawObjectScalerOnCanvas(obj) {
-    var coor = obj.getResizeCornerCoordinates();
-    var curZoom = this.zoom;
-    objType = obj.getType();
-
-	var pntNE_srt = getConvertedPoint({x:coor.NE.SX, y:coor.NE.SY});
-	var pntNE_end = getConvertedPoint({x:coor.NE.EX, y:coor.NE.EY});
-	
-	var pntSE_srt = getConvertedPoint({x:coor.SE.SX, y:coor.SE.SY});
-	var pntSE_end = getConvertedPoint({x:coor.SE.EX, y:coor.SE.EY});
-	
-	var pntSW_srt = getConvertedPoint({x:coor.SW.SX, y:coor.SW.SY});
-	var pntSW_end = getConvertedPoint({x:coor.SW.EX, y:coor.SW.EY});
-	
-	var pntNW_srt = getConvertedPoint({x:coor.NW.SX, y:coor.NW.SY});
-	var pntNW_end = getConvertedPoint({x:coor.NW.EX, y:coor.NW.EY});
-	
-    if (objType == ObjectType.CONT_WALL) {
-        objVertices = obj.getVerticesArr();
-        x1 = objVertices[0].x;
-        y1 = objVertices[0].y;
-        x2 = objVertices[1].x;
-        y2 = objVertices[1].y;
-
-        m = (y2 - y1) / (x2 - x1);
-
-        contextOrig.fillStyle = "#FF0000";
-        if (m < 0) {
-            contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x) * curZoom, (pntNE_end.y - pntNE_srt.y));
-			contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
-        } else {
-            contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
-            contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
-        }
-        contextOrig.fillStyle = "#000000";
-    }else if(obj.getType == ObjectType.TEXT){
-	    contextOrig.fillStyle = "#FF0000";
-        contextOrig.fillRect(coor.NE.SX * curZoom, coor.NE.SY-5 * curZoom, (coor.NE.EX - coor.NE.SX) * curZoom, (coor.NE.EY - coor.NE.SY) * curZoom);
-        contextOrig.fillRect(coor.SE.SX * curZoom, coor.SE.SY * curZoom, (coor.SE.EX - coor.SE.SX) * curZoom, (coor.SE.EY - coor.SE.SY) * curZoom);
-        contextOrig.fillRect(coor.SW.SX * curZoom, coor.SW.SY * curZoom, (coor.SW.EX - coor.SW.SX) * curZoom, (coor.SW.EY - coor.SW.SY) * curZoom);
-        contextOrig.fillRect(coor.NW.SX * curZoom, coor.NW.SY * curZoom, (coor.NW.EX - coor.NW.SX) * curZoom, (coor.NW.EY - coor.NW.SY) * curZoom);
-        contextOrig.fillStyle = "#000000";
-
-	} else {
-        contextOrig.fillStyle = "#FF0000";
-        contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x), (pntNE_end.y - pntNE_srt.y));
-        contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
-        contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
-        contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
-        contextOrig.fillStyle = "#000000";
-    }
-}
-
-/* Draws the rotation indicators */
-function drawObjectRotateIndicatorsOnCanvas(obj){
-	var coor = obj.getResizeCornerCoordinates();
-	var curZoom  =  this.zoom;
-	var center = obj.getCenter();
-	var arcSegment = Math.PI/8;
-	var tmpPoint;
-	
-	drawArcArrow(center.x * curZoom,center.y * curZoom,obj.getObjWidth()/2 * curZoom, Math.PI/4 -arcSegment + obj.getRotation(),Math.PI/4 + arcSegment + obj.getRotation(), contextOrig);
-	drawArcArrow(center.x * curZoom,center.y * curZoom,obj.getObjWidth()/2 * curZoom, 3 * Math.PI/4 -arcSegment + obj.getRotation(), 3 * Math.PI/4 + arcSegment + obj.getRotation(), contextOrig);
-	drawArcArrow(center.x * curZoom,center.y * curZoom,obj.getObjWidth()/2 * curZoom, 5 * Math.PI/4 -arcSegment + obj.getRotation(),5 * Math.PI/4 + arcSegment + obj.getRotation(), contextOrig);
-	drawArcArrow(center.x * curZoom,center.y * curZoom,obj.getObjWidth()/2 * curZoom, 7* Math.PI/4 -arcSegment + obj.getRotation(),7 * Math.PI/4 + arcSegment + obj.getRotation(), contextOrig);
-}
-
-/* Draws a two sided arc arrow to indicate rotation
- * cX - center X
- * cY - center Y
- * r - radius
- * sA - starting angle
- * eA - end angle
- */
-function drawArcArrow(cX, cY, r, sA, eA, targetContext){
-	
-	targetContext.beginPath();
-	targetContext.strokeStyle = "#FF0000";
-	targetContext.lineWidth = 3;
-	
-	targetContext.arc(cX,cY, r ,sA, eA);
-	targetContext.stroke();
-}
-
-
 /* Detects which object is being selected by the user by clicking. Later added objects get selected first. 
  * factor variable is used to expand the area of sensitivity
  * */
 function getSelObject(x, y){
-	var pnt = getReverseConvertedPoint({x:x, y:y});
+	var pnt = canvasHelper.convertViewportXyToCanvasXy({x:x, y:y});
 	var checkX = pnt.x;
 	var checkY = pnt.y;
 	
@@ -1971,7 +1240,7 @@ function getSelObject(x, y){
  * Returns object index */
  
 function getSelObjectIndex(x, y){
-	var pnt = getReverseConvertedPoint({x:x, y:y});
+	var pnt = canvasHelper.convertViewportXyToCanvasXy({x:x, y:y});
 	var checkX = pnt.x;
 	var checkY = pnt.y;
 	
@@ -2147,22 +1416,22 @@ function getLightBulbFromLabel(label){
 
 /* Increments the zoom ratio */
 function zoomIn(){
-	zoom = zoom + minZoom;
+	canvasHelper.zoom = canvasHelper.zoom + minZoom;
 	drawAllObjects();
 	drawBackgroundImage();
 }
 
 /* Decrements the zoom ratio */
 function zoomOut(){
-	this.zoom = this.zoom - minZoom;
-	if (this.zoom <minZoom) this.zoom =minZoom;
+	canvasHelper.zoom = canvasHelper.zoom - minZoom;
+	if (canvasHelper.zoom <minZoom) canvasHelper.zoom =minZoom;
 	drawAllObjects();
 	drawBackgroundImage();
 }
 
 /* Resets the zoom ratio to 1 */
 function zoomReset(){
-	this.zoom = 1;
+	canvasHelper.zoom = 1;
 	drawAllObjects();
 	drawBackgroundImage();
 }
@@ -2205,8 +1474,8 @@ function scaleReset(){
 
 /* Sets a zoom value directly */
 function setZoom(zoomValue){
-	this.zoom = zoomValue;
-	if (this.zoom < minZoom ) this.zoom = minZoom;
+	canvasHelper.zoom = zoomValue;
+	if (canvasHelper.zoom < minZoom ) canvasHelper.zoom = minZoom;
 }
 
 /* Draws rays from the mouse ponter to a given radius. Rays will be blocked by any item */
@@ -2214,7 +1483,7 @@ function drawRayCasts(lightBulbObj, targetContext)
 {
 	if (lightBulbObj.getType() != ObjectType.LIGHT_BULB) return;
 	
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	var rayNo = 2000;
 	var rayLength = lightBulbObj.getRayLength();
 	var tmpPoints = [];
@@ -2281,7 +1550,7 @@ function drawRayCasts(lightBulbObj, targetContext)
 		lineTargetX = ax+dx*minDist;
 		lineTargetY = ay+dy*minDist;
 		
-		lineTarget = getConvertedPoint({x:lineTargetX, y:lineTargetY});
+		lineTarget = canvasHelper.convertCanvasXyToViewportXy({x:lineTargetX, y:lineTargetY});
 		lightEndPoints.push (lineTarget);
 	}
 	
@@ -2289,7 +1558,7 @@ function drawRayCasts(lightBulbObj, targetContext)
 	var first = true;
 	var prevX, prevY;
 	var tmpX, tmpY;
-	var c_pnt = getConvertedPoint({x:ax, y:ay});
+	var c_pnt = canvasHelper.convertCanvasXyToViewportXy({x:ax, y:ay});
 	var centerX = c_pnt.x;
 	var centerY = c_pnt.y;
 	
@@ -2402,7 +1671,7 @@ $('#switch-menu').on('click','a',function(event){
 });
 
 function getRulerParams(is_mm){
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	var pixelsPerMm = 5 * curZoom;
 
 	var pixelsPerUnit = pixelsPerMm;
@@ -2437,7 +1706,7 @@ function getRulerParams(is_mm){
 
 /* Draws scale on top and left */
 function drawRuler(){
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	var rulerParams = getRulerParams(true);
 
 	/* Draw top line */
@@ -2453,8 +1722,9 @@ function drawRuler(){
 	var pixelsperMajorDivision = rulerParams.pixelsPerUnit * rulerParams.unitsPerMajorDiv; 
 	var pixelsPerSmallStep = pixelsperMajorDivision / rulerParams.smallDivsPerMajorDiv  
 	var count;
-	var xOffset = rulerOffsetX * curZoom;
-	var yOffset = rulerOffsetY * curZoom;
+	var offset_pnt = canvasHelper.convertCanvasXyToViewportXy({x: 0, y: 0});
+	var xOffset = offset_pnt.x;
+	var yOffset = offset_pnt.y;
 	/* Draw top center to right ruler */
 	count = rulerParams.smallDivsPerMajorDiv - 1;
 	for (var i=xOffset; i<= (canvasOrig.width) ;i = i + pixelsPerSmallStep){
@@ -2544,9 +1814,9 @@ function drawGridLine(x1,y1,x2,y2,lineWidth,color){
 
 function createAndInsertTextObject(){
 	var insertText = $('#type-text').val();
-	var fontSize = $('#type-text-size').val();
-	var insertX = $('#text-container').attr('data-x');
-	var insertY = $('#text-container').attr('data-y');
+	var fontSize = $('#text-container-fontsize').val();
+	var insertX = 0;
+	var insertY = 0;
 	
 	if (toolAction != ToolActionEnum.EDITTEXT){
 		currentObj = new DrawText();
@@ -2556,29 +1826,30 @@ function createAndInsertTextObject(){
 		if (currentObj.getType() == ObjectType.TEXT){
 			currentObj.setDrawText(insertText);
 			currentObj.setFontSize(fontSize);
-			var fontFamily = currentObj.getFontFamily();
-			contextOrig.font=fontSize*zoom+ 'px '+ fontFamily;
-			var maxWidth = getMaxWidth(insertText.split(' '),contextOrig)
-			var lineNumber =getLineCount(insertText.split(' '),contextOrig)
-			currentObj.setPoints(insertX,insertY,parseInt(insertX)+parseInt(maxWidth),parseInt(insertY)+(parseInt(fontSize))*lineNumber);
-			//currentObj.setPoints(100,100,500,500);
+			currentObj.setPoints(insertX,insertY,parseInt(insertX)+10,parseInt(insertY)+10);
 			
 			if (toolAction != ToolActionEnum.EDITTEXT){
 				pushElementToDrawElement(currentObj);
+				selObj = currentObj;
+				changeToolAction(ToolActionEnum.DRAG);
+				mouseStatus = MouseStatusEnum.DRAG;
+				clickX = insertX;
+				clickY = insertY;
+				offsetX = 0;
+				offsetY = 0;
 			}
 			
-			if (changeObj != undefined){
-				if (changeObj.getTrackObject().getType() == ObjectType.TEXT) {
-					changeObj.updateNewParameters();
-					pushElementToDrawElement(changeObj);
-					changeObj = undefined;
-				}
+			if (changeObj != undefined && changeObj.getTrackObject().getType() == ObjectType.TEXT) {
+				changeObj.updateNewParameters();
+				pushElementToDrawElement(changeObj);
+				changeObj = undefined;
 			}
 		} else {
 			console.log ("Expecting text but getting ");
 			console.log(currentObj);
+			changeToolAction(ToolActionEnum.DRAG);
 		}
-		$('#text-container').hide();
+		$('#text-container').modal('hide');
 	} else {
 		new PNotify({
 			title: 'EMPTY TEXT',
@@ -2590,18 +1861,18 @@ function createAndInsertTextObject(){
 	}
 	
 	drawAllObjects();
-	toolAction = ToolActionEnum.DRAW;
+	// toolAction = ToolActionEnum.DRAW;
 }
 
 function showTextEdit(endX,endY, text, fontSize,obj){
-	var curZoom = this.zoom;
+	var curZoom = canvasHelper.zoom;
 	// if(obj != null){
 	// 	text = obj.getDrawText();
 	// }
 	
 	if (text == undefined) text= "";
 	if (fontSize == undefined) fontSize = 15;
-	var pnt = getConvertedPoint({x:endX, y:endY});
+	var pnt = canvasHelper.convertCanvasXyToViewportXy({x:endX, y:endY});
 		$('#text-container').css('left',pnt.x + rulerWidth ).css('top',pnt.y + rulerHeight+$('#text-container').height()).attr('data-x', endX).attr('data-y', endY);
 // $('#text-container').css('left', pnt.x + rulerWidth + 7).css('top', pnt.y + rulerHeight- 8).attr('data-x', endX).attr('data-y', endY);
 	$('#text-container').show();
@@ -2611,9 +1882,9 @@ function showTextEdit(endX,endY, text, fontSize,obj){
 }
 
 function cancelTextEdit(){
-	$('#text-container').hide();
+	$('#text-container').modal('hide');
 	mouseStatus = MouseStatusEnum.UP;
-	toolAction = ToolActionEnum.DRAW;
+	changeToolAction(ToolActionEnum.DRAG);
 }
 
 function logElementStacksBegin(){
@@ -3141,37 +2412,6 @@ function getObjectFromId(id) {
 	return object;
 }
 
- function getConvertedPoint(point) {
-	var curZoom = this.zoom;
-	c_x = (point.x + rulerOffsetX) * curZoom;
-	c_y = (point.y + rulerOffsetY) * curZoom;
-
-	return { x:c_x, y:c_y };
-}
-
-function getReverseConvertedPoint(point) {
-	var curZoom = this.zoom;
-	r_x = point.x / curZoom - rulerOffsetX;
-	r_y = point.y / curZoom - rulerOffsetY;
-
-	return { x:r_x, y:r_y };
-}
-
-function getMaxWidth(words,targetContext){
-	var minWidth = 0;
-	for(var n = 0; n < words.length; n++) {
-        	// var word ='';
-        	// word = words[n] + '';
-			var metricsStart= targetContext.measureText(words[n]);
-			var valN = metricsStart.width;
-			if (minWidth < valN){
-					minWidth = valN;
-				}
-            
-    }
-	return minWidth;
-}
-
 function getLineCount(words ,ctx){
 	var line = '';
     var lines = [];
@@ -3195,8 +2435,6 @@ function getLineCount(words ,ctx){
 	return 	lines.length;
 }
 
-
-
 function getConnection(id){
 	var lines = [];
 	for (var i = productDataArray.length - 1; i >= 0; i--) {
@@ -3209,70 +2447,39 @@ function getConnection(id){
 	return lines;
 }
 
-function drawControllPoint(id,state){
-	var curZoom = this.zoom;
+function setConnectionState(id,state){
+	var curZoom = canvasHelper.zoom;
 	var elements = [];
 	var elements = getConnection(id);
 	for (var i = elements.length - 1; i >= 0; i--) {
 		elements[i].setIsActive(state);
-		var beginPath = getObjectFromId(elements[i].getsourseId()).getCenter();
-		var endPath = getObjectFromId(elements[i].getsdestinationId()).getCenter();
-		var startX = beginPath.x;
-		var starty = beginPath.y;
-		var endx = endPath.x;
-		var endy = endPath.y;
-		// tmpOffsetCenterPoint = getOffsetCenterPoint(startX ,starty, endx, endy);
-		// elements[i].setcontrollerPointX(tmpOffsetCenterPoint.x);
-		// elements[i].setcontrollerPointY(tmpOffsetCenterPoint.y);
-		contextOrig.fillStyle = "#FF0000";
-        contextOrig.fillRect((elements[i].getcurvePointX()-elements[i].getTolarence())*curZoom ,(elements[i].getcurvePointY()-elements[i].getTolarence())*curZoom,10*curZoom,10*curZoom);
 	}
 }
-
-
-
-
-
 function findClickeConnection(e){
 	clickX = getX(e);
 	clickY = getY(e);
+	var pnt = canvasHelper.convertViewportXyToCanvasXy({ x: clickX, y: clickY })
 	for (var i = productDataArray.length - 1; i >= 0; i--) {
-		if(productDataArray[i].objType == ObjectType.CONNECT && productDataArray[i].getIsActive()){
-			if(productDataArray[i].isInControlPoint(clickX,clickY)){
+		if (productDataArray[i].objType == ObjectType.CONNECT && productDataArray[i].getIsActive()) {
+			var tol = productDataArray[i].getTolarence() * canvasHelper.zoom;
+			if (pnt.x > productDataArray[i].getcurvePointX() - tol &&
+				pnt.x < productDataArray[i].getcurvePointX() + tol &&
+				pnt.y > productDataArray[i].getcurvePointY() - tol &&
+				pnt.y < productDataArray[i].getcurvePointY() + tol) {
 				return productDataArray[i];
-			}			
+			}
 		}
 	}
 	return 0;
 }
 
-// function isInControlPoint(x,y,obj){
-// 	if(x>(obj.getcontrollerPointX()-5) && (obj.getcontrollerPointX()+5) >x && y > (obj.getcontrollerPointY()-5) && (obj.getcontrollerPointY()+5)>y){
-// 		return true;
-// 	}
-// 	return false;
-// }
-
 function dragControlPoint(e,ctx,obj){
-	if(obj == 0){
-		return;
-	}
-	if(!mouseDownEvent){
+	if(obj == 0 || !mouseDownEvent){
 		return;	
 	}
-	var newCP = getReverseConvertedPoint({x:endX,y:endY}); //mouse point converted to canvas
+	var newCP = canvasHelper.convertViewportXyToCanvasXy({x:endX,y:endY}); //mouse point converted to canvas
 	obj.setcurvePointX(newCP.x);
 	obj.setcurvePointY(newCP.y);
-	// var beginPath = getObjectFromId(obj.getsourseId()).getCenter();
-	// var endPath = getObjectFromId(obj.getsdestinationId()).getCenter();
-	// var startX = beginPath.x;
-	// var starty = beginPath.y;
-	// var endx = endPath.x;
-	// var endy = endPath.y;
-	// var startNewPoint = getConvertedPoint({x:startX,y:starty});
-	// var endNewPoint = getConvertedPoint({x:endx,y:endy});
-	// cpx = cpx * 2 - (startX+endx)/2;
-	// cpy = cpy * 2 - (starty+endy )/2;
 }
 
 
@@ -3281,12 +2488,10 @@ function calControllPoint(objSourse,objEnd,conObj){
 	var endPath = objEnd.getCenter();
 	var startX = beginPath.x;
 	var starty = beginPath.y;
-	var endx = endPath.x;
+	var endx = endPath.x;               
 	var endy = endPath.y;
-	var source = getConvertedPoint({x:startX,y:starty});
-	var end = getConvertedPoint({x:endx,y:endy});
-	conObj.setcurvePointX((source.x+end.x)/2);
-	conObj.setcurvePointY((source.y+end.y)/2);
+	conObj.setcurvePointX((startX+endx)/2);
+	conObj.setcurvePointY((starty+endy)/2);
 }
 
 

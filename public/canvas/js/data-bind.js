@@ -18,7 +18,7 @@
     var subCategory= '';
     var products = '';
     var serch ='';
-    var baseUrl='/';
+    var baseUrl ='http://23.239.13.202';
     
 
         $.ajax({
@@ -242,29 +242,6 @@
 
                     var angle, elev, power, type, b_tooltip, s_angle, s_elev, s_power, s_bname, s_type, s_tooltip;
 
-                $(".product-container").on("click", ".single-item", function (e) {
-
-                    var getItemType = $(this).attr("attr");
-
-                    if (this.getAttribute("attr") == 'LIGHT_BULB') {
-                        toolAction = ToolActionEnum.DRAW;
-                        drawObjectType = ObjectType.LIGHT_BULB;
-
-                        angle = this.getAttribute("data-angle");
-                        elev = this.getAttribute("data-evel");
-                        power = this.getAttribute("data-power");
-
-                        bname = this.getAttribute("data-name");
-                        type = this.getAttribute("attr");
-                        b_tooltip = this.getAttribute("data-tooltip");
-                        bulbPrice = this.getAttribute("data-price");
-                        set_itemCode = this.getAttribute("data-item-code");
-                        lightImagePath = this.getAttribute("data-path");
-                        iconPath  = this.getAttribute("data-path1");
-
-                    }
-
-                });
 
 //var single_item = document.getElementsByClassName('single-item');
 
@@ -287,10 +264,10 @@
                     helper: function () {
                         is_pack = parseInt(this.getAttribute("data-is_pack"));
                         pack_id = parseInt(this.getAttribute("data-cat"));//sub catagory id
-                        image_path = '/'+this.getAttribute("data-image_path");
+                        image_path = this.getAttribute("data-image_path");
                         prod_id = this.getAttribute("data-prod_id");
                         prod_type = this.getAttribute("data-prod_type");
-                        sale_price = this.getAttribute("data-sale_price");
+                        builder_price = this.getAttribute("data-builder_price");
                         category_type = this.getAttribute("data-category-type");
                         $copy = $(this).clone();
                         if(is_pack ==1){ //TODO: check why if statement needed ??? 
@@ -326,7 +303,7 @@
                     var offsetX = Offset.left;
                     var offsetY = Offset.top;
 
-                    var curZoom = zoom;
+                    var curZoom = canvasHelper.zoom;
                     var x = (e.clientX - offsetX) / curZoom;
                     var y = (e.clientY - offsetY) / curZoom;
 
@@ -349,7 +326,7 @@
                         addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath);
                     }
                     // drawAllObjects();
-                    $('#tool-items-ul li').removeClass('active');
+                    //$('#tool-items-ul li').removeClass('active');
 
                 }
 

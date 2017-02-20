@@ -29,7 +29,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     this.currentPopupObj =selObj1;
     lastConectedObj = currentPopupObj;
     var canvas_offset = $(canvasOrig).offset();
-    var center = getConvertedPoint(selObj1.getCenter());
+    var center = canvasHelper.convertCanvasXyToViewportXy(selObj1.getCenter());
     center.x += canvas_offset.left;
     center.y += canvas_offset.top;
     hideItemPopups();
@@ -37,7 +37,8 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
         imgHight = $('.image-background').height();
         imgWidth =$('.image-background').width();
     }
-    $('.image-background').height(imgHight*zoom).width(imgWidth*zoom);
+    var curZoom = canvasHelper.zoom;
+    $('.image-background').height(imgHight*curZoom).width(imgWidth*curZoom);
 
     var itemPopupIds = [];
     itemPopupIds.push('#item-popup-close');
@@ -64,8 +65,8 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     var x,y;
     for (var index = 0; index < itemPopupIds.length; index++) {
         theta += theta_step;
-        x = center.x + (radius * Math.cos(theta) - imgWidth / 2) * zoom;
-        y = center.y - (radius * Math.sin(theta) + imgHight / 2) * zoom;
+        x = center.x + (radius * Math.cos(theta) - imgWidth / 2) * curZoom;
+        y = center.y - (radius * Math.sin(theta) + imgHight / 2) * curZoom;
         $(itemPopupIds[index]).css({ top: y , left:  x});
         $(itemPopupIds[index]).show();
         $(itemPopupIds[index]).addClass('animated bounceIn');
@@ -79,7 +80,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
 
     $('#item-popup-conW').click(function(e) {
        //var selObj_new= getSelObject(startX, startY);
-       drawControllPoint(currentPopupObj.getUniqueItemID(),false);
+       setConnectionState(currentPopupObj.getUniqueItemID(),false);
         if(currentPopupObj.getType() == ObjectType.LIGHT_SWITCH ||currentPopupObj.getType() == ObjectType.LIGHT_BULB || currentPopupObj.getType() == ObjectType.PRODUCT){
             isHide = false;
             lastConectedObj = currentPopupObj;
@@ -92,7 +93,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
 
     $('#item-popup-close').click(function() {
        //var selObj_new= getSelObject(startX, startY);
-        drawControllPoint(currentPopupObj.getUniqueItemID(),false);
+        setConnectionState(currentPopupObj.getUniqueItemID(),false);
         removeEditMode()        
         hideItemPopups();
         drawAllObjects();
@@ -105,7 +106,7 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     $('#item-popup-info').click(function(e) {
         //var selObj_new= getSelObject(startX, startY);
         removeEditMode();
-        drawControllPoint(currentPopupObj.getUniqueItemID(),false);
+        setConnectionState(currentPopupObj.getUniqueItemID(),false);
         drawAllObjects();
         showCanvasProductTooltip(e);
         
@@ -117,12 +118,11 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
         });
     });
     
-    $('#item-popup-connections').click(function(e) {
+    $('#item-popup-connections').click(function (e) {
         removeEditMode();
-         toolAction = ToolActionEnum.CONNECTION;
-         //var selObj_new= getSelObject(startX, startY);
-         drawControllPoint(currentPopupObj.getUniqueItemID(),true);
-         drawAllObjects();
+        toolAction = ToolActionEnum.CONNECTION;
+        setConnectionState(currentPopupObj.getUniqueItemID(),true);        
+        drawAllObjects();
     });
 
 
@@ -157,22 +157,23 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
     
      
     $('#savevalues').click(function (e) {
-
         var d = new Date();
-
         var date = [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/');
 
         var listValue = document.getElementById('displayvalues').value;
-       // comments.unshift(date+' - '+listValue);
-       if(!valuesAdded){
-           enteredCommentes = selObj.getNotes();
-           valuesAdded = true;
-       }
+        // comments.unshift(date+' - '+listValue);
+        if (!valuesAdded) {
+            enteredCommentes = selObj.getNotes();
+            valuesAdded = true;
+        }
         if (listValue != '') {
-            enteredCommentes += date + ' - ' + listValue + "\n";
+            enteredCommentes = "\n"+date + ' - ' + listValue +enteredCommentes+ "\n";
             selObj.notes = enteredCommentes;
-//        var notes = selObj.getNotes();
-//        notes.unshift(date+' - '+listValue);
+
+            if (selObj.commentID == null) {
+                productCommentIndex++;
+                selObj.commentID = productCommentIndex;
+            }
 
             var textarea = document.getElementById("display_notes");
             textarea.value = enteredCommentes;//.join("\n");
@@ -181,6 +182,43 @@ function populateDialog(e,selObj1, xOffset, yOffset) {
 
     });
     
+     $('#project_comment_save').click(function (e){
+         var commentValue = document.getElementById('project_comment_area').value;
+         $('#project_comment_area').summernote('code', '');
+         projcetComments = combinateDataProj(commentValue) +projcetComments;
+         $('#project_comment_display').summernote('code', projcetComments);
+         //var textarea = document.getElementById("project_display_notes");
+         //textarea.value = projcetComments;//.join("\n");
+         document.getElementById('project_comment_area').value = "";
+    });
+
+    function combinateData(text){
+        var comments ='';
+        if (text != '') {
+           var d = new Date(); 
+            var date = [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/');
+            comments += date + ' - ' + text + "\n" 
+        }
+        return comments;
+    }
+
+  function combinateDataProj(text){
+        var comments ='';
+        if (text != '') {
+           var d = new Date(); 
+            var date = [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/');
+            comments += '</br></br><b> Revision '+date+' :</b></br>'  + text + "\n" 
+        }
+        return comments;
+    }
+
+  $('.proj_close').click(function (e){
+      $('#project_comment_area').summernote('code', '');
+      $('#project_comment_popup').modal('hide');
+  });
+
+
+
     function loadValues() {
         
         var list = document.getElementById('comments');

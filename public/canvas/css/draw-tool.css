@@ -33,7 +33,7 @@
     border-bottom: solid 1px #ccc;
 }
 
-#text-container{
+/*#text-container{
 	position:absolute;
 	left:0px;
 	top:0px;
@@ -41,17 +41,17 @@
 	z-index:1000;
 	background:#fff;
 	padding:2px;
-}
+}*/
 
 #type-text-size{
 	width:30px;
 }
 
-#text-container input{
+/*#text-container input{
 	background: transparent;
     border: none;
     font-size:15px;
-}
+}*/
 
 #draw-tool-canvas {
 	/*background:#FFF;*/

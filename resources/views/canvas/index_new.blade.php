@@ -24,6 +24,7 @@
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
 	{{ Html::style('canvas/css/bom-print.css') }}
+	{{ Html::style('canvas/lib/text/summernote.css') }}
 	<style>
 		@media print {
 			body * {
@@ -49,9 +50,9 @@
 <div id="parent" class="row">
     <div id="sidebar" class="col-xs-12 col-sm-12 col-md-4 col-lg-2" style="background-color: #E7E7E7">
 	<div style=" background-color:#E7E7E7; ">
-		<div class="panel panel-default  body-main inside-body-pan" style="background-color: #51748c;"id="main-pnnel-drag" >
-             <div class="panel-heading back-ground-colour-inner">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-title back-ground-colour-inner line-hight " style="padding-right: 10px; padding-left:0px;">
+		<div class="panel panel-default  body-main " style="background-color: #51748c;"id="main-pnnel-drag" >
+             <div class="panel-heading back-ground-colour-inner" id="main-hadder">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-title back-ground-colour-inner line-hight main-title" style="padding-right: 10px; padding-left:0px;">
 						<div class="row left-align"  style="margin-top: 40px;margin-bottom: 3px">
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
@@ -97,8 +98,8 @@
                 
                 
                 
-			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body" style="overflow: auto" >
-				<div class="panel panel-default inner-class cat-1 hide-catelog" id="main-0">
+			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-0">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="0" class="catelog-name">
@@ -109,14 +110,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-0">
+							<ul class="level-2 list" style="" id="catlog-0">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-2 hide-catelog" id="main-1">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-1">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="1" class="catelog-name">
@@ -126,7 +127,7 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
-							<ul class="level-2" style=""  id="catlog-1">
+							<ul class="level-2 list" style=""  id="catlog-1">
 								
 							</ul>
 
@@ -134,7 +135,7 @@
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-3 hide-catelog" id="main-2">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-2">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="2" class="catelog-name">
@@ -144,13 +145,13 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
-							<ul class="level-2" style=""  id="catlog-2">
+							<ul class="level-2 list" style=""  id="catlog-2">
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-4 hide-catelog" id="main-3">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-3">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="3" class="catelog-name">
@@ -161,14 +162,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-3">
+							<ul class="level-2 list" style="" id="catlog-3">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-5 hide-catelog" id="main-4">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-4">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="4" class="catelog-name">
@@ -179,14 +180,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-4">
+							<ul class="level-2 list" style="" id="catlog-4">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-6 hide-catelog" id="main-5">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-5">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="5" class="catelog-name">
@@ -197,14 +198,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-5">
+							<ul class="level-2 list" style="" id="catlog-5">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-7 hide-catelog" id="main-6">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-6">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="6" class="catelog-name">
@@ -215,14 +216,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-6">
+							<ul class="level-2 list" style="" id="catlog-6">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-8 hide-catelog" id="main-7">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-7">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="7" class="catelog-name">
@@ -233,14 +234,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-7">
+							<ul class="level-2 list" style="" id="catlog-7">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-9 hide-catelog" id="main-8">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-8">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="8" class="catelog-name">
@@ -251,14 +252,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-8">
+							<ul class="level-2 list" style="" id="catlog-8">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-10 hide-catelog" id="main-9">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-9">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="9" class="catelog-name">
@@ -269,14 +270,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-9">
+							<ul class="level-2 list" style="" id="catlog-9">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-11 hide-catelog" id="main-10">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-10">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="10" class="catelog-name">
@@ -287,14 +288,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-10">
+							<ul class="level-2 list" style="" id="catlog-10">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-12 hide-catelog" id="main-11">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-11">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="11" class="catelog-name">
@@ -305,14 +306,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-11">
+							<ul class="level-2 list" style="" id="catlog-11">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-13 hide-catelog" id="main-12">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-12">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="12" class="catelog-name">
@@ -323,14 +324,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-12">
+							<ul class="level-2 list" style="" id="catlog-12">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-14 hide-catelog" id="main-13">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-13">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="13" class="catelog-name">
@@ -341,7 +342,7 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-13">
+							<ul class="level-2 list" style="" id="catlog-13">
 							</ul>
 
 						</div>
@@ -364,38 +365,41 @@
                                 <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
 
                                 <div class="image_div" align="center">
-                                    <img class="pd_img img-responsive"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
+                                    <img class="pd_img"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
                                 </div>
                             </div>
                             <div class="pd_details_con">
-                                <div class="col-md-7 padding_L">
+								<div class="col-md-12 padding_L">
                                     <h2 name="smname" id="left_popup_productName">LED SS - 25mm Chrome</h2>
-                                    <p >Product Description.</p><p id="left_popup_productDescription" >Product Description. This is where the product description placed. This is a small descriptionn about the product focuses on selling the product like why the product is good for the house they use and want to own. No more than words.</p>
+                                </div>
+                                <div class="col-md-7 padding_L">
+                                    <p >Product Description.</p><p id="left_popup_productDescription" ></p>
                                 </div>
 
-                                <div class="col-md-5 padding_R padding_L margin_top_20">
-
-                                    <p><strong>Supplier :</strong><span id="left_popup_suppName"> Clipsal</span></p>
-                                    <p><strong>Colour :</strong><span id="left_popup_productStyle">White, Chrome</span></p>
-                                    <p><strong>Style :</strong><span id="left_popup_productType">  LED</span></p>
-                                    <p><strong>Watts :</strong><span id="left_popup_productWatt">10 w</span></p>
-                                    <p><strong>Rating</strong>:N/A</p>
-                                    <p><strong>Size</strong>:N/A</p>
+                                <div class="col-md-5 padding_R padding_L ">
+                                    <p>
+										<strong>Supplier :</strong><span id="left_popup_suppName"> Clipsal</span><br>
+										<strong>Colour :</strong><span id="left_popup_productStyle">White, Chrome</span><br>
+										<strong>Style :</strong><span id="left_popup_productType">  LED</span><br>
+										<strong>Watts :</strong><span id="left_popup_productWatt">10 w</span><br>
+										<strong>Rating</strong>:N/A<br>
+										<strong>Size</strong>:N/A
+									</p>
 
                                 </div>
                                 <div class="price_holder clearfix">
-                                    <div class="col-md-5 padding_L padding_R margin_top_40">
+                                    <div class="col-md-5 padding_L padding_R margin_top_20">
                                         <strong><span class="pd_price" name="builderproductPrice" id="left_popup_builderproductPrice"></span>
                                         <span class="pd_price_txt">(inc GST)</span></strong>
                                     </div>
 
-                                    <div class="col-md-4 padding_L padding_R margin_top_20">
+                                    <div class="col-md-4 padding_L padding_R" style="display: none">
                                         <span class="pd_price_txt lbl_red">WAS<br>
                                             <strong ><span class="pd_price" id="left_popup_wasprice"></span></strong>
                                         </span>
                                     </div>
 
-                                    <div class="col-md-3 padding_L padding_R margin_top_20">
+                                    <div class="col-md-3 padding_L padding_R" style="display: none">
                                         <span class="pd_price_txt lbl_green">SAVE<br>
                                             <strong ><span class="pd_price" id="left_popup_saveprice"></span></strong>
                                         </span>
@@ -410,15 +414,15 @@
 
 	<div  style="vertical-align: bottom;" class="clearfix ">
 		<div class="panel panel-default bom-medder bom-hide" id="bom-area">
-			<div class="panel-heading test1 ">
+			<div class="panel-heading test1 " id="bom-hedder">
 				<div class="panel-title ading-left-padding title titel-text-size" >
 					BOM
 				</div>
 				</div>
-				<div class="panel-body back-ground-colour-inner selected-panel-body-pan">
-				<div class="side-bar2" id="bom-table">
-					<div class="property-div" >
-						<table id="productInfo" border="1" cellpadding="2">
+				<div class="panel-body back-ground-colour-inner selected-panel-body-pan" id="bom-body">
+				<div class="side-bar2" id="bom-table" style="overflow-y:auto ">
+					<div class="property-div" style="width:100%;">
+						<table  border="1" cellpadding="2" id="productInfo" >
 							<tr>
 								<th>Name</th>
 								<th>Unit Price ($)</th>
@@ -655,12 +659,26 @@
 		</ul>
 	</div>
 
-	<div id="text-container">
-		<input id="type-text" type="text" name="type-text" value="" placeholder="Enter your text here"/><br/>
-		<input id="type-text-size" type="text" name="type-text-size" value="15" placeholder="Font size in pixels" size="3" maxlength="3"/>px<br/>
-		<button id="text-ok">OK</button>
-		<button id="text-cancel">Cancel</button>
+	<div class="modal fade common_popup new_Project_popup" id="text-container" role="dialog">
+		<div class="modal-dialog custom_popupModel ">
+			<div class="popup_con">
+				<div class="pd_popup_header" align="center">
+					<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+				</div>
+				<div>
+					<div style="width: 100%;color: white"><img src="{!! asset('/img/text.png') !!}"><b> Plan Comment:</b></div>
+				</div>
+				<div style="color: white; margin: 10px">
+					<p> Font Size <select name="fnt_sizes" id="text-container-fontsize" style="color: black; background-color: white"></select></p>
+					<!--<input id="type-text-size" type="text" name="type-text-size" value="15" placeholder="Font size in pixels" size="3" maxlength="3"/>px<br/>-->
+					<textarea id="type-text" rows="6" cols="55" placeholder="Enter your text here" style="color: black; width: 100%; resize: none;"></textarea><br/>
+					<input id="text-ok" name="add_btn" type="button" class="pd_btn_save" value="Add" style="margin: 0px;">
+					<input id="text-cancel" name="cancel_btn" type="button" class="pd_btn_save" value="Cancel" style="margin: 0px 10px 0px 0px;">
+				</div>
+			</div>
+		</div>
 	</div>
+
 
 	</div>
 	<div id="item-popup-conW" class="item-popup " title="Connect Lights">
@@ -684,12 +702,12 @@
 
 <!--PRODUCT ICON POP UP -->
 
-        <div class="modal fade common_popup new_Project_popup" id="productIconModal" role="dialog">
+        <div class="modal fade common_popup new_Project_popup" id="productIconModal" role="dialog" style="box-shadow: 10px 10px 5px #888888;">
             <div class="modal-dialog custom_popupModel ">
 
                 <!-- Modal content-->
                 <!--<div class="modal-content clearfix">-->
-                <div class="popup_con">
+                <div class="popup_con" style="box-shadow: 10px 10px 5px #888888;">
                     <div class="pd_popup_header" align="center">
 
                         <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
@@ -713,7 +731,7 @@
 
 
                         <div class="pd_commentbox">
-                            <input  type="text" list="comments" id="displayvalues" style="color: black; width: 100%;" width="50" placeholder="Add Comment Here" />
+                            <input  type="text" list="comments" id="displayvalues" style="color: black; width: 100%;" width="50" placeholder="Add Comment Here" maxlength="150" />
                             <datalist id="comments" style="color: black; width: 100%;"></datalist>
                         </div>
 
@@ -726,6 +744,34 @@
         </div>
 
 <!--PRODUCT ICON POP UP END-->
+
+<!--project comment section-->
+<div class="modal fade common_popup new_Project_popup" id="project_comment_popup" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Comments :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+				<!--<textarea id="project_comment_area" placeholder="Enter text ..." style="width: 100%;color: black;height: 300px;line-height: 2em;"></textarea>
+				<textarea id="project_comment_display" placeholder="Enter text ..." style="width: calc(100% - 100px);color: black;height: 300px;line-height: 2em;"></textarea>-->
+				<textarea   id="project_comment_area" style="width: 100%"></textarea>
+				<!--<datalist id="comments" style="color: black; width: 100%;"></datalist>-->
+				<!--<div id="project_comment_area"></div>-->
+				<div id="project_comment_display" style="width:calc(100% - 15px);    border-bottom: 0.2px dashed #51748c !important;height: 0.3px"></div>
+			</div>
+			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Save" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancle" style="color: white">
+		</div>
+	</div>
+</div>
+
+<!--project comment section end-->
+
 <script>
 	var template_floor_catalog_design_id = '{!! $template_floor_catalog_design_id !!}';
 </script>
@@ -735,7 +781,7 @@
 {{ Html::script('canvas/js/canvas_items/canvas_item.js') }}
 {{ Html::script('canvas/js/canvas_items/drawing_item.js') }}
 {{ Html::script('canvas/js/canvas_items/product_item.js') }}
-{{ Html::script('canvas/js/ntc.js') }}
+{{ Html::script('canvas/js/canvas_helper.js') }}
 {{ Html::script('canvas/js/draw-tool.js') }}
 {{ Html::script('canvas/js/bom.js') }}
 {{ Html::script('canvas/js/controllers_template.js') }}
@@ -747,6 +793,7 @@
 {{ Html::script('canvas/js/scripts-expand.js') }}
 {{ Html::script('lib/jquery.ui.touch-punch.min.js') }}
 {{ Html::script('canvas/bootstrap/js/bootstrap.min.js') }}
+{{ Html::script('canvas/lib/text/summernote.js') }}
 {{ Html::script('canvas/dist/js/lobipanel.js') }}
 {{ Html::script('lib/highlight/highlight.pack.js') }}
 {{ Html::script('canvas/js/get-products.js') }}
@@ -765,12 +812,15 @@
 
 		$('.template_modal').modal('show');
 	});
-	
-	clientName = "N/A";
-	clientAdddress = "N/A";
-	projectName = "N/A";
-	consultentName = "N/A";
-	printVersion = "N/A";
+
+	var isTemplate = true;
+	var planID = -1;
+
+	clientName = "not implimented";
+	clientAdddress = "not implimented";
+	projectName = "not implimented";
+	consultentName = "not implimented";
+	printVersion = "not implimented";
 
 </script>
 
@@ -808,7 +858,7 @@
 <div class="row">
 	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
 
-	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/add-plans/'.$templateFloorCatalog->id.'/canvas') !!}">Open</a></div>
+	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalog->id.'/canvas') !!}">Open</a></div>
 </div>
 
 

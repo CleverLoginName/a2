@@ -134,7 +134,9 @@ function ProductItem(){
     this.isInsidePack = false;
     this.parentPackId = null; //only valid for pack items 
     this.selectionColour ;
-     this.conectingMood =false;
+    this.conectingMood = false;
+    this.commentID = null;
+
     // this.scalerSize = 10;
     this.width = 40;
     this.height = 40;
@@ -172,8 +174,6 @@ ProductItem.prototype.setConectingMood = function (type) {
 ProductItem.prototype.getConectingMood = function () {
     return this.conectingMood;
 }
-
-
 
 /* Sets the name*/
 ProductItem.prototype.setName = function(name){
@@ -276,6 +276,54 @@ ProductItem.prototype.getCoordinates = function(){
 
     var coordinates = {x:retX, y:retY};
     return coordinates;
+}
+
+ProductItem.prototype.draw = function(targetContext, canvasHelper){
+    targetContext.save();
+    var img = document.createElement('img');
+    img.src = this.symbolPath;
+	   if(this.conectingMood){
+        targetContext.shadowColor = this.selectionColour;
+        targetContext.shadowBlur = 10;
+        targetContext.shadowOffsetX = 0;
+        targetContext.shadowOffsetY = 0;
+        //targetContext.fill();
+    }
+    var str_pnt = canvasHelper.convertCanvasXyToViewportXy({x:this.objStartX, y:this.objStartY});
+    var width = this.getObjWidth() * canvasHelper.zoom;
+    var height = this.getObjHeight() * canvasHelper.zoom;
+    targetContext.strokeStyle = '#000000';
+    targetContext.drawImage(img, str_pnt.x, str_pnt.y, width, height);
+
+    this.drawCommentID(targetContext, canvasHelper);
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+    targetContext.restore();
+}
+
+ProductItem.prototype.drawCommentID = function (targetContext, canvasHelper) {
+    if (this.commentID != null && this.commentID > 0) {
+        targetContext.save();
+
+        var r = 11;
+        var text_width = targetContext.measureText(this.commentID).width;
+        
+        var circ_center = canvasHelper.convertCanvasXyToViewportXy({ x: (this.objStartX + this.objEndX) / 2, y: this.objEndY });
+        // r *= canvasHelper.zoom;
+        circ_center.y += r * 3 / 2;
+
+        targetContext.fillStyle = 'black';
+        targetContext.beginPath();
+        targetContext.arc(circ_center.x, circ_center.y, r, 0, 2 * Math.PI);
+        targetContext.fill();
+
+        var text_width = targetContext.measureText(this.commentID).width;
+
+
+        targetContext.font = r + "px Open Sans";
+        targetContext.fillStyle = 'white';
+        targetContext.fillText(this.commentID, circ_center.x - text_width / 2, circ_center.y + r / 4);
+        targetContext.restore();
+    }
 }
 
 

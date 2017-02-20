@@ -125,7 +125,7 @@ body {
     color: #000000;
     margin-bottom: 13px;
 	background:#2a404e;
-	width:204px;
+	width:230px;
 	float:left;
 	margin-right:10px;
     -moz-user-select: none; /* Firefox */
@@ -141,7 +141,11 @@ body {
     height: 62px;
 }
 .wr_img{ margin-right:5px !important; float:left !important; width:90px !important;}
-.wr_desc{     width: 107px !important;
+.wr_desc{
+      /*width: 107px !important;*/
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     float: left !important;
     line-height: 13px;}
 
@@ -417,7 +421,11 @@ tbody {
     padding: 5px 43px 5px 73px;
 }
 
-#text-container{
+.lobipanel-tooltip{
+    display: none !important;
+}
+
+/*#text-container{
     position:absolute;
     left:0px;
     top:0px;
@@ -425,17 +433,17 @@ tbody {
     z-index:1000;
     background:#fff;
     padding:2px;
-}
+}*/
 
 #type-text-size{
     width:30px;
 }
 
-#text-container input{
+/*#text-container input{
     background: transparent;
     border: none;
     font-size:15px;
-}
+}*/
 
 @-moz-document url-prefix() {
     .single-item {
@@ -574,14 +582,19 @@ tbody {
 
 .level-3{
     display: none;
+     list-style: none;
     list-style-type: none!important;
+}
+
+.list{
+  list-style: none;
 }
 
 #listContainer{
     margin-top:15px;
 }
 
-#expList ul, li {
+#expList ul li {
     list-style: none;
     margin:0;
     padding:0;
@@ -704,10 +717,10 @@ tbody {
 }
 
 .pro-detail-container {
-    text-align: left; !important;
+    text-align: left!important;
     /*padding: 5px;*/
     padding-right: 2px;
-    margin-left: 0 !important;
+    margin-left: 0px !important;
 	width:131px;
 }
 .pro-price-container {
@@ -719,8 +732,6 @@ tbody {
    align-items: center;
     color: #FFF;
     /*background-color: rgba(255, 254, 254, 0.37);*/
-    margin-left: 2px;
-    margin-right: 2px;
    /* height: 100px;*/
 }
 
@@ -763,8 +774,16 @@ tbody {
 }
 
 
+.panel-body {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+}
 
-
+.level-2{
+    margin-left: -20px !important;
+}
 
 .property-div table thead {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fcfff4+0,e9e9ce+100;Wax+3D+%232 */
@@ -808,7 +827,7 @@ tbody {
   background-color:#51748c !important;
   /*height: 100% !important;*/
   width: 280px;
-  min-width:150px;
+  min-width:250px;
  }
 /*#top-canvas, #bg-canvas{ min-height:550px;}*/
 .without-margin{
@@ -872,7 +891,11 @@ tbody {
 
 .selected-panel-body-pan{
     padding: 0px !important;
+    overflow-y: auto !important;
 }
+
+
+
 
 .bom-hide{
     display: none !important;
@@ -901,6 +924,23 @@ tbody {
 }
 
 
+.body-main::-moz-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+.body-main::-moz-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+.body-main::-moz-scrollbar {
+    width: 13px;
+}
+
+
 #display_notes::-webkit-scrollbar-track {
  	background:#ffffff;
 	width:5px !important;
@@ -917,11 +957,74 @@ tbody {
     width: 13px;
 }
 
+
+#display_notes::-moz-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+#display_notes::-moz-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+#display_notes::-moz-scrollbar {
+    width: 13px;
+}
+
+
+
+#bom-table::-moz-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+#bom-table::-moz-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+#bom-table::-moz-scrollbar {
+    width: 13px;
+}
+
+
+#bom-table::-webkit-scrollbar-track {
+ 	background:#ffffff;
+	width:5px !important;
+	border:5px solid #51748c;
+ }
+
+#bom-table::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+      border-right:3px solid #51748c; border-left:3px solid #51748c;
+	  background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+#bom-table::-webkit-scrollbar {
+    width: 13px;
+}
+
 .no-margin{
     margin: 0px !important;
 }
 
+
+/*.modal-backdrop{
+    opacity:0 !important;
+}*/
+
 input::-webkit-calendar-picker-indicator {
+    opacity: 100;
+    /*background: url(../img/arrow_carrot-down.png) no-repeat;*/
+    background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
+}
+
+input::-moz-calendar-picker-indicator {
     opacity: 100;
     /*background: url(../img/arrow_carrot-down.png) no-repeat;*/
     background:#fff url(../img/scroll_icon.jpg) no-repeat center center;
@@ -985,3 +1088,93 @@ input::-webkit-calendar-picker-indicator {
     text-overflow: ellipsis;
 }
 }
+
+.note-editor.note-frame {
+     border: 0px solid #a9a9a9 !important;
+}
+
+.note-resizebar{
+   display: none;
+}
+
+.btn-default {
+    color: white !important;
+    background-color: #51748c !important;
+    border-color: white !important;
+    height: 25px !important;
+}
+.note-fontsize .open{
+    padding: 0px !important;
+}
+
+.dropdown-toggle {
+    color: black !important;
+    background-color: white !important;
+    border-color: white !important;
+}
+
+.note-editing-area .panel-body{
+    overflow-y: scroll !important;
+    border-bottom: 0.2px solid #51748c !important;
+    padding-left: 5px !important;
+    /*border-bottom-width: 15px !important;*/
+}
+
+.note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
+     background-color: white !important;
+}
+
+.note-editor .note-editable {
+    line-height: 1 !important;
+}
+.pd_commentbox{
+    margin-top: 1px !important;
+}
+
+
+
+
+:hov
+
+.cls
+
+element.style {
+    margin-right: 5px;
+}
+.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.btn-group>.btn:first-child {
+    margin-left: 0;
+}
+.btn-group-vertical>.btn, .btn-group>.btn {
+    position: relative;
+    float: left;
+}
+.btn-group-sm>.btn, .btn-sm {
+    padding: 5px 10px;
+    font-size: 10px;
+    /* line-height: 1.5; */
+    /* border-radius: 3px; */
+}
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.btn {
+    border-radius: 0px !important;
+    margin-right: 6px !important;
+}
+
+.note-popover .popover-content>.btn-group, .panel-heading.note-toolbar>.btn-group {
+     margin-right: 0px !important;
+}
+/*.note-editing-area{
+   height: 200px !important; max-height: 200px !important; min-height: 200px !important;overflow: auto !important;
+}
+
+.note-editable{
+    width: calc(100% - 14px) !important;
+   }*/

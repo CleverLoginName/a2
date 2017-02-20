@@ -56,7 +56,7 @@ Wall.prototype.constructor = Wall;
 function Wall(){
     this.objStatus = ObjectStatus.DRAW;
     this.objType = ObjectType.WALL;
-    this.objWallThickness = 10;
+    this.objWallThickness = 5;
     this.scalerSize = 10;
 }
 
@@ -85,6 +85,24 @@ Wall.prototype.setPoints = function(sX, sY, eX, eY){
         this.objEndY = eY;
     }
 }
+
+
+Wall.prototype.draw = function (targetContext, canvasHelper) {
+    str_pnt = canvasHelper.convertCanvasXyToViewportXy({ x: this.objStartX, y: this.objStartY });
+    end_pnt = canvasHelper.convertCanvasXyToViewportXy({ x: this.objEndX, y: this.objEndY });
+
+    var oldLineWidth = targetContext.lineWidth;
+    targetContext.lineWidth = objWallThickness;
+
+    targetContext.beginPath();
+    targetContext.moveTo(str_pnt.x, str_pnt.y);
+    targetContext.lineTo(end_pnt.x, end_pnt.y);
+    targetContext.stroke();
+
+    targetContext.lineWidth = oldLineWidth;
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 /* Continuous wall object inherit from Draw object. Unlike other primitive object classes, this class 
@@ -398,6 +416,65 @@ CWall.prototype.pointInsideObj = function(targetX, targetY){
     return false;
 }
 
+CWall.prototype.drawObjectScalerOnCanvas = function(targetContext, canvasHelper) {
+    var coor = this.getResizeCornerCoordinates();
+
+    var pntNE_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NE.SX, y: coor.NE.SY });
+    var pntNE_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NE.EX, y: coor.NE.EY });
+
+    var pntSE_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SE.SX, y: coor.SE.SY });
+    var pntSE_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SE.EX, y: coor.SE.EY });
+
+    var pntSW_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SW.SX, y: coor.SW.SY });
+    var pntSW_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SW.EX, y: coor.SW.EY });
+
+    var pntNW_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NW.SX, y: coor.NW.SY });
+    var pntNW_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NW.EX, y: coor.NW.EY });
+
+    objVertices = this.getVerticesArr();
+    x1 = objVertices[0].x;
+    y1 = objVertices[0].y;
+    x2 = objVertices[1].x;
+    y2 = objVertices[1].y;
+
+    m = (y2 - y1) / (x2 - x1);
+
+    contextOrig.fillStyle = "#FF0000";
+    if (m < 0) {
+        contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x), (pntNE_end.y - pntNE_srt.y));
+        contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
+    } else {
+        contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
+        contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
+    }
+    contextOrig.fillStyle = "#000000";
+}
+
+CWall.prototype.draw = function (targetContext, canvasHelper) {
+    str_pnt = canvasHelper.convertCanvasXyToViewportXy({ x: this.objStartX, y: this.objStartY });
+// function drawContWall(pointsArr, targetContext, curX, curY){
+	var first = true;
+    var oldLineWidth = targetContext.lineWidth;
+	targetContext.lineWidth=5;
+	targetContext.strokeStyle = '#000000';
+
+    targetContext.beginPath();
+
+	$(this.objVerticesArr).each(function(i,pnt){
+		if (first == true){
+            str_pnt = canvasHelper.convertCanvasXyToViewportXy(pnt);
+			targetContext.moveTo(str_pnt.x, str_pnt.y);
+			first = false;
+		} else {
+            end_pnt = canvasHelper.convertCanvasXyToViewportXy(pnt);
+			targetContext.lineTo(end_pnt.x, end_pnt.y);
+		}
+	});
+    targetContext.stroke();
+    targetContext.lineWidth = oldLineWidth;
+
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 /* Text object inherit from Draw object. Unlike other primitive object classes, this class 
@@ -409,14 +486,14 @@ function DrawText(){
 
     this.drawText = "Sample Text";
     this.fontSize = "15"; /* in pixels */
-    this.fontColor = "#FF0000";
+    this.fontColor = "#0000FF";
     this.objStatus = ObjectStatus.DRAW;
     this.objType = ObjectType.TEXT;
     this.fontFamily = "Open Sans";
-    this.objStartX = 0;
-    this.objStartY = 0;
-    this.objEndX = 0;
-    this.objEndY = 0;
+    // this.objStartX = 0;
+    // this.objStartY = 0;
+    // this.objEndX = 0;
+    // this.objEndY = 0;
     this.minWidth = 10;
     this.maxHeight= 15;
 }
@@ -558,9 +635,6 @@ DrawText.prototype.resize = function (direction, newX, newY, offsetX, offsetY){
     this.objEndY = tmpEndY;
 }
 
-
-
-
 /* Changes the boundaries of the object without changing the dimensions. In text object, we need to
  * make sure borders are set according to the font size, etc.. so that drag and scale borderes are not 
  * a line */
@@ -589,7 +663,80 @@ DrawText.prototype.setPoints = function(sX, sY, eX, eY){
     this.objEndX = parseInt(eX);
 }
 
+DrawText.prototype.getMinWidth = function (targetContext) {
+    var maxWordWidth = 0;
+    var words = this.drawText.split(' ');
+    for (var n = 0; n < words.length; n++) {
+        var temp_width = targetContext.measureText(words[n]).width;
+        if (maxWordWidth < temp_width) {
+            maxWordWidth = temp_width;
+        }
+    }
+    return maxWordWidth;
+}
 
+DrawText.prototype.draw = function(targetContext, canvasHelper){
+    targetContext.save();
+    targetContext.fillStyle = this.fontColor;
+    var fontsize_zoomed = this.fontSize * canvasHelper.zoom;
+    targetContext.font =  fontsize_zoomed + 'px ' + this.fontFamily;
+    this.minWidth = this.getMinWidth(targetContext);
+    
+    var textboxWidth = (this.objEndX - this.objStartX) * canvasHelper.zoom;
+    var textboxHeight = this.maxHeight;
+    var lineHeight = fontsize_zoomed;
+    var words = this.drawText.split(' ');
+	var line = '';
+	var lines = [];
+	var tempLine = '';
+
+    if (this.minWidth > textboxWidth) {
+        textboxWidth = this.minWidth;
+    }
+
+    //wrap text around textboxWidth
+	for (var n = 0; n < words.length; n++) {
+		var testLine = line + words[n] + ' ';
+		var testWidth = targetContext.measureText(testLine).width;
+		if (testWidth > textboxWidth && n > 0) {
+			lines.push(line);
+			line = words[n] + ' ';
+		}
+		else {
+			line = testLine;
+		}
+		if (n == words.length - 1) {
+			lines.push(line);
+		}
+	}
+    this.maxHeight = parseInt(this.fontSize) * lines.length;
+    textboxHeight = lineHeight * lines.length;
+
+    var str_pnt = canvasHelper.convertCanvasXyToViewportXy({x:this.objStartX, y:this.objStartY});
+
+    var box_margin = fontsize_zoomed / 4;
+	targetContext.fillStyle = 'white';
+	targetContext.fillRect(str_pnt.x - box_margin, str_pnt.y - box_margin, textboxWidth + 2 * box_margin, textboxHeight + 2 * box_margin);
+	targetContext.lineWidth = 1;
+	targetContext.strokeStyle = this.fontColor;
+	targetContext.strokeRect(str_pnt.x -  box_margin, str_pnt.y - box_margin, textboxWidth + 2 * box_margin, textboxHeight + 2 * box_margin);
+
+    var x = str_pnt.x;
+    var y = str_pnt.y;
+	targetContext.fillStyle = this.fontColor;
+	for (var index = 0; index < lines.length; index++) {
+		var line = lines[index];
+        y += lineHeight;
+		targetContext.fillText(line, x, y);
+	} 
+    var obj_end_pnt = canvasHelper.convertViewportXyToCanvasXy({x: str_pnt.x + textboxWidth, y: str_pnt.y + textboxHeight});
+    this.objEndX = obj_end_pnt.x;
+    this.objEndY = obj_end_pnt.y;
+
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+    targetContext.restore();
+}
+                                           
 /////////////////////////////////////////////////////////////////////////////
 /* Text object inherit from Draw object.  */
 /////////////////////////////////////////////////////////////////////////////
@@ -635,6 +782,28 @@ Eraser.prototype.setVertices = function(pointsArrIncoming){
         tmpObjVerticesArr.push({x:e.x, y:e.y});
     });
 }
+
+Eraser.prototype.draw = function (targetContext, canvasHelper) {
+    targetContext.save();
+    targetContext.beginPath();
+    targetContext.lineWidth = this.eraserSize * canvasHelper.zoom;
+    targetContext.strokeStyle = this.eraserColor;
+    targetContext.lineJoin = targetContext.lineCap = this.eraserType;
+    var erPnt;
+    for (var iy = 0; iy < this.eraserPointsArr.length; iy++) {
+        erPnt = canvasHelper.convertCanvasXyToViewportXy(this.eraserPointsArr[iy]);
+        if (iy == 0) {
+            targetContext.moveTo(erPnt.x, erPnt.y);
+        } else {
+            targetContext.lineTo(erPnt.x, erPnt.y);
+        }
+    }
+    targetContext.stroke();
+
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+    targetContext.restore();
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 /* Connection object inherit from Draw object.  */
@@ -712,22 +881,33 @@ Connection.prototype.getTolarence = function(){
     return this.tolerance;
 }
 
-Connection.prototype.isInControlPoint = function(targetX, targetY){
-    //getReverseConvertedPoint
-    var controlPointTar =  getReverseConvertedPoint({x:targetX,y:targetY});
-    if(controlPointTar.x>(this.getcurvePointX()-this.getTolarence()) && (this.getcurvePointX()+this.getTolarence()) >controlPointTar.x && controlPointTar.y > (this.getcurvePointY()-this.getTolarence()) && (this.getcurvePointY()+this.getTolarence())>controlPointTar.y){
-		return true;
-	}
-	return false;
+Connection.prototype.draw = function (targetContext, canvasHelper) {
+    var beginPath = getObjectFromId(this.sourseId).getCenter();
+    var endPath = getObjectFromId(this.destinationId).getCenter();
+    var endx = endPath.x;
+    var endy = endPath.y;
+    targetContext.save();
+    targetContext.lineWidth = 1;
+    targetContext.setLineDash([5]);
+    targetContext.strokeStyle = '#FF0000';
+    targetContext.beginPath();
+    var str_pnt = canvasHelper.convertCanvasXyToViewportXy(beginPath);
+    targetContext.moveTo(str_pnt.x, str_pnt.y);
 
+    var cpx = this.getcontrollerPointX(beginPath.x, endPath.x);
+    var cpy = this.getcontrollerPointY(beginPath.y, endPath.y);
+    var ctrl_pnt = canvasHelper.convertCanvasXyToViewportXy({ x: cpx, y: cpy });
+    var end_pnt = canvasHelper.convertCanvasXyToViewportXy(endPath);
+
+    targetContext.quadraticCurveTo(ctrl_pnt.x, ctrl_pnt.y, end_pnt.x, end_pnt.y);
+    targetContext.stroke();
+
+    if (this.isActive) {
+        var boxWidth = this.tolerance * 2 * canvasHelper.zoom;
+        var boxCenter = canvasHelper.convertCanvasXyToViewportXy({ x: this.curvePointX, y: this.curvePointY });
+        targetContext.fillStyle = "#FF0000";
+        targetContext.fillRect(boxCenter.x - boxWidth / 2, boxCenter.y - boxWidth / 2, boxWidth, boxWidth);
+    }
+    CanvasItem.prototype.draw.call(this, targetContext, canvasHelper);
+    targetContext.restore();
 }
-
-
-
-
-// function isInControlPoint(x,y,obj){
-// 	if(x>(obj.getcontrollerPointX()-5) && (obj.getcontrollerPointX()+5) >x && y > (obj.getcontrollerPointY()-5) && (obj.getcontrollerPointY()+5)>y){
-// 		return true;
-// 	}
-// 	return false;
-// }

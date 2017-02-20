@@ -238,10 +238,6 @@ CanvasItem.prototype.getObjHeight = function(){
     return (this.objEndY - this.objStartY);
 }
 
-
-
-
-
 /* Returns whether any given point is inside the object. Useful in detection object user clicks for dragging, etc...
  */
 CanvasItem.prototype.pointInsideObj = function(targetX, targetY){
@@ -525,15 +521,52 @@ CanvasItem.prototype.copyProperties = function (params){
     this.setPoints(params.objStartX, params.objStartY, params.objEndX, params.objEndY);
 }
 
+/* Draws the rotation indicators */
+CanvasItem.prototype.drawRotateIndicators = function(targetContext, canvasHelper){
+	var coor = this.getResizeCornerCoordinates();
+	var center = canvasHelper.convertCanvasXyToViewportXy(this.getCenter());
+	var arcSegment = Math.PI/8;
+	var radius = this.getObjWidth()/2 * canvasHelper.zoom;
+	
+    targetContext.beginPath();
+	targetContext.strokeStyle = "#FF0000";
+	targetContext.lineWidth = 3;
+	
+	targetContext.arc(center.x, center.y, radius, Math.PI/4 -arcSegment + this.getRotation(),Math.PI/4 + arcSegment + this.getRotation());
+	targetContext.arc(center.x, center.y, radius, 3 * Math.PI/4 -arcSegment + this.getRotation(), 3 * Math.PI/4 + arcSegment + this.getRotation());
+	targetContext.arc(center.x, center.y, radius, 5 * Math.PI/4 -arcSegment + this.getRotation(),5 * Math.PI/4 + arcSegment + this.getRotation());
+	targetContext.arc(center.x, center.y, radius, 7* Math.PI/4 -arcSegment + this.getRotation(),7 * Math.PI/4 + arcSegment + this.getRotation());
+	targetContext.stroke();
+}
 
+CanvasItem.prototype.drawObjectScalerOnCanvas = function(targetContext, canvasHelper) {
+    var coor = this.getResizeCornerCoordinates();
 
+    var pntNE_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NE.SX, y: coor.NE.SY });
+    var pntNE_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NE.EX, y: coor.NE.EY });
 
+    var pntSE_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SE.SX, y: coor.SE.SY });
+    var pntSE_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SE.EX, y: coor.SE.EY });
 
+    var pntSW_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SW.SX, y: coor.SW.SY });
+    var pntSW_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.SW.EX, y: coor.SW.EY });
 
+    var pntNW_srt = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NW.SX, y: coor.NW.SY });
+    var pntNW_end = canvasHelper.convertCanvasXyToViewportXy({ x: coor.NW.EX, y: coor.NW.EY });
 
+    contextOrig.fillStyle = "#FF0000";
+    contextOrig.fillRect(pntNE_srt.x, pntNE_srt.y, (pntNE_end.x - pntNE_srt.x), (pntNE_end.y - pntNE_srt.y));
+    contextOrig.fillRect(pntSE_srt.x, pntSE_srt.y, (pntSE_end.x - pntSE_srt.x), (pntSE_end.y - pntSE_srt.y));
+    contextOrig.fillRect(pntSW_srt.x, pntSW_srt.y, (pntSW_end.x - pntSW_srt.x), (pntSW_end.y - pntSW_srt.y));
+    contextOrig.fillRect(pntNW_srt.x, pntNW_srt.y, (pntNW_end.x - pntNW_srt.x), (pntNW_end.y - pntNW_srt.y));
+    contextOrig.fillStyle = "#000000";
+}
 
-
-
+CanvasItem.prototype.draw = function(targetContext, canvasHelper){
+    if (this.objStatus == ObjectStatus.SCALE){
+        this.drawObjectScalerOnCanvas(targetContext, canvasHelper);
+    }
+}
 
 
 

@@ -13,6 +13,7 @@ $(function(){
         sortable: true,
         minimize:false,
         expand:false,
+        tooltips:false,
         unpin: {
             icon: 'glyphicon glyphicon-pushpin',
         }
@@ -24,16 +25,17 @@ $(function(){
         close: false,
         editTitle: false,
         sortable: true,
-        expando:false,
-        expand:false,
-        unpin:true,
+        expando: false,
+        expand: false,
+        tooltips: false,
+        unpin: true,
         unpin: {
             icon: 'glyphicon glyphicon-pushpin',
-            icon2:'glyphicon glyphicon-pushpin'
+            icon2: 'glyphicon glyphicon-pushpin'
         },
-        minimize:{
-            icon:'fa fa-minus-square-o',
-            icon2:'fa fa-plus-square-o'
+        minimize: {
+            icon: 'fa fa-minus-square-o',
+            icon2: 'fa fa-plus-square-o'
         },
 
     });
@@ -43,12 +45,13 @@ $(function(){
         close: false,
         editTitle: false,
         sortable: true,
-        expando:false,
-        expand:false,
-        unpin:false,
-        minimize:{
-            icon:'fa fa-minus-square-o',
-            icon2:'fa fa-plus-square-o'
+        expando: false,
+        expand: false,
+        unpin: false,
+        tooltips: false,
+        minimize: {
+            icon: 'fa fa-minus-square-o',
+            icon2: 'fa fa-plus-square-o'
         },
 
 
@@ -72,222 +75,57 @@ $(function(){
     }).lobiPanel();
 
 
-//                catlog1
-    $('.cat-1').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-1>.panel-heading').addClass("test1").removeClass("test2");
+    $('.cat').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
+        $(this).find('.panel-heading').addClass("test1").removeClass("test2");
         addBoder(this);
 
     }).lobiPanel();
 
-    $('.cat-1').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-1>.panel-heading').addClass("test2").removeClass("test1");
+    $('.cat').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
+        $(this).find('.panel-heading').addClass("test2").removeClass("test1");
          addBoder(this);
     }).lobiPanel();
-
-
-//                catlog2
-    $('.cat-2').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-2>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-2').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-2>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-//                catlog3
-    $('.cat-3').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-3>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-3').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-3>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-//                catlog 4
-    $('.cat-4').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-4>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-4').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-4>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-//                catlog 5
-    $('.cat-5').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-5>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-5').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-5>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-//				catlog 6
-    $('.cat-6').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-6>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-6').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-6>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-    $('.cat-7').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-7>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-7').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-7>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-
-    $('.cat-8').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-8>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-
-    }).lobiPanel();
-
-    $('.cat-8').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-8>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-    $('.cat-9').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-9>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-9').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-9>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-    $('.cat-10').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-10>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-
-    }).lobiPanel();
-
-    $('.cat-10').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-10>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-11').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-11>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-11').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-11>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-    $('.cat-12').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-12>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-12').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-12>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-
-    $('.cat-13').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-13>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-13').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-13>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-14').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-14>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-14').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-14>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-15').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-15>.panel-heading').addClass("test1").removeClass("test2");
-        addBoder(this);
-    }).lobiPanel();
-
-    $('.cat-15').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
-        $('.cat-15>.panel-heading').addClass("test2").removeClass("test1");
-        addBoder(this);
-    }).lobiPanel();
-
 
     $('.inner-class').lobiPanel('minimize');
     $('#bom-area').lobiPanel('minimize');
 
-    $('.cat-1').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-1').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
+    $('#main-pnnel-drag').find('[data-func="unpin"]').attr("title", "Unpin");
+    $('.inner-class').find('[data-func="unpin"]').attr("title", "Unpin");
+    $('.inner-class').find('[data-func="minimize"]').attr("title", "Maximize");
+    $('.bom-medder').find('[data-func="minimize"]').attr("title", "Maximize");
 
-    $('.cat-2').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-2').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
+    $('.lobipanel').on('onUnpin.lobiPanel', function(ev, lobiPanel){
+        $(this).find('[data-func="unpin"]').attr("title", "Pin");
+    });
+    $('.lobipanel').on('onPin.lobiPanel', function(ev, lobiPanel){
+        $(this).find('[data-func="unpin"]').attr("title", "Unpin");
+    });
+    $('.lobipanel').on('beforeMinimize.lobiPanel', function(ev, lobiPanel){
+        $(this).find('[data-func="minimize"]').attr("title", "Maximize");
+    });
+    $('.lobipanel').on('beforeMaximize.lobiPanel', function(ev, lobiPanel){
+        $(this).find('[data-func="minimize"]').attr("title", "Minimize");
+    });
 
-    $('.cat-3').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-3').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
+    $('.lobipanel').on('onMaximize.lobiPanel', function(ev, lobiPanel){
+        $(this).find('[data-func="minimize"]').attr("title", "Minimize");
+        $(this).find('[data-func="unpin"]').attr("title", "Pin");
+    });
 
-    $('.cat-4').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-4').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
+    $('.cat').on('beforeUnpin.lobiPanel', function (ev, lobiPanel) {
+        $(this).addClass("unpin-pannel-hight");
+        $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
+        $(this).addClass("lobi-pannel-border");
+        $(this).lobiPanel('maximize');
+    }).lobiPanel();
 
-    $('.cat-5').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-5').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
+    $('.cat').on('beforePin.lobiPanel', function (ev, lobiPanel) {
+        $(this).removeClass("unpin-pannel-hight");
+        $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+        $(this).removeClass("lobi-pannel-border");
+        $(this).lobiPanel('maximize');
+    }).lobiPanel();
 
-    $('.cat-6').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-6').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-7').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-7').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-8').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-8').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-9').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-9').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-10').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-10').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-11').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-11').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-12').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-12').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-13').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-13').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-14').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-14').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
-
-    $('.cat-15').on('beforeUnpin.lobiPanel',function (ev,lobiPanel) {unpinPan(this);}).lobiPanel();
-    $('.cat-15').on('beforePin.lobiPanel',function (ev,lobiPanel) {pinPan(this)  }).lobiPanel();
     $('#main-pnnel-drag').on('onPin.lobiPanel',function (ev,lobiPanel) {
         pinedState = true;
         resizeSidebarContent();
@@ -302,8 +140,8 @@ $(function(){
     $('#bom-area').on('beforeMaximize.lobiPanel',function (ev,lobiPanel) {
         bomMinimize = false;
         resizeSidebarContent();
+         $('#bom-table').height($('#bom-area').height() - $('#bom-hedder').height()-10);
     }).lobiPanel();
-
 
     $('#bom-area').on('beforeMinimize.lobiPanel',function (ev,lobiPanel) {
         bomMinimize = true;
@@ -312,37 +150,34 @@ $(function(){
 
 });
 
-function unpinPan(element){
-    $(element).addClass("unpin-pannel-hight");
-    $(element).find('.panel-body').addClass("unpin-pannel-hight-body");
-    $(element).addClass("lobi-pannel-border");
-    $(element).lobiPanel('maximize');
-}
-
-function pinPan(element){
-         $(element).removeClass("unpin-pannel-hight");
-        $(element).find('.panel-body').removeClass("unpin-pannel-hight-body");
-        $(element).removeClass("lobi-pannel-border");
-        $(element).lobiPanel('maximize');
-}
-
 resizeSidebarContent();
 function resizeSidebarContent() {
     var height = $(window).height() -1;
     if (pinedState) {
         if(bomMinimize){
-            $('.body-main').css("height",height*70/100);
+            // $('.body-main').css("height",height*70/100);
             $('#main-pnnel-drag').height(height*94/100);
+            $('#main-pannel-body').height($('#main-pnnel-drag').height()-$('.main-title').height());
             $('#bom-area').height(height*6/100);
+            //main-title
+
         } else {
             $('#main-pnnel-drag').height(height*50/100);
+            $('#main-pannel-body').height($('#main-pnnel-drag').height()-$('.main-title').height());
             $('#bom-area').height(height*50/100);
         }    
     }
     else{
         if(!bomMinimize){
-            $('#bom-area').height(height*70/100);
+           $('#main-pnnel-drag').height(height*50/100);
+            $('#bom-area').height(height*50/100);
+        } else{
+            $('#main-pnnel-drag').height(height*94/100);
+            $('#bom-area').height(height*6/100);
         }          
-        $('#main-pnnel-drag').height(height*70/100);
+       // $('#main-pnnel-drag').height(height*70/100);
     }
 }
+
+//    $('.main-body-tag').css("height",height*94/100-$('#main-hadder').height());
+//  $('#main-pannel-body').height( $('#main-pnnel-drag').height()-$('#main-hadder').height());
