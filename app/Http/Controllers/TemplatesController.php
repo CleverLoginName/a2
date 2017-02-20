@@ -334,9 +334,9 @@ class TemplatesController extends Controller
         $tfloors = TemplateFloor::where('template_id', '=',$template->id)->
                     where('floor_id', '=',$templateFloor->floor_id)->
                     get();
-                  //  dd($tfloors);
+                  //dd($tfloors);
        // foreach ($tfloors as $tfloor){
-            if(($tfloors)&&(count($tfloors)>1)){
+            if(($tfloors)&&(count($tfloors)>0)){
             $t = TemplateFloor::find($tfloors[0]->id);
             //$t->template_image_id = $img_parent;
             $templateFloor->canvas_data= $t->canvas_data;
@@ -402,6 +402,8 @@ class TemplatesController extends Controller
             ->with('template', $template)
             ->with('bgImg', $templateImage->path)
             ->with('template_floor_catalog_design_id', $id)
+            ->with('templateFloor', $templateFloor)
+            ->with('templateFloorCatalog', $templateFloorCatalog)
             ->with('templateFloors', $templateFloors);
     }
 

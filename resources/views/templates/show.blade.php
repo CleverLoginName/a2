@@ -97,7 +97,7 @@
                         </div>
                         <label for="_name" class="col-xs-12 col-lg-4 col-md-4 control-label"></label>
                         <div class="col-md-8 col-lg-8">
-                            <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Load in Canvas</a>
+                            <a href="{!! url('templates/create/'.$templateFloor->template_id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Load in Canvas</a>
                         </div>
                     </div>
 

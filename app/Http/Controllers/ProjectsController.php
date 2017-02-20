@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\Floor;
 use App\Product;
+use App\ProductCatalog;
 use App\Project;
 use App\ProjectCanvasData;
 use App\ProjectFloor;
@@ -23,6 +24,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -162,6 +164,8 @@ class ProjectsController extends Controller
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        $template = Template::find($request->get('template_id'));
+
         $project = new Project();
         $project->consultant_id = $request->get('consultant_id');
         $project->template_id = $request->get('template_id');
@@ -173,6 +177,7 @@ class ProjectsController extends Controller
         $project->address_id = $address->id;
         $project->energy_consumption = $request->get('energy_consumption');
         $project->budget = $request->get('budget');
+        $project->canvas_data = $template->canvas_data;
         $project->save();
 
         $project_canvas_data = new ProjectCanvasData();
@@ -182,19 +187,36 @@ class ProjectsController extends Controller
         $templateFloors = TemplateFloor::where('template_id', '=', $project->template_id)->get();
         $projectPlans = [];
         foreach ($templateFloors as $templateFloor){
+
+
+            $templateImage = TemplateImage::find($templateFloor->template_image_id);
+            $projectImagePath = str_replace("uploads/templates/".$request->get('template_id'),"uploads/projects/".$project->id,$templateImage->path);
+            $projectImage = new ProjectImage();
+            $projectImage->name = $templateImage->name;
+            $projectImage->path = $projectImagePath;
+            $projectImage->save();
+
             $projectFloor = new ProjectFloor();
-            $projectFloor->project_image_id = $templateFloor->template_image_id;
+            $projectFloor->project_image_id = $projectImage->id;
             $projectFloor->floor_id = $templateFloor->floor_id;
             $projectFloor->canvas_data = $templateFloor->canvas_data;
             $projectFloor->project_id = $project->id;
             $projectFloor->save();
-            
-            $templateImage = TemplateImage::find($templateFloor->template_image_id);
-            $projectImage = new ProjectImage();
-            $projectImage->name = $templateImage->name;
-            $projectImage->path = $templateImage->path;
-            $projectImage->save();
-            
+
+            $destinationPath = 'uploads/projects/'.$project->id.'/originals/';
+            $destinationPathThumb = 'uploads/projects/'.$project->id.'/300x200/';
+
+            File::exists('uploads') or File::makeDirectory('uploads');
+            File::exists('uploads/projects') or File::makeDirectory('uploads/projects');
+            File::exists('uploads/projects/'.$project->id) or File::makeDirectory('uploads/projects/'.$project->id);
+            File::exists(public_path().'/'.$destinationPath) or File::makeDirectory(public_path().'/'.$destinationPath);
+            File::exists(public_path().'/'.$destinationPathThumb) or File::makeDirectory(public_path().'/'.$destinationPathThumb);
+
+            //dd(public_path().'/'.$templateImage->path.'  '.public_path().'/'.$projectImagePath);
+            if ( ! File::copy(public_path().'/'.$templateImage->path, public_path().'/'.$projectImagePath))
+            {
+                die("Couldn't copy file");
+            }
 
             $templateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id', '=', $templateFloor->id)->get();
             foreach ($templateFloorCatalogs as $templateFloorCatalog){
@@ -228,59 +250,121 @@ class ProjectsController extends Controller
             'ProjectsController@editPlanInCanvas', ['id' => $projectPlans[0]->id]
         );
 */
-        $levels = Floor::lists('name','id');
-
 
     return Redirect::to('/projects/'.$project->id.'/plans/0/canvas');
-        return view('canvas.index_project')
-            ->with('showPop', true)
-            ->with('bgImg', '')
-            ->with('project', $project)
-            ->with('levels', $levels)
-            ->with('plans', $projectPlans);
-      //  });
     }
 
 
     public function editPlanInCanvas(Project $project, $id)
     {
-
+        $projectFloorCatalogDesignArray = [];
+        $bgImg = '';
         $projectFloors = DB::table('project_floors')->where('project_id','=',$project->id)->get();
         foreach ($projectFloors as $projectFloor){
+            $projectImage = ProjectImage::where('id', '=', $projectFloor->project_image_id)->first();
             $projectFloorCatalogs = DB::table('project_floor_catalogs')->where('project_floor_id','=',$projectFloor->id)->get();
             foreach ($projectFloorCatalogs as $projectFloorCatalog){
                 $projectFloorCatalogDesigns = DB::table('project_floor_catalog_designs')->where('project_floor_catalog_id','=',$projectFloorCatalog->id)->get();
                 foreach ($projectFloorCatalogDesigns as $projectFloorCatalogDesign){
-                    
+                    $projectFloorCatalogDesignArray[] = ['id'=>$projectFloorCatalogDesign->id, 'img'=>$projectImage->path];
                 }
             }
         }
-        $projectPlan = DB::table('project_plans')->where('id','=',$id)->first();
-        if($projectPlan){
-            $allPlans = DB::table('project_plans')->where('project_id','=',$projectPlan->project_id)->get();
+        if($id == 0){
+            $tempPlan = DB::table('project_floors')->where('project_id','=',$project->id)->first();
+            $projectImage = ProjectImage::where('id','=',$tempPlan->project_image_id)->first();
+            $projectFloorCatalog = ProjectFloorCatalog::where('project_floor_id','=',$tempPlan->id)->first();
+            $projectFloorCatalogDesign = ProjectFloorCatalogDesign::where('project_floor_catalog_id','=',$projectFloorCatalog->id)->first();
+            if($projectFloorCatalogDesign){
+                return view('canvas.index_project')
+                    ->with('bgImg', $projectImage->path)
+                    ->with('floors', $projectFloors)
+                    ->with('floor', $tempPlan)
+                    ->with('floorCatalog', $projectFloorCatalog)
+                    ->with('floorCatalogDesign', $projectFloorCatalogDesign)
+                    ->with('project', $project)
+                    ->with('showPop', true)
+                    ->with('plans', $projectFloorCatalogDesignArray);
+            }
+        }
+
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::where('id','=',$id)->first();
+        $projectFloorCatalog = ProjectFloorCatalog::where('id','=',$projectFloorCatalogDesign->project_floor_catalog_id)->first();
+        $projectFloor = DB::table('project_floors')->where('id','=',$projectFloorCatalog->project_floor_id)->first();
+        $projectImage = ProjectImage::where('id','=',$projectFloor->project_image_id)->first();
+
+        if($projectFloor){
             return view('canvas.index_project')
-                ->with('bgImg', $projectPlan->img)
+                ->with('bgImg', $projectImage->path)
+                ->with('floors', $projectFloors)
+                ->with('floor', $projectFloor)
+                ->with('floorCatalog', $projectFloorCatalog)
+                ->with('floorCatalogDesign', $projectFloorCatalogDesign)
+                ->with('project', $project)
                 ->with('showPop', false)
-                ->with('plans', $allPlans);
+                ->with('plans', $projectFloorCatalogDesignArray);
+        }
+    }
+
+    public function updatePlanDataInCanvas(Request $request,$project, $projectFloorCatalogDesign_id)
+    {
+        $fileData = $request->get('file_data');
+        $fileData = (array)json_decode($fileData,true);
+
+        $project = Project::find($project);//dd($project);
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($projectFloorCatalogDesign_id);//
+        $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
+        $projectFloor = ProjectFloor::find($projectFloorCatalog->project_floor_id);
+
+        if (array_key_exists("products",$fileData))
+        {
+            $projectFloorCatalogDesign->canvas_data = json_encode($fileData['products']['data']);
+            $projectFloorCatalogDesign->save();
+        }
+
+        if (array_key_exists("floorplan",$fileData)) {
+            $projectFloor->canvas_data = json_encode($fileData['floorplan']['data']);
+            $projectFloor->save();
+
+            /**************************************************************************************************************/
+
+            $tfloors = ProjectFloor::where('project_id', '=',$project->id)->
+            where('floor_id', '=',$projectFloor->floor_id)->
+            get();
+            //  dd($tfloors);
+            foreach ($tfloors as $tfloor){
+                $t = ProjectFloor::find($tfloor->id);
+                $t->canvas_data = json_encode($fileData['floorplan']['data']);
+                $t->save();
+            }
+
+
+
+
+            /**************************************************************************************************************/
+
+
+        }
+        if (array_key_exists("project",$fileData)) {
+            $project->canvas_data = json_encode($fileData['project']['data']);
+            $project->save();
         }
 
     }
 
-    public function updatePlanDataInCanvas(Request $request)
+    public function loadPlanDataInCanvas(Request $request,$project, $projectFloorCatalogDesign_id)
     {
+        $project = Project::find($project);//dd($project);
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($projectFloorCatalogDesign_id);//
+        $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
+        $projectFloor = ProjectFloor::find($projectFloorCatalog->project_floor_id);
+        $response = [
+            'products'=>['data'=>$projectFloorCatalogDesign->canvas_data],
+            'floorplan'=>['data'=>$projectFloor->canvas_data],
+            'project'=>['data'=>$project->canvas_data],
+        ];//dd($response);
 
-        $projectPlan = ProjectPlan::find(session('project_plan_id'));
-        $projectPlan->template_data = $request->get('file_data') ;
-        $projectPlan->save();
-        //return view('canvas.index_new');
-
-    }
-
-    public function loadPlanDataInCanvas()
-    {
-
-        $projectPlan = ProjectPlan::find(session('plan_id'));
-        return $projectPlan->template_data;
+        return $response;
         //return view('canvas.index_new');
 
     }
@@ -294,8 +378,28 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
+        $plans = [];
         $project = Project::find($id);
+        $projectFloors = DB::table('project_floors')->where('project_id', '=', $project->id)->get();
+        foreach ($projectFloors as $projectFloor){
+            $projectFloorCatalogs = DB::table('project_floor_catalogs')->where('project_floor_id', '=', $projectFloor->id)->get();
+            foreach ($projectFloorCatalogs as $projectFloorCatalog){
+                $projectFloorCatalogDesigns = DB::table('project_floor_catalog_designs')->where('project_floor_catalog_id', '=', $projectFloorCatalog->id)->get();
+                foreach ($projectFloorCatalogDesigns as $projectFloorCatalogDesign){
+                    $plans[] = [
+                        'design'=>$projectFloorCatalogDesign->name,
+                        'catalog'=>ProductCatalog::find($projectFloorCatalog->catalog_id)->name,
+                        'floor'=>Floor::find($projectFloor->floor_id)->name,
+                        'img'=>ProjectImage::find($projectFloor->project_image_id)->path,
+                        'projectFloorCatalogDesignId'=>$projectFloorCatalogDesign->id,
+                    ];
+                }
+            }
+        }
+
+
         return view('projects.show')
+            ->with('plans', $plans)
             ->with('project', $project);
     }
 
@@ -439,6 +543,9 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+        Flash::error('Project Deleted', 'Project has been deleted successfully.');
+        return redirect()->action('ProjectsController@index');
     }
 }

@@ -285,7 +285,7 @@ $(function () {
         if (fileName != "") {
             $.ajax({
                 type: 'POST',
-                url: 'canvas/templates/updates',
+                url: 'canvas/projects/updates',
                 data: 'file_data=' + JSON.stringify(saveData),
                 success: function (msg) {
                     new PNotify({
@@ -425,7 +425,7 @@ function loadSavedFile(fileName) {
 $(function () {
     $.ajax({
         type: 'GET',
-        url: 'canvas/templates/load-latest',
+        url: 'canvas/projects/load-latest',
         success: function (msg) {
             var fileDetails =  msg;
             clearDrawElements();

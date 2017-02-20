@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->integer('user_id_2');
             $table->integer('address_id');
             $table->float('energy_consumption');
+            $table->string('canvas_data');
             $table->float('budget')->nullable();
             $table->softDeletes();
             $table->timestamps();

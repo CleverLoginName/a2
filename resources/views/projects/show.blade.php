@@ -84,36 +84,37 @@
                 </div>
                 <div class="col-md-12 related_products">
                     <h4>Project Plans</h4>
-                    @php
-                        $projectPlans = \App\ProjectPlan::where('project_id','=',$project->id)->get();
-                    @endphp
                     <div class="row is-table-row">
-                @foreach($projectPlans as $projectPlan)
+                @foreach($plans as $plan)
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                         <div class="product">
-                            <img src="/{!! $projectPlan->img !!}" class="img-responsive col-md-12">
+                            <img src="/{!! $plan['img'] !!}" class="img-responsive col-md-12">
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Design</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p>{!! $projectPlan->design !!}</p>
+                                    <p>{!! $plan['design'] !!}</p>
                                 </div>
                             </div>
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Level</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p>{!! $projectPlan->level !!}</p>
+                                    @if($plan['floor'] != ' Please Select a Level')
+                                    <p>{!! $plan['floor'] !!}</p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Catalog</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p>{!! $projectPlan->catalog !!}</p>
+                                    @if($plan['catalog'] != 'Please Select a Catalog')
+                                    <p>{!! $plan['catalog'] !!}</p>
+                                        @endif
                                 </div>
                             </div>
                             <div class="form-group clearfix">
                                 <label for="_name" class="col-xs-12 col-lg-4 control-label">Edit in Canvas</label>
                                 <div class="col-md-12 col-lg-8">
-                                    <p><a href="{!! url('projects/'.$projectPlan->id.'/canvas') !!}">Link</a> </p>
+                                    <p><a href="{!! url('projects/'.$project->id.'/plans/'.$plan["projectFloorCatalogDesignId"].'/canvas') !!}">Link</a> </p>
                                 </div>
                             </div>
                         </div>

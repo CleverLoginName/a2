@@ -83,7 +83,7 @@
 							</div>
 							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"
 								 id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical"
-								 style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find() !!}:{!! \App\ProductCatalog::find($project_plan->catalog_id)->name !!}</div>
+								 style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find($floor->floor_id)->name !!}:{!! \App\ProductCatalog::find($floorCatalog->catalog_id)->name !!}</div>
 							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">@if($template){!! '1 : '.$template->scale !!} @endif</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
@@ -98,6 +98,7 @@
 								</form>
 							</div>
 						</div>
+
 						<div class="row" style=" margin-bottom:2px; margin-top:2px;"  >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9 text-in-side-menue title">Max Energy :</div>
 							<div class="col-xs-6 col-sm-1 col-md-3 col-lg-3 text-sub-cat" id="max-energy">{!! $total !!} watts</div>
@@ -775,36 +776,6 @@
 
 </script>
 
-<!--
-<div class="modal fade template_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div id="templates">
-                Child elements of container with class="list" becomes list items
-                <ul class="list">
-                    @foreach($plans as $plan)
-
-                        <li>
-                            <div class="row">
-                                <div class="col-md-6"><img src="{!! asset($plan->img) !!}" class="col-md-12"></div>
-                                <div class="col-md-6">
-                                    <a href="{!! url('projects/'.$plan->id.'/canvas') !!}">Open</a>
-                                </div>
-                            </div>
-
-                            <h3 class="name_1 template-item"
-                                data-template-id="{!! $plan->id !!}"
-                                data-template-name="{!! $plan->design !!}"
-                            >{!! $plan->design !!}</h3>
-
-                        </li>
-                    @endforeach
-                </ul>
-
-            </div>
-        </div>
-    </div>
-</div>-->
 
 
 <!-- ========================= MODEL POPUP STARTS ============================ -->
@@ -834,7 +805,7 @@
 											<div class="row">
 												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
 
-												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}">Open</a></div>
+												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}">Open</a></div>
 											</div>
 
 

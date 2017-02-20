@@ -56,7 +56,7 @@
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
 							</div>
-							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-7 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">Fist Floor:Electrical</div>
+							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-7 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find($templateFloor->floor_id)->name !!}:{!! \App\ProductCatalog::find($templateFloorCatalog->catalog_id)->name !!}</div>
 							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">1:100</div>
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
@@ -444,7 +444,7 @@
 
         </div>
         <div class="headerDiv second">
-                Template Floor - Template Catalog
+			{!! \App\Floor::find($templateFloor->floor_id)->name !!}:{!! \App\ProductCatalog::find($templateFloorCatalog->catalog_id)->name !!}
         </div>
         <div class="headerDiv third">
                 <img src="/img/adopto.png" width="90"/>

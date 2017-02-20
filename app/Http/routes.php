@@ -90,8 +90,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('canvas/templates/load-latest', 'ProjectsController@showPlanInCanvas');
     Route::get('projects/{project}/plans/{id}/canvas', 'ProjectsController@editPlanInCanvas');
-    Route::post('projects/{id}/canvas/templates/updates', 'ProjectsController@updatePlanDataInCanvas');
-    Route::get('projects/{id}/canvas/templates/load-latest', 'ProjectsController@loadPlanDataInCanvas');
+    Route::post('projects/{id}/plans/{plan_id}/canvas/projects/updates', 'ProjectsController@updatePlanDataInCanvas');
+    Route::get('projects/{id}/plans/{plan_id}/canvas/projects/load-latest', 'ProjectsController@loadPlanDataInCanvas');
 });
 
 Route::get('export/excel-format/products','ExcelFormatExportsController@productsExport');
