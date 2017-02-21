@@ -58,15 +58,7 @@ class TemplatesController extends Controller
     {
 
         $rules = array(
-            'name'   => 'required',
-            'scale'    => 'required',
-            'energy_rating'    => 'required',
-            'house_watts_per_sqm'    => 'required',
-            'garage_watts_per_sqm'    => 'required',
-            'porch_watts_per_sqm'    => 'required',
-            'terrace_watts_per_sqm'    => 'required',
-            'balcony_watts_per_sqm'    => 'required',
-            'alfresco_watts_per_sqm'    => 'required',
+            'name'   => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -483,15 +475,7 @@ class TemplatesController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'name'   => 'required',
-            'scale'    => 'required',
-            'energy_rating'    => 'required',
-            'house_watts_per_sqm'    => 'required',
-            'garage_watts_per_sqm'    => 'required',
-            'porch_watts_per_sqm'    => 'required',
-            'terrace_watts_per_sqm'    => 'required',
-            'balcony_watts_per_sqm'    => 'required',
-            'alfresco_watts_per_sqm'    => 'required',
+            'name'   => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);

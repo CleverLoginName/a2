@@ -839,7 +839,8 @@
 
 		$('.template_modal').modal('show');
 	});
-
+	var isTemplate = false;
+	var planID = -1;
 	clientName = "{!! $user_1->title.'.'.$user_1->first_name.' '.$user_1->last_name !!}";
 	clientAdddress = "{!! $address->street_name.', '.$address->postal_code.', '.$address->town.', '.$address->state !!}";
 	projectName = "{!! $project->job !!}";
