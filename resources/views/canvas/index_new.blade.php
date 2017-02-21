@@ -855,16 +855,23 @@
 													@endphp
 
 													@foreach($templateFloorCatalogs as $templateFloorCatalog)
+
+														@php
+															$templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
+														@endphp
+
+														@foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
 <div class="row">
 	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
 
-	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalog->id.'/canvas') !!}">Open</a></div>
+	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Open</a></div>
 </div>
 
 
 
 
 
+												@endforeach
 												@endforeach
 												@endforeach
 											</ul>

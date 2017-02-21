@@ -68,7 +68,7 @@
 
                 {!! Form::close() !!}
 
-                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 model_search_results new_project_uploader consultant_results_bg clearfix">
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 new_project_uploader consultant_results_bg clearfix">
 
                     @if ($errors->has('exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
                     @if ($errors->has('empty_exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif

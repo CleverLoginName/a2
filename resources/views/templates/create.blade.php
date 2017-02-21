@@ -34,7 +34,7 @@
                         </select></section>
                 </section>
                 <section class="row form-group">
-                    <section class="col-md-2"><label>Watt Area Per SQM</label></section>
+                    <section class="col-md-2"><label>Wattage Calculator</label></section>
                     <section class="col-md-8">
                         <section class="col-md-12">
                             <section class="row form-group">
@@ -43,14 +43,14 @@
                                 </section>
                                 <section class="col-md-4 clearfix">
                                     <input class="form-control required" id="house_watts_per_sqm"
-                                           name="house_watts_per_sqm" aria-required="true" type="text" placeholder="5w Per SQM">
+                                           name="house_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                                 </section>
                                 <section class="col-md-2" style="text-align: right">
                                     Terrace
                                 </section>
                                 <section class="col-md-4">
                                     <input class="form-control required" id="terrace_watts_per_sqm"
-                                           name="terrace_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                                           name="terrace_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                                 </section>
                             </section>
                             <section class="row form-group">
@@ -59,14 +59,14 @@
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="garage_watts_per_sqm"
-                                       name="garage_watts_per_sqm" aria-required="true" type="text" placeholder="3w Per SQM">
+                                       name="garage_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                             </section>
                             <section class="col-md-2" style="text-align: right">
                                 Balcony
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="balcony_watts_per_sqm"
-                                       name="balcony_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                                       name="balcony_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                             </section>
                             </section>
                             <section class="row form-group" style="text-align: right">
@@ -75,19 +75,19 @@
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="porch_watts_per_sqm"
-                                       name="porch_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                                       name="porch_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                             </section>
                             <section class="col-md-2" style="text-align: right">
                                 Alfresco
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="alfresco_watts_per_sqm"
-                                       name="alfresco_watts_per_sqm" aria-required="true" type="text" placeholder="4w Per SQM">
+                                       name="alfresco_watts_per_sqm" aria-required="true" type="text" placeholder="Square Meters (SQM)?">
                             </section>
                             </section>
                             <section class="row form-group" style="text-align: right">
                             <section class="col-md-2">
-                                Total
+                                Total Watts
                             </section>
                             <section class="col-md-4">
                                 <input class="form-control required" id="total"
