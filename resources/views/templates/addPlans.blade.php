@@ -154,7 +154,7 @@
 
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                    <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                    <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}

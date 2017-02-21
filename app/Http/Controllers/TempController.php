@@ -35,8 +35,10 @@ class TempController extends Controller
         foreach ($catalogs as $catalog) {
 
             $catalog_array = [];
-            $catalog_array['catalog_id'] = $catalog->id;
-            $catalog_array['catalog_name'] = $catalog->name;
+            if($catalog->id != 1){
+                $catalog_array['catalog_id'] = $catalog->id;
+                $catalog_array['catalog_name'] = $catalog->name;
+
 
             $categories = ProductCategory::where('catalog_id', '=', $catalog->id)->get();
             foreach ($categories as $category) {
@@ -114,6 +116,7 @@ class TempController extends Controller
                 $catalog_array['data'][] = $category_array;
             }
             $out[] = $catalog_array;
+        }
         }
 
 

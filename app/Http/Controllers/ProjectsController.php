@@ -26,9 +26,11 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Szykra\Notifications\Flash;
 
 class ProjectsController extends Controller
@@ -347,6 +349,7 @@ class ProjectsController extends Controller
             ])
             ->where('project_floor_catalog_designs.is_active', '=', true)
             ->where('projects.id', '=',$project->id)
+            ->orderBy('project_floor_catalog_designs.id', 'desc')
             ->get();
         if($project_floor_catalog_designs)
             return  view('projects.addPlans')
@@ -741,5 +744,51 @@ class ProjectsController extends Controller
         Flash::success('Updated successfully', 'Updated successfully.');
         return Redirect::to('/projects/create/'.$project->id.'/add-plans');
 
+    }
+
+    public function deletePlanInCanvas(Project $project, $id){
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($id);
+        if($projectFloorCatalogDesign){
+            $projectFloorCatalogDesign->delete();
+            Flash::success('Plan Deleted', 'Plan has been deleted successfully.');
+            return Redirect::to('/projects/create/'.$project->id.'/add-plans');
+        }
+
+        Flash::success('Plan Not Deleted', 'Plan not deleted.');
+        return Redirect::to('/projects/create/'.$project->id.'/add-plans');
+    }
+
+
+    public function cropPlanImage(Project $project, $id)
+    {
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($id);
+        $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
+
+        $projectFloor= ProjectFloor::find($projectFloorCatalog->project_floor_id);
+        if($projectFloor){
+            $projectImage  = DB::table('project_images')->where('id','=',$projectFloor->project_image_id)->first();
+            $img_path = $projectImage->path;
+            $img = Image::make($img_path);
+            $width = number_format(Input::get('width'), 0, '.', '');
+            $height = number_format(Input::get('height'), 0, '.', '');
+            $x = number_format(Input::get('x'), 0, '.', '');
+            $y = number_format(Input::get('y'), 0, '.', '');
+            $rotate = number_format(Input::get('rotate'), 0, '.', '');
+            $rotate = $rotate* -1;
+
+            $img->rotate($rotate);
+            $img->crop($width,$height,$x,$y );
+            $img->save($img_path);
+
+
+            $projectsFloors = ProjectFloor::where('project_id','=',$project->id)->get();
+
+            Flash::success('Updated Successfully', 'Updated Successfully');
+            return Redirect::to('/projects/create/'.$project->id.'/add-plans');
+            return  view('projects.addPlans')
+                ->with('project',$project)
+                ->with('projectsFloors',$projectsFloors)
+                ->with('empty_form',false);
+        }
     }
 }

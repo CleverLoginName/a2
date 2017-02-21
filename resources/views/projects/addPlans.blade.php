@@ -154,7 +154,7 @@
 
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                    <a href="{!! url('projects/create/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                    <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -209,11 +209,9 @@
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn cursor-normal" type="submit" id="2-bc"><span
-                class="breadcrumb-text">New</span></button>
+                class="breadcrumb-text">Manage Projects</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
-    <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">{!! $project->name !!}</span></button>
-    <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
+
 @stop
 
 @section('post-js')

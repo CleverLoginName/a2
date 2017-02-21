@@ -76,15 +76,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('templates/create/{template}/plan-data', 'TemplatesController@addTemplatePlansData');
     Route::get('templates/create/{template}/add-plans', 'TemplatesController@addPlan');
     Route::get('templates/create/{template}/add-plans/{id}/canvas', 'TemplatesController@editPlanInCanvas');
-    Route::get('templates/create/add-plans/{id}/delete', 'TemplatesController@deletePlanInCanvas');
+    Route::get('templates/create/{template}/add-plans/{id}/delete', 'TemplatesController@deletePlanInCanvas');
     Route::post('templates/create/{template}/add-plans/{id}/canvas/templates/updates', 'TemplatesController@updatePlanDataInCanvas');
     Route::get('templates/create/{template}/add-plans/{id}/canvas/templates/load-latest', 'TemplatesController@loadPlanDataInCanvas');
 
     Route::post('templates/create/{template}/add-plans/{id}/crop', 'TemplatesController@cropPlanImage');
+    Route::post('projects/create/{project}/add-plans/{id}/crop', 'ProjectsController@cropPlanImage');
 
 
     Route::resource('projects', 'ProjectsController');
     Route::get('projects/{id}/delete', 'ProjectsController@destroy');
+    Route::get('projects/create/{project}/add-plans/{id}/delete', 'ProjectsController@deletePlanInCanvas');
     Route::post('projects/create/{project}/plan-image', 'ProjectsController@addProjectPlansImage');
     Route::post('projects/create/{project}/plan-data', 'ProjectsController@addProjectPlansData');
     Route::get('projects/create/{project}/add-plans', 'ProjectsController@addplan');

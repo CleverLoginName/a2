@@ -122,6 +122,7 @@ class TemplatesController extends Controller
             ])
             ->where('template_floor_catalog_designs.is_active', '=', true)
             ->where('templates.id', '=',$template->id)
+            ->orderBy('template_floor_catalog_designs.id', 'desc')
             ->get();
          if($template_floor_catalog_designs)
             return  view('templates.addPlans')
