@@ -568,7 +568,7 @@ class TemplatesController extends Controller
         }
     }
     
-    public function editPlansInTemplate($template_id){
+    public function editPlansInTemplate($template_id){dd('safsa');
         $template = Template::find($template_id);
         //session(['template' => $template]);
         return Redirect::to('templates/create/'.$template->id.'/add-plans');

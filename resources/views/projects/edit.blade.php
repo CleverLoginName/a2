@@ -35,6 +35,7 @@
                         @endif
                     </section>
                 </section>
+
                 <section class="row form-group">
                     <section class="col-md-2"><label>Job# / Consultant</label></section>
                     <section class="col-md-2">
@@ -298,12 +299,9 @@
                     </button>
                     <a id="prod-frm-reset" href="{!! url('products') !!}" class="btn add-item-btn" style="margin-right:10px;">Reset</a>
 
-                    @php
-                        $projectPlans = \App\ProjectPlan::where('project_id','=',$project->id)->get();
-                    @endphp
-                    @if($projectPlans)
-                    <a id="prod-frm-reset" href="{!! url('projects/'.$projectPlans[0]->id.'/canvas') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
-                        @endif
+
+                    <a id="prod-frm-reset" href="{!! url('projects/create/'.$project->id.'/add-plans') !!}" class="btn add-item-btn" style="margin-right:10px;">Manage Plans</a>
+
                 </section>
             </form>
         </section>

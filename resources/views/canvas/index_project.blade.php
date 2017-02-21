@@ -24,6 +24,7 @@
 	{{ Html::style('canvas/css/animate.css') }}
 	{{ Html::style('pnotify.custom.min.css') }}
 	{{ Html::style('canvas/css/bom-print.css') }}
+	{{ Html::style('canvas/lib/text/summernote.css') }}
 	<style>
 		@media print {
 			body * {
@@ -74,9 +75,9 @@
 <div id="parent" class="row">
     <div id="sidebar" class="col-xs-12 col-sm-12 col-md-4 col-lg-2" style="background-color: #E7E7E7">
 	<div style=" background-color:#E7E7E7; ">
-		<div class="panel panel-default  body-main inside-body-pan" style="background-color: #51748c;"id="main-pnnel-drag" >
-             <div class="panel-heading back-ground-colour-inner">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-title back-ground-colour-inner line-hight " style="padding-right: 10px; padding-left:0px;">
+		<div class="panel panel-default  body-main " style="background-color: #51748c;"id="main-pnnel-drag" >
+             <div class="panel-heading back-ground-colour-inner" id="main-hadder">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-title back-ground-colour-inner line-hight main-title" style="padding-right: 10px; padding-left:0px;">
 						<div class="row left-align"  style="margin-top: 40px;margin-bottom: 3px">
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
@@ -93,9 +94,14 @@
 								<form class="acidjs-rating-stars">
 									@for($i=1;$i<=$template->energy_rating;$i++)
 									<input type="radio" name="group-1" id="group-1-0" value="5" /><label for="group-1-0"></label>
-									@endfor
-										@endif
+									<input type="radio" name="group-1" id="group-1-1" value="4" /><label for="group-1-1"></label>
+									<input type="radio" name="group-1" id="group-1-2" value="3" /><label for="group-1-2"></label>
+									<input type="radio" name="group-1" id="group-1-3" value="2" /><label for="group-1-3"></label>
+									<input type="radio" name="group-1" id="group-1-4"  value="1" /><label for="group-1-4"></label>
+									<input type="radio" name="group-1" id="group-1-5"  value="1" /><label for="group-1-4"></label>
+										@endfor
 								</form>
+									@endif
 							</div>
 						</div>
 
@@ -124,8 +130,8 @@
 
 
 
-			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body" style="overflow: auto" >
-				<div class="panel panel-default inner-class cat-1 hide-catelog" id="main-0">
+			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-0">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="0" class="catelog-name">
@@ -136,14 +142,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-0">
+							<ul class="level-2 list" style="" id="catlog-0">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-2 hide-catelog" id="main-1">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-1">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="1" class="catelog-name">
@@ -153,7 +159,7 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
-							<ul class="level-2" style=""  id="catlog-1">
+							<ul class="level-2 list" style=""  id="catlog-1">
 
 							</ul>
 
@@ -161,7 +167,7 @@
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-3 hide-catelog" id="main-2">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-2">
 					<div class="panel-heading">
 						<div class="panel-title ading-left-padding title titel-text-size">
 							<div id="2" class="catelog-name">
@@ -171,13 +177,13 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;">
-							<ul class="level-2" style=""  id="catlog-2">
+							<ul class="level-2 list" style=""  id="catlog-2">
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-4 hide-catelog" id="main-3">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-3">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="3" class="catelog-name">
@@ -188,14 +194,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-3">
+							<ul class="level-2 list" style="" id="catlog-3">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-5 hide-catelog" id="main-4">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-4">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="4" class="catelog-name">
@@ -206,14 +212,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-4">
+							<ul class="level-2 list" style="" id="catlog-4">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-6 hide-catelog" id="main-5">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-5">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="5" class="catelog-name">
@@ -224,14 +230,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-5">
+							<ul class="level-2 list" style="" id="catlog-5">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-7 hide-catelog" id="main-6">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-6">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="6" class="catelog-name">
@@ -242,14 +248,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-6">
+							<ul class="level-2 list" style="" id="catlog-6">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-8 hide-catelog" id="main-7">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-7">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="7" class="catelog-name">
@@ -260,14 +266,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-7">
+							<ul class="level-2 list" style="" id="catlog-7">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-9 hide-catelog" id="main-8">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-8">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="8" class="catelog-name">
@@ -278,14 +284,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-8">
+							<ul class="level-2 list" style="" id="catlog-8">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-10 hide-catelog" id="main-9">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-9">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="9" class="catelog-name">
@@ -296,14 +302,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-9">
+							<ul class="level-2 list" style="" id="catlog-9">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-11 hide-catelog" id="main-10">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-10">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="10" class="catelog-name">
@@ -314,14 +320,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-10">
+							<ul class="level-2 list" style="" id="catlog-10">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-12 hide-catelog" id="main-11">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-11">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="11" class="catelog-name">
@@ -332,14 +338,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-11">
+							<ul class="level-2 list" style="" id="catlog-11">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-13 hide-catelog" id="main-12">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-12">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="12" class="catelog-name">
@@ -350,14 +356,14 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-12">
+							<ul class="level-2 list" style="" id="catlog-12">
 							</ul>
 
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default inner-class cat-14 hide-catelog" id="main-13">
+				<div class="panel panel-default inner-class cat hide-catelog" id="main-13">
 					<div class="panel-heading ">
 						<div class="panel-title ading-left-padding title titel-text-size" >
 							<div id="13" class="catelog-name">
@@ -368,7 +374,7 @@
 					</div>
 					<div class="panel-body back-ground-colour-inner inside-body-pan body-inner boddy-defalt-hight scroller" style="overflow-x: hidden;overflow-y:auto;">
 						<div class="clearfix" style=" margin-bottom:4px; margin-top:4px;" >
-							<ul class="level-2" style="" id="catlog-13">
+							<ul class="level-2 list" style="" id="catlog-13">
 							</ul>
 
 						</div>
@@ -380,70 +386,81 @@
 	</div>
 
         <!--Popup -->
+                <div class="modal fade common_popup new_Project_popup" id="myModal" role="dialog">
 
-        <div id="myModal" class="modal">
+                    <div class="modal-dialog custom_popupModel">
+                        <!-- Modal content-->
 
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <br><br><br>
-                <div class="popcontainer">
-                    <header>
-                        <img id="imgProduct"  style="height: 250px;width:250px;"/>
-                    </header>
-                    <nav>
-                        <input type="text" name="smname" id="smname"  value="tttt" style="width: 300px;color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" width="100%"/>
-                        <br>
-                        Product Description : <input type="text" name="productDescription" id="productDescription"  value="tttt" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                    </nav>
-                    <article>
+                        <div class="popup_con clearfix" >
+                            <div class="pd_popup_header">
 
-                        Supplier Name :<input type="text" name="suppName" id="suppName"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Colour(s) :
-                        <br>
-                        Style(s) :<input type="text" name="productStyle" id="productStyle"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Type :<input type="text" name="productType" id="productType"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Energy Rating or Watts :<input type="text" name="productWatt" id="productWatt"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true"/>
-                        <br>
-                        Size:
-                    </article>
-                    <footer>
-                        $<input type="text" name="builderproductPrice" id="builderproductPrice"  value="supname" style="color: #C0C0C0;border-color: rgba(0,0,0,0)" readonly="true" size=""/>*(inc GST)
-                        <span id="builderproductPrice" v/>
-                    </footer>
+                                <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+
+                                <div class="image_div" align="center">
+                                    <img class="pd_img"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
+                                </div>
+                            </div>
+                            <div class="pd_details_con">
+								<div class="col-md-12 padding_L">
+                                    <h2 name="smname" id="left_popup_productName">LED SS - 25mm Chrome</h2>
+                                </div>
+                                <div class="col-md-7 padding_L">
+                                    <p >Product Description.</p><p id="left_popup_productDescription" ></p>
+                                </div>
+
+                                <div class="col-md-5 padding_R padding_L ">
+                                    <p>
+										<strong>Supplier :</strong><span id="left_popup_suppName"> Clipsal</span><br>
+										<strong>Colour :</strong><span id="left_popup_productStyle">White, Chrome</span><br>
+										<strong>Style :</strong><span id="left_popup_productType">  LED</span><br>
+										<strong>Watts :</strong><span id="left_popup_productWatt">10 w</span><br>
+										<strong>Rating</strong>:N/A<br>
+										<strong>Size</strong>:N/A
+									</p>
+
+                                </div>
+                                <div class="price_holder clearfix">
+                                    <div class="col-md-5 padding_L padding_R margin_top_20">
+                                        <strong><span class="pd_price" name="builderproductPrice" id="left_popup_builderproductPrice"></span>
+                                        <span class="pd_price_txt">(inc GST)</span></strong>
+                                    </div>
+
+                                    <div class="col-md-4 padding_L padding_R" style="display: none">
+                                        <span class="pd_price_txt lbl_red">WAS<br>
+                                            <strong ><span class="pd_price" id="left_popup_wasprice"></span></strong>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 padding_L padding_R" style="display: none">
+                                        <span class="pd_price_txt lbl_green">SAVE<br>
+                                            <strong ><span class="pd_price" id="left_popup_saveprice"></span></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        </div>
         <!-- -->
 
 	<div  style="vertical-align: bottom;" class="clearfix ">
 		<div class="panel panel-default bom-medder bom-hide" id="bom-area">
-			<div class="panel-heading test1 ">
+			<div class="panel-heading test1 " id="bom-hedder">
 				<div class="panel-title ading-left-padding title titel-text-size" >
 					BOM
 				</div>
 				</div>
-				<div class="panel-body back-ground-colour-inner selected-panel-body-pan">
-				<div class="side-bar2" id="bom-table">
-					<div class="property-div" >
-						<table id="productInfo" border="1" cellpadding="2">
+				<div class="panel-body back-ground-colour-inner selected-panel-body-pan" id="bom-body">
+				<div class="side-bar2" id="bom-table" style="overflow-y:auto ">
+					<div class="property-div" style="width:100%;">
+						<table  border="1" cellpadding="2" id="productInfo" >
 							<tr>
 								<th>Name</th>
 								<th>Unit Price ($)</th>
 								<th>Quantity</th>
 								<th>Total Price ($)</th>
 							</tr>
-							<!--<tr>
-								<td><b>Name</b></td>
-								<td><b>Price</b></td>
-								<td><b>Discount</b></td>
-								<td><b>Energy(W)</b></td>
-								<td><b>Visible</b></td>
-							</tr>-->
 						</table>
 					</div>
 				</div>
@@ -489,7 +506,7 @@
 					<span class="tooltiptext">Save</span>
 				</li>
 
-				<li class="tool-item" id="print-btn">
+				<li class="tool-item top-menu-item" id="print-btn" >
 					<a href="javascript:void(0)">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/printIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/printIcon.png') !!}">
@@ -665,11 +682,24 @@
 		</ul>
 	</div>
 
-	<div id="text-container">
-		<input id="type-text" type="text" name="type-text" value="" placeholder="Enter your text here"/><br/>
-		<input id="type-text-size" type="text" name="type-text-size" value="15" placeholder="Font size in pixels" size="3" maxlength="3"/>px<br/>
-		<button id="text-ok">OK</button>
-		<button id="text-cancel">Cancel</button>
+	<div class="modal fade common_popup new_Project_popup" id="text-container" role="dialog">
+		<div class="modal-dialog custom_popupModel ">
+			<div class="popup_con">
+				<div class="pd_popup_header" align="center">
+					<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+				</div>
+				<div>
+					<div style="width: 100%;color: white"><img src="{!! asset('/img/text.png') !!}"><b> Plan Comment:</b></div>
+				</div>
+				<div style="color: white; margin: 10px">
+					<p> Font Size <select name="fnt_sizes" id="text-container-fontsize" style="color: black; background-color: white"></select></p>
+					<!--<input id="type-text-size" type="text" name="type-text-size" value="15" placeholder="Font size in pixels" size="3" maxlength="3"/>px<br/>-->
+					<textarea id="type-text" rows="6" cols="55" placeholder="Enter your text here" style="color: black; width: 100%; resize: none;"></textarea><br/>
+					<input id="text-ok" name="add_btn" type="button" class="pd_btn_save" value="Add" style="margin: 0px;">
+					<input id="text-cancel" name="cancel_btn" type="button" class="pd_btn_save" value="Cancel" style="margin: 0px 10px 0px 0px;">
+				</div>
+			</div>
+		</div>
 	</div>
 
 	</div>
@@ -686,43 +716,83 @@
 	<div id="item-popup-remW" class="item-popup " title="Remove Connection">
 		<img src="/img/DesignCanvassRemoveSwitchWire.png" class="image-background">
 	</div>
+
+	<div id="item-popup-connections" class="item-popup " title="Rearrange Connection">
+		<img src="/img/re_arrange.png" class="image-background">
+	</div>
 </div>
 
-<span class="canvas-tooltip-span" id="span-tooltip-can">
-	<table class="noborder">
-		<tbody>
-			<tr>
-				<th id="can-tool-title"></th>
-				<td rowspan="2" class="noborder">
-					<img id="can-tool-image" alt="" src=""/>
-				</td>
-			</tr>
-			<tr>
-				<td id="can-tool-product-code" class="noborder"></td>
-			</tr>
-			<tr>
-				<td class="noborder">Fit-Off Dimensions:
-					<ul>
-						<li id="can-tool-product-elevation"></li>
-						<li id="can-tool-product-location"></li>
-					</ul>
-				</td>
-				<td align="center" class="noborder"><h4 id="can-tool-product-power"></h4><h5>watts</h5></td>
-			</tr>
-			<tr>
-				<td colspan="2" class="noborder">
-					<input type="text" id="can-tool-product-note" style="color:black; width:100%;" placeholder="Notes"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right" class="noborder">
-					<!--<button type="button" id="can-tool-btn-cancel" class="btn btn-primary">Edit</button>-->
-					<button type="button" id="can-tool-btn-save" class="btn btn-primary">Save</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</span>
+<!--PRODUCT ICON POP UP -->
+
+        <div class="modal fade common_popup new_Project_popup" id="productIconModal" role="dialog" style="box-shadow: 10px 10px 5px #888888;">
+            <div class="modal-dialog custom_popupModel ">
+
+                <!-- Modal content-->
+                <!--<div class="modal-content clearfix">-->
+                <div class="popup_con" style="box-shadow: 10px 10px 5px #888888;">
+                    <div class="pd_popup_header" align="center">
+
+                        <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+                        <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
+						<!--this popup is not responsive , for best viewing exprince-->
+                        <img class="pd_img " src="images/pd_1.png" id="popupImage" />
+                        <div class="ico_cw" style="border-style: solid;border-width: 1px;border-color:gray"><img style="width:50px;height:50px;" src="images/ico_cw.jpg" id="popupImageIcon"/></div>
+                    </div>
+                    <div class="pd_details_con">
+                        <h2 id="canvas_popup_productName" class="no-margin" style="max-width:100%;  overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">LED SS - 25mm Chrome</h2>
+                        <p class="no-margin"><strong>Color:</strong> <span id="canvas_popup_productColor">xx</span></p>
+                        <p class="no-margin"><strong>Style:</strong> <span id="canvas_popup_productStyle"></span></p>
+                        <p class="no-margin"><strong>Watts:</strong> <span id="canvas_popup_productWatt"></span></p>
+
+                        <div class="col-md-6 padding_L no-margin"><strong>SIV Code:</strong> <span id="canvas_popup_SIVcode"></span></div>
+
+                        <div class="col-md-6 margin_top-20 text-right padding_R">
+                            <span class="pd_price"><strong>$<span id="canvas_popup_productPrice">00</span></strong></span>
+                            <span class="pd_price_txt">(inc GST)</span>
+                        </div>
+
+
+                        <div class="pd_commentbox">
+                            <input  type="text" list="comments" id="displayvalues" style="color: black; width: 100%;" width="50" placeholder="Add Comment Here" maxlength="150" />
+                            <datalist id="comments" style="color: black; width: 100%;"></datalist>
+                        </div>
+
+                        <input id="savevalues" name="save_btn" type="button" class="pd_btn_save" value="SAVE">
+                        <textarea id="display_notes" rows="3" cols="50" style="color: black;background-color:#52748d;border: 0px;color: #fff; width: 100%;resize: none;" readonly></textarea>
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--PRODUCT ICON POP UP END-->
+
+<!--project comment section-->
+<div class="modal fade common_popup new_Project_popup" id="project_comment_popup" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Comments :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+				<!--<textarea id="project_comment_area" placeholder="Enter text ..." style="width: 100%;color: black;height: 300px;line-height: 2em;"></textarea>
+				<textarea id="project_comment_display" placeholder="Enter text ..." style="width: calc(100% - 100px);color: black;height: 300px;line-height: 2em;"></textarea>-->
+				<textarea   id="project_comment_area" style="width: 100%"></textarea>
+				<!--<datalist id="comments" style="color: black; width: 100%;"></datalist>-->
+				<!--<div id="project_comment_area"></div>-->
+				<div id="project_comment_display" style="width:calc(100% - 15px);    border-bottom: 0.2px dashed #51748c !important;height: 0.3px"></div>
+			</div>
+			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Save" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancle" style="color: white">
+		</div>
+	</div>
+</div>
+
+<!--project comment section end-->
 
 
 {{ Html::script('lib/jquery-3.1.1.js') }}
@@ -730,6 +800,7 @@
 {{ Html::script('canvas/js/canvas_items/canvas_item.js') }}
 {{ Html::script('canvas/js/canvas_items/drawing_item.js') }}
 {{ Html::script('canvas/js/canvas_items/product_item.js') }}
+{{ Html::script('canvas/js/canvas_helper.js') }}
 {{ Html::script('canvas/js/draw-tool.js') }}
 {{ Html::script('canvas/js/bom.js') }}
 {{ Html::script('canvas/js/controllers_project.js') }}
@@ -741,6 +812,7 @@
 {{ Html::script('canvas/js/scripts-expand.js') }}
 {{ Html::script('lib/jquery.ui.touch-punch.min.js') }}
 {{ Html::script('canvas/bootstrap/js/bootstrap.min.js') }}
+{{ Html::script('canvas/lib/text/summernote.js') }}
 {{ Html::script('canvas/dist/js/lobipanel.js') }}
 {{ Html::script('lib/highlight/highlight.pack.js') }}
 {{ Html::script('canvas/js/get-products.js') }}

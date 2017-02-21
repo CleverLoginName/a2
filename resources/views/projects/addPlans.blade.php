@@ -3,9 +3,9 @@
 
 @section('main-content')
 
-        @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+        @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
             @php
-                $model = "modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
+                $model = "modal_".$projectFloorCatalogDesign->project_floor_catalog_design_id;
             @endphp
 
             <div class="modal fade" id="{!! $model !!}" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
@@ -17,19 +17,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <img id="image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" src="{!! asset($templateFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <img id="image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" src="{!! asset($projectFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             </div>
                             <div style="padding-top: 15px">
-                                {!! Form::open(['url' => 'templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
-                                <input type="hidden" name="width" id="width_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
-                                <input type="hidden" name="height" id="height_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
-                                <input type="hidden" name="x" id="x_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
-                                <input type="hidden" name="y" id="y_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
-                                <input type="hidden" name="rotate" id="rotate_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" value="">
+                                {!! Form::open(['url' => 'projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
+                                <input type="hidden" name="width" id="width_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="height" id="height_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="x" id="x_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="y" id="y_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" value="">
+                                <input type="hidden" name="rotate" id="rotate_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" value="">
                                 {!! Form::submit('Save & Exit',['class'=>'btn_save']) !!}
                                 {!! Form::close() !!}
-                                <button class="btn_save" onclick="rotate_left_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}()">Rotate Clockwise</button>
-                                <button class="btn_save" onclick="rotate_right_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}()">Rotate Anti-clockwisw</button>
+                                <button class="btn_save" onclick="rotate_left_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}()">Rotate Clockwise</button>
+                                <button class="btn_save" onclick="rotate_right_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}()">Rotate Anti-clockwisw</button>
 
                                 <button type="button" class="btn_save" data-dismiss="modal">Close</button>
                             </div>
@@ -53,14 +53,14 @@
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-12 content_left">
 
             <div class="form_container clearfix">
-                {!! Form::open(['url' => 'templates/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-3 col-lg-3 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word;height:275px']) !!}
+                {!! Form::open(['url' => 'projects/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-3 col-lg-3 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word;height:275px']) !!}
 
                 <div id="dropzonePreview" class="dz-default dz-message">
                     <div class="form-group">
                         <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
                         <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
                         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="template_id" id="template_id" value="{!! $template->id !!}">
+                        <input type="hidden" name="project_id" id="project_id" value="{!! $project->id !!}">
 
                     </div>
                 </div>
@@ -68,28 +68,28 @@
 
                 {!! Form::close() !!}
 
-                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 model_search_results new_template_uploader consultant_results_bg clearfix">
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 model_search_results new_project_uploader consultant_results_bg clearfix">
 
                     @if ($errors->has('exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
                     @if ($errors->has('empty_exists')) <span style="color: red">Floor & Catalog Already Exists. Please Select Another Combination</span> @endif
                     <ul>
 
-                            @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+                            @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
                                 @php
-                                    $templateFloor = \App\TemplateFloor::find($templateFloorCatalogDesign->template_floor_id);
+                                    $projectFloor = \App\ProjectFloor::find($projectFloorCatalogDesign->project_floor_id);
                                 @endphp
                                 <li>
                                     <div class="consultant_wrapper clearfix">
                                         <div class="col-md-4 img_consultant">
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                                <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}">
-                                                    <p>@if($templateFloorCatalogDesign->template_floor_catalog_design){!! $templateFloorCatalogDesign->template_floor_catalog_design !!}@else{!! $templateFloorCatalogDesign->template_name !!}@endif {!! $templateFloorCatalogDesign->floor_name !!}</p>
-                                                    <img src="{!! asset($templateFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
+                                                <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}">
+                                                    <p>@if($projectFloorCatalogDesign->project_floor_catalog_design){!! $projectFloorCatalogDesign->project_floor_catalog_design !!}@else{!! $projectFloorCatalogDesign->project_name !!}@endif {!! $projectFloorCatalogDesign->floor_name !!}</p>
+                                                    <img src="{!! asset($projectFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
                                                 </a>
                                             </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 @php
-                                                    $model = "#modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
+                                                    $model = "#modal_".$projectFloorCatalogDesign->project_floor_catalog_design_id;
                                                 @endphp
                                                 <br/>
 
@@ -102,7 +102,7 @@
                                                         <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
                                                         </td>
                                                         <td width="15"></td>
-                                                        <td class="col-md-4"> <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
+                                                        <td class="col-md-4"> <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
 
                                                         </td>
                                                     </tr>
@@ -116,19 +116,19 @@
 
                                         <div class="col-md-8 desc_plan">
 
-                                            {!! Form::open(['url' => 'templates/create/'.$template->id.'/plan-data','method'=>'POST']) !!}
+                                            {!! Form::open(['url' => 'projects/create/'.$project->id.'/plan-data','method'=>'POST']) !!}
 
-                                            {{Form::hidden('id',$templateFloorCatalogDesign->template_floor_catalog_design_id)}}
-                                            <h5>House Design Template</h5>
-                                            <p>{!! $templateFloorCatalogDesign->image_name !!} : (Not Available Yet)kbs </p>
+                                            {{Form::hidden('id',$projectFloorCatalogDesign->project_floor_catalog_design_id)}}
+                                            <h5>House Design project</h5>
+                                            <p>{!! $projectFloorCatalogDesign->image_name !!} : (Not Available Yet)kbs </p>
 
                                             <div class="col-md-12 margin_top_20">
                                                 <div class="form-group">
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Design</label>
                                                     <div class="col-md-12 col-lg-10">
-                                                        @if($templateFloorCatalogDesign->template_floor_catalog_design != '')
+                                                        @if($projectFloorCatalogDesign->project_floor_catalog_design != '')
                                                             <input class="form-control required" id="design"
-                                                                   name="design" aria-required="true" type="text" placeholder="" value="{!! $templateFloorCatalogDesign->template_floor_catalog_design !!}">
+                                                                   name="design" aria-required="true" type="text" placeholder="" value="{!! $projectFloorCatalogDesign->project_floor_catalog_design !!}">
                                                         @else
                                                             <input class="form-control required" id="design"
                                                                    name="design" aria-required="true" type="text" placeholder="" value="">
@@ -141,20 +141,20 @@
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Level </label>
                                                     <div class="col-md-12 col-lg-10">
                                                         <?php  $i = 0;$j = 0; ?>
-                                                        {!! Form::select('level',$templateFloors,$templateFloor->floor_id,['class' => 'form-control']) !!}
+                                                        {!! Form::select('level',$projectFloors,$projectFloor->floor_id,['class' => 'form-control']) !!}
 
                                                     </div>
 
                                                     <label for="first_name1" class="col-xs-12 col-lg-2 control-label">Catalog</label>
                                                     <div class="col-md-12 col-lg-10">
-                                                        {!! Form::select('catalog_id',$templateCatalogs,$templateFloorCatalogDesign->catalog_id,['class' => 'form-control']) !!}
+                                                        {!! Form::select('catalog_id',$projectCatalogs,$projectFloorCatalogDesign->catalog_id,['class' => 'form-control']) !!}
 
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
-                                                    <a href="{!! url('templates/create/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                    <a href="{!! url('projects/create/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -205,14 +205,14 @@
     <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
                                            src="{{ URL::asset('resources/images/Black/plan.png') }}"></span><span
-                class="breadcrumb-text">Templates</span></button>
+                class="breadcrumb-text">projects</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn cursor-normal" type="submit" id="2-bc"><span
                 class="breadcrumb-text">New</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">{!! $template->name !!}</span></button>
+                class="breadcrumb-text">{!! $project->name !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
 @stop
 
@@ -246,16 +246,16 @@
         }
 
         Dropzone.autoDiscover = false;
-        /* var myDropzone = new Dropzone("#filexx",{ url: "{!! url('templates/create/plans') !!}"});*/
+        /* var myDropzone = new Dropzone("#filexx",{ url: "{!! url('projects/create/plans') !!}"});*/
 
         var myDropzone = new Dropzone("#real-dropzone", {
             maxFiles: 1,
             uploadMultiple: false,
             sending: function (file, xhr, formData) {
                 formData.append('_token', $('#token').val()),
-                        formData.append('template_id', $('#template_id').val())
+                        formData.append('project_id', $('#project_id').val())
             },
-            url: "{!! url('templates/create/'.$template->id.'/plan-image') !!}",
+            url: "{!! url('projects/create/'.$project->id.'/plan-image') !!}",
             acceptedFiles: '.jpg, .jpeg, .png, .svg, .pdf'
         });
 
@@ -273,14 +273,14 @@
                         addclass: "stack-bottomright",
                         delay:1500
                 });
-                    window.location.href = '{!! url('templates/create/'.$template->id.'/add-plans') !!}';
+                    window.location.href = '{!! url('projects/create/'.$project->id.'/add-plans') !!}';
                 }, 2000);
 
 
             }else{
 
             }*/
-            window.location.href = '{!! url('templates/create/'.$template->id.'/add-plans') !!}';
+            window.location.href = '{!! url('projects/create/'.$project->id.'/add-plans') !!}';
            //
 
 //console.log('test');
@@ -296,18 +296,18 @@
 
     <script>
 
-                @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+                @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
 
-        var cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
-        var canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
-        var cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!};
+        var cropBoxData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!};
+        var canvasData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!};
+        var cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!};
 
 
-        function rotate_left_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}() {
-            cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.rotate(45);
+        function rotate_left_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}() {
+            cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.rotate(45);
         }
-        function rotate_right_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}() {
-            cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.rotate(-45);
+        function rotate_right_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}() {
+            cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.rotate(-45);
         }
 
         @endforeach
@@ -315,34 +315,34 @@
     window.addEventListener('DOMContentLoaded', function () {
 
 
-                    @foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+                    @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
                     @php
-                        $model = "modal_".$templateFloorCatalogDesign->template_floor_catalog_design_id;
+                        $model = "modal_".$projectFloorCatalogDesign->project_floor_catalog_design_id;
                     @endphp
 
-            var image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = document.getElementById('image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}');
-            $('#modal_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').on('shown.bs.modal', function () {
-                cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = new Cropper(image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}, {
+            var image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!} = document.getElementById('image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}');
+            $('#modal_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').on('shown.bs.modal', function () {
+                cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!} = new Cropper(image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}, {
                     autoCropArea: 0.5,
                     ready: function () {
 
                         // Strict mode: set crop box data first
-                        cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.setCropBoxData(cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}).setCanvasData(canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!});
+                        cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.setCropBoxData(cropBoxData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}).setCanvasData(canvasData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!});
                     },
                     crop: function(e) {
 
-                        $('#x_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.x);
-                        $('#y_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.y);
-                        $('#width_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.width);
-                        $('#height_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.height);
-                        $('#rotate_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}').val(e.detail.rotate);
+                        $('#x_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').val(e.detail.x);
+                        $('#y_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').val(e.detail.y);
+                        $('#width_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').val(e.detail.width);
+                        $('#height_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').val(e.detail.height);
+                        $('#rotate_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}').val(e.detail.rotate);
 
                     }
                 });
             }).on('hidden.bs.modal', function () {
-                cropBoxData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.getCropBoxData();
-                canvasData_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!} = cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.getCanvasData();
-                cropper_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}.destroy();
+                cropBoxData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!} = cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.getCropBoxData();
+                canvasData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!} = cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.getCanvasData();
+                cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.destroy();
             });
 
 

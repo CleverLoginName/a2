@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Szykra\Notifications\Flash;
 
 class ProjectsController extends Controller
@@ -253,6 +254,121 @@ class ProjectsController extends Controller
 
     return Redirect::to('/projects/'.$project->id.'/plans/0/canvas');
     }
+
+    public function addProjectPlansImage(Project $project,Request $request)
+    {
+        $file = $request->file('file');
+        $randStr = Str::random(16);
+        $randFileName = $randStr.'.'.$file->getClientOriginalExtension();
+        //Move Uploaded File
+        $destinationPath = 'uploads/projects/'.$request->get('project_id').'/originals/';
+        $destinationPathThumb = 'uploads/projects/'.$request->get('project_id').'/300x200/';//dd(public_path().'/'.$destinationPath);
+        $destinationPathPdf = 'uploads/projects/'.$request->get('project_id').'/pdf/';//dd(public_path().'/'.$destinationPath);
+
+        File::exists('uploads') or File::makeDirectory('uploads');
+        File::exists('uploads/projects') or File::makeDirectory('uploads/projects');
+        File::exists('uploads/projects/'.$request->get('project_id')) or File::makeDirectory('uploads/projects/'.$request->get('project_id'));
+        File::exists(public_path().'/'.$destinationPath) or File::makeDirectory(public_path().'/'.$destinationPath);
+        File::exists(public_path().'/'.$destinationPathThumb) or File::makeDirectory(public_path().'/'.$destinationPathThumb);
+
+
+        if('pdf' === $file->getClientOriginalExtension()){
+
+            $pdf_path = public_path().'/'.$destinationPath.'pdf/';
+            File::exists($pdf_path) or File::makeDirectory($pdf_path);
+            $file->move($pdf_path,$randFileName);
+
+            $pdf = new Pdf($pdf_path.$randFileName);
+            $pdf->setOutputFormat('png')
+                ->saveImage($destinationPath.$randStr.'.png');
+
+            $randFileName = $randStr.'.png';
+        }else{
+            $file->move($destinationPath,$randFileName);
+        }
+
+
+        $projectImage = new ProjectImage();
+        $projectImage->name = $file->getClientOriginalName();
+        $projectImage->path = $destinationPath.$randFileName;
+        $projectImage->save();
+
+        $projectFloor = new ProjectFloor();
+        $projectFloor->project_image_id = $projectImage->id;
+        $projectFloor->floor_id = 1;
+        $projectFloor->canvas_data = '[]';
+        $projectFloor->project_id = $request->get('project_id');
+        $projectFloor->save();
+
+        $projectFloorCatalog = new ProjectFloorCatalog();
+        // $projectFloorCatalog->canvas_data = '';
+        $projectFloorCatalog->project_floor_id = $projectFloor->id;
+        $projectFloorCatalog->catalog_id = 1;
+        //  $projectFloorCatalog->is_active = true;
+        $projectFloorCatalog->save();
+
+
+        $projectFloorCatalogDesign = new ProjectFloorCatalogDesign();
+        $projectFloorCatalogDesign->canvas_data = '[]';
+        $projectFloorCatalogDesign->project_floor_catalog_id = $projectFloorCatalog->id;
+        $projectFloorCatalogDesign->name = '';
+        $projectFloorCatalogDesign->is_active = true;
+        $projectFloorCatalogDesign->save();
+
+        Flash::success('Image Added', 'Image has been added successfully.');
+
+
+    }
+
+    public function addPlan(Project $project, Request $request){//dd($project);
+        //$templatesFloors = TemplateFloor::where('template_id','=',session('template')->id)->get();
+        //$tempalateFloorCatalogs = TemplateFloorCatalog::where('template_floor_id')
+        //dd($template);
+
+        $projectCatalogs = ProductCatalog::lists('name','id');
+        $projectFloors = Floor::lists('name','id');
+        $project_floor_catalog_designs = DB::table('project_floor_catalog_designs')
+            ->join('project_floor_catalogs','project_floor_catalogs.id','=','project_floor_catalog_designs.project_floor_catalog_id')
+            ->join('project_floors','project_floors.id','=','project_floor_catalogs.project_floor_id')
+            ->join('projects','projects.id','=','project_floors.project_id')
+            ->join('project_images','project_floors.project_image_id','=','project_images.id')
+            ->join('floors','project_floors.floor_id','=','floors.id')
+            ->join('product_catalogs','project_floor_catalogs.catalog_id','=','product_catalogs.id')
+            ->select([
+                'project_images.path as image_path',
+                'project_images.name as image_name',
+                'floors.name as floor_name',
+                'project_floors.id as project_floor_id',
+                'project_floor_catalog_designs.id as project_floor_catalog_design_id',
+                'project_floor_catalog_designs.name as project_floor_catalog_design',
+                'product_catalogs.name as catalog_name',
+                'product_catalogs.id as catalog_id',
+                'project_floor_catalog_designs.name as project_name'
+            ])
+            ->where('project_floor_catalog_designs.is_active', '=', true)
+            ->where('projects.id', '=',$project->id)
+            ->get();
+        if($project_floor_catalog_designs)
+            return  view('projects.addPlans')
+                ->with('project',$project)
+                ->with('projectCatalogs',$projectCatalogs)
+                ->with('projectFloors',$projectFloors)
+                ->with('projectFloorCatalogDesigns',$project_floor_catalog_designs);
+
+        return  view('projects.addPlans')
+            ->with('project',$project)
+            ->with('projectCatalogs',$projectCatalogs)
+            ->with('projectFloors',$projectFloors)
+            ->with('projectFloorCatalogDesigns',$project_floor_catalog_designs);
+
+    }
+
+
+    /*public function editPlansInProject($id){
+        $project = Project::find($id);
+        //session(['template' => $template]);
+        return Redirect::to('projects/create/'.$project->id.'/add-plans');
+    }*/
 
 
     public function editPlanInCanvas(Project $project, $id)
