@@ -664,4 +664,82 @@ class ProjectsController extends Controller
         Flash::error('Project Deleted', 'Project has been deleted successfully.');
         return redirect()->action('ProjectsController@index');
     }
+
+
+
+    public function addProjectPlansData(Project $project,Request $request){
+        //dd($request->all());
+
+        /**************************************************************************************************************/
+        $exists = DB::table('project_floor_catalog_designs')
+            ->join('project_floor_catalogs', 'project_floor_catalogs.id', '=', 'project_floor_catalog_designs.project_floor_catalog_id')
+            ->join('project_floors', 'project_floors.id', '=', 'project_floor_catalogs.project_floor_id')
+            ->where('project_floors.floor_id', '=', $request->get('level'))
+            ->where('project_floor_catalogs.catalog_id', '=',  $request->get('catalog_id'))
+            ->where('project_floor_catalog_designs.name', '=',  $request->get('design'))
+            ->where('project_floor_catalog_designs.id', '!=' , $request->get('id'))
+            ->orWhereNull('project_floor_catalog_designs.id')
+            ->select('project_floors.id')
+            ->get();
+
+
+        $rules = array(
+            'street_name'   => 'required'
+        );
+
+        if($exists){
+            $validator = Validator::make($request->all(), $rules);
+
+            $validator->after(function($validator) {
+                $validator->errors()->add('exists', 'Floor & Catalog Already Exists');
+            });
+            return Redirect::to('/projects/create/'.$project->id.'/add-plans')
+                ->withErrors($validator);
+        }
+
+
+        /**************************************************************************************************************/
+
+        $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($request->get('id'));
+        $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
+        $projectFloor = ProjectFloor::find($projectFloorCatalog->project_floor_id);
+        $project = Project::find($projectFloor->project_id);
+
+        $projectFloorCatalog->catalog_id = $request->get('catalog_id');
+        $projectFloorCatalogDesign->name = $request->get('design');
+        $projectFloorCatalogDesign->save();
+        $projectFloorCatalog->save();
+
+        $projectFloor->floor_id = $request->get('level');
+        // $img_parent = $templateFloor->template_image_id;
+        //$canvas_data_parent = $templateFloor->canvas_data;
+
+
+
+        /**************************************************************************************************************/
+
+        $tfloors = ProjectFloor::where('project_id', '=',$project->id)->
+        where('floor_id', '=',$projectFloor->floor_id)->
+        get();
+        //dd($tfloors);
+        // foreach ($tfloors as $tfloor){
+        if(($tfloors)&&(count($tfloors)>0)){
+            $t = ProjectFloor::find($tfloors[0]->id);
+            //$t->template_image_id = $img_parent;
+            $projectFloor->canvas_data= $t->canvas_data;
+        }
+        //$t->save();
+        //}
+
+
+        $projectFloor->save();
+
+        /**************************************************************************************************************/
+
+        $projectFloors = ProjectPlan::where('project_id','=',$project->id)->get();
+
+        Flash::success('Updated successfully', 'Updated successfully.');
+        return Redirect::to('/projects/create/'.$project->id.'/add-plans');
+
+    }
 }

@@ -82,7 +82,7 @@
                                     <div class="consultant_wrapper clearfix">
                                         <div class="col-md-4 img_consultant">
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-                                                <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}">
+                                                <a href="{!! url('projects/'.$project->id.'/plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}">
                                                     <p>@if($projectFloorCatalogDesign->project_floor_catalog_design){!! $projectFloorCatalogDesign->project_floor_catalog_design !!}@else{!! $projectFloorCatalogDesign->project_name !!}@endif {!! $projectFloorCatalogDesign->floor_name !!}</p>
                                                     <img src="{!! asset($projectFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
                                                 </a>
@@ -102,7 +102,7 @@
                                                         <td class="col-md-8"> <a data-target="{!! $model !!}" data-toggle="modal" class="btn_save col-md-12" style="color:white">Crop / Rotate</a>
                                                         </td>
                                                         <td width="15"></td>
-                                                        <td class="col-md-4"> <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
+                                                        <td class="col-md-4"> <a href="{!! url('projects/'.$project->id.'/plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}" class="btn_save col-md-12" id="Reset" style="color: white">Edit</a>
 
                                                         </td>
                                                     </tr>
