@@ -161,81 +161,24 @@
                         <th scope="col" width="8%">Total Qty.</th>
                         <th scope="col" width="10%">Variation Price <span class="txtSmall">inc gst.</span></th>
                     </tr>
+                    @php
+                        $no = 0;
+                    @endphp
+                    @foreach(session('qty') as $key=>$value)
+                        @php
+                            $product = session('products')[$key];
+                            $no = ++$no;
+                        @endphp
                     <tr>
-                        <td>1</td>
-                        <td>Interior Lights</td>
+                        <td>{!! $no !!}</td>
+                        <td>{!! $product->name !!}</td>
                         <td>AC0000580</td>
-                        <td>Harley Oyster 15w LED RND Opal</td>
-                        <td>5</td>
-                        <td>$248.95</td>
+                        <td>{!! $product->description !!}</td>
+                        <td>{!! $value !!}</td>
+                        <td>{!! $product->builder_price !!}</td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Interior Lights</td>
-                        <td>AC0000581	</td>
-                        <td>Delta Oyster 18w LED RND SCH</td>
-                        <td>10</td>
-                        <td>$1485.00</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Interior Lights</td>
-                        <td>AC0000582	</td>
-                        <td>Detroit Oyster 18w LED 3K SOR SCH	</td>
-                        <td>14</td>
-                        <td>$2861.74</td>
-                    </tr>
+                    @endforeach
 
-                    <tr>
-                        <td>9</td>
-                        <td>Miscellaneous</td>
-                        <td>554J4-WE</td>
-                        <td>Junction Box - Internal</td>
-                        <td>&nbsp;</td>
-                        <td>$88.77</td>
-                    </tr>
-
-                    <tr>
-                        <td>12</td>
-                        <td>Argus	</td>
-                        <td>N/A</td>
-                        <td>TP-LINK Network Switch - 24-port<br>
-                            The TL-SG1024 Gigabit Ethernet Switch provides you with a high-performance, lowcost, easy-to-use, seamless and standard upgrade to improve old network to 1000Mbps network. All 24 ports support auto MDI/MDIX, no need to worry about the cable type, simply plug and play. Moreover, with the innovative energy-efficient technology,
-                            the TL-SG1024 can save up to 25% of the power consumption and 80%
-                            of the packaging material can be recycled, making it an eco-friendly solution for your business network.
-                            Parts list:<br>
-                            1 x TP Link 24 port switch<br>
-                            1 x Install of Network switch<br>
-                            **Does not include power point<br>
-                            **Does not include patch leads<br>
-                        </td>
-                        <td>1</td>
-                        <td>$403.93</td>
-                    </tr>
-                    <tr>
-                        <td>13</td>
-                        <td>Ducted Vacuum	</td>
-                        <td>N/A</td>
-                        <td>DUC VAC DELUXE HOSE KIT UPGRADE - 9M	</td>
-                        <td>1</td>
-                        <td>$74.30</td>
-                    </tr>
-                    <tr>
-                        <td>14</td>
-                        <td>Heating</td>
-                        <td>N/A</td>
-                        <td>Regional Surcharge</td>
-                        <td>1</td>
-                        <td>$120.00</td>
-                    </tr>
-                    <tr>
-                        <td>15</td>
-                        <td>Fans	</td>
-                        <td>AC0000003	</td>
-                        <td>CEIL FAN AIRFLOW ACES48AL PROMO ONLY, inland areas only	</td>
-                        <td>1</td>
-                        <td>$192.50</td>
-                    </tr>
                     </tbody>
                 </table>
 

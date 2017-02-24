@@ -18,8 +18,8 @@
         "yajra/laravel-datatables-oracle": "~6.0",
         "socialengine/sniffer-rules": "^2.2",
         "guzzlehttp/guzzle": "~5.3|~6.0",
-        "barryvdh/laravel-dompdf": "^0.7.1",
-        "iio/libmergepdf": "~3.0"
+        "iio/libmergepdf": "~3.0",
+        "barryvdh/laravel-snappy": "^0.3.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

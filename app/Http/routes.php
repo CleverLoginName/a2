@@ -148,6 +148,7 @@ Route::group(['prefix' => 'advanced'], function () {
 });
 
 Route::get('/print', 'PrintController@test');
+Route::get('/a3', 'PrintController@a3');
 Route::get('/print1', 'PrintController@test1');
 Route::get('/print2', 'PrintController@test2');
 

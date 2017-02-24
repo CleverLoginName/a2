@@ -1,5 +1,7 @@
 // icons actions
-	
+var projcetComments = '';
+var isFirstTime = false;
+
 $('.toggle-button a').click(function () {
     $('.toggle-button').removeClass('active');
     $(this).parent().addClass('active');
@@ -40,10 +42,27 @@ $('#pan').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "pointer";
 });
 
+
+// proj-comment-button
+$('#proj-comment-button').click(function () {
+    var commentValue = document.getElementById('project_comment_area').value;
+    projcetComments += combinateData(commentValue);
+    $('#project_comment_popup').modal({
+        show: true,
+    });
+    if(isFirstTime){
+        $('.note-fontsize').prepend('<div style="float:left;padding-right:5px;padding-top:5px">Font </div>');
+        isFirstTime = false;
+    }
+ 
+});
+
+
 $('#add-text').click(function () {
-    toolAction = ToolActionEnum.DRAW;
-    drawObjectType = ObjectType.TEXT;
-    document.getElementsByTagName("body")[0].style.cursor = "text";
+    showPlanCommentDialog();
+    // toolAction = ToolActionEnum.DRAW;
+    // drawObjectType = ObjectType.TEXT;
+    // document.getElementsByTagName("body")[0].style.cursor = "text";
 });
 
 $("#undo").on("click", function () {
@@ -62,9 +81,35 @@ $('#print-btn').click(function () {
 });
 // icons actions end
 
+
+function showPlanCommentDialog(){
+	var text= "";
+	var  fontSize_arr = [8,10,12,14,15,16,18,20,22,25];
+
+    var sel = document.getElementById("text-container-fontsize");
+    sel.innerHTML = "";
+    fontSize_arr.forEach(function (e){
+        var option = document.createElement("option");
+        option.text = e + " pt";
+        option.value = e;
+        sel.add(option);
+    })
+    sel.value = 15;
+	$('#type-text').val(text).focus();
+
+	// $('#text-container').show();
+    $('#text-container').modal({
+        show: true
+    });
+}
+
+
+
 function getFullCanvas(){
     var fullCanvas = document.createElement('canvas');
     var fullctx = fullCanvas.getContext('2d');
+    var fullCanvasHelper = new CanvasHelper();
+
     if (backgroundImage != undefined){
         fullCanvas.width = backgroundImage.width;
         fullCanvas.height = backgroundImage.height;
@@ -74,61 +119,26 @@ function getFullCanvas(){
         fullCanvas.height = canvasOrig.height;
     }
 
-    //Eraser sould be drawen before products
-    //todo remove eraser drawing duplication
-    for (var index = 0; index < drawElements.length; index++) {
-        var obj = drawElements[index];
-        if (obj.getType() == ObjectType.ERASER){
-            fullctx.beginPath();
-            fullctx.lineWidth = obj.eraserSize;		
-            fullctx.strokeStyle = obj.eraserColor;
-            fullctx.lineJoin = fullctx.lineCap = obj.eraserType;
-            var erPnt;
-            for(var iy = 0; iy<obj.eraserPointsArr.length; iy++){
-                erPnt = obj.eraserPointsArr[iy];
-                if ( iy == 0){				
-                    fullctx.moveTo(erPnt.x, erPnt.y);
-                } else {	
-                    fullctx.lineTo(erPnt.x, erPnt.y);
-                }
-            }
-            fullctx.stroke();	
+    //Eraser sould be drawen before walls and products
+	for (var i = 0; i < floorplanDataArray.length; i++) {
+		var element = floorplanDataArray[i];
+        if (element.getType() == ObjectType.ERASER){
+            element.draw(fullctx, fullCanvasHelper);
         }
-    }
+	}
 
-
-    for (var index = 0; index < drawElements.length; index++) {
-        var obj = drawElements[index];
-        
-        if (!(obj instanceof CanvasItem)) continue;
-
-        drawConnections(obj, fullctx);
-
-		var sX = obj.getObjStartX();
-		var sY = obj.getObjStartY();
-		var eX = obj.getObjEndX();
-		var eY = obj.getObjEndY();
-
-        if (obj.getType() == ObjectType.SQUARE){
-            drawSquare(sX , sY , eX , eY , fullctx);
-        } else if(obj.getType() == ObjectType.CIRCLE){
-            drawCircle(sX , sY , eX , eY , fullctx);
-        } else if (obj.getType() == ObjectType.WALL){
-            drawWall(sX , sY , eX , eY , obj.getWallThickness(), fullctx);
-        } else if (obj.getType() == ObjectType.CONT_WALL){
-            drawContWall(obj.getVerticesArr(), fullctx);
-        } else if (obj.getType() == ObjectType.LIGHT_BULB){
-            var rad = obj.getRadius();
-            drawLightBulb(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath(),obj.getConectingMood(),obj.getSelectionColour());
-        } else if (obj.getType() == ObjectType.LIGHT_SWITCH){
-            var rad = obj.getRadius();
-            drawLightSwitch(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath());
-        } else if (obj.getType() == ObjectType.TEXT){
-            drawText(obj,fullctx,sX,sY,eX,eY);		
-        }else if(obj.getType() == ObjectType.PRODUCT){
-            drawProduct(sX, sY, rad, fullctx, obj.getObjWidth(), obj.getObjHeight(),obj.getSymbolPath());
+    for (var i = 0; i < floorplanDataArray.length; i++) {
+		var element = floorplanDataArray[i];
+        if (element.getType() != ObjectType.ERASER){
+            element.draw(fullctx, fullCanvasHelper);
         }
-    }
+	}
+
+	for (var i = 0; i < productDataArray.length; i++) {
+		var element = productDataArray[i];
+		element.draw(fullctx, fullCanvasHelper);
+	}
+
     return fullCanvas;
 }
 
@@ -272,12 +282,14 @@ $(function () {
 
     /* Saves the current drawing to the file specified */
     $('#save-button').click(function () {
-
+        var print_dataUrl = getFullCanvas().toDataURL("image/png");
         var saveData = {
             metaData: {scaleFactor: scaleFactor},
             products: { data: productDataArray, isChanged: isProductDataChanged},
-            floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged},
-            project:  { data: projectDataArray, isChanged: isProjectDataChanged}
+            floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged,printable_plan: print_dataUrl},
+            project:  { data: projectDataArray, isChanged: isProjectDataChanged},
+            _token:'',
+            template_floor_catalog_design_id:23
         }
 
         var fileName = "drawtool.dtf";
@@ -330,11 +342,11 @@ $(function () {
         clearDrawElements();
     });
 
-    $('#text-container button#text-ok').click(function () {
+    $('#text-container input#text-ok').click(function () {
         createAndInsertTextObject();
     });
-
-    $('#text-container button#text-cancel').click(function () {
+//todo
+    $('#text-container input#text-cancel').click(function () {
         cancelTextEdit();
     });
 
@@ -412,6 +424,8 @@ function loadSavedFile(fileName) {
             var productData = fileDetails.products.data;
             var floorplanData = fileDetails.floorplan.data;
             var projectData = fileDetails.project.data;
+            projcetComments  = fileDetails.project.proj_comments;
+            productCommentIndex = fileDetails.products.lastCommentIndex; 
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
@@ -435,6 +449,8 @@ $(function () {
             var productData = JSON.parse(fileDetails.products.data);
             var floorplanData = JSON.parse(fileDetails.floorplan.data);
             var projectData = JSON.parse(fileDetails.project.data);
+            projcetComments  = fileDetails.project.proj_comments;
+            productCommentIndex = fileDetails.products.lastCommentIndex;
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
@@ -496,14 +512,6 @@ $('#mouse-action-menu li').click(function () {
     }
 });
 
-$('#can-tool-btn-save').click(function () {
-    //console.log(this);
-    var notes = $('#can-tool-product-note').val();
-    if (notes != undefined) {
-        addNoteToSelectedProduct(notes);    
-    } 
-});
-
 $('#tool-items-ul a').click(function () {
     clearObjStatusesAndSetToDraw();
 });
@@ -560,33 +568,12 @@ adjustSidebar()
 function adjustSidebar(){
     var height = $(window).height() - 1;
     $('#sidebar').height(height);
-    // $('#main-pnnel-drag').height(height * 70 / 100);
+     $('#main-pnnel-drag').height(height * 90 / 100);
     // $('#bom-area').height(height * 30 / 100);
-
+    $('#main-pannel-body').height( $('#main-pnnel-drag').height()-$('.main-title').height());
     $('#bom-area').width($('#sidebar').width());
     $('#bom-table').width($('#sidebar').width());
-    $('.body-main').css("height",(height * 70 / 100));
-    $('#main-pannel-body').height( $('#main-pnnel-drag').height()-$('#main-hadder').height())
 }
-/*
-$('#plans-button').click( function(){
-    if ($('#temp-fileinput').length == 0) {
-        $('<input id="temp-fileinput" type="file" name="somename" size="chars">').appendTo('body');
-
-        $('#temp-fileinput').change(function(){
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onloadend = function(){
-                setBackgroundImage(reader.result);
-            }
-            if(file){
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    $('#temp-fileinput').hide();
-    $('#temp-fileinput').click();
-});*/
 
 $(".toggle-button").click( function () {
     performEscapeAction()
@@ -594,6 +581,33 @@ $(".toggle-button").click( function () {
 
 $(document).ready(function() { 
     showTopIcons();
+    isFirstTime = true;
+    $('#project_comment_area').summernote({
+        height: 70,                 // set editor height
+        minHeight: 70,             // set minimum height of editor
+        maxHeight: 400,             // set maximum height of editor
+        focus: true,             // set focus to editable area after initializing summernote
+        toolbar: [
+            // [groupName, [list of button]]
+            ['fontsize', ['fontsize']],
+            ['style', ['bold', 'italic', 'underline']],
+            ['para', ['ul', 'ol']]
+        ],
+        fontSizes: ['8', '9', '10', '11', '12', '15', '16', '17', '18' , '19', '20'],
+        placeholder: 'Type your new comment here...'
+    });
+   $('#project_comment_area').summernote('fontSize', 12);
+    $('#project_comment_display').summernote({
+        height: 363,                 // set editor height
+        minHeight: 363,             // set minimum height of editor
+        maxHeight: 363,             // set maximum height of editor
+        focus: true,             // set focus to editable area after initializing summernote
+        toolbar: [
+        ]
+    });
+    $('#project_comment_display').summernote('disable');
+    // $('#project_comment_display').summernote('lineHeight', 0.9);
+
 });
 
 

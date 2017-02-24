@@ -173,7 +173,8 @@ return [
 
         SocialEngine\SnifferRules\ServiceProvider::class,
 
-        Barryvdh\DomPDF\ServiceProvider::class,
+
+        Barryvdh\Snappy\ServiceProvider::class,
     ],
 
     /*
@@ -231,7 +232,8 @@ return [
 
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
 
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         
 
     ],

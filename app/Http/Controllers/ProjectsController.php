@@ -443,8 +443,36 @@ class ProjectsController extends Controller
 
         if (array_key_exists("floorplan",$fileData)) {
             $projectFloor->canvas_data = json_encode($fileData['floorplan']['data']);
+
+            /*****************************************************************************************************/
+            $printable_image_path =  $fileData['floorplan']['printable_plan'];
+          /* list($type, $printable_image_path) = explode(';', $printable_image_path);
+            list(, $printable_image_path)      = explode(',', $printable_image_path);*/
+
+           // $printable_image_path = explode(';', $printable_image_path);//dd($printable_image_path[1]);
+            //$printable_image_path = base64_decode($printable_image_path[1]);
+
+
+            File::exists('printable_plans') or File::makeDirectory('printable_plans');
+            File::exists('printable_plans/'.$projectFloorCatalogDesign_id) or File::makeDirectory('printable_plans/'.$projectFloorCatalogDesign_id);
+
+
+            $img = str_replace('data:image/png;base64,', '', $printable_image_path);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            file_put_contents('printable_plans/'.$projectFloorCatalogDesign_id.'/'.'original.png', $data);
+
+            /*****************************************************************************************************/
+            $projectFloor->printable_image_path = 'printable_plans/'.$projectFloorCatalogDesign_id.'/'.'original.png';
             $projectFloor->save();
 
+
+            /*$x = $this->base64_to_jpeg($fileData['floorplan']['printable_plan'], 'bar.jpg');
+            $img = Image::make(imagecreatefromstring(base64_decode($fileData['floorplan']['printable_plan'])));
+            $img->resize(320, 240);
+            $img->save('bar.jpg');*/
+
+            $this->saveImage($fileData['floorplan']['printable_plan'] , 'x.png');
             /**************************************************************************************************************/
 
             $tfloors = ProjectFloor::where('project_id', '=',$project->id)->
@@ -790,5 +818,18 @@ class ProjectsController extends Controller
                 ->with('projectsFloors',$projectsFloors)
                 ->with('empty_form',false);
         }
+    }
+
+
+    private function saveImage($data, $path){
+
+       /*
+       // dd($data);
+        $img = Image::make(imagecreatefromstring($data));
+        $img->resize(320, 240);
+        $img->save('bar.jpg');
+
+
+        file_put_contents($path, $data);*/
     }
 }
