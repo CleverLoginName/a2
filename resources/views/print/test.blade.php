@@ -193,32 +193,6 @@
     <div class="end">END</div>
 </div>
 
-
-<!-- =============== FOOTER ============= -->
-<div class="site_container">
-    <div class="wr_footer"  id="inner">
-        <div class="footer">
-            <table width="100%" border="0" class="tbl_authorise">
-                <tbody>
-                <tr>
-                    <td scope="col" width="230"><img src="http://192.168.33.10/print_static/images/logo_portar_davis.jpg" /></td>
-                    <td scope="col" align="left"><span class="bld">Client</span> Authorisation ..........................................................................................</td>
-                    <td scope="col" align="right">Date .......</td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-
-        <div class="footer_stripe"></div>
-        <div class="footer_para"><p>Level 10 720 Bourke St Docklands Vic 3008 P: 03555 5555 E: sales@iporterdavis.com.au W: porterdavis.com.au<br>
-                Please Note: Terms and Conidtions do apply as is product subject availibifity. To review our Terms and conditions, please visit our website. Adapto is a registered trademark of Adapto Technologies Pty Limited.
-            </p></div>
-    </div>
-</div>
-
-
 <!-- =============== FOOTER ENDS ============= -->
 
 </body>

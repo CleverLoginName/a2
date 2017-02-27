@@ -147,14 +147,24 @@ Route::group(['prefix' => 'advanced'], function () {
 
 });
 
-Route::get('/print', 'PrintController@test');
+Route::get('/print0', 'PrintController@test');
 Route::get('/a3', 'PrintController@a3');
 Route::get('/print1', 'PrintController@test1');
 Route::get('/print2', 'PrintController@test2');
+Route::get('/print-a3/{project_id}', 'PrintController@downloadA3');
+Route::get('/print-a4/{project_id}', 'PrintController@downloadA4');
+Route::group(['prefix' => 'print'], function () {
+    Route::group(['prefix' => 'headers'], function () {
+        Route::get('/a3', 'PrintController@a3header');
+    });
+    Route::group(['prefix' => 'footers'], function () {
+        Route::get('/a3', 'PrintController@a3footer');
+    });
+});
 
 Route::group(['prefix' => 'rest/api'], function () {
     Route::group(['prefix' => 'projects'], function () {
-//APICanvasController
+//APICanvasControllerro
         Route::get('/{id}/packs','APICanvasController@project_pack_list');
         Route::get('/{id}/bom-dictionary','APICanvasController@project_bom_dict');
         Route::get('/{id}/bom-dictionary-std','APICanvasController@project_bom_dict_std_inc');

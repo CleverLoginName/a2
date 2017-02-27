@@ -55,12 +55,12 @@ $("#redo").on("click", function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     redo();
 });
-
+/*
 $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     printCanvas();
 });
-
+*/
 
 $("#b-save").on("click", function () {
     $("#switch-prop").hide();

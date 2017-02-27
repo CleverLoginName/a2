@@ -108,6 +108,8 @@
                                                     </tr>
                                                 </table>
 
+
+
                                             </div>
 
 
@@ -116,7 +118,7 @@
 
                                         <div class="col-md-8 desc_plan">
 
-                                            {!! Form::open(['url' => 'projects/create/'.$project->id.'/plan-data','method'=>'POST']) !!}
+                                            {!! Form::open(['url' => 'projects/create/'.$project->id.'/plan-data','method'=>'POST', 'files'=>true]) !!}
 
                                             {{Form::hidden('id',$projectFloorCatalogDesign->project_floor_catalog_design_id)}}
                                             <h5>House Design project</h5>
@@ -155,6 +157,7 @@
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
                                                     <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
+                                                    {!! Form::file('image',['class'=>"btn_reset",'style'=>"max-width:100px;margin-right:10px"]) !!}
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}

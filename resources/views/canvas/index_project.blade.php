@@ -787,12 +787,64 @@
 				<div id="project_comment_display" style="width:calc(100% - 15px);    border-bottom: 0.2px dashed #51748c !important;height: 0.3px"></div>
 			</div>
 			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Save" style="color: white">
-			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancle" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
 		</div>
 	</div>
 </div>
 
 <!--project comment section end-->
+
+<!--project print section-->
+<div class="modal fade common_popup new_Project_printpopup" id="project_print_popup" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Print Project :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+				<input type="checkbox" onClick="toggle(this)" /> Toggle All<br/>
+
+				@foreach($plans as $plan)
+					<input type="checkbox" name="print_paln" value="{!! $plan["id"] !!}"/>{!! $plan["name"] !!} <br/>
+				@endforeach
+
+			</div>
+			<input id="project_print_save" name="save_btn" type="button" class="pd_btn_save" value="Print" style="color: white">
+			<input id="project_print_cancel" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
+		</div>
+	</div>
+</div>
+<!--project print section end-->
+
+<!--project print 2 section-->
+<div class="modal fade common_popup new_Project_printpopup2" id="project_print_popup_2" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Print Project :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+				<div class="row">
+					<a href="{!! url('/print-a3/'.$project->id) !!}" class="col-md-6 col-lg-6" style="min-height: 50px"><center><h1>A3</h1></center></a>
+					<a href="{!! url('/print-a4/'.$project->id) !!}" class="col-md-6 col-lg-6" style="min-height: 50px"><center><h1>A4</h1></center></a>
+				</div>
+			</div>
+
+
+			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Print" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
+		</div>
+	</div>
+	</div>
+<!--project print 2section end-->
 
 
 {{ Html::script('lib/jquery-3.1.1.js') }}
@@ -834,6 +886,10 @@
 
 		@endif
 
+		checkboxes = document.getElementsByName('print_paln');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = true;
+		}
 	});
 	$('#plans-button').on('click', function () {
 
@@ -847,6 +903,26 @@
 	consultentName = "{!! $consultant->title.'.'.$consultant->first_name.' '.$consultant->last_name !!}";
 	printVersion = "1";
 
+
+	$('#print-btn').click(function () {
+		$('#project_print_popup').modal({
+			show: true,
+		});
+	});
+
+	$('#project_print_save').click(function () {
+		$('#project_print_popup').modal('hide');
+		$('#project_print_popup_2').modal({
+			show: true,
+		});
+	});
+
+	function toggle(source) {
+		checkboxes = document.getElementsByName('print_paln');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = source.checked;
+		}
+	}
 </script>
 
 

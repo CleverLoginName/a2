@@ -74,11 +74,11 @@ $("#redo").on("click", function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     redo();
 });
-
+/*
 $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     printCanvas();
-});
+});*/
 // icons actions end
 
 
