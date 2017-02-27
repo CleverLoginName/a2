@@ -776,10 +776,21 @@ class ProjectsController extends Controller
             }
 
 
-            $projectImage = ProjectImage::find($projectImage->id);
-            $projectImage->name = $file->getClientOriginalName();
+            //$projectImage = ProjectImage::find($projectImage->id);
+            //$projectImage->name = $file->getClientOriginalName();
             $projectImage->path = $destinationPath.$randFileName;
             $projectImage->save();
+
+
+            $updateProjectFloors  = ProjectFloor::where('project_id', '=',$project->id)->
+            where('floor_id', '=',$request->get('level'))->
+            get();
+
+            foreach ($updateProjectFloors as $updateProjectFloor){
+                $tmp_ = ProjectFloor::where('id', '=',$updateProjectFloor->id)->first();
+                $tmp_->project_image_id = $projectImage->id;
+                $tmp_->save();//
+            }
 
         }
 
