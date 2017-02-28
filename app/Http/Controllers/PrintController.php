@@ -47,8 +47,8 @@ class PrintController extends Controller
         $data1 = $data[1];
         //dd($data1);
         session(['products'=>$data0,'qty'=>$data1,'project'=>$project]);
-        /*$pdf = \PDF::loadView('print.test', ['a'=>$data])->setPaper('a4');
-        $m->addRaw($pdf->output());*/
+        $pdf = \PDF::loadView('print.test', ['a'=>$data])->setPaper('a4');
+        $m->addRaw($pdf->output());
         $pdf = \PDF::loadView('print.test2', ['a'=>$data])->setPaper('a4');
         $m->addRaw($pdf->output());
         return file_put_contents('a4.pdf', $m->merge());

@@ -40,7 +40,7 @@
             list-style: none
         }
         .tbl_main td ul li {
-            background: url(http://192.168.33.10/print_static/images/bullet.jpg) no-repeat 0px 4px;
+            background: url(http://dev.adapto.com.au/print_static/images/bullet.jpg) no-repeat 0px 4px;
             padding-left: 30px;
         }
         .tbl_top td:first-child {border-right: 5px solid #bdbdbd}
@@ -101,7 +101,7 @@
 
 
 <div id="topSection">
-    <div class="logo"><img src="http://192.168.33.10/print_static/images/logo.jpg"/></div>
+    <div class="logo"><img src="http://dev.adapto.com.au/print_static/images/logo.jpg"/></div>
     <table width="800" border="0" cellpadding="0" cellspacing="0" class="tbl_main">
         <tbody>
         <tr>

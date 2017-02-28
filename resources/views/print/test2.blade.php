@@ -153,7 +153,7 @@
             list-style: none
         }
         .tbl_plan_Instructions td ul li {
-            background: url(../images/bullet.jpg) no-repeat 0px 4px;
+            background: url(http://dev.adapto.com.au/images/bullet.jpg) no-repeat 0px 4px;
             padding-left: 30px;
         }
         .tbl_subHeader{ padding:20px 0 0 10px; background:#bdbdbd; font-size: 28px;}
@@ -297,7 +297,7 @@
             <table width="100%" border="0" class="tbl_authorise">
                 <tbody>
                 <tr>
-                    <td scope="col" width="230"><img src="http://192.168.33.10/print_static/images/logo_portar_davis.jpg" /></td>
+                    <td scope="col" width="230"><img src="http://dev.adapto.com.au/print_static/images/logo_portar_davis.jpg" /></td>
                     <td scope="col" align="left"><span class="bld">Client</span> Authorisation ..........................................................................................</td>
                     <td scope="col" align="right">Date .......</td>
                 </tr>
