@@ -287,7 +287,7 @@ $(function () {
             metaData: {scaleFactor: scaleFactor},
             products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex},
             floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged,printable_plan: print_dataUrl},
-            project:  { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments },
+            project:  { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments,unAssignedProducts:unassigned_packItemList,bom: project_bom_dict},
             _token:'',
             project_floor_catalog_design_id:project_floor_catalog_design_id
         }
@@ -451,6 +451,8 @@ $(function () {
             var projectData = JSON.parse(fileDetails.project.data);
             projcetComments  = fileDetails.project.proj_comments;
             productCommentIndex = fileDetails.products.lastCommentIndex;
+            unassigned_packItemList=fileDetails.products.unAssignedProducts;
+            project_bom_dict = fileDetails.project.bom;
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
