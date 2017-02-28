@@ -92,6 +92,7 @@ class PrintController extends Controller
     }
 
     private function getAllProducts($project_id){
+        $canvas_id_data = [];
         $canvas_data = [];
         $project = Project::find($project_id);
         $projectFloors = ProjectFloor::where('project_id','=',$project->id)->get();

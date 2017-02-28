@@ -767,6 +767,30 @@
 
 <!--PRODUCT ICON POP UP END-->
 
+			<!--packview start-->
+		<div>
+
+			<div id="pack-view-container"  >
+				<div style="float: left;">
+
+				<div class=" minimized-pack" id="pack-zip-topic" style="float: right">
+					<img src="img/left.png" >
+					<div style="margin-top:5px;padding-left: 12px">p<br/>a<br/>c<br/>k<br/>s</div>
+				    </div>
+				</div>
+			<div class="row table-contener">
+				<div class=" row maximized-pack" style="margin-left: 0px; float: left" id="pack-expand-topic">
+					<img src="img/right.png" >
+				</div>
+				<div  class="table-body-pack" style="background-color: #52748d;float: right" id="pack-table-container">
+					<div class="pack-name-section" ><img src="img/packw.png" style="margin-right: 5px;width: 20px;height: 20px"><b style="font-size:12px">PACKS :</b></div>
+					<table id="pack-tablle" class="table-pack-body" >
+					</table>
+				</div>
+			</div>
+		</div>
+		 <!--packview end-->
+
 <!--project comment section-->
 <div class="modal fade common_popup new_Project_popup" id="project_comment_popup" role="dialog" style="height:700px">
 	<div class="modal-dialog custom_popupModel ">
@@ -874,6 +898,7 @@
 
 
 <script>
+	var project_floor_catalog_design_id = '{!! $floorCatalogDesign->id !!}}';
 
 	$(function() {
 		init();
@@ -972,6 +997,7 @@
 		</div>
 
 	</div>
+</div>
 </div>
 </body>
 

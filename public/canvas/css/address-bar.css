@@ -7,7 +7,7 @@
 .headerDiv {
   float: left;
   /*width: 33%;*/
-  text-align: center;
+  text-align: center; 
   color: white;
   font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
 	font-size: 18px;
@@ -18,7 +18,7 @@
   background:rgba(101, 92, 92, 0.7);
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; 
   padding-left: 5px;
 }
 

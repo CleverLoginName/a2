@@ -9,7 +9,7 @@
                 <a href="{!! url('/products/single-products/create') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
-                                    class="dahsboard-item-icon dashboard-item-user"></span><span
+                                    class="dahsboard-item-icon dashboard-item-products"></span><span
                                     class="dashboard-item-name">Single Product</span><span
                                     class="dashboard-item-count"></span></section>
                     </section>
@@ -25,7 +25,7 @@
                 <a href="{!! url('/products/packs/create') !!}">
                     <section class="col-md-4 dashboard-widget-col">
                         <section class="dashboard-widget"><span
-                                    class="dahsboard-item-icon dashboard-item-user"></span><span
+                                    class="dahsboard-item-icon dashboard-item-products"></span><span
                                     class="dashboard-item-name">Pack </span><span
                                     class="dashboard-item-count"></span></section>
                     </section>

@@ -141,11 +141,11 @@ body {
     height: 62px;
 }
 .wr_img{ margin-right:5px !important; float:left !important; width:90px !important;}
-.wr_desc{
+.wr_desc{   
       /*width: 107px !important;*/
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;  
     float: left !important;
     line-height: 13px;}
 
@@ -587,7 +587,7 @@ tbody {
 }
 
 .list{
-  list-style: none;
+  list-style: none; 
 }
 
 #listContainer{
@@ -740,7 +740,7 @@ tbody {
 }
 .product-name {
     font-size: 12px !important;
-    font-weight: bold;
+    font-weight: bold; 
 }
 .set-red {
     color: #ff8d00;
@@ -882,6 +882,12 @@ tbody {
 
 .boddy-defalt-hight{
     height: 200px !important;
+    /*calc(100% - 25px)*/
+}
+
+.boddy-unpin-hight{
+    height: calc(100% - 25px) !important;
+    /*calc(100% - 25px)*/
 }
 
 .minimize-border{
@@ -909,10 +915,10 @@ tbody {
 
 .body-main::-webkit-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 .body-main::-webkit-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -920,16 +926,16 @@ tbody {
 }
 
 .body-main::-webkit-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 
 .body-main::-moz-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 .body-main::-moz-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -937,16 +943,16 @@ tbody {
 }
 
 .body-main::-moz-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 
 #display_notes::-webkit-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 #display_notes::-webkit-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -954,16 +960,16 @@ tbody {
 }
 
 #display_notes::-webkit-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 
 #display_notes::-moz-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 #display_notes::-moz-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -971,17 +977,17 @@ tbody {
 }
 
 #display_notes::-moz-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 
 
 #bom-table::-moz-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 #bom-table::-moz-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -989,16 +995,16 @@ tbody {
 }
 
 #bom-table::-moz-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 
 #bom-table::-webkit-scrollbar-track {
  	background:#ffffff;
-	width:5px !important;
+	width:5px !important; 
 	border:5px solid #51748c;
  }
-
+ 
 #bom-table::-webkit-scrollbar-thumb {
     border-radius: 0px;
       border-right:3px solid #51748c; border-left:3px solid #51748c;
@@ -1006,7 +1012,7 @@ tbody {
 }
 
 #bom-table::-webkit-scrollbar {
-    width: 13px;
+    width: 13px; 
 }
 
 .no-margin{
@@ -1052,7 +1058,7 @@ input::-moz-calendar-picker-indicator {
 }
 
 .print-bom-hedder{
-    transition: none !important;
+    transition: none !important;  
     background-color: #e2383f !important;
     color: white !important;
      -webkit-print-color-adjust: exact;
@@ -1060,7 +1066,7 @@ input::-moz-calendar-picker-indicator {
 }
 
 .print-body{
-    transition: none !important;
+    transition: none !important;  
 }
 
 .top-menu-item{
@@ -1090,7 +1096,7 @@ input::-moz-calendar-picker-indicator {
 }
 
 .note-editor.note-frame {
-     border: 0px solid #a9a9a9 !important;
+     border: 0px solid #a9a9a9 !important; 
 }
 
 .note-resizebar{
@@ -1121,7 +1127,7 @@ input::-moz-calendar-picker-indicator {
 }
 
 .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
-     background-color: white !important;
+     background-color: white !important; 
 }
 
 .note-editor .note-editable {
@@ -1169,7 +1175,7 @@ element.style {
 }
 
 .note-popover .popover-content>.btn-group, .panel-heading.note-toolbar>.btn-group {
-     margin-right: 0px !important;
+     margin-right: 0px !important; 
 }
 /*.note-editing-area{
    height: 200px !important; max-height: 200px !important; min-height: 200px !important;overflow: auto !important;

@@ -27,6 +27,14 @@
     text-overflow: ellipsis;
 }
 
+/*#productInfo{ display: block; }
+
+#productInfo {
+     
+     width: 100%;
+    overflow-y: auto;   
+    overflow-x: hidden;  
+}*/
 .catelog-name{
     /*display:inline-block;*/
     /*width:80%;*/
@@ -52,6 +60,9 @@
     height: 65px !important;
 }
 
+
+
+
 /*============ ERANDA'S CSS======================= */
  .pin:nth-child(2) {
     width:68px;
@@ -64,7 +75,7 @@
 #tool-items-ul{ padding-left:0px;}
 
 .wr_logout .tool-item .tooltiptext { 
-    left: -105px;
+    left: -105px; 
 }
 
 /*.glyphicon-pushpin:before, .fa-plus-square-o:before {
@@ -127,15 +138,15 @@
     display: block;
     padding: 11px 11px 14px 14px;
 }
-
+ 
 .test1 .dropdown-menu-right .glyphicon-pushpin {
     background: url(../img/pinned_light.jpg) no-repeat center center;
-}
+} 
 .unpin-pannel-hight .dropdown-menu-right .glyphicon-pushpin {
     background: url(../img/unpinned_light.jpg) no-repeat center center;
-}
-
-
+} 
+ 
+ 
  
 @media screen and (min-width: 768px){
 .lobipanel>.panel-heading {

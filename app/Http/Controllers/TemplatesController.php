@@ -309,7 +309,73 @@ class TemplatesController extends Controller
         $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($request->get('id'));
         $templateFloorCatalog = TemplateFloorCatalog::find($templateFloorCatalogDesign->template_floor_catalog_id);
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
+        $templateImage = TemplateImage::find($templateFloor->template_image_id);
         $template = Template::find($templateFloor->template_id);
+
+
+        /**************************************************************************************************************/
+        if($request->file('image') != null){
+
+            $file = $request->file('image');
+
+            $path = $templateImage->path;
+            $template_image_path = 'uploads/templates/'.$template->id.'/originals/';
+            $template_image_name = explode($template_image_path, $path);
+            $template_image_name = $template_image_name[1];
+
+            $randFileName = $template_image_name;
+            //Move Uploaded File
+            $destinationPath = 'uploads/templates/'.$template->id.'/originals/';
+            $destinationPathThumb = 'uploads/templates/'.$template->id.'/300x200/';//dd(public_path().'/'.$destinationPath);
+            $destinationPathPdf = 'uploads/templates/'.$template->id.'/pdf/';//dd(public_path().'/'.$destinationPath);
+
+            File::exists('uploads') or File::makeDirectory('uploads');
+            File::exists('uploads/templates') or File::makeDirectory('uploads/templates');
+            File::exists('uploads/templates/'.$template->id) or File::makeDirectory('uploads/templates/'.$template->id);
+            File::exists(public_path().'/'.$destinationPath) or File::makeDirectory(public_path().'/'.$destinationPath);
+            File::exists(public_path().'/'.$destinationPathThumb) or File::makeDirectory(public_path().'/'.$destinationPathThumb);
+
+            File::delete($template_image_path.$template_image_name);
+            if('pdf' === $file->getClientOriginalExtension()){
+
+                $pdf_path = public_path().'/'.$destinationPath.'pdf/';
+                File::exists($pdf_path) or File::makeDirectory($pdf_path);
+                $file->move($pdf_path,$randFileName);
+
+                $pdf = new Pdf($pdf_path.$randFileName);
+                $pdf->setOutputFormat('png')
+                    ->saveImage($destinationPath.$randFileName);
+
+                $randFileName = $template_image_name;
+            }else{
+                $file->move($destinationPath,$randFileName);
+            }
+
+
+            //$projectImage = ProjectImage::find($projectImage->id);
+            //$projectImage->name = $file->getClientOriginalName();
+            $templateImage->path = $destinationPath.$randFileName;
+            $templateImage->save();
+
+
+            $updateTemplateFloors  = TemplateFloor::where('template_id', '=',$template->id)->
+            where('floor_id', '=',$request->get('level'))->
+            get();
+
+            foreach ($updateTemplateFloors as $updateTemplateFloor){
+                $tmp_ = TemplateFloor::where('id', '=',$updateTemplateFloor->id)->first();
+                $tmp_->template_image_id = $templateImage->id;
+                $tmp_->save();//
+            }
+
+        }
+
+
+
+
+        /**************************************************************************************************************/
+
+
 
         $templateFloorCatalog->catalog_id = $request->get('catalog_id');
         $templateFloorCatalogDesign->name = $request->get('design');

@@ -459,10 +459,12 @@
             <span class="bc-img-wrap"><img class="breadcrumb-main-icon"
                                            src="{{ URL::asset('resources/images/project_ico_black.png') }}"></span><span
                 class="breadcrumb-text">Projects</span></button>
+    <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>  <button data-ref="sub-menu-items" data-index="1" class="breadcrumb-btn cursor-normal" type="submit" id="1-bc">
+    <span class="breadcrumb-text">Edit</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">Edit</span></button>
+                class="breadcrumb-text">{!! $project->job !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
 @stop
 

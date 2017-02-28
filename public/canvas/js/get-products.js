@@ -12,6 +12,7 @@ function escapeHtml(unsafe) {
         .replace(/\\f/g, "\\f");
 
 }
+var Data;
 (function () {
     var catalog = '';
     var category = '';
@@ -30,6 +31,7 @@ function escapeHtml(unsafe) {
         success: function (data, textStatus, xhr) {
             $('#bom-area').removeClass("bom-hide");
             $.each(data, function (index, catelog_value) {
+                Data = data;
                 $('#' + index).text(catelog_value.catalog_name);
                 if ($('#main-' + index).hasClass("hide-catelog")) {
                     $('#main-' + index).removeClass("hide-catelog");
@@ -243,63 +245,52 @@ function escapeHtml(unsafe) {
             });
 
             // make the canvas a dropzone
-            $("#top-canvas").droppable({
-                drop: dragDrop,
-            });
-
-            // handle a drop into the canvas
-            function dragDrop(e, ui) {
-
-                var Offset = $("#top-canvas").offset();
-                var offsetX = Offset.left;
-                var offsetY = Offset.top;
-
-                var dropPnt = canvasHelper.convertViewportXyToCanvasXy({x:e.clientX - offsetX, y:e.clientY - offsetY});
-                var x = dropPnt.x;
-                var y = dropPnt.y;
+           
 
 
-                var dragItem = ui.draggable[0];
-                if ($(dragItem).hasClass('single-item')) {
-                    var draggableName = $(dragItem).attr("data-name");
-                    var draggableProductID = $(dragItem).attr("data-product-id");
-                    if (is_pack == 1) {
-                        $.each(data, function (index, catelog_value) {
-                            $.each(catelog_value.data, function (i1, v1) {
-                                $.each(v1.data, function (i2, v2) {
-                                    if (pack_id == parseInt(v2.sub_category_id)) {
-                                        addPack(x, y, v2);
-                                    }
-                                });
-                            });
-                        });
-                    } else {
-                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath, product_watt);
-                    }
-                    drawAllObjects();
-                    //$('#tool-items-ul li').removeClass('active');
-                }
+          
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log('Error in Operation');
+        }
+    });
 
-            }
+    function addProductSection(sub_category_value,product_value,catagory_value ) {
+        product_section = '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id=' + product_value.id + '  data-prod_type=' + product_value.type + ' data-name="' + product_value.name + '" data-builder_price="' + product_value.builder_price + '" data-image_path="'+baseUrl + product_value.path + '" data-path1 ="' + baseUrl + product_value.icon + '" data-is_pack="' + sub_category_value.is_pack + '" data-cat="' + sub_category_value.sub_category_id + '" data-category-type="' + catagory_value.category_name + '" data-Watts="' + (product_value.Watts || '0') + '" data-product-price="' + product_value.builder_price + '">'
+            + '<div class="clearfix">'
+            + '<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_img">'
+            + '<img src="' + baseUrl + product_value.path + '" class="imege-props product-item">'
+             + '<img src="' + baseUrl + product_value.icon + '" style="display:none">'
+            + '</div>'
+            + '<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_desc">'
+            + '<span  class=" without-margin product-name">' + product_value.name + '</span></br>'
+            + '<span  class="  without-margin product-normal">' + product_value.supplier + '</span></br>'
+            + '<span  class=" without-margin product-normal">Colour : ' + (product_value.Colour || 'N/A') + '</span></br>'
+            + '<span  class=" without-margin product-normal">Type : ' + product_value.type + '</span></br>'
+            // +'<span  class=" without-margin product-normal">Rating: N/A</span></br>'
+            + '<span  class=" without-margin product-normal">wattage : ' + (product_value.Watts || 'N/A') + '</span></br>'
+            + '<span  class=" without-margin "><span class="product-price">$ ' + product_value.builder_price + '</span><span class="product-gst"> (ino gst)</span></span>'
+            + '</div>'
+            + '</div>'
+            + '<div>';
+        return product_section;
+    }
+
+
 
             function addPack(x, y, params) {
                 var pack = new PackItem();
 
                 pack.setUniqueItemID(generateUID());
+                pack.setPrice(params.builder_price);
                 pack.setPackID(params.sub_category_id);
                 pack.setName(params.sub_category_name);
-                pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
-
-                $.each(params.data, function (i, product) {
-                    var currentProduct = addProduct(x + i * 40, y, product.type, product.id, product.name, product.builder_price, product.path, baseUrl + product.icon);
-                    currentProduct.isInsidePack = true;
-                    currentProduct.setParentPackID(pack.getUniqueItemID());
-                    pack.pushProduct(currentProduct.getUniqueItemID());
-                });
+                addPackView(params,pack.getUniqueItemID());
                 pushElementToDrawElement(pack);
             }
 
-            function addProduct(x, y, type, id, name, price, imgPath, symbolPath, product_watt) {
+
+              function addProduct(x, y, type, id, name, price, imgPath, symbolPath, product_watt) {
                 var currentObj;
                 var product_type;
                 if (type !== undefined) {
@@ -336,32 +327,47 @@ function escapeHtml(unsafe) {
                 pushElementToDrawElement(currentObj); //TODO check for pack 
                 return currentObj;
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error in Operation');
-        }
-    });
 
-    function addProductSection(sub_category_value,product_value,catagory_value ) {
-        product_section = '<div class="single-item S" attr="LIGHT_BULB" data-angle="0" data-evel="2.54" data-power="30" data-prod_id=' + product_value.id + '  data-prod_type=' + product_value.type + ' data-name="' + product_value.name + '" data-builder_price="' + product_value.builder_price + '" data-image_path="'+baseUrl + product_value.path + '" data-path1 ="' + baseUrl + product_value.icon + '" data-is_pack="' + sub_category_value.is_pack + '" data-cat="' + sub_category_value.sub_category_id + '" data-category-type="' + catagory_value.category_name + '" data-Watts="' + (product_value.Watts || '0') + '" data-product-price="' + product_value.builder_price + '">'
-            + '<div class="clearfix">'
-            + '<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_img">'
-            + '<img src="' + baseUrl + product_value.path + '" class="imege-props product-item">'
-             + '<img src="' + baseUrl + product_value.icon + '" style="display:none">'
-            + '</div>'
-            + '<div class="pro-detail-container col-md-4 col-lg-4 col-sm-4 col-xs-4 wr_desc">'
-            + '<span  class=" without-margin product-name">' + product_value.name + '</span></br>'
-            + '<span  class="  without-margin product-normal">' + product_value.supplier + '</span></br>'
-            + '<span  class=" without-margin product-normal">Colour : ' + (product_value.Colour || 'N/A') + '</span></br>'
-            + '<span  class=" without-margin product-normal">Type : ' + product_value.type + '</span></br>'
-            // +'<span  class=" without-margin product-normal">Rating: N/A</span></br>'
-            + '<span  class=" without-margin product-normal">wattage : ' + (product_value.Watts || 'N/A') + '</span></br>'
-            + '<span  class=" without-margin "><span class="product-price">$ ' + product_value.builder_price + '</span><span class="product-gst"> (ino gst)</span></span>'
-            + '</div>'
-            + '</div>'
-            + '<div>';
-        return product_section;
-    }
+
+     $("#top-canvas").droppable({
+                drop: dragDrop,
+            });
+
+            // handle a drop into the canvas
+            function dragDrop(e, ui) {
+
+                var Offset = $("#top-canvas").offset();
+                var offsetX = Offset.left;
+                var offsetY = Offset.top;
+
+                var dropPnt = canvasHelper.convertViewportXyToCanvasXy({x:e.clientX - offsetX, y:e.clientY - offsetY});
+                var x = dropPnt.x;
+                var y = dropPnt.y;
+
+
+                var dragItem = ui.draggable[0];
+                if ($(dragItem).hasClass('single-item')) {
+                    var draggableName = $(dragItem).attr("data-name");
+                    var draggableProductID = $(dragItem).attr("data-product-id");
+                    if (is_pack == 1) {
+                        $.each(Data, function (index, catelog_value) {
+                            $.each(catelog_value.data, function (i1, v1) {
+                                $.each(v1.data, function (i2, v2) {
+                                    if (pack_id == parseInt(v2.sub_category_id)) {
+                                        //addPackView(v2);
+                                         addPack(x, y, v2);
+                                    }
+                                });
+                            });
+                        });
+                    } else {
+                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath, product_watt);
+                    }
+                    drawAllObjects();
+                    //$('#tool-items-ul li').removeClass('active');
+                }
+
+            }
 
 
     function addDragable(element) {
@@ -385,9 +391,10 @@ function escapeHtml(unsafe) {
                     prod_name = this.getAttribute("data-name");
                     iconPath = this.getAttribute("data-path1");
                 }
+                $("#top-canvas").droppable({
+                drop: dragDrop,
+            });
                 return '<img src="' + iconPath + '" />';
-            }, drag: function () {
-
             },
             cursor: 'move',
             appendTo: 'body'

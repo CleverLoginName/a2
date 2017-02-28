@@ -285,11 +285,11 @@ $(function () {
         var print_dataUrl = getFullCanvas().toDataURL("image/png");
         var saveData = {
             metaData: {scaleFactor: scaleFactor},
-            products: { data: productDataArray, isChanged: isProductDataChanged},
+            products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex},
             floorplan:{ data: floorplanDataArray, isChanged: isFloorplanDataChanged,printable_plan: print_dataUrl},
-            project:  { data: projectDataArray, isChanged: isProjectDataChanged},
+            project:  { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments },
             _token:'',
-            template_floor_catalog_design_id:23
+            project_floor_catalog_design_id:project_floor_catalog_design_id
         }
 
         var fileName = "drawtool.dtf";

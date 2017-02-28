@@ -157,8 +157,10 @@
                                            src="{{ URL::asset('resources/images/Black/plan.png') }}"></span><span
                 class="breadcrumb-text">Template</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
+    <span class="breadcrumb-text">Edit</span></button>
+    <i class="fa fa-chevron-right breadcrumb-icn " id="1-ic"></i>
 
     <button data-ref="sub-menu-items" data-index="2" class="breadcrumb-btn font-blue" type="submit" id="2-bc"><span
-                class="breadcrumb-text">Edit</span></button>
+                class="breadcrumb-text">{!! $template->name !!}</span></button>
     <i class="fa fa-chevron-right breadcrumb-icn font-blue" id="3-ic"></i>
 @stop

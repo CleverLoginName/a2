@@ -116,12 +116,14 @@ $(function(){
         $(this).addClass("unpin-pannel-hight");
         $(this).find('.panel-body').addClass("unpin-pannel-hight-body");
         $(this).addClass("lobi-pannel-border");
+        $(this).find(".body-inner").addClass("boddy-unpin-hight").removeClass("boddy-defalt-hight")
         $(this).lobiPanel('maximize');
     }).lobiPanel();
 
     $('.cat').on('beforePin.lobiPanel', function (ev, lobiPanel) {
         $(this).removeClass("unpin-pannel-hight");
         $(this).find('.panel-body').removeClass("unpin-pannel-hight-body");
+         $(this).find(".body-inner").addClass("boddy-defalt-hight").removeClass("boddy-unpin-hight")
         $(this).removeClass("lobi-pannel-border");
         $(this).lobiPanel('maximize');
     }).lobiPanel();
