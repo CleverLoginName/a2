@@ -449,10 +449,11 @@ $(function () {
             var productData = JSON.parse(fileDetails.products.data);
             var floorplanData = JSON.parse(fileDetails.floorplan.data);
             var projectData = JSON.parse(fileDetails.project.data);
-            projcetComments  = fileDetails.project.proj_comments;
-            productCommentIndex = fileDetails.products.lastCommentIndex;
-            unassigned_packItemList=fileDetails.products.unAssignedProducts;
-            project_bom_dict = fileDetails.project.bom;
+
+            projcetComments = (fileDetails.project.proj_comments == undefined) ? '' : fileDetails.project.proj_comments;
+            productCommentIndex = (fileDetails.products.lastCommentIndex == undefined) ? 0 : fileDetails.products.lastCommentIndex;
+            project_bom_dict = (fileDetails.project.bom == undefined) ? {} : fileDetails.project.bom;
+            unassigned_packItemList= (fileDetails.products.unAssignedProducts == undefined) ? [] : fileDetails.project.unAssignedProducts;
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
