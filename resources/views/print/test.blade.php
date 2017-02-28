@@ -3,11 +3,6 @@
 <head>
     <title>Print Table</title>
     <style>
-        h1, h2, h3, h4, h5 {
-            font-family: extB;
-        }
-        .bld {font-family: extB}
-        .bld_price{ font-family: extB; font-size:30px;}
         table td {	vertical-align: top;color: #404342}
         .tbl_authorise td {	vertical-align: middle}
         .common_padding {padding: 30px 30px 0px 10px;}

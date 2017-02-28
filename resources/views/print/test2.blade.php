@@ -6,7 +6,6 @@
 
         /*======================== PAGE 1 CSS =============================*/
 
-
         body, ul, li, ol, h1, h2, h3, h4, h5, p {
             margin: 0;
             padding: 0;
@@ -112,7 +111,7 @@
             border:1px solid #fff;
             padding:4px !important;
         }
-        .tbl_product_display td{ border:0; widows:80%; padding:4px; border-top:none; border-bottom:none !important}
+        .tbl_product_display td{ border:0; widow:80%; padding:4px; border-top:none; border-bottom:none !important}
         .tbl_product_display th {width:12%}
         .tbl_product_display img{ width:100%;}
 
@@ -272,20 +271,7 @@
                             </div>
                         </td>
                         <td width="50%">
-                            <div class="wr_img">
-                                <img src="{!! asset('images/4.jpg') !!}" width="150"/>
-                            </div>
-                            <div class="wr_productDetails">
-                                <ul>
-                                    <li>Detroit Oyster 18w LED 3K SQR SCH </li>
-                                    <li>AC0000582</li>
-                                    <li>Chrome</li>
-                                    <li>LED</li>
-                                    <li>Qty 14</li>
-                                    <span class="bld_price">$202.91</span><span class="txtSmall"> (inc GST)</span>
-                                </ul>
 
-                            </div>
                         </td>
                     </tr>
                         @endforeach
