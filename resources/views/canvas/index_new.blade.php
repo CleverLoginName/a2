@@ -719,7 +719,7 @@
 					</div>
                     <div class="pd_popup_header" align="center">
 
-                        <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+						<!--<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
                         <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
 						<!--this popup is not responsive , for best viewing exprince-->
                         <img class="pd_img " src="images/pd_1.png" id="popupImage" />
