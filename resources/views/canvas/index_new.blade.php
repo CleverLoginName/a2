@@ -26,6 +26,7 @@
 	{{ Html::style('canvas/css/bom-print.css') }}
 	{{ Html::style('canvas/lib/text/summernote.css') }}
 	{{ Html::style('canvas/css/loading.css') }}
+	{{ Html::style('canvas/css/pack-view.css') }}
 	<style>
 		@media print {
 			body * {
@@ -833,6 +834,7 @@
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}
+{{ Html::script('canvas/js/pack-view.js') }}
 
 
 <script>

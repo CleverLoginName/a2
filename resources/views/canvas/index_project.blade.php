@@ -26,6 +26,7 @@
 	{{ Html::style('canvas/css/bom-print.css') }}
 	{{ Html::style('canvas/lib/text/summernote.css') }}
 	{{ Html::style('canvas/css/loading.css') }}
+	{{ Html::style('canvas/css/pack-view.css') }}
 	<style>
 		@media print {
 			body * {
@@ -39,7 +40,27 @@
 				left: 0;
 				top: 0;
 			}
-		}</style>
+		}
+
+		.fileUpload {
+			position: relative;
+			overflow: hidden;
+			margin: 10px;
+		}
+		.fileUpload input.upload {
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin: 0;
+			padding: 0;
+			font-size: 20px;
+			cursor: pointer;
+			opacity: 0;
+			filter: alpha(opacity=0);
+		}
+
+	</style>
+
 
 
 
@@ -913,6 +934,7 @@
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}
+{{ Html::script('canvas/js/pack-view.js') }}
 
 
 <script>
