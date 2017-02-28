@@ -155,7 +155,11 @@
                                                 <div class="col-md-12">
                                                     <input name="Save" type="submit" class="btn_save" id="Save" value="Save">
                                                     <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
-                                                    {!! Form::file('image',['class'=>"btn_reset",'style'=>"max-width:100px;margin-right:10px",'onchange' => 'this.form.submit()']) !!}
+                                                    <div class="fileUpload btn btn_reset">
+                                                        <span>Image</span>
+                                                        {!! Form::file('image',['class'=>"upload",'style'=>"max-width:100px;margin-right:10px",'onchange' => 'this.form.submit()']) !!}
+
+                                                    </div>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -372,6 +376,24 @@
         }
         .modal-dialog {
 
+        }
+
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        .fileUpload input.upload {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
         }
     </style>
 @stop

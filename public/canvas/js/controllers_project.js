@@ -582,6 +582,19 @@ $(".toggle-button").click( function () {
 $(document).ready(function() { 
     showTopIcons();
     isFirstTime = true;
+    if (unassigned_packItemList.length != 0) {
+        drawPacksInPopup();
+        $('#pack-view-container').show();
+        $('#pack-expand-topic').show();
+        $('#pack-view-container').addClass('animated bounceIn');
+        $('#pack-zip-topic').removeClass("bounceInUp").addClass('animated bounceOutDown');
+        $('#pack-expand-topic').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        $('#pack-table-container').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        //   $('#pack-expand-topic').removeClass('minimized-pack');
+        $('#pack-zip-topic').addClass('minimized-pack');
+        $('#pack-view-container').height(300);
+        $('#pack-view-container').width(260);
+    }
     $('#project_comment_area').summernote({
         height: 70,                 // set editor height
         minHeight: 70,             // set minimum height of editor

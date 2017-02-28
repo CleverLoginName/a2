@@ -101,7 +101,7 @@
 
 
 <div id="topSection">
-    <div class="logo"><img src="http://dev.adapto.com.au/print_static/images/logo.jpg"/></div>
+    <div class="logo"><img src="http://test.adapto.com.au/print_static/images/logo.jpg"/></div>
     <table width="800" border="0" cellpadding="0" cellspacing="0" class="tbl_main">
         <tbody>
         <tr>

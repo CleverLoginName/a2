@@ -42,22 +42,6 @@
 			}
 		}
 
-		.fileUpload {
-			position: relative;
-			overflow: hidden;
-			margin: 10px;
-		}
-		.fileUpload input.upload {
-			position: absolute;
-			top: 0;
-			right: 0;
-			margin: 0;
-			padding: 0;
-			font-size: 20px;
-			cursor: pointer;
-			opacity: 0;
-			filter: alpha(opacity=0);
-		}
 
 	</style>
 
@@ -994,50 +978,39 @@
 
 <!-- ========================= MODEL POPUP STARTS ============================ -->
 
-<!-- Modal -->
-<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog">
-	<div class="modal-dialog">
 
-		<!-- Modal content-->
-		<div class="modal-content clearfix">
-			<div class="modal-header">
-
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Project Plans:</h4>
-
-			</div>
-			<div class="modal-body" id="templates">
-				<form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-					  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/catalogs') !!}">
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-							<section class="row form-group">
-								<section class="col-md-12" style="margin-left: 100px">
-									<ul>
-										@foreach($plans as $plan)
-											<div class="row">
-												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
-
-												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}">Open</a></div>
-											</div>
-
-
-
-
-										@endforeach
-									</ul>
-								</section>
-							</section>
+			<!--project comment section-->
+			<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog" style="height:700px">
+				<div class="modal-dialog custom_popupModel ">
+					<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+						<!--<div class="pd_popup_header" align="center">
+                            <button type="button" class="close custom_popupButton proj_close" >x</button>
+                         </div>-->
+						<div class="proj_close custom-close-btn">
+							<svg viewbox="0 0 40 40">
+								<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+							</svg>
 						</div>
+						<div>
+
+							<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Plans :</b></div>
+						</div>
+
+						@foreach($plans as $plan)
+								<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+								<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}" style="color: white">Open</a></div>
+						@endforeach
 					</div>
-				</form>
+				</div>
 			</div>
 
-		</div>
 
-	</div>
-</div>
+
+			<!--project comment section end-->
+
+
+
+
 </div>
 </body>
 
