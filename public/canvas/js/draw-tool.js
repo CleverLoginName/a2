@@ -2417,7 +2417,9 @@ function getObjectFromId(id) {
 			return e.uid == id;
 		});
 		if (object == null || object == undefined) {
-			//todo search from pack data
+			object = unassigned_packItemList.find(function (e) {
+				return e.uid == id;
+			});
 		}
 		if (object != null && object != undefined) {
 			object_id_map[id] = object;

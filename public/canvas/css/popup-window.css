@@ -183,9 +183,6 @@ margin-top: 5px;*/
     height: 200px;
     padding: 10px;
     align-content:center;
-    
-    
-    
 }
 
 .product img{margin:auto; margin-bottom:20px;}
@@ -228,6 +225,19 @@ margin-top: 5px;*/
    
 }
 
+.custom-close-btn{
+    right: 0;
+    top: 0;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    background: white;
+    margin: -19px;
+    border: #294356 solid 2px;
+    border-radius: 30px;  
+}
 
-
-        
+.close-x {
+    stroke-width:3;
+    stroke:#51748c;
+}        
