@@ -13,7 +13,7 @@
         <section class="sidebar">
             @include('includes.menu')
 
-            <center style="color: white;"><h4 >ADAPTO 1.1.0(20170221)</h4><br>© Copyright 2017 - Adapto<br/>
+            <center style="color: white;"><h4 >ADAPTO Test Alpha</h4><br>© Copyright 2017 - Adapto<br/>
                 Technology Pty Limited <br/>(ACN 608 530 669).</center>
         </section>
     </aside>
