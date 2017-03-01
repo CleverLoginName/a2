@@ -200,14 +200,44 @@
         .plan_header{ width:400px; float:left}
 
 
+        .plan_img
+        {
+            /*width:  95%; /*or 70%, or what you want*/
+            height: 100%; /*or 70%, or what you want*/
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        div.page
+        {
+            page-break-after: always;
+            page-break-inside: avoid;
+
+        }
+
+        .plan_img{
+            height: 100%;
+        }
+
     </style>
 </head>
 
 <body>
-@foreach(session('projectFloors') as $floor)
+
+
+@php
+
+    $data = session('data');
+    if($data){
+        $loop = $data['loop'];
+
+
+@endphp
+@foreach($loop as $floor)
+    @if($floor['printable_image_path'] != '')
+    <div class="page">
 <div id="topSection">
-
-
 
 
     <table border="0" width="1800" cellpadding="0" cellspacing="0" class="tbl_plan_Instructions">
@@ -224,7 +254,11 @@
         </tr>
         <tr>
             <td>
-                <img src="{!! asset($floor->printable_image_path) !!}" width="100%"></td>
+                <div style="min-height: 1150px">
+                    <img src="{!! asset($floor['printable_image_path']) !!}" class="plan_img"/>
+                </div>
+
+            </td>
         </tr>
 
         </tbody>
@@ -264,7 +298,13 @@
             </p></div>
     </div>
 </div>
-
+</div>
+@endif
 @endforeach
+
+
+@php
+}
+@endphp
 </body>
 </html>

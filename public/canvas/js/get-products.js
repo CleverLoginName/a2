@@ -12,6 +12,8 @@ function escapeHtml(unsafe) {
         .replace(/\\f/g, "\\f");
 
 }
+var Data;
+ var baseUrl = '';
 (function () {
     var catalog = '';
     var category = '';
@@ -19,8 +21,7 @@ function escapeHtml(unsafe) {
     var products = '';
     var serch = '';
 
-    var baseUrl = '';
-    //var baseUrl ='http://97.107.130.164';
+   
 
 
     $.ajax({
@@ -30,6 +31,7 @@ function escapeHtml(unsafe) {
         success: function (data, textStatus, xhr) {
             $('#bom-area').removeClass("bom-hide");
             $.each(data, function (index, catelog_value) {
+                Data = data;
                 $('#' + index).text(catelog_value.catalog_name);
                 if ($('#main-' + index).hasClass("hide-catelog")) {
                     $('#main-' + index).removeClass("hide-catelog");
@@ -243,99 +245,10 @@ function escapeHtml(unsafe) {
             });
 
             // make the canvas a dropzone
-            $("#top-canvas").droppable({
-                drop: dragDrop,
-            });
-
-            // handle a drop into the canvas
-            function dragDrop(e, ui) {
-
-                var Offset = $("#top-canvas").offset();
-                var offsetX = Offset.left;
-                var offsetY = Offset.top;
-
-                var dropPnt = canvasHelper.convertViewportXyToCanvasXy({x:e.clientX - offsetX, y:e.clientY - offsetY});
-                var x = dropPnt.x;
-                var y = dropPnt.y;
+           
 
 
-                var dragItem = ui.draggable[0];
-                if ($(dragItem).hasClass('single-item')) {
-                    var draggableName = $(dragItem).attr("data-name");
-                    var draggableProductID = $(dragItem).attr("data-product-id");
-                    if (is_pack == 1) {
-                        $.each(data, function (index, catelog_value) {
-                            $.each(catelog_value.data, function (i1, v1) {
-                                $.each(v1.data, function (i2, v2) {
-                                    if (pack_id == parseInt(v2.sub_category_id)) {
-                                        addPack(x, y, v2);
-                                    }
-                                });
-                            });
-                        });
-                    } else {
-                        addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath, product_watt);
-                    }
-                    drawAllObjects();
-                    //$('#tool-items-ul li').removeClass('active');
-                }
-
-            }
-
-            function addPack(x, y, params) {
-                var pack = new PackItem();
-
-                pack.setUniqueItemID(generateUID());
-                pack.setPackID(params.sub_category_id);
-                pack.setName(params.sub_category_name);
-                pack.setPrice(params.builder_price); //TODO which price (builder_price | supplier_price | contractor_price)
-
-                $.each(params.data, function (i, product) {
-                    var currentProduct = addProduct(x + i * 40, y, product.type, product.id, product.name, product.builder_price, product.path, baseUrl + product.icon);
-                    currentProduct.isInsidePack = true;
-                    currentProduct.setParentPackID(pack.getUniqueItemID());
-                    pack.pushProduct(currentProduct.getUniqueItemID());
-                });
-                pushElementToDrawElement(pack);
-            }
-
-            function addProduct(x, y, type, id, name, price, imgPath, symbolPath, product_watt) {
-                var currentObj;
-                var product_type;
-                if (type !== undefined) {
-                    product_type = type.toLowerCase();
-                }
-
-                switch (product_type) {
-                    case "switches":
-                        currentObj = new LightSwitch();
-                        currentObj.setWatts(product_watt);
-                        break;
-
-                    case "lights":
-                        currentObj = new LightBulb();
-                        var lightBulbIndex = lightBulbArr.length + 1;
-                        currentObj.setLabel(lightBulbIndex);
-                        lightBulbArr.push(currentObj);
-                        currentObj.setWatts(product_watt);
-                        break;
-
-                    default:
-                        currentObj = new ProductItem();
-                        currentObj.setWatts(product_watt);
-                        break;
-                }
-                currentObj.setUniqueItemID(generateUID());
-                currentObj.setCoordinates(x, y);
-                currentObj.setProductID(id);
-                currentObj.setName(name);
-                currentObj.setPrice(price);
-                currentObj.setImgPath(imgPath);
-                currentObj.setSymbolPath(symbolPath);
-                currentObj.setPlanID(planID);
-                pushElementToDrawElement(currentObj); //TODO check for pack 
-                return currentObj;
-            }
+          
         },
         error: function (xhr, textStatus, errorThrown) {
             console.log('Error in Operation');
@@ -364,6 +277,108 @@ function escapeHtml(unsafe) {
     }
 
 
+    function addPack(x, y, params) {
+        var pack = new PackItem();
+
+        pack.setUniqueItemID(generateUID());
+        pack.setPrice(params.builder_price);
+        pack.setPackID(params.sub_category_id);
+        pack.setName(params.sub_category_name);
+        addPackView(params,pack.getUniqueItemID());
+        pushElementToDrawElement(pack);
+    }
+
+
+    function addProduct(x, y, type, id, name, price, imgPath, symbolPath, product_watt) {
+        var currentObj;
+        var product_type;
+        if (type !== undefined) {
+            product_type = type.toLowerCase();
+        }
+
+        switch (product_type) {
+            case "switches":
+                currentObj = new LightSwitch();
+                currentObj.setWatts(product_watt);
+                break;
+
+            case "lights":
+                currentObj = new LightBulb();
+                var lightBulbIndex = lightBulbArr.length + 1;
+                currentObj.setLabel(lightBulbIndex);
+                lightBulbArr.push(currentObj);
+                currentObj.setWatts(product_watt);
+                break;
+
+            default:
+                currentObj = new ProductItem();
+                currentObj.setWatts(product_watt);
+                break;
+        }
+        currentObj.setUniqueItemID(generateUID());
+        currentObj.setCoordinates(x, y);
+        currentObj.setProductID(id);
+        currentObj.setName(name);
+        currentObj.setPrice(price);
+        currentObj.setImgPath(imgPath);
+        currentObj.setSymbolPath(symbolPath);
+        currentObj.setPlanID(planID);
+        pushElementToDrawElement(currentObj); //TODO check for pack 
+        return currentObj;
+    }
+
+
+    $("#top-canvas").droppable({
+        drop: dragDrop,
+    });
+
+    // handle a drop into the canvas
+    function dragDrop(e, ui) {
+
+        var Offset = $("#top-canvas").offset();
+        var offsetX = Offset.left;
+        var offsetY = Offset.top;
+
+        var dropPnt = canvasHelper.convertViewportXyToCanvasXy({ x: e.clientX - offsetX, y: e.clientY - offsetY });
+        var x = dropPnt.x;
+        var y = dropPnt.y;
+
+
+        var dragItem = ui.draggable[0];
+        if ($(dragItem).hasClass('single-item')) {
+            var draggableName = $(dragItem).attr("data-name");
+            var draggableProductID = $(dragItem).attr("data-product-id");
+            if (is_pack == 1) {
+                $.each(Data, function (index, catelog_value) {
+                    $.each(catelog_value.data, function (i1, v1) {
+                        $.each(v1.data, function (i2, v2) {
+                            if (pack_id == parseInt(v2.sub_category_id)) {
+                                //addPackView(v2);
+                                addPack(x, y, v2);
+                            }
+                        });
+                    });
+                });
+            } else {
+                addProduct(x, y, prod_type, prod_id, prod_name, builder_price, image_path, iconPath, product_watt);
+            }
+            drawAllObjects();
+            //$('#tool-items-ul li').removeClass('active');
+        } else if ($(dragItem).hasClass('single-pack-view-item')) {
+            $(dragItem).attr("data-planId", planID);
+            var drawing_obj = removeAndGetUnassinedProduct(uniq_id);
+            drawing_obj.setCoordinates(x, y);
+            drawing_obj.setPlanID(planID);
+            pushElementToDrawElement(drawing_obj);
+            drawPacksInPopup();
+            //addProduct(x, y,prod_type,prod_id,product_name,builder_price,image_path,icon_path,product_watt,id_pack);
+            drawAllObjects();
+        }
+
+
+    }
+
+
     function addDragable(element) {
         var $tools = $(".single-item");
 
@@ -385,9 +400,10 @@ function escapeHtml(unsafe) {
                     prod_name = this.getAttribute("data-name");
                     iconPath = this.getAttribute("data-path1");
                 }
+                $("#top-canvas").droppable({
+                drop: dragDrop,
+            });
                 return '<img src="' + iconPath + '" />';
-            }, drag: function () {
-
             },
             cursor: 'move',
             appendTo: 'body'

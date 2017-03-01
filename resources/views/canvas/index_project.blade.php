@@ -25,6 +25,8 @@
 	{{ Html::style('pnotify.custom.min.css') }}
 	{{ Html::style('canvas/css/bom-print.css') }}
 	{{ Html::style('canvas/lib/text/summernote.css') }}
+	{{ Html::style('canvas/css/loading.css') }}
+	{{ Html::style('canvas/css/pack-view.css') }}
 	<style>
 		@media print {
 			body * {
@@ -38,7 +40,11 @@
 				left: 0;
 				top: 0;
 			}
-		}</style>
+		}
+
+
+	</style>
+
 
 
 
@@ -82,10 +88,10 @@
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
 							</div>
-							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-6 title titel-text-size content_right_head span-new"
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 title titel-text-size content_right_head span-new"
 								 id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical"
 								 style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find($floor->floor_id)->name !!}:{!! \App\ProductCatalog::find($floorCatalog->catalog_id)->name !!}</div>
-							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">@if($template){!! '1 : '.$template->scale !!} @endif</div>
+							{{--<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">@if($template){!! '1 : '.$template->scale !!} @endif</div>--}}
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9  text-in-side-menue title" >Energy Rated :</div>
@@ -390,12 +396,13 @@
 
                     <div class="modal-dialog custom_popupModel">
                         <!-- Modal content-->
-
+						<div class="custom-close-btn" data-dismiss="modal">
+							<svg viewbox="0 0 40 40">
+								<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+							</svg>
+						</div>
                         <div class="popup_con clearfix" >
                             <div class="pd_popup_header">
-
-                                <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
-
                                 <div class="image_div" align="center">
                                     <img class="pd_img"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
                                 </div>
@@ -532,13 +539,13 @@
 					</a>
 					<span class="tooltiptext">Plans</span>
 				</li>
-				<li class="tool-item top-menu-item" >
+				<!--<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="archived-plan-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/archived_plans.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/archived_plans.png') !!}">
 					</a>
 					<span class="tooltiptext" style="width: 120px">Archived Plans</span>
-				</li>
+				</li>-->
 
 				<li class="top-menu-item">|</li>
 
@@ -685,8 +692,10 @@
 	<div class="modal fade common_popup new_Project_popup" id="text-container" role="dialog">
 		<div class="modal-dialog custom_popupModel ">
 			<div class="popup_con">
-				<div class="pd_popup_header" align="center">
-					<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+				<div class="custom-close-btn" data-dismiss="modal">
+					<svg viewbox="0 0 40 40">
+						<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+					</svg>
 				</div>
 				<div>
 					<div style="width: 100%;color: white"><img src="{!! asset('/img/text.png') !!}"><b> Plan Comment:</b></div>
@@ -730,9 +739,14 @@
                 <!-- Modal content-->
                 <!--<div class="modal-content clearfix">-->
                 <div class="popup_con" style="box-shadow: 10px 10px 5px #888888;">
+					<div class="custom-close-btn" data-dismiss="modal">
+						<svg viewbox="0 0 40 40">
+							<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+						</svg>
+					</div>
                     <div class="pd_popup_header" align="center">
 
-                        <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+                        <!--<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>-->
                         <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
 						<!--this popup is not responsive , for best viewing exprince-->
                         <img class="pd_img " src="images/pd_1.png" id="popupImage" />
@@ -767,12 +781,41 @@
 
 <!--PRODUCT ICON POP UP END-->
 
+			<!--packview start-->
+		<div>
+
+			<div id="pack-view-container"  >
+				<div style="float: left;">
+
+				<div class=" minimized-pack" id="pack-zip-topic" style="float: right">
+					<img src="img/left.png" >
+					<div style="margin-top:5px;padding-left: 12px">p<br/>a<br/>c<br/>k<br/>s</div>
+				    </div>
+				</div>
+			<div class="row table-contener">
+				<div class=" row maximized-pack" style="margin-left: 0px; float: left" id="pack-expand-topic">
+					<img src="img/right.png" >
+				</div>
+				<div  class="table-body-pack" style="background-color: #52748d;float: right" id="pack-table-container">
+					<div class="pack-name-section" ><img src="img/packw.png" style="margin-right: 5px;width: 20px;height: 20px"><b style="font-size:12px">PACKS :</b></div>
+					<table id="pack-tablle" class="table-pack-body" >
+					</table>
+				</div>
+			</div>
+		</div>
+		 <!--packview end-->
+
 <!--project comment section-->
 <div class="modal fade common_popup new_Project_popup" id="project_comment_popup" role="dialog" style="height:700px">
-	<div class="modal-dialog custom_popupModel ">
-		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
-			<div class="pd_popup_header" align="center">
-				<button type="button" class="close custom_popupButton proj_close" ></button>
+    <div class="modal-dialog custom_popupModel ">
+        <div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+            <!--<div class="pd_popup_header" align="center">
+                <button type="button" class="close custom_popupButton proj_close" >x</button>
+             </div>-->
+			 <div class="proj_close custom-close-btn">
+				<svg viewbox="0 0 40 40">
+					<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+				</svg>
 			</div>
 			<div>
 
@@ -787,12 +830,68 @@
 				<div id="project_comment_display" style="width:calc(100% - 15px);    border-bottom: 0.2px dashed #51748c !important;height: 0.3px"></div>
 			</div>
 			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Save" style="color: white">
-			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancle" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
 		</div>
 	</div>
 </div>
 
+
+
 <!--project comment section end-->
+
+<div class="loading-modal"></div>
+
+<!--project print section-->
+<div class="modal fade common_popup new_Project_printpopup" id="project_print_popup" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Print Project :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+				<input type="checkbox" onClick="toggle(this)" /> Toggle All<br/>
+
+				@foreach($plans as $plan)
+					<input type="checkbox" name="print_paln" value="{!! $plan["id"] !!}"/>{!! $plan["name"] !!} <br/>
+				@endforeach
+
+			</div>
+			<input id="project_print_save" name="save_btn" type="button" class="pd_btn_save" value="Print" style="color: white">
+			<input id="project_print_cancel" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
+		</div>
+	</div>
+</div>
+<!--project print section end-->
+
+<!--project print 2 section-->
+<div class="modal fade common_popup new_Project_printpopup2" id="project_print_popup_2" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close" ></button>
+			</div>
+			<div>
+
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Print Project :</b></div>
+			</div>
+			<div class="pd_commentbox" style="margin-top: 20px">
+
+					<a href="{!! url('/print-a3/'.$project->id) !!}" class="col-md-5 col-lg-5" style="min-height: 50px"><center><h1 style="color: white">A3</h1></center></a>
+					<a href="{!! url('/print-a4/'.$project->id) !!}" class="col-md-5 col-lg-5" style="min-height: 50px"><center><h1 style="color: white">A4</h1></center></a>
+
+			</div>
+
+
+			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Print" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
+		</div>
+	</div>
+</div>
+<!--project print 2section end-->
 
 
 {{ Html::script('lib/jquery-3.1.1.js') }}
@@ -819,9 +918,11 @@
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}
+{{ Html::script('canvas/js/pack-view.js') }}
 
 
 <script>
+	var project_floor_catalog_design_id = '{!! $floorCatalogDesign->id !!}}';
 
 	$(function() {
 		init();
@@ -834,6 +935,10 @@
 
 		@endif
 
+		checkboxes = document.getElementsByName('print_paln');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = true;
+		}
 	});
 	$('#plans-button').on('click', function () {
 
@@ -847,55 +952,65 @@
 	consultentName = "{!! $consultant->title.'.'.$consultant->first_name.' '.$consultant->last_name !!}";
 	printVersion = "1";
 
+
+	$('#print-btn').click(function () {
+		$('#project_print_popup').modal({
+			show: true,
+		});
+	});
+
+	$('#project_print_save').click(function () {
+		$('#project_print_popup').modal('hide');
+		$('#project_print_popup_2').modal({
+			show: true,
+		});
+	});
+
+	function toggle(source) {
+		checkboxes = document.getElementsByName('print_paln');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = source.checked;
+		}
+	}
 </script>
 
 
 
 <!-- ========================= MODEL POPUP STARTS ============================ -->
 
-<!-- Modal -->
-<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog">
-	<div class="modal-dialog">
 
-		<!-- Modal content-->
-		<div class="modal-content clearfix">
-			<div class="modal-header">
-
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Project Plans:</h4>
-
-			</div>
-			<div class="modal-body" id="templates">
-				<form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-					  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/catalogs') !!}">
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-							<section class="row form-group">
-								<section class="col-md-12" style="margin-left: 100px">
-									<ul>
-										@foreach($plans as $plan)
-											<div class="row">
-												<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
-
-												<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}">Open</a></div>
-											</div>
-
-
-
-
-										@endforeach
-									</ul>
-								</section>
-							</section>
+			<!--project comment section-->
+			<div class="modal fade common_popup new_Project_popup template_modal" id="myModal" role="dialog" style="height:700px">
+				<div class="modal-dialog custom_popupModel ">
+					<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+						<!--<div class="pd_popup_header" align="center">
+                            <button type="button" class="close custom_popupButton proj_close" >x</button>
+                         </div>-->
+						<div class="proj_close custom-close-btn">
+							<svg viewbox="0 0 40 40">
+								<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+							</svg>
 						</div>
+						<div>
+
+							<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Plans :</b></div>
+						</div>
+
+						@foreach($plans as $plan)
+								<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($plan['img']) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+								<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('projects/'.$project->id.'/plans/'.$plan['id'].'/canvas') !!}" style="color: white">Open</a></div>
+						@endforeach
 					</div>
-				</form>
+				</div>
 			</div>
 
-		</div>
 
-	</div>
+
+			<!--project comment section end-->
+
+
+
+
 </div>
 </body>
 

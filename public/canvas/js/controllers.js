@@ -74,11 +74,11 @@ $("#redo").on("click", function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     redo();
 });
-
+/*
 $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     printCanvas();
-});
+});*/
 // icons actions end
 
 
@@ -286,10 +286,10 @@ $(function () {
         var print_dataUrl = getFullCanvas().toDataURL("image/png");
         var saveData = {
             // metaData: { scaleFactor: scaleFactor },
-            products: { data: productDataArray, isChanged: isProductDataChanged , lastCommentIndex: productCommentIndex},
+            products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex },
             floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
-            project: { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments },
-            _token:''
+            project: { data: projectDataArray, isChanged: isProjectDataChanged, proj_comments: projcetComments, bom: project_bom_dict },
+            _token: ''
         }
 
         var fileName = "drawtool.dtf";
@@ -416,6 +416,7 @@ function loadSavedFile(fileName) {
             var projectData = fileDetails.project.data;
             projcetComments  = fileDetails.project.proj_comments;
             productCommentIndex = fileDetails.products.lastCommentIndex; 
+            project_bom_dict = fileDetails.project.bom;
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
@@ -591,6 +592,19 @@ $(".toggle-button").click( function () {
 $(document).ready(function() { 
     showTopIcons();
     isFirstTime = true;
+    if (unassigned_packItemList.length != 0) {
+        drawPacksInPopup();
+        $('#pack-view-container').show();
+        $('#pack-expand-topic').show();
+        $('#pack-view-container').addClass('animated bounceIn');
+        $('#pack-zip-topic').removeClass("bounceInUp").addClass('animated bounceOutDown');
+        $('#pack-expand-topic').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        $('#pack-table-container').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        //   $('#pack-expand-topic').removeClass('minimized-pack');
+        $('#pack-zip-topic').addClass('minimized-pack');
+        $('#pack-view-container').height(300);
+        $('#pack-view-container').width(260);
+    }
     $('#project_comment_area').summernote({
         height: 70,                 // set editor height
         minHeight: 70,             // set minimum height of editor
@@ -624,3 +638,7 @@ function showTopIcons() {
     $('.top-menu-item').show();
 }
 
+$(document).on({
+    ajaxStart: function () { $("body").addClass("loading"); },
+    ajaxStop: function () { $("body").removeClass("loading"); }
+});

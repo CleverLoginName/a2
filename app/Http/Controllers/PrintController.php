@@ -11,12 +11,14 @@ use App\Template;
 use App\TemplateFloor;
 use App\TemplateFloorCatalog;
 use iio\libmergepdf\Merger;
-use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+
 class PrintController extends Controller
 {
-    public function  test(){
+    public function  test($projectid){
         //$this->getAllProducts(2);
         $m = new Merger();
 /*
@@ -39,32 +41,58 @@ class PrintController extends Controller
 
         return file_put_contents('combined.pdf', $m->merge());*/
 
-
-        $data = $this->getAllProducts(5);
+        $project = Project::find($projectid);
+        $data = $this->getAllProducts($projectid);
         $data0 = $data[0];
         $data1 = $data[1];
         //dd($data1);
-        session(['products'=>$data0,'qty'=>$data1]);
+        session(['products'=>$data0,'qty'=>$data1,'project'=>$project]);
         $pdf = \PDF::loadView('print.test', ['a'=>$data])->setPaper('a4');
         $m->addRaw($pdf->output());
         $pdf = \PDF::loadView('print.test2', ['a'=>$data])->setPaper('a4');
         $m->addRaw($pdf->output());
-        return file_put_contents('combined.pdf', $m->merge());
-        return $pdf->download('invoice.pdf');
+        return file_put_contents('a4.pdf', $m->merge());
+        //return $pdf->download('invoice.pdf');
     }
-    public function  a3(){
+    public function  a3($projectid){
         //$this->getAllProducts(2);
         $m = new Merger();
-        $project = Project::find(5);
+        $projectFloorCatalogDesigns = [];
+        $loop = [];
+        $project = Project::find($projectid);
         $projectFloors = ProjectFloor::where('project_id','=',$project->id)->get();
+        foreach ($projectFloors as $projectFloor){
+            $loop[] = ['printable_image_path'=>$projectFloor->printable_image_path];
+            $projectFloorCatalogs = ProjectFloorCatalog::where('project_floor_id','=',$projectFloor->id)->get();
+            foreach ($projectFloorCatalogs as $projectFloorCatalog){
+                $projectFloorCatalogDesigns[] = ProjectFloorCatalogDesign::where('project_floor_catalog_id','=',$projectFloorCatalog->id)->get();
+            }
+        }
 
-        session(['projectFloors'=>$projectFloors]);
-        $pdf = \PDF::loadView('print.plan', ['a'=>$projectFloors])->setPaper('a3')->setOrientation('landscape');
+        $data = [
+            'projectFloorCatalogDesigns' => $projectFloorCatalogDesigns,
+            'project' => $project,
+            'loop' => $loop
+        ];
+        session(['data'=>$data]);
+        $pdf = \PDF::loadView('print.plan', ['a'=>$projectFloors])
+            ->setPaper('a3')
+           // ->setOption('footer-html',$request->root().'/print/footers/a3')
+            ->setOrientation('landscape');
+
+
+
+
         $m->addRaw($pdf->output());
-        return file_put_contents('combined.pdf', $m->merge());
+        return file_put_contents('a3.pdf', $m->merge());
+    }
+
+    public function a3footer(){
+        return view('print.a3_footer');
     }
 
     private function getAllProducts($project_id){
+        $canvas_id_data = [];
         $canvas_data = [];
         $project = Project::find($project_id);
         $projectFloors = ProjectFloor::where('project_id','=',$project->id)->get();
@@ -112,5 +140,29 @@ class PrintController extends Controller
     public function  test2(){
         return view('print.test2');
 
+    }
+
+
+    public function downloadA4($projectid)
+    {
+        $this->test($projectid);
+        $file= public_path(). "/a4.pdf";
+
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return Response::download($file, 'A4.pdf', $headers);
+    }
+    public function downloadA3($projectid)
+    {
+        $this->a3($projectid);
+        $file= public_path(). "/a3.pdf";
+
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return Response::download($file, 'A3.pdf', $headers);
     }
 }

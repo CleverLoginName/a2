@@ -74,11 +74,11 @@ $("#redo").on("click", function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     redo();
 });
-
+/*
 $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     printCanvas();
-});
+});*/
 // icons actions end
 
 
@@ -288,7 +288,7 @@ $(function () {
             // metaData: { scaleFactor: scaleFactor },
             products: { data: productDataArray, isChanged: isProductDataChanged , lastCommentIndex: productCommentIndex},
             floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
-            project: { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments },
+            project: { data: projectDataArray, isChanged: isProjectDataChanged,proj_comments:projcetComments,unAssignedProducts:unassigned_packItemList , bom: project_bom_dict },
             _token:'',
             template_floor_catalog_design_id:template_floor_catalog_design_id
         }
@@ -452,9 +452,12 @@ $(function () {
             var productData = JSON.parse(fileDetails.products.data);
             var floorplanData = JSON.parse(fileDetails.floorplan.data);
             var projectData = JSON.parse(fileDetails.project.data);
-            projcetComments  = fileDetails.project.proj_comments;
-            productCommentIndex = fileDetails.products.lastCommentIndex;
-
+ 
+            projcetComments = (fileDetails.project.proj_comments == undefined) ? '' : fileDetails.project.proj_comments;
+            productCommentIndex = (fileDetails.products.lastCommentIndex == undefined) ? 0 : fileDetails.products.lastCommentIndex;
+            project_bom_dict = (fileDetails.project.bom == undefined) ? {} : fileDetails.project.bom;
+            unassigned_packItemList= (fileDetails.products.unAssignedProducts == undefined) ? [] : fileDetails.project.unAssignedProducts;
+            
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
             projectData.forEach( generateAndLoadObjectFromParams );
@@ -586,6 +589,19 @@ $(".toggle-button").click( function () {
 $(document).ready(function() { 
     showTopIcons();
     isFirstTime = true;
+    if (unassigned_packItemList.length != 0) {
+        drawPacksInPopup();
+        $('#pack-view-container').show();
+        $('#pack-expand-topic').show();
+        $('#pack-view-container').addClass('animated bounceIn');
+        $('#pack-zip-topic').removeClass("bounceInUp").addClass('animated bounceOutDown');
+        $('#pack-expand-topic').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        $('#pack-table-container').addClass('animated bounceInRight').removeClass("bounceOutRight");
+        //   $('#pack-expand-topic').removeClass('minimized-pack');
+        $('#pack-zip-topic').addClass('minimized-pack');
+        $('#pack-view-container').height(300);
+        $('#pack-view-container').width(260);
+    }
     $('#project_comment_area').summernote({
         height: 70,                 // set editor height
         minHeight: 70,             // set minimum height of editor
@@ -619,3 +635,7 @@ function showTopIcons() {
     $('.top-menu-item').show();
 }
 
+$(document).on({
+    ajaxStart: function () { $("body").addClass("loading"); },
+    ajaxStop: function () { $("body").removeClass("loading"); }
+});

@@ -25,6 +25,8 @@
 	{{ Html::style('pnotify.custom.min.css') }}
 	{{ Html::style('canvas/css/bom-print.css') }}
 	{{ Html::style('canvas/lib/text/summernote.css') }}
+	{{ Html::style('canvas/css/loading.css') }}
+	{{ Html::style('canvas/css/pack-view.css') }}
 	<style>
 		@media print {
 			body * {
@@ -57,8 +59,8 @@
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 panel_top_width"   >
 								<img class="pro-logo" src="{!! asset('img/logooo.png') !!}" align="center">
 							</div>
-							<div class="col-xs-7 col-sm-10 col-md-7 col-lg-7 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find($templateFloor->floor_id)->name !!}:{!! \App\ProductCatalog::find($templateFloorCatalog->catalog_id)->name !!}</div>
-							<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px">1:100</div>
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 title titel-text-size content_right_head span-new"  id="plan-name" data-toggle="tooltip" data-placement="left" title="Fist Floor:Electrical" style="margin-top: 5px; padding-left:10px;">{!! \App\Floor::find($templateFloor->floor_id)->name !!}:{!! \App\ProductCatalog::find($templateFloorCatalog->catalog_id)->name !!}</div>
+							<!--<div class="col-xs-3 col-sm-1 col-md-3 col-lg-3  title pull-right text-center titel-text-size" id="scale1" align="right" style="margin-top: 5px"></div>-->
 						</div>
 						<div class="row" style=" margin-bottom:2px; " >
 							<div class="col-xs-6 col-sm-11 col-md-9 col-lg-9  text-in-side-menue title" >Energy Rated :</div>
@@ -358,12 +360,13 @@
 
                     <div class="modal-dialog custom_popupModel">
                         <!-- Modal content-->
-
+						<div class="custom-close-btn" data-dismiss="modal">
+							<svg viewbox="0 0 40 40">
+								<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+							</svg>
+						</div>
                         <div class="popup_con clearfix" >
                             <div class="pd_popup_header">
-
-                                <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
-
                                 <div class="image_div" align="center">
                                     <img class="pd_img"  id="left_popup_imgProduct" style="background-color: whitesmoke;background-size:100% auto; "/>
                                 </div>
@@ -509,13 +512,13 @@
 					</a>
 					<span class="tooltiptext">Plans</span>
 				</li>
-				<li class="tool-item top-menu-item" >
+				<!--<li class="tool-item top-menu-item" >
 					<a href="javascript:void(0)" id="archived-plan-button">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/archived_plans.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/archived_plans.png') !!}">
 					</a>
 					<span class="tooltiptext" style="width: 120px">Archived Plans</span>
-				</li>
+				</li>-->
 
 				<li class="top-menu-item">|</li>
 
@@ -662,8 +665,10 @@
 	<div class="modal fade common_popup new_Project_popup" id="text-container" role="dialog">
 		<div class="modal-dialog custom_popupModel ">
 			<div class="popup_con">
-				<div class="pd_popup_header" align="center">
-					<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+				<div class="custom-close-btn" data-dismiss="modal">
+					<svg viewbox="0 0 40 40">
+						<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+					</svg>
 				</div>
 				<div>
 					<div style="width: 100%;color: white"><img src="{!! asset('/img/text.png') !!}"><b> Plan Comment:</b></div>
@@ -708,9 +713,14 @@
                 <!-- Modal content-->
                 <!--<div class="modal-content clearfix">-->
                 <div class="popup_con" style="box-shadow: 10px 10px 5px #888888;">
+					<div class="custom-close-btn" data-dismiss="modal">
+						<svg viewbox="0 0 40 40">
+							<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+						</svg>
+					</div>
                     <div class="pd_popup_header" align="center">
 
-                        <button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
+						<!--<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
                         <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
 						<!--this popup is not responsive , for best viewing exprince-->
                         <img class="pd_img " src="images/pd_1.png" id="popupImage" />
@@ -743,14 +753,38 @@
             </div>
         </div>
 
-<!--PRODUCT ICON POP UP END-->
+            <!--PRODUCT ICON POP UP END-->
+		<div id="pack-view-container" style="float: right;">
+			<div class=" minimized-pack" id="pack-zip-topic" style="float: right">
+				<img src="img/left.png">
+				<div style="margin-top:5px;padding-left: 12px">p<br/>a<br/>c<br/>k<br/>s</div>
+			</div>
+			<div class="row table-contener" style="width: 260px;float: right">
+				<div class=" row maximized-pack" style="margin-left: 0px; float: left" id="pack-expand-topic">
+					<img src="img/right.png">
+				</div>
+				<div class="table-body-pack" style="background-color: #52748d;float: right" id="pack-table-container">
+					<div class="pack-name-section">
+						<img src="img/packw.png" style="margin-right: 5px;width: 20px;height: 20px"><b style="font-size:12px">PACKS :</b>
+					</div>
+					<table id="pack-tablle" class="table-pack-body">
+					</table>
+				</div>
+			</div>
+		</div>
+		 <!--packview end-->
 
 <!--project comment section-->
 <div class="modal fade common_popup new_Project_popup" id="project_comment_popup" role="dialog" style="height:700px">
-	<div class="modal-dialog custom_popupModel ">
-		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
-			<div class="pd_popup_header" align="center">
-				<button type="button" class="close custom_popupButton proj_close" ></button>
+    <div class="modal-dialog custom_popupModel ">
+        <div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+            <!--<div class="pd_popup_header" align="center">
+                <button type="button" class="close custom_popupButton proj_close" >x</button>
+             </div>-->
+			 <div class="proj_close custom-close-btn">
+				<svg viewbox="0 0 40 40">
+					<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+				</svg>
 			</div>
 			<div>
 
@@ -771,6 +805,8 @@
 </div>
 
 <!--project comment section end-->
+
+<div class="loading-modal"></div>
 
 <script>
 	var template_floor_catalog_design_id = '{!! $template_floor_catalog_design_id !!}';
@@ -800,6 +836,7 @@
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
 {{ Html::script('pnotify.custom.min.js') }}
+{{ Html::script('canvas/js/pack-view.js') }}
 
 
 <script>
@@ -825,68 +862,46 @@
 </script>
 
 
-<!-- ========================= MODEL POPUP STARTS ============================ -->
 
-<!-- Modal -->
-<div class="modal fade common_popup new_Project_popup template_modal" id="myModal_" role="dialog">
-	<div class="modal-dialog">
-
-		<!-- Modal content-->
-		<div class="modal-content clearfix">
-			<div class="modal-header">
-
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Project Plans:</h4>
-
+<!--project comment section-->
+<div class="modal fade common_popup new_Project_popup template_modal" id="myModal_" role="dialog" style="height:700px">
+	<div class="modal-dialog custom_popupModel ">
+		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
+			<!--<div class="pd_popup_header" align="center">
+                <button type="button" class="close custom_popupButton proj_close" >x</button>
+             </div>-->
+			<div class="proj_close custom-close-btn">
+				<svg viewbox="0 0 40 40">
+					<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+				</svg>
 			</div>
-			<div class="modal-body" id="templates">
-				<form class="row new-item-from-wrapper" role="form" method="post" id="new-prod-form"
-					  enctype="multipart/form-data" novalidate="novalidate" action="{!! url('/catalogs') !!}">
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
-									<input type="hidden" name="_token" value="{{ csrf_token() }}">
-									<section class="row form-group">
-										<section class="col-md-12" style="margin-left: 100px">
-											<ul>
-												@foreach($templateFloors as $templateFloor)
-													@php
-														$templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('id','=',$templateFloor->id)->get();
-														$templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
-													@endphp
+			<div>
 
-													@foreach($templateFloorCatalogs as $templateFloorCatalog)
-
-														@php
-															$templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
-														@endphp
-
-														@foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
-<div class="row">
-	<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
-
-	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Open</a></div>
-</div>
-
-
-
-
-
-												@endforeach
-												@endforeach
-												@endforeach
-											</ul>
-										</section>
-										</section>
-						</div>
-					</div>
-				</form>
+				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Plans :</b></div>
 			</div>
+			@foreach($templateFloors as $templateFloor)
+				@php
+					$templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('id','=',$templateFloor->id)->get();
+                    $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
+				@endphp
 
+				@foreach($templateFloorCatalogs as $templateFloorCatalog)
+
+					@php
+						$templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
+					@endphp
+
+					@foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+							<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
+							<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}" style="color: white;">Open</a></div>
+					@endforeach
+				@endforeach
+			@endforeach
 		</div>
-
 	</div>
 </div>
-<!-- ========================= MODEL POPUP ============================ -->
+
+
 
 </body>
 

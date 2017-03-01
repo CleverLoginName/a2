@@ -3,11 +3,6 @@
 <head>
     <title>Print Table</title>
     <style>
-        h1, h2, h3, h4, h5 {
-            font-family: extB;
-        }
-        .bld {font-family: extB}
-        .bld_price{ font-family: extB; font-size:30px;}
         table td {	vertical-align: top;color: #404342}
         .tbl_authorise td {	vertical-align: middle}
         .common_padding {padding: 30px 30px 0px 10px;}
@@ -45,7 +40,7 @@
             list-style: none
         }
         .tbl_main td ul li {
-            background: url(http://192.168.33.10/print_static/images/bullet.jpg) no-repeat 0px 4px;
+            background: url(http://dev.adapto.com.au/print_static/images/bullet.jpg) no-repeat 0px 4px;
             padding-left: 30px;
         }
         .tbl_top td:first-child {border-right: 5px solid #bdbdbd}
@@ -106,7 +101,7 @@
 
 
 <div id="topSection">
-    <div class="logo"><img src="http://192.168.33.10/print_static/images/logo.jpg"/></div>
+    <div class="logo"><img src="http://test.adapto.com.au/print_static/images/logo.jpg"/></div>
     <table width="800" border="0" cellpadding="0" cellspacing="0" class="tbl_main">
         <tbody>
         <tr>
@@ -192,32 +187,6 @@
     </table>
     <div class="end">END</div>
 </div>
-
-
-<!-- =============== FOOTER ============= -->
-<div class="site_container">
-    <div class="wr_footer"  id="inner">
-        <div class="footer">
-            <table width="100%" border="0" class="tbl_authorise">
-                <tbody>
-                <tr>
-                    <td scope="col" width="230"><img src="http://192.168.33.10/print_static/images/logo_portar_davis.jpg" /></td>
-                    <td scope="col" align="left"><span class="bld">Client</span> Authorisation ..........................................................................................</td>
-                    <td scope="col" align="right">Date .......</td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-
-        <div class="footer_stripe"></div>
-        <div class="footer_para"><p>Level 10 720 Bourke St Docklands Vic 3008 P: 03555 5555 E: sales@iporterdavis.com.au W: porterdavis.com.au<br>
-                Please Note: Terms and Conidtions do apply as is product subject availibifity. To review our Terms and conditions, please visit our website. Adapto is a registered trademark of Adapto Technologies Pty Limited.
-            </p></div>
-    </div>
-</div>
-
 
 <!-- =============== FOOTER ENDS ============= -->
 

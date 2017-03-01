@@ -58,6 +58,7 @@ var DataLevel = {
 var project_pack_list = []; //array of packs in the project
 var project_bom_dict = {}; 
 var project_bom_dict_std_inc = {}; 
+var unassigned_packItemList = [];
 //------------------------------
 
 // ......................
@@ -148,7 +149,6 @@ var wallPointsCount = 0;
  
 function init(){
 	checkIE();
-
 	canvasOrig = document.getElementById('draw-tool-canvas');
 	contextOrig = canvasOrig.getContext("2d");
 	contextOrig.strokeStyle = "#0000FF";
@@ -753,7 +753,7 @@ function getDataLevel(obj){
 		case ObjectType.LIGHT_BULB:
 		case ObjectType.LIGHT_SWITCH:
 		case ObjectType.TEXT:
-		case ObjectType.PACK: //todo move to project 
+		//case ObjectType.PACK: //todo move to project 
 		case ObjectType.CONNECT:
 			return DataLevel.PROJECT_FLOORPLAN_PRODUCT;
 
@@ -763,8 +763,8 @@ function getDataLevel(obj){
 		//case ObjectType.PLANIMAGE: //todo
 			return DataLevel.PROJECT_FLOORPLAN;
 
-		// case ObjectType.PACK:
-		// 	return DataLevel.PROJECT;
+		case ObjectType.PACK:
+			return DataLevel.PROJECT;
 	
 		default:
 			return DataLevel.NONE;
@@ -799,7 +799,7 @@ function pushElementToDrawElement(e, ignoreCopyToStack){
 	if (relatedSubArr != null) {
 		relatedSubArr.push(e);
 	}
-	
+	addElemantToBom(e);
 	drawElements.push(e);
 	if (!(ignoreCopyToStack != undefined && ignoreCopyToStack == true)){
 		copyDrawElementsToStack();
@@ -830,6 +830,7 @@ function popElementFromDrawElementsAndStack(){
 
 function pushDeletedElement(del_obj){
 	deletedElements.push(del_obj);
+	removeElemantFromBom(del_obj);
 	var relatedArr = getRelatedArray(del_obj, true);
 	if (relatedArr != null) {
 		//remove element from related array
@@ -2114,34 +2115,44 @@ function paste(selObjIndex){
 }
 
 function deleteContainingPack(productitem){
-	if (productitem.isInsidePack) {
-		var containingPack = getObjectFromId(productitem.getParentPackID());
-		// var canDeletePack = confirm("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
-		alert("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
-		var canDeletePack = true;
+	// if (productitem.isInsidePack) {
+	// 	var containingPack = getObjectFromId(productitem.getParentPackID());
+	// 	// var canDeletePack = confirm("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
+	// 	//alert("Selected product is associated with the pack : "+containingPack.name+"\nHence whole pack will be deleted");
+	// 	var canDeletePack = true;
 
-		if(canDeletePack){
-			containingPack.product_list.forEach( function (p_uid) {
-				removeObjectFromDrawElements(getObjectFromId(p_uid));
-			});
-			removeObjectFromDrawElements(containingPack);
-		}
+	// 	if(canDeletePack){
+	// 		containingPack.product_list.forEach( function (p_uid) {
+	// 			removeObjectFromDrawElements(getObjectFromId(p_uid));
+	// 		});
+	// 		removeObjectFromDrawElements(containingPack);
+	// 	}
+	// 	$('#mouse-action-container').hide();
+	// 	drawelementListChanged = true;
+	// 	drawAllObjects();
+	// 	//TODO undo redo support
+	// }
+	if(productitem.getParentPackID() != undefined){
+		removeObjectFromDrawElements(productitem);
+		unassigned_packItemList.push(productitem);
+		drawPacksInPopup();
+		
+	}
 		$('#mouse-action-container').hide();
 		drawelementListChanged = true;
 		drawAllObjects();
-		//TODO undo redo support
-	}
 }
 
 /* Deletes an object and put it on the deleted objects array */
  function deleteObj(selObjIndex){
 	memObject = drawElements[selObjIndex];
-	if (memObject instanceof ProductItem) {
-		if (memObject.isInsidePack) {
-			deleteContainingPack(memObject);
-			return;
-		}
-	}
+	// if (memObject instanceof ProductItem) {
+	// 	if (memObject.isInsidePack) {
+	// 		deleteContainingPack(memObject);
+	// 		return;
+	// 	}
+	// }
+
 	changeObj = new ChangeObject(memObject);
 	changeObj.setDrawElementIndex(selObjIndex);
 	
@@ -2156,6 +2167,11 @@ function deleteContainingPack(productitem){
 	populateLightBulbMenu();
 	$('#mouse-action-container').hide();
 	drawelementListChanged = true;
+	if (memObject.getParentPackID() != undefined) {
+		unassigned_packItemList.push(memObject);
+		drawPacksInPopup();
+
+	}
 	drawAllObjects();
 }
 
@@ -2401,7 +2417,9 @@ function getObjectFromId(id) {
 			return e.uid == id;
 		});
 		if (object == null || object == undefined) {
-			//todo search from pack data
+			object = unassigned_packItemList.find(function (e) {
+				return e.uid == id;
+			});
 		}
 		if (object != null && object != undefined) {
 			object_id_map[id] = object;

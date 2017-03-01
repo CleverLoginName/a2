@@ -385,7 +385,7 @@ class ProjectsController extends Controller
             foreach ($projectFloorCatalogs as $projectFloorCatalog){
                 $projectFloorCatalogDesigns = DB::table('project_floor_catalog_designs')->where('project_floor_catalog_id','=',$projectFloorCatalog->id)->get();
                 foreach ($projectFloorCatalogDesigns as $projectFloorCatalogDesign){
-                    $projectFloorCatalogDesignArray[] = ['id'=>$projectFloorCatalogDesign->id, 'img'=>$projectImage->path];
+                    $projectFloorCatalogDesignArray[] = ['id'=>$projectFloorCatalogDesign->id, 'img'=>$projectImage->path,'name'=>$projectFloorCatalogDesign->name];
                 }
             }
         }
@@ -729,12 +729,80 @@ class ProjectsController extends Controller
         }
 
 
-        /**************************************************************************************************************/
 
         $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($request->get('id'));
         $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
         $projectFloor = ProjectFloor::find($projectFloorCatalog->project_floor_id);
+        $projectImage = ProjectImage::find($projectFloor->project_image_id);
         $project = Project::find($projectFloor->project_id);
+
+
+        /**************************************************************************************************************/
+        if($request->file('image') != null){
+
+            $file = $request->file('image');
+
+            $path = $projectImage->path;
+            $project_image_path = 'uploads/projects/'.$project->id.'/originals/';
+            $project_image_name = explode($project_image_path, $path);
+            $project_image_name = $project_image_name[1];
+
+            $randFileName = $project_image_name;
+            //Move Uploaded File
+            $destinationPath = 'uploads/projects/'.$project->id.'/originals/';
+            $destinationPathThumb = 'uploads/projects/'.$project->id.'/300x200/';//dd(public_path().'/'.$destinationPath);
+            $destinationPathPdf = 'uploads/projects/'.$project->id.'/pdf/';//dd(public_path().'/'.$destinationPath);
+
+            File::exists('uploads') or File::makeDirectory('uploads');
+            File::exists('uploads/projects') or File::makeDirectory('uploads/projects');
+            File::exists('uploads/projects/'.$project->id) or File::makeDirectory('uploads/projects/'.$project->id);
+            File::exists(public_path().'/'.$destinationPath) or File::makeDirectory(public_path().'/'.$destinationPath);
+            File::exists(public_path().'/'.$destinationPathThumb) or File::makeDirectory(public_path().'/'.$destinationPathThumb);
+
+            File::delete($project_image_path.$project_image_name);
+            if('pdf' === $file->getClientOriginalExtension()){
+
+                $pdf_path = public_path().'/'.$destinationPath.'pdf/';
+                File::exists($pdf_path) or File::makeDirectory($pdf_path);
+                $file->move($pdf_path,$randFileName);
+
+                $pdf = new Pdf($pdf_path.$randFileName);
+                $pdf->setOutputFormat('png')
+                    ->saveImage($destinationPath.$randFileName);
+
+                $randFileName = $project_image_name;
+            }else{
+                $file->move($destinationPath,$randFileName);
+            }
+
+
+            //$projectImage = ProjectImage::find($projectImage->id);
+            //$projectImage->name = $file->getClientOriginalName();
+            $projectImage->path = $destinationPath.$randFileName;
+            $projectImage->save();
+
+
+            $updateProjectFloors  = ProjectFloor::where('project_id', '=',$project->id)->
+            where('floor_id', '=',$request->get('level'))->
+            get();
+
+            foreach ($updateProjectFloors as $updateProjectFloor){
+                $tmp_ = ProjectFloor::where('id', '=',$updateProjectFloor->id)->first();
+                $tmp_->project_image_id = $projectImage->id;
+                $tmp_->save();//
+            }
+
+        }
+
+
+
+
+        /**************************************************************************************************************/
+
+
+
+        /**************************************************************************************************************/
+
 
         $projectFloorCatalog->catalog_id = $request->get('catalog_id');
         $projectFloorCatalogDesign->name = $request->get('design');
