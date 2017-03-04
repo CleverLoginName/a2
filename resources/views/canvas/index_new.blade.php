@@ -9,6 +9,8 @@
     {{ Html::style('canvas/css/address-bar.css') }}
     {{ Html::style('canvas/css/popup-window.css') }}
     {{ Html::style('canvas/lib/jquery-ui.min.css') }}
+	   {{ Html::style('canvas/lib/pnotify/pnotify.custom.min.css') }}
+	   {{ Html::style('canvas/lib/pnotify/pnotify.buttons.css') }}
     {{ Html::style('canvas/bootstrap/dist/css/bootstrap.min.css') }}
     {{ Html::style('canvas/bootstrap/css/bootstrap.min.css') }}
     {{ Html::style('canvas/dist/css/lobipanel.min.css') }}
@@ -40,7 +42,92 @@
 				left: 0;
 				top: 0;
 			}
-		}</style>
+		}
+
+
+		.border_color{
+			background-color: #e7e7e7 !important;
+		}
+
+		.inside_popup_plan{
+			background-color: #575354 !important;
+			padding: 10px !important;
+			margin-bottom: 10px !important;
+		}
+
+		.inside_popup_plan ul{
+			padding: 0px !important;
+			background-color: #575354 !important;
+		}
+
+		.inside_popup_plan ul li{
+			padding: 0px !important;
+			background-color: #575354 !important;
+		}
+
+		.btn_assign {
+			border: 1px solid #333;
+			background: #0060d8;
+			border-radius: 3px;
+			padding: 2px 20px;
+			color: #fff;
+			margin-bottom: 0px !important;
+			margin-top: 10px;
+		}
+
+		.hedder_plan_selection{
+			background-color: #575354 !important;
+			color: white !important;
+		}
+
+		.plan_select_body{
+			background-color: white !important;
+			color: #0060d8 !important;
+		}
+
+		.img_plan_select{
+			height: 200px !important;
+			width: 250px !important;
+		}
+
+		.plan_save_date{
+			margin-top: 20px !important;
+		}
+
+		.plan_save_date_value{
+			margin-bottom: 15px;
+		}
+
+		.plan_select_btn{
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+		.pd_commentbox h3{
+
+			margin: 0px !important;
+		}
+
+		.topic_select_plan{
+
+			margin-top: 10px !important;
+		}
+
+
+		.model_search_results {
+			height: 422px;
+			overflow-y: auto;
+		}
+
+
+		.pd_popup_header .plan_select{
+			margin-top: -35px;
+			margin-right: -75px;
+			background: #fff;
+		}
+
+
+	</style>
 
 
 
@@ -89,16 +176,6 @@
 						</div>
 					</div>
 			</div>
-            
-            
-            
-            
-            
-            
-            
-                
-                
-                
                 
 			<div class="panel-body back-ground-colour-inner main-body-tag inside-body-pan selected-panel-body-pan" id="main-pannel-body">
 				<div class="panel panel-default inner-class cat hide-catelog" id="main-0">
@@ -469,6 +546,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/home.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/home.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Home</span>
 				</li>
 
@@ -477,6 +555,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/saveIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/saveIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Save</span>
 				</li>
 
@@ -485,6 +564,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/printIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/printIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Print</span>
 				</li>
 
@@ -500,6 +580,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/project_comment.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/project_comment.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 120px">Project Comment</span>
 				</li>
 
@@ -510,6 +591,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/plan.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/plan.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Plans</span>
 				</li>
 				<!--<li class="tool-item top-menu-item" >
@@ -527,6 +609,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/undo.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/undo.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Undo</span>
 				</li>
 				<li class="tool-item top-menu-item" >
@@ -534,6 +617,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/redo.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/redo.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Redo</span>
 				</li>
 
@@ -544,6 +628,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/selectIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/selectIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Select</span>
 				</li>
 
@@ -552,6 +637,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/NewWallIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/NewWallIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 100px">Draw wall</span>
 				</li>
 
@@ -560,14 +646,16 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/eraser_icon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/eraser_icon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Eraser</span>
 				</li>
 
-				<li id="add-text" class="tool-item toggle-button top-menu-item" >
+				<li id="add-text" class="tool-item top-menu-item" >
 					<a href="javascript:void(0)">
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/text.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/text.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 120px">Add Plan Note</span>
 				</li>
 
@@ -576,6 +664,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/scale.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/scale.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 120px">Scale object</span>
 				</li>
 
@@ -584,6 +673,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/handIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/handIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Pan</span>
 				</li>
 
@@ -594,6 +684,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/zoom_in.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/zoom_in.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 100px">Zoom in</span>
 				</li>
 				<li class="tool-item top-menu-item" >
@@ -601,6 +692,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/zoom_out.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/zoom_out.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext" style="width: 100px">Zoom out</span>
 				</li>
 			</ul>
@@ -612,6 +704,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/infomationIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/infomationIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Help</span>
 				</li>
 				<li class="tool-item top-menu-item" >
@@ -619,6 +712,7 @@
 						<img class="image-item" 		src="{!! asset('img/tool-bar/black/logOffIcon.png') !!}">
 						<img class="image-item-hover" 	src="{!! asset('img/tool-bar/blue/logOffIcon.png') !!}">
 					</a>
+					</br>
 					<span class="tooltiptext">Settings/Logout</span>
 				</li>
 			</ul>
@@ -684,7 +778,6 @@
 		</div>
 	</div>
 
-
 	</div>
 	<div id="item-popup-conW" class="item-popup " title="Connect Lights">
 		<img src="/img/DesignCanvassCreateSwitchWire.png" class="image-background">
@@ -723,8 +816,8 @@
 						<!--<button type="button" class="close custom_popupButton" data-dismiss="modal"></button>
                         <!--<h4 class="modal-title ttl_consultants">Consultants:</h4>-->
 						<!--this popup is not responsive , for best viewing exprince-->
-                        <img class="pd_img " src="images/pd_1.png" id="popupImage" />
-                        <div class="ico_cw" style="border-style: solid;border-width: 1px;border-color:gray"><img style="width:50px;height:50px;" src="images/ico_cw.jpg" id="popupImageIcon"/></div>
+                        <img class="pd_img " src="" id="popupImage" />
+                        <div class="ico_cw" style="border-style: solid;border-width: 1px;border-color:gray"><img style="width:50px;height:50px;" src="" id="popupImageIcon"/></div>
                     </div>
                     <div class="pd_details_con">
                         <h2 id="canvas_popup_productName" class="no-margin" style="max-width:100%;  overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">LED SS - 25mm Chrome</h2>
@@ -745,9 +838,8 @@
                             <datalist id="comments" style="color: black; width: 100%;"></datalist>
                         </div>
 
-                        <input id="savevalues" name="save_btn" type="button" class="pd_btn_save" value="SAVE">
+                        <input id="savevalues" name="save_btn" type="button" class="pd_btn_save pd_btn_save_info" value="SAVE">
                         <textarea id="display_notes" rows="3" cols="50" style="color: black;background-color:#52748d;border: 0px;color: #fff; width: 100%;resize: none;" readonly></textarea>
-                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -756,18 +848,16 @@
             <!--PRODUCT ICON POP UP END-->
 		<div id="pack-view-container" style="float: right;">
 			<div class=" minimized-pack" id="pack-zip-topic" style="float: right">
-				<img src="img/left.png">
+				<img src="{!! asset('img/left.png') !!}">
 				<div style="margin-top:5px;padding-left: 12px">p<br/>a<br/>c<br/>k<br/>s</div>
 			</div>
 			<div class="row table-contener" style="width: 260px;float: right">
 				<div class=" row maximized-pack" style="margin-left: 0px; float: left" id="pack-expand-topic">
-					<img src="img/right.png">
+					<img src="{!! asset('img/right.png') !!}">
 				</div>
-				<div class="table-body-pack" style="background-color: #52748d;float: right" id="pack-table-container">
-					<div class="pack-name-section">
-						<img src="img/packw.png" style="margin-right: 5px;width: 20px;height: 20px"><b style="font-size:12px">PACKS :</b>
-					</div>
-					<table id="pack-tablle" class="table-pack-body">
+				<div  class="table-body-pack" style="background-color: #52748d;float: right" id="pack-table-container">
+					<div class="title_text_popup  title_text_popup_pack" ><img src="{!! asset('img/packw.png') !!}" class="left_top_image_in_popup left_top_image_in_popup_pack">Packs :</div>
+					<table id="pack-tablle" class="table-pack-body" >
 					</table>
 				</div>
 			</div>
@@ -788,7 +878,7 @@
 			</div>
 			<div>
 
-				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Comments :</b></div>
+				<div style="width: 100%;" class="title_text_popup"><img src="{!! asset('/img/project_comment.png') !!}" class="left_top_image_in_popup">Project Comments :</div>
 			</div>
 			<div class="pd_commentbox" style="margin-top: 20px">
 				<!--<textarea id="project_comment_area" placeholder="Enter text ..." style="width: 100%;color: black;height: 300px;line-height: 2em;"></textarea>
@@ -799,7 +889,7 @@
 				<div id="project_comment_display" style="width:calc(100% - 15px);    border-bottom: 0.2px dashed #51748c !important;height: 0.3px"></div>
 			</div>
 			<input id="project_comment_save" name="save_btn" type="button" class="pd_btn_save" value="Save" style="color: white">
-			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancle" style="color: white">
+			<input id="project_comment_cancle" name="cancle_btn" type="button" class="pd_btn_save proj_close" value="Cancel" style="color: white">
 		</div>
 	</div>
 </div>
@@ -835,7 +925,12 @@
 {{ Html::script('canvas/js/get-products.js') }}
 {{ Html::script('canvas/js/lobipannel-query.js') }}
 {{ Html::script('canvas/js/product-popup.js') }}
-{{ Html::script('pnotify.custom.min.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.custom.min.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.buttons.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.confirm.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.animate.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.callbacks.js') }}
+{{ Html::script('canvas/lib/pnotify/pnotify.custom.min.js') }}
 {{ Html::script('canvas/js/pack-view.js') }}
 
 
@@ -864,44 +959,70 @@
 
 
 <!--project comment section-->
-<div class="modal fade common_popup new_Project_popup template_modal" id="myModal_" role="dialog" style="height:700px">
+<div class="modal fade common_popup new_Project_popup template_modal" id="project_plan_popup" role="dialog" style="height:750px">
 	<div class="modal-dialog custom_popupModel ">
-		<div class="popup_con" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px">
-			<!--<div class="pd_popup_header" align="center">
-                <button type="button" class="close custom_popupButton proj_close" >x</button>
-             </div>-->
-			<div class="proj_close custom-close-btn">
-				<svg viewbox="0 0 40 40">
-					<path class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
-				</svg>
+		<div class="popup_con border_color" style="padding-top: 5px;padding-left: 5px;padding-right: 0px;padding-bottom: 5px;height: 620px;width: 550px">
+			<div class="pd_popup_header" align="center">
+				<button type="button" class="close custom_popupButton proj_close plan_select" ></button>
 			</div>
 			<div>
-
-				<div style="width: 100%;color: white"><img src="{!! asset('/img/project_comment.png') !!}"><b> Project Plans :</b></div>
+				<div class="row">
+					<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: 15px"><img src="{!! asset('img/tool-bar/blue/plan.png') !!}"></div>
+					<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="color: #0060d8"><h4><b>Project Plans :</b></h4></div>
+				</div>
+				<!--<div style="width: 100%;color: #294356">
+					<img src="img/tool-bar/blue/plan.png"><h4><b>Project Plans :</b></h4></div>-->
 			</div>
-			@foreach($templateFloors as $templateFloor)
-				@php
-					$templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('id','=',$templateFloor->id)->get();
-                    $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
-				@endphp
+			<div class="pd_commentbox inner_layout" style="margin-top: 20px">
+				<div class="modal-body">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 model_search_results consultant_results_bg clearfix inside_popup_plan" style="height: 520px;">
+						<ul>
+							@foreach($templateFloors as $templateFloor)
+								@php
+									$templateFloorCatalogs  = DB::table('template_floor_catalogs')->where('id','=',$templateFloor->id)->get();
+                                    $templateImage  = DB::table('template_images')->where('id','=',$templateFloor->template_image_id)->first();
+								@endphp
 
-				@foreach($templateFloorCatalogs as $templateFloorCatalog)
+								@foreach($templateFloorCatalogs as $templateFloorCatalog)
 
-					@php
-						$templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
-					@endphp
+									@php
+										$templateFloorCatalogDesigns  = DB::table('template_floor_catalog_designs')->where('template_floor_catalog_id','=',$templateFloorCatalog->id)->get();
+									@endphp
 
-					@foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
-							<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><img src="{!! asset($templateImage->path) !!}" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 img-responsive"/></div>
-							<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"><a class="btn_assign" href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}" style="color: white;">Open</a></div>
-					@endforeach
-				@endforeach
-			@endforeach
+									@foreach($templateFloorCatalogDesigns as $templateFloorCatalogDesign)
+
+										<li style="margin-bottom: 10px;">
+											<div>
+										<div class="topic_select_plan">
+											<div  class="hedder_plan_selection"><h3><b>Design_Floor_Catalogue</b></h3></div>
+											<div class="consultant_wrapper clearfix plan_select_body">
+												<div class="col-md-8 img_consultant">
+													<img src="{!! asset($templateImage->path) !!}" class="img_plan_select" />
+
+												</div>
+												<div class="col-md-4 desc_consultant">
+													<div class="plan_save_date"><b>Last Saved :</b></div>
+													<div class="plan_save_date_value">DD/MM/YY</div>
+													<div class="plan_save_date"><b>Revision :</b></div>
+													<div class="plan_save_date_value">X.xx</div>
+													<div class="plan_select_btn" style="float: right;margin-right: 5px">
+														<a name="Save" type="button" class="btn_assign" id="Save"  href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->id.'/canvas') !!}">Open</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										</div>
+										</li>
+									@endforeach
+								@endforeach
+							@endforeach
+						</ul>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
-
 
 </body>
 

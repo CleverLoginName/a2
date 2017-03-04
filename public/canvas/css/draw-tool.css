@@ -134,6 +134,7 @@ canvas {
 .zoom-control, .scale-control {
 	width:30px;
 	height:30px;
+	content: "\A";
 }
 
 #switch-menu{
@@ -163,6 +164,12 @@ td.noborder {
 	display: block;
 	position:fixed;
     overflow:hidden;
+}
+
+.noselect {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 img#can-tool-image {

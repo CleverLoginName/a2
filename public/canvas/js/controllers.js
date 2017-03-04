@@ -59,10 +59,7 @@ $('#proj-comment-button').click(function () {
 
 
 $('#add-text').click(function () {
-    showPlanCommentDialog();
-    // toolAction = ToolActionEnum.DRAW;
-    // drawObjectType = ObjectType.TEXT;
-    // document.getElementsByTagName("body")[0].style.cursor = "text";
+    showPlanCommentDialog("", 15);
 });
 
 $("#undo").on("click", function () {
@@ -77,13 +74,18 @@ $("#redo").on("click", function () {
 /*
 $('#print-btn').click(function () {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
-    printCanvas();
+    if(checkChanedHasDone()){
+         autoSave(printCanvas);
+    }else{
+        printCanvas();
+    }
+   
+    // printCanvas();
 });*/
 // icons actions end
 
 
-function showPlanCommentDialog(){
-	var text= "";
+function showPlanCommentDialog(default_text, default_fontSize){
 	var  fontSize_arr = [8,10,12,14,15,16,18,20,22,25];
 
     var sel = document.getElementById("text-container-fontsize");
@@ -93,9 +95,9 @@ function showPlanCommentDialog(){
         option.text = e + " pt";
         option.value = e;
         sel.add(option);
+        if(e == default_fontSize) sel.value = default_fontSize;
     })
-    sel.value = 15;
-	$('#type-text').val(text).focus();
+	$('#type-text').val(default_text).focus();
 
 	// $('#text-container').show();
     $('#text-container').modal({
@@ -273,6 +275,37 @@ function printCanvas() {
     // printWin.close();
 }
 
+function saveCanvasContent() {
+    var print_dataUrl = getFullCanvas().toDataURL("image/png");
+        var saveData = {
+            // metaData: { scaleFactor: scaleFactor },
+            products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex },
+            floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
+            project: { data: projectDataArray, isChanged: isProjectDataChanged, proj_comments: projcetComments, bom: project_bom_dict, unassignedProducts: unassigned_packItemList },
+            _token: ''
+        }
+
+    var fileName = "drawtool.dtf";
+
+    if (fileName != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'file_save.php',
+            data: 'file_data=' + JSON.stringify(saveData),
+            success: function (msg) {
+                window.open(msg, '_blank');
+                 conformationPopup("Save Completed");
+            },
+            error: function () {
+                errorPopup('Unable to save ,please try again');
+                // alert('Network Error !');
+            }
+        });
+    } else {
+        errorPopup('Please enter a file name');
+        // alert('Please enter a file name');
+    }
+}
 $(function () {
     $('#print').click(function () {
         window.print();
@@ -282,45 +315,14 @@ $(function () {
 
     /* Saves the current drawing to the file specified */
     $('#save-button').click(function () {
-
-        var print_dataUrl = getFullCanvas().toDataURL("image/png");
-        var saveData = {
-            // metaData: { scaleFactor: scaleFactor },
-            products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex },
-            floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
-            project: { data: projectDataArray, isChanged: isProjectDataChanged, proj_comments: projcetComments, bom: project_bom_dict },
-            _token: ''
-        }
-
-        var fileName = "drawtool.dtf";
-
-        if (fileName != "") {
-            $.ajax({
-                type: 'POST',
-                url: 'save',
-                data: 'file_data=' + JSON.stringify(saveData),
-                success: function (msg) {
-                    window.open(msg, '_blank');
-                },
-                error: function () {
-                    alert('Network Error !');
-                }
-            });
-        } else {
-            alert('Please enter a file name');
-        }
+        saveCanvasContent();       
     });
 
 
     $('#price-vice').on('click', function () {
-        
-
-
     });
 
-    $('#product-vice').on('click', function () {
-        alert('product');
-    });
+    $('#product-vice').on('click', function () {});
 
     $('#loadable_files').on('click', 'a', function () {
         var fileName = $(this).attr('data-file-name');
@@ -357,7 +359,8 @@ $(function () {
                 zoomReset();
                 break;
             default:
-                alert('Invalid zoom option');
+                errorPopup('Invalid zoom option');
+                //alert('Invalid zoom option');
         }
     });
 
@@ -373,7 +376,7 @@ $(function () {
                 redo();
                 break;
             default:
-                alert('Invalid time action');
+                errorPopup('Invalid undo/redo operation');
         }
     });
 
@@ -392,7 +395,7 @@ $(function () {
                 scaleReset();
                 break;
             default:
-                alert('Invalid scale option');
+                errorPopup('Invalid scale factor');
         }
     });
 });
@@ -414,9 +417,11 @@ function loadSavedFile(fileName) {
             var productData = fileDetails.products.data;
             var floorplanData = fileDetails.floorplan.data;
             var projectData = fileDetails.project.data;
-            projcetComments  = fileDetails.project.proj_comments;
-            productCommentIndex = fileDetails.products.lastCommentIndex; 
-            project_bom_dict = fileDetails.project.bom;
+
+            projcetComments = (fileDetails.project.proj_comments == undefined) ? '' : fileDetails.project.proj_comments;
+            productCommentIndex = (fileDetails.products.lastCommentIndex == undefined) ? 0 : fileDetails.products.lastCommentIndex; 
+            project_bom_dict = (fileDetails.project.bom == undefined) ? {} : fileDetails.project.bom;
+            unassigned_packItemList = (fileDetails.project.unassignedProducts == undefined) ? {} : fileDetails.project.unassignedProducts; 
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
@@ -441,6 +446,10 @@ $('#load').click(function () {
             var productData = fileDetails.products.data;
             var floorplanData = fileDetails.floorplan.data;
             var projectData = fileDetails.project.data;
+            projcetComments = (fileDetails.project.proj_comments == undefined) ? '' : fileDetails.project.proj_comments;
+            productCommentIndex = (fileDetails.products.lastCommentIndex == undefined) ? 0 : fileDetails.products.lastCommentIndex;
+            project_bom_dict = (fileDetails.project.bom == undefined) ? {} : fileDetails.project.bom;
+            unassigned_packItemList = (fileDetails.project.unassignedProducts == undefined) ? {} : fileDetails.project.unassignedProducts;
 
             productData.forEach( generateAndLoadObjectFromParams );
             floorplanData.forEach( generateAndLoadObjectFromParams );
@@ -467,7 +476,8 @@ function showLoadableFiles() {
             $('#loadable_files').append(fileNames.join(""));
         },
         error: function () {
-            alert('Error loading files. Network Error!');
+            errorPopup('Unable to load files,please try again');
+            // alert('Error loading files. Network Error!');
         }
     });
 }

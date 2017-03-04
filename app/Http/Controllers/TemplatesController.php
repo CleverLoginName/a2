@@ -212,6 +212,16 @@ class TemplatesController extends Controller
                 ->saveImage($destinationPath.$randStr.'.png');
 
             $randFileName = $randStr.'.png';
+            $img_path = $destinationPath.$randStr.'.png';
+
+            $img = Image::make($img_path);
+            $width = $img->width();
+            $height = $img->height();
+            $canvas = Image::canvas($width, $height, '#ffffff');
+            $canvas->insert($img_path);
+            $canvas->save($img_path);
+
+
         }else{
             $file->move($destinationPath,$randFileName);
         }
@@ -469,21 +479,41 @@ class TemplatesController extends Controller
 
     public function updatePlanDataInCanvas(Request $request)
     {
-        $fileData = $request->get('file_data');
+        $fileData = $request->get('file_data');//dd($fileData);
         $fileData = (array)json_decode($fileData,true);
-        //dd($fileData['products']);
+        //dd($fileData);
         $templateFloorCatalogDesign = TemplateFloorCatalogDesign::find($fileData['template_floor_catalog_design_id']);
         $templateFloorCatalog = TemplateFloorCatalog::find($templateFloorCatalogDesign->template_floor_catalog_id);
         $templateFloor = TemplateFloor::find($templateFloorCatalog->template_floor_id);
         $template = Template::find($templateFloor->template_id);
         if (array_key_exists("products",$fileData))
         {
-            $templateFloorCatalogDesign->canvas_data = json_encode($fileData['products']['data']);
+            $templateFloorCatalogDesign->canvas_data = json_encode([
+                'data'=>$fileData['products']['data'],
+                'lastCommentIndex'=>$fileData['products']['lastCommentIndex'],
+            ]);
             $templateFloorCatalogDesign->save();
         }
 
         if (array_key_exists("floorplan",$fileData)) {
             $templateFloor->canvas_data = json_encode($fileData['floorplan']['data']);
+
+            /*****************************************************************************************************/
+            $printable_image_path =  $fileData['floorplan']['printable_plan'];
+
+            File::exists('printable_plans') or File::makeDirectory('printable_plans');
+            File::exists('printable_plans/templates') or File::makeDirectory('printable_plans/templates');
+            File::exists('printable_plans/templates/'.$templateFloorCatalogDesign->id) or File::makeDirectory('printable_plans/templates/'.$templateFloorCatalogDesign->id);
+
+
+            $img = str_replace('data:image/png;base64,', '', $printable_image_path);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            file_put_contents('printable_plans/templates/'.$templateFloorCatalogDesign->id.'/'.'original.png', $data);
+
+            /*****************************************************************************************************/
+            $templateFloor->printable_image_path = 'printable_plans/templates/'.$templateFloorCatalogDesign->id.'/'.'original.png';
+
             $templateFloor->save();
 
             /**************************************************************************************************************/
@@ -503,10 +533,14 @@ class TemplatesController extends Controller
 
             /**************************************************************************************************************/
 
-
         }
         if (array_key_exists("project",$fileData)) {
-            $template->canvas_data = json_encode($fileData['project']['data']);
+            $template->canvas_data = json_encode([
+                'data'=>$fileData['project']['data'],
+                'proj_comments'=>$fileData['project']['proj_comments'],
+                'bom'=>$fileData['project']['bom'],
+                'unassignedProducts'=>$fileData['project']['unassignedProducts']
+            ]);
             $template->save();
         }
 
@@ -521,10 +555,23 @@ class TemplatesController extends Controller
         $templateFloor  = DB::table('template_floors')->where('id','=',$templateFloorCatalog->template_floor_id)->first();
         $template  = DB::table('templates')->where('id','=',$templateFloor->template_id)->first();
 
+     //   $templateFloor = json_decode($templateFloor->canvas_data);
+      //  dd(json_decode($templateFloor->canvas_data,true));
+        $project = (array)json_decode($template->canvas_data);
+        $products = (array)json_decode($templateFloorCatalogDesign->canvas_data);
+        $floorplan = (array)json_decode($templateFloor->canvas_data);
         $response = [
-            'products'=>['data'=>$templateFloorCatalogDesign->canvas_data],
-            'floorplan'=>['data'=>$templateFloor->canvas_data],
-            'project'=>['data'=>$template->canvas_data],
+            'products'=>[
+                'data'=>($products['data']),
+                'lastCommentIndex'=>json_encode($products['lastCommentIndex'])
+                ],
+            'floorplan'=>['data'=>json_encode($floorplan)],
+            'project'=>[
+                'data'=>json_encode($project['data']),
+                'proj_comments'=>json_encode($project['proj_comments']),
+                'bom'=>json_encode($project['bom']),
+                'unassignedProducts'=>($project['unassignedProducts']),
+            ],
         ];
 
         return $response;

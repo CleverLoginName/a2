@@ -16,7 +16,7 @@ class CreateProjectFloorsTable extends Migration
             $table->increments('id');
             $table->integer('project_image_id');
             $table->integer('floor_id');
-            $table->text('canvas_data');
+            $table->text('canvas_data')->nullable();
             $table->text('printable_image_path');
             $table->integer('project_id');
             $table->softDeletes();

@@ -14,7 +14,7 @@ class CreateProjectFloorCatalogDesignsTable extends Migration
     {
         Schema::create('project_floor_catalog_designs', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('canvas_data');
+            $table->text('canvas_data')->nullable();
             $table->string('name');
             $table->integer('project_floor_catalog_id');
             $table->boolean('is_active');

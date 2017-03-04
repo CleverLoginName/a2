@@ -16,7 +16,8 @@ class CreateTemplateFloorsTable extends Migration
             $table->increments('id');
             $table->integer('template_image_id');
             $table->integer('floor_id');
-            $table->text('canvas_data');
+            $table->text('canvas_data')->nullable();
+            $table->text('printable_image_path');
             $table->integer('template_id');
             $table->softDeletes();
             $table->timestamps();

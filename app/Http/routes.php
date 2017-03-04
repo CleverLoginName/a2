@@ -148,7 +148,7 @@ Route::group(['prefix' => 'advanced'], function () {
 });
 
 Route::get('/print0', 'PrintController@test');
-Route::get('/a3', 'PrintController@a3');
+Route::get('/a3/{id}', 'PrintController@a3');
 Route::get('/print1', 'PrintController@test1');
 Route::get('/print2', 'PrintController@test2');
 Route::get('/print-a3/{project_id}', 'PrintController@downloadA3');

@@ -21,8 +21,6 @@ var Data;
     var products = '';
     var serch = '';
 
-   
-
 
     $.ajax({
         url: baseUrl + '/rest/api/products',

@@ -42,6 +42,8 @@ var ToolActionEnum = {
 	CONNECTION:11
 }
 
+
+
 var MouseButtonEnum = {
 	LEFT:1,
 	RIGHT:3
@@ -93,7 +95,16 @@ var isProjectDataChanged = false;
 
 var productCommentIndex = 0;
 ///////////////////////////
+// change had been done 
 
+var AlertEnum = {
+	NORMAL:1,
+	ERROR:2,
+	WARNING:3
+}
+
+
+// 
 var drawElements = [];
 var drawElementsStack = []; /* Used to track the object history for undo / redo */
 var deletedElements = [];
@@ -118,10 +129,14 @@ var rotateOffsetAngle = 0;
 var object_id_map = {}
 
 /* Continuous wall realted variables */
-
 var wallPointsCount = 0;
 
 /* End of Continuous wall related variables */
+
+/* Auto Save related*/
+var AUTO_SAVE_INTERVAL = 900000; // 15mins
+// var AUTO_SAVE_INTERVAL = 1000; // 10mins
+
 
 /* Ruler related variables */
 	
@@ -206,6 +221,146 @@ function init(){
 	changeToolAction(ToolActionEnum.DRAG);
 }
 
+function get_center_pos(width, top) {
+  // top is empty when creating a new notification and is set when recentering
+  if (!top) {
+    top = 90;
+    // this part is needed to avoid notification stacking on top of each other
+    $('.ui-pnotify').each(function() {
+      top += $(this).outerHeight() + 20;
+    });
+  }
+
+  return {
+    "top": top,
+    "left": ($(window).width() / 2) 
+  }
+}
+
+setInterval(function () {
+   autoSave();
+}, AUTO_SAVE_INTERVAL);
+
+/*confirm: {
+			confirm: true,
+			buttons: [{
+				text: 'Yes',
+				addClass: 'btn-primary',
+				click: function (notice) {
+
+				}
+			}, {
+				text: 'No',
+				click: function (notice) {
+					PNotify.removeAll();
+				}
+			},]
+		}, */
+
+function autoSave(callFunction) {
+	customizedConformation("Save Now ?",
+		function () {
+			PNotify.removeAll();
+			saveCanvasContent();			
+			callFunction()
+		},
+		function () {
+			PNotify.removeAll();
+			callFunction();
+		});
+
+}
+
+function customizedConformation(text,yesmethod,nomethod){
+	 PNotify.removeAll();
+	//  conformationPopup();
+	//  errorPopup();
+	//   warningPopup();
+	(new PNotify({
+		title: text,
+		icon: 'left_top_image_in_popup image_in_popup image_confomation',
+		hide: false,
+		 animate: {
+			animate: true,
+			in_class: 'slideInDown',
+			out_class: 'fadeOut'
+		},
+		before_open: function(PNotify) {
+			PNotify.get().css(get_center_pos(PNotify.get().width()));
+		},
+		// addclass: 'custom',
+		confirm: {
+			confirm: true,
+			buttons: [{
+				text: 'Yes',
+				addClass: 'btn-primary pd_btn_save button_conformation',
+				click: yesmethod
+			}, {
+				text: 'No',
+				addClass: 'pd_btn_save button_conformation',
+				click: nomethod
+			},]
+		},
+		buttons: {
+			closer: false,
+			sticker: false
+		},
+		history: {
+			history: false
+		},
+		addclass: 'stack-modal'
+	}));
+
+	// $('.ui-pnotify-action-button').addClass('pd_btn_save_notification');
+	$('.ui-pnotify-container').addClass('adapto_blue_background');
+	$('.ui-pnotify-title').replaceWith( '<div class="title_text_popup">'+text+'</div>' );
+}
+
+function conformationPopup(message){
+	AlartMsg("SUCCESS",AlertEnum.NORMAL,'image_ok',message);
+}
+
+
+function errorPopup(message){
+	AlartMsg("ERROR",AlertEnum.ERROR,'image_error',message);
+}
+
+function warningPopup(message){
+	AlartMsg("Warning",AlertEnum.WARNING,message);
+}
+
+function AlartMsg(text,type,icon,errorMsg){
+	// PNotify.removeAll();
+	PNotify.prototype.options.delay = 3000;
+    // update_timer_display();
+	var centerPoint = ($(window).width() / 2- (300 / 2))
+	new PNotify({
+		title: text,
+		text: errorMsg,
+		icon: 'left_top_image_in_popup image_in_popup '+icon+'',
+		 animate: {
+			animate: true,
+			in_class: 'slideInDown',
+			out_class: 'slideOutUp'
+		},
+		before_open: function(PNotify) {
+			PNotify.get().css({ top: 150 , left: centerPoint });
+		},
+		type: 'success'
+	});
+	if(type == AlertEnum.NORMAL){
+		$('.ui-pnotify-container').addClass('adapto_blue_background');
+	}else if(type == AlertEnum.WARNING){
+		$('.ui-pnotify-container').addClass('adapto_blue_background adapto_yello_backgroun');
+	}else if(type == AlertEnum.ERROR){
+		$('.ui-pnotify-container').addClass('adapto_blue_background adapto_red_backgroun');
+	}
+	$('.ui-pnotify-title').replaceWith( '<div class="title_text_popup">'+text+'</div>' );
+	
+	
+}
+
+
 
 $("body").on("contextmenu", "canvas", function(e) {
   return false;
@@ -263,6 +418,28 @@ function fixWhich(e) {
 
 function mouseDoubleClick(e){
 	//todo
+	fixWhich(e);
+	if (e.which != 1) return false;
+	$('#mouse-action-container').hide();
+	var curZoom = canvasHelper.zoom;
+	mouseStatus = MouseStatusEnum.DOWN;
+	
+	startX = getX(e);
+	startY = getY(e);
+
+	if (toolAction == ToolActionEnum.DRAW){
+		
+	} else if (toolAction == ToolActionEnum.DRAG){
+		/* Need to find out the object user is trying to move */
+		var tmpSelObj = getSelObject(startX, startY);
+		if (tmpSelObj.getType() == ObjectType.TEXT){
+			toolAction = ToolActionEnum.EDITTEXT;
+			currentObj = tmpSelObj;
+			changeObj = new ChangeObject(currentObj);
+			showPlanCommentDialog(tmpSelObj.getDrawText(), tmpSelObj.getFontSize());
+			// showTextEdit(tmpSelObj.getObjStartX(), tmpSelObj.getObjStartY(), tmpSelObj.getDrawText(), tmpSelObj.getFontSize());
+		}		
+	}	
 }
 
 /* Handles what happens when mouse down.
@@ -636,11 +813,7 @@ function mouseUp(e){
 					pushElementToDrawElement(bulb_connection);
 					populateDialog(e,firstSelectedObject);
 				}else {
-                   new PNotify({
-					title: 'Cannot connect',
-					text: 'This connection already define',
-					type: 'info'
-				});
+					errorPopup('This connection already define');
                 }
 				lastConectedObj = selObj;
 				drawAllObjects();
@@ -845,6 +1018,10 @@ function pushDeletedElement(del_obj){
 /* Handles what happens when mouse gets out of the canvas. */
 function mouseOut(e){
 	drawAllObjects();
+	if (toolAction == ToolActionEnum.PAN){
+		mouseStatus = MouseStatusEnum.UP;
+	}
+
 	// performEscapeAction();
 }
 
@@ -1640,7 +1817,8 @@ $("#add-s-buld").on("click", function() {
             connectedLightBulbLabels.push(bulbObj.getLabel());
             updateSwitchConnectedBulbLabelsInCurrentTimeState();
         } else {
-            alert ('Light bulb already connected');
+			errorPopup('Light bulb already connected');
+            // alert ('Light bulb already connected');
         }
 
         resetLightBulbMenu();
@@ -1664,7 +1842,8 @@ $('#switch-menu').on('click','a',function(event){
 		connectedLightBulbLabels.push(bulbObj.getLabel());
 		updateSwitchConnectedBulbLabelsInCurrentTimeState();
 	} else {
-		alert ('Light bulb already connected');
+		//alert ('Light bulb already connected');
+		errorPopup('Light bulb already connected');
 	}
 	
 	resetLightBulbMenu();
@@ -1827,9 +2006,9 @@ function createAndInsertTextObject(){
 		if (currentObj.getType() == ObjectType.TEXT){
 			currentObj.setDrawText(insertText);
 			currentObj.setFontSize(fontSize);
-			currentObj.setPoints(insertX,insertY,parseInt(insertX)+10,parseInt(insertY)+10);
 			
 			if (toolAction != ToolActionEnum.EDITTEXT){
+				currentObj.setPoints(insertX,insertY,parseInt(insertX)+10,parseInt(insertY)+10);
 				pushElementToDrawElement(currentObj);
 				selObj = currentObj;
 				changeToolAction(ToolActionEnum.DRAG);
@@ -1844,6 +2023,7 @@ function createAndInsertTextObject(){
 				changeObj.updateNewParameters();
 				pushElementToDrawElement(changeObj);
 				changeObj = undefined;
+				changeToolAction(ToolActionEnum.DRAG);
 			}
 		} else {
 			console.log ("Expecting text but getting ");
@@ -2528,7 +2708,9 @@ function isAlradyConected(objSourse,objEnd){
 	return false;
 }
 
-
+function checkChanedHasDone(){
+	return isProductDataChanged || isFloorplanDataArray || isProjectDataArray;
+}
 
 function getCelectedConection(objSourse,objEnd){
 	for (var i = productDataArray.length - 1; i >= 0; i--) {
@@ -2540,11 +2722,12 @@ function getCelectedConection(objSourse,objEnd){
 				objEnd.setConectingMood(false);
 				var objectsConected =getObjectFromId(productDataArray[i].getsdestinationId());
 				productDataArray.splice(i, 1);
-				new PNotify({
-					title: 'CONNECTION DELETED',
-					text: 'Product conectin deleted',
-					type: 'error'
-				});
+				conformationPopup('Product conectin deleted');
+				// new PNotify({
+				// 	title: 'CONNECTION DELETED',
+				// 	text: 'Product conectin deleted',
+				// 	type: 'error'
+				// });
 			}
 		}
 	}

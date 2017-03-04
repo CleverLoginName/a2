@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Floor;
 use App\Product;
+use App\ProductCatalog;
 use App\Project;
 use App\ProjectFloor;
 use App\ProjectFloorCatalog;
@@ -56,16 +58,22 @@ class PrintController extends Controller
     }
     public function  a3($projectid){
         //$this->getAllProducts(2);
+
+
+
+
         $m = new Merger();
         $projectFloorCatalogDesigns = [];
         $loop = [];
         $project = Project::find($projectid);
         $projectFloors = ProjectFloor::where('project_id','=',$project->id)->get();
         foreach ($projectFloors as $projectFloor){
-            $loop[] = ['printable_image_path'=>$projectFloor->printable_image_path];
             $projectFloorCatalogs = ProjectFloorCatalog::where('project_floor_id','=',$projectFloor->id)->get();
             foreach ($projectFloorCatalogs as $projectFloorCatalog){
                 $projectFloorCatalogDesigns[] = ProjectFloorCatalogDesign::where('project_floor_catalog_id','=',$projectFloorCatalog->id)->get();
+                $loop[] = ['printable_image_path'=>$projectFloor->printable_image_path,
+                    'name'=>Floor::find($projectFloor->floor_id)->name,
+                        'catalog'=>ProductCatalog::find($projectFloorCatalog->catalog_id)->name];
             }
         }
 
@@ -75,6 +83,9 @@ class PrintController extends Controller
             'loop' => $loop
         ];
         session(['data'=>$data]);
+
+        //return view('print.plan');
+        
         $pdf = \PDF::loadView('print.plan', ['a'=>$projectFloors])
             ->setPaper('a3')
            // ->setOption('footer-html',$request->root().'/print/footers/a3')

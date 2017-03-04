@@ -53,12 +53,12 @@
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-12 content_left">
 
             <div class="form_container clearfix">
-                {!! Form::open(['url' => 'projects/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-3 col-lg-3 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word;height:275px']) !!}
+                {!! Form::open(['url' => 'projects/create/plans', 'class' => 'col-xs-12 col-sm-12 col-md-3 col-lg-3 file_uploader dropzone', 'files'=>true, 'id'=>'real-dropzone', 'style'=>'word-wrap: break-word;height:285px']) !!}
 
                 <div id="dropzonePreview" class="dz-default dz-message">
                     <div class="form-group">
                         <label class="col-xs-12 col-lg-12 control-label">Upload Plan File Drop it Here</label>
-                        <label for="profile_pic" class="col-xs-12 col-lg-12 control-label browse_file">Browse</label>
+                        <label for="profile_pic" class="control-label browse_file">Browse</label>
                         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                         <input type="hidden" name="project_id" id="project_id" value="{!! $project->id !!}">
 
@@ -84,12 +84,12 @@
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 <a href="{!! url('projects/'.$project->id.'/plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/canvas') !!}">
                                                     <p>@if($projectFloorCatalogDesign->project_floor_catalog_design){!! $projectFloorCatalogDesign->project_floor_catalog_design !!}@else{!! $projectFloorCatalogDesign->project_name !!}@endif {!! $projectFloorCatalogDesign->floor_name !!}</p>
-                                                    <img src="{!! asset($projectFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
+                                                    <img src="{!! asset($projectFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="max-height: 165px;width:100%"/>
                                                 </a>
                                             </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 @php
-                                                    $model = "#modal_".$projectFloorCatalogDesign->project_floor_catalog_design_id;
+                                                    $model = "#modal_".$projectFloorCatalogDesign->project_floor_catalog_design_id
                                                 @endphp
                                                 <br/>
 
@@ -159,7 +159,7 @@
                                                     <a href="{!! url('projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/delete') !!}" class="btn_reset" id="Reset" style="color: white">Delete</a>
 
                                                     <div class="fileUpload btn btn_reset">
-                                                        <span>Image</span>
+                                                        <span>Replace Plan</span>
                                                         {!! Form::file('image',['class'=>"upload",'style'=>"max-width:100px;margin-right:10px",'onchange' => 'this.form.submit()']) !!}
 
                                                     </div>
@@ -398,6 +398,18 @@
             cursor: pointer;
             opacity: 0;
             filter: alpha(opacity=0);
+        }
+        #real-dropzone{
+        position: relative;
+        }
+        #dropzonePreview{
+            position: absolute;
+            top: 50%;
+            height: 100px;
+            margin-top: -50px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
         }
     </style>
 @stop

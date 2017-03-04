@@ -454,16 +454,17 @@ class ProjectsController extends Controller
 
 
             File::exists('printable_plans') or File::makeDirectory('printable_plans');
-            File::exists('printable_plans/'.$projectFloorCatalogDesign_id) or File::makeDirectory('printable_plans/'.$projectFloorCatalogDesign_id);
+            File::exists('printable_plans/projects') or File::makeDirectory('printable_plans/projects');
+            File::exists('printable_plans/projects/'.$projectFloorCatalogDesign_id) or File::makeDirectory('printable_plans/projects/'.$projectFloorCatalogDesign_id);
 
 
             $img = str_replace('data:image/png;base64,', '', $printable_image_path);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
-            file_put_contents('printable_plans/'.$projectFloorCatalogDesign_id.'/'.'original.png', $data);
+            file_put_contents('printable_plans/projects/'.$projectFloorCatalogDesign_id.'/'.'original.png', $data);
 
             /*****************************************************************************************************/
-            $projectFloor->printable_image_path = 'printable_plans/'.$projectFloorCatalogDesign_id.'/'.'original.png';
+            $projectFloor->printable_image_path = 'printable_plans/projects/'.$projectFloorCatalogDesign_id.'/'.'original.png';
             $projectFloor->save();
 
 
@@ -472,7 +473,7 @@ class ProjectsController extends Controller
             $img->resize(320, 240);
             $img->save('bar.jpg');*/
 
-            $this->saveImage($fileData['floorplan']['printable_plan'] , 'x.png');
+            //$this->saveImage($fileData['floorplan']['printable_plan'] , 'x.png');
             /**************************************************************************************************************/
 
             $tfloors = ProjectFloor::where('project_id', '=',$project->id)->
@@ -771,6 +772,17 @@ class ProjectsController extends Controller
                     ->saveImage($destinationPath.$randFileName);
 
                 $randFileName = $project_image_name;
+
+                $img_path = $project_image_path.$project_image_name;
+
+                $img = Image::make($img_path);
+                $width = $img->width();
+                $height = $img->height();
+                $canvas = Image::canvas($width, $height, '#ffffff');
+                $canvas->insert($img_path);
+                $canvas->save($img_path);
+
+
             }else{
                 $file->move($destinationPath,$randFileName);
             }

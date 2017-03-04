@@ -133,10 +133,6 @@
 
         /*======================== PAGE 4 CSS END =============================*/
 
-        .tbl_plan_Instructions {
-        /*border-bottom: 5px solid #bdbdbd;*/
-        width: 1800px;
-        }
         .tbl_plan_Instructions th {
         background: #404342;
         padding: 20px 5px 0px 5px;
@@ -215,11 +211,6 @@
             page-break-inside: avoid;
 
         }
-
-        .plan_img{
-            height: 100%;
-        }
-
     </style>
 </head>
 
@@ -240,22 +231,22 @@
 <div id="topSection">
 
 
-    <table border="0" width="1800" cellpadding="0" cellspacing="0" class="tbl_plan_Instructions">
+    <table border="0" cellpadding="0" cellspacing="0" class="tbl_plan_Instructions" style="border: 5px solid #bdbdbd;border-top: 0px;min-width: 2000px;width: 100%">
         <tbody>
         <tr>
             <th scope="col" valign="bottom">
                 <div class="plan_header">
-                    <span class="bld">Plan Instructions;</span> Electrical
+                    <span class="bld">{!! $floor['name'] !!};</span> {!! $floor['catalog'] !!}
 
                     <p class="txtMedium">Lot 25 No 63 Sample Street Sample Town Vic 3033</p>
                 </div>
 
-                <div class="logoDark"><img src="" width="180"/></div></th>
+                <div class="logoDark"><img src="" width="100%"/></div></th>
         </tr>
         <tr>
             <td>
-                <div style="min-height: 1150px">
-                    <img src="{!! asset($floor['printable_image_path']) !!}" class="plan_img"/>
+                <div style="min-height: 1075px;max-height: 1150px;display: inline-block;">
+                    <img src="{!! asset($floor['printable_image_path']) !!}" class="plan_img" style="max-height: 1050px"/>
                 </div>
 
             </td>
@@ -279,7 +270,7 @@
             <table width="100%" border="0" class="tbl_authorise f_18">
                 <tbody>
                 <tr>
-                    <td scope="col" width="230"><img src="" /></td>
+                    <td scope="col" width="230"><img src="{!! asset('/img/logo_portar_davis.jpg') !!}" /></td>
                     <td scope="col" align="left"><span class="bld">Client</span> Authorisation ......................................................</td>
                     <td scope="col" align="left">Date ........../........./.........</td>
                     <td scope="col" align="left"><span class="bld">Client Name 1: </span>Ms Belinda Butera <br><span class="bld">Client Name 2: </span>Mr Scott Power</td>
@@ -294,7 +285,7 @@
 
 
         <div class="footer_stripe_long"></div>
-        <div class="footer_para"><p>Please Note: Terms and Conidtions do apply as is product subject availibility. To review our Terms and conditions, please visit our website. Adapto is a registered trademark of Adapto Technologies Pty Limited. Please note all prices are INCLUSIVE OF Goods and Services Tax (GST).
+        <div class="footer_para"><p>Please Note: Terms and Conidtions do apply as is product subject availability. To review our Terms and conditions, please visit our website. Adapto is a registered trademark of Adapto Technologies Pty Limited. Please note all prices are INCLUSIVE OF Goods and Services Tax (GST).
             </p></div>
     </div>
 </div>
