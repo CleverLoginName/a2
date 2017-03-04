@@ -456,7 +456,7 @@ $(function () {
 
             var metaData = fileDetails.metaData;
             //scaleFactor = metaData.scaleFactor;
-            var productData = (fileDetails.products.data);
+            var productData = JSON.parse(fileDetails.products.data);
             var floorplanData = JSON.parse(fileDetails.floorplan.data);
             var projectData = JSON.parse(fileDetails.project.data);
             var proj_comments = JSON.parse(fileDetails.project.proj_comments);
