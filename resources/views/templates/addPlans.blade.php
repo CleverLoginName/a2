@@ -16,8 +16,8 @@
                             <h4 class="modal-title" id="modalLabel">Cropper</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <img id="image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" src="{!! asset($templateFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="img-container">
+                                <img id="image_{!! $templateFloorCatalogDesign->template_floor_catalog_design_id !!}" src="{!! asset($templateFloorCatalogDesign->image_path) !!}" alt="Picture" class="" width="max-width:100%">
                             </div>
                             <div style="padding-top: 15px">
                                 {!! Form::open(['url' => 'templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
@@ -84,7 +84,7 @@
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
                                                 <a href="{!! url('templates/create/'.$template->id.'/add-plans/'.$templateFloorCatalogDesign->template_floor_catalog_design_id.'/canvas') !!}">
                                                     <p>@if($templateFloorCatalogDesign->template_floor_catalog_design){!! $templateFloorCatalogDesign->template_floor_catalog_design !!}@else{!! $templateFloorCatalogDesign->template_name !!}@endif {!! $templateFloorCatalogDesign->floor_name !!}</p>
-                                                    <img src="{!! asset($templateFloorCatalogDesign->image_path) !!}" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="height: 165px"/>
+                                                    <img src="{!! asset($templateFloorCatalogDesign->image_path) !!}" class="" style="height: 165px;width:90%"/>
                                                 </a>
                                             </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
@@ -394,6 +394,19 @@
             cursor: pointer;
             opacity: 0;
             filter: alpha(opacity=0);
+        }
+
+        #real-dropzone{
+            position: relative;
+        }
+        #dropzonePreview{
+            position: absolute;
+            top: 50%;
+            height: 100px;
+            margin-top: -50px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
         }
     </style>
 @stop

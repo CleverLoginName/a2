@@ -16,8 +16,8 @@
                             <h4 class="modal-title" id="modalLabel">Cropper</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="img-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <img id="image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" src="{!! asset($projectFloorCatalogDesign->image_path) !!}" alt="Picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="img-container">
+                                <img id="image_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}" src="{!! asset($projectFloorCatalogDesign->image_path) !!}" alt="Picture" style="max-width: 100%">
                             </div>
                             <div style="padding-top: 15px">
                                 {!! Form::open(['url' => 'projects/create/'.$project->id.'/add-plans/'.$projectFloorCatalogDesign->project_floor_catalog_design_id.'/crop', 'method' => 'post']) !!}
@@ -302,7 +302,7 @@
 
     <script>
 
-                @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
+     @foreach($projectFloorCatalogDesigns as $projectFloorCatalogDesign)
 
         var cropBoxData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!};
         var canvasData_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!};
@@ -316,7 +316,7 @@
             cropper_{!! $projectFloorCatalogDesign->project_floor_catalog_design_id !!}.rotate(-45);
         }
 
-        @endforeach
+     @endforeach
 
     window.addEventListener('DOMContentLoaded', function () {
 

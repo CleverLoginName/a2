@@ -288,6 +288,15 @@ class ProjectsController extends Controller
         }else{
             $file->move($destinationPath,$randFileName);
         }
+        $project = Project::find($request->get('project_id'));
+        $project->canvas_data = json_encode([
+            'data'=>[],
+            'proj_comments'=>[],
+            'bom'=>null,
+            'unassignedProducts'=>[]
+        ]);
+        $project->save();
+
 
 
         $projectImage = new ProjectImage();
@@ -298,7 +307,9 @@ class ProjectsController extends Controller
         $projectFloor = new ProjectFloor();
         $projectFloor->project_image_id = $projectImage->id;
         $projectFloor->floor_id = 1;
-        $projectFloor->canvas_data = '[]';
+        $projectFloor->canvas_data = json_encode([
+            'data'=>[]
+        ]);
         $projectFloor->project_id = $request->get('project_id');
         $projectFloor->save();
 
@@ -311,7 +322,10 @@ class ProjectsController extends Controller
 
 
         $projectFloorCatalogDesign = new ProjectFloorCatalogDesign();
-        $projectFloorCatalogDesign->canvas_data = '[]';
+        $projectFloorCatalogDesign->canvas_data = json_encode([
+            'data'=>[],
+            'lastCommentIndex'=>[]
+        ]);
         $projectFloorCatalogDesign->project_floor_catalog_id = $projectFloorCatalog->id;
         $projectFloorCatalogDesign->name = '';
         $projectFloorCatalogDesign->is_active = true;
@@ -437,12 +451,17 @@ class ProjectsController extends Controller
 
         if (array_key_exists("products",$fileData))
         {
-            $projectFloorCatalogDesign->canvas_data = json_encode($fileData['products']['data']);
+            $projectFloorCatalogDesign->canvas_data = json_encode([
+                'data'=>$fileData['products']['data'],
+                'lastCommentIndex'=>$fileData['products']['lastCommentIndex'],
+            ]);
             $projectFloorCatalogDesign->save();
         }
 
         if (array_key_exists("floorplan",$fileData)) {
-            $projectFloor->canvas_data = json_encode($fileData['floorplan']['data']);
+            $projectFloor->canvas_data = json_encode([
+                'data'=>$fileData['floorplan']['data']
+            ]);
 
             /*****************************************************************************************************/
             $printable_image_path =  $fileData['floorplan']['printable_plan'];
@@ -482,7 +501,9 @@ class ProjectsController extends Controller
             //  dd($tfloors);
             foreach ($tfloors as $tfloor){
                 $t = ProjectFloor::find($tfloor->id);
-                $t->canvas_data = json_encode($fileData['floorplan']['data']);
+                $t->canvas_data = json_encode([
+                    'data'=>$fileData['floorplan']['data']
+                ]);
                 $t->save();
             }
 
@@ -494,7 +515,12 @@ class ProjectsController extends Controller
 
         }
         if (array_key_exists("project",$fileData)) {
-            $project->canvas_data = json_encode($fileData['project']['data']);
+            $project->canvas_data = json_encode([
+                'data'=>$fileData['project']['data'],
+                'proj_comments'=>$fileData['project']['proj_comments'],
+                'bom'=>$fileData['project']['bom'],
+                'unassignedProducts'=>$fileData['project']['unassignedProducts']
+            ]);
             $project->save();
         }
 
@@ -506,11 +532,30 @@ class ProjectsController extends Controller
         $projectFloorCatalogDesign = ProjectFloorCatalogDesign::find($projectFloorCatalogDesign_id);//
         $projectFloorCatalog = ProjectFloorCatalog::find($projectFloorCatalogDesign->project_floor_catalog_id);
         $projectFloor = ProjectFloor::find($projectFloorCatalog->project_floor_id);
-        $response = [
+        /*$response = [
             'products'=>['data'=>$projectFloorCatalogDesign->canvas_data],
             'floorplan'=>['data'=>$projectFloor->canvas_data],
             'project'=>['data'=>$project->canvas_data],
-        ];//dd($response);
+        ];*///dd($response);
+
+        $project = (array)json_decode($project->canvas_data);
+        $products = (array)json_decode($projectFloorCatalogDesign->canvas_data);
+        $floorplan = (array)json_decode($projectFloor->canvas_data);
+//dd($project);
+        $response = [
+            'products'=>[
+                'data'=>json_encode($products['data']),
+                'lastCommentIndex'=>json_encode($products['lastCommentIndex'])
+            ],
+            'floorplan'=>['data'=>json_encode($floorplan['data'])],
+            'project'=>[
+                'data'=>json_encode($project['data']),
+                'proj_comments'=>json_encode($project['proj_comments']),
+                'bom'=>json_encode($project['bom']),
+                'unassignedProducts'=>json_encode($project['unassignedProducts'])
+            ],
+        ];
+
 
         return $response;
         //return view('canvas.index_new');

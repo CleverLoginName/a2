@@ -278,11 +278,12 @@ function printCanvas() {
 function saveCanvasContent() {
     var print_dataUrl = getFullCanvas().toDataURL("image/png");
     var saveData = {
+        template_floor_catalog_design_id:template_floor_catalog_design_id,
         // metaData: { scaleFactor: scaleFactor },
         products: { data: productDataArray, isChanged: isProductDataChanged, lastCommentIndex: productCommentIndex },
         floorplan: { data: floorplanDataArray, isChanged: isFloorplanDataChanged, printable_plan: print_dataUrl },
         project: { data: projectDataArray, isChanged: isProjectDataChanged, proj_comments: projcetComments, bom: project_bom_dict, unassignedProducts: unassigned_packItemList },
-        _token: '',template_floor_catalog_design_id:template_floor_catalog_design_id
+        _token: ''
     }
 
     var fileName = "drawtool.dtf";
@@ -466,7 +467,7 @@ $(function () {
 
             projcetComments = (proj_comments == undefined) ? '' : proj_comments;
             productCommentIndex = (lastCommentIndex == undefined) ? 0 : lastCommentIndex;
-            project_bom_dict = (bom == undefined) ? {} : bom;
+            project_bom_dict = (bom == 'null') ? {} : bom;
             unassigned_packItemList= (unAssignedProducts == undefined) ? [] : unAssignedProducts;
             productData= (productData == undefined) ? [] : productData;
             floorplanData= (floorplanData == undefined) ? [] : floorplanData;

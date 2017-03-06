@@ -441,7 +441,7 @@ $(function () {
 
             projcetComments = (fileDetails.project.proj_comments == undefined) ? '' : fileDetails.project.proj_comments;
             productCommentIndex = (fileDetails.products.lastCommentIndex == undefined) ? 0 : fileDetails.products.lastCommentIndex;
-            project_bom_dict = (fileDetails.project.bom == undefined) ? {} : fileDetails.project.bom;
+            project_bom_dict = (bom == 'null') ? {} : bom;
             unassigned_packItemList = (fileDetails.project.unassignedProducts == undefined) ? [] : fileDetails.project.unassignedProducts;
 
             productData.forEach( generateAndLoadObjectFromParams );

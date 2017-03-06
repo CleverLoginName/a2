@@ -230,7 +230,7 @@ class TemplatesController extends Controller
         $template->canvas_data = json_encode([
             'data'=>[],
             'proj_comments'=>[],
-            'bom'=>[],
+            'bom'=>null,
             'unassignedProducts'=>[]
         ]);
         $template->save();
